@@ -1,5 +1,6 @@
 import os
-import torch
+import gc
+from pathlib import Path
 from repo.shark.shark_inference import SharkInference
 from repo.shark.shark_importer import import_with_fx
 from repo.shark.iree_utils.vulkan_utils import (
@@ -9,21 +10,26 @@ from repo.shark.iree_utils.vulkan_utils import (
 from repo.shark.iree_utils.gpu_utils import get_cuda_sm_cc
 from repo.stable_diffusion.src.utils.stable_args import args
 from repo.stable_diffusion.src.utils.resources import opt_flags
+from repo.stable_diffusion.src.utils.sd_annotation import sd_model_annotation
 import sys
 from diffusers.pipelines.stable_diffusion.convert_from_ckpt import (
     load_pipeline_from_original_stable_diffusion_ckpt,
 )
 
+def get_vmfb_path_name(model_name):
+    device = (
+        args.device
+        if "://" not in args.device
+        else "-".join(args.device.split("://"))
+    )
+    extended_name = "{}_{}".format(model_name, device)
+    vmfb_path = os.path.join(os.getcwd(), extended_name + ".vmfb")
+    return [vmfb_path, extended_name]
+
 
 def _compile_module(shark_module, model_name, extra_args=[]):
     if args.load_vmfb or args.save_vmfb:
-        device = (
-            args.device
-            if "://" not in args.device
-            else "-".join(args.device.split("://"))
-        )
-        extended_name = "{}_{}".format(model_name, device)
-        vmfb_path = os.path.join(os.getcwd(), extended_name + ".vmfb")
+        [vmfb_path, extended_name] = get_vmfb_path_name(model_name)
         if args.load_vmfb and os.path.isfile(vmfb_path) and not args.save_vmfb:
             print(f"loading existing vmfb from: {vmfb_path}")
             shark_module.load_module(vmfb_path, extra_args=extra_args)
@@ -73,11 +79,34 @@ def compile_through_fx(
     model_name,
     is_f16=False,
     f16_input_mask=None,
+    use_tuned=False,
     extra_args=[],
-):
+): 
+    from repo.shark.parser import shark_args
+
+    if "cuda" in args.device:
+        shark_args.enable_tf32 = True
     mlir_module, func_name = import_with_fx(
         model, inputs, is_f16, f16_input_mask
     )
+    
+    if use_tuned:
+        model_name = model_name + "_tuned"
+        tuned_model_path = f"{args.annotation_output}/{model_name}_torch.mlir"
+        if not os.path.exists(tuned_model_path):
+            if "vae" in model_name.split("_")[0]:
+                args.annotation_model = "vae"
+
+            tuned_model, tuned_model_path = sd_model_annotation(
+                mlir_module, model_name
+            )
+            del mlir_module, tuned_model
+            gc.collect()
+
+        with open(tuned_model_path, "rb") as f:
+            mlir_module = f.read()
+            f.close()
+            
     shark_module = SharkInference(
         mlir_module,
         device=args.device,
@@ -208,6 +237,10 @@ def set_init_device_flags():
         args.hf_model_id
         in ["prompthero/openjourney", "dreamlike-art/dreamlike-diffusion-1.0"]
         or args.precision != "fp16"
+        or args.height != 512
+        or args.width != 512
+        or args.batch_size != 1
+        or ("vulkan" not in args.device and "cuda" not in args.device)
     ):
         args.use_tuned = False
 
@@ -217,7 +250,12 @@ def set_init_device_flags():
     ):
         args.use_tuned = False
 
-    elif "cuda" in args.device and get_cuda_sm_cc() not in ["sm_80", "sm_89"]:
+    elif "cuda" in args.device and get_cuda_sm_cc() not in [
+        "sm_80",
+        "sm_84",
+        "sm_86",
+        "sm_89",
+    ]:
         args.use_tuned = False
 
     elif args.use_base_vae and args.hf_model_id not in [
@@ -232,7 +270,10 @@ def set_init_device_flags():
         print("Tuned models are currently not supported for this setting.")
 
     # set import_mlir to True for unuploaded models.
-    if args.hf_model_id not in [
+    if args.ckpt_loc != "":
+        args.import_mlir = True
+
+    elif args.hf_model_id not in [
         "Linaqruf/anything-v3.0",
         "dreamlike-art/dreamlike-diffusion-1.0",
         "prompthero/openjourney",
@@ -243,7 +284,7 @@ def set_init_device_flags():
     ]:
         args.import_mlir = True
 
-    if args.height != 512 or args.width != 512 or args.batch_size != 1:
+    elif args.height != 512 or args.width != 512 or args.batch_size != 1:
         args.import_mlir = True
 
 
@@ -296,6 +337,11 @@ def get_opt_flags(model, precision="fp16"):
     if sys.platform == "darwin":
         iree_flags.append("-iree-stream-fuse-binding=false")
 
+    if "default_compilation_flags" in opt_flags[model][is_tuned][precision]:
+        iree_flags += opt_flags[model][is_tuned][precision][
+            "default_compilation_flags"
+        ]
+        
     if "specified_compilation_flags" in opt_flags[model][is_tuned][precision]:
         device = (
             args.device
@@ -347,5 +393,5 @@ def preprocessCKPT():
     )
     pipe.save_pretrained(path_to_diffusers)
     print("Loading complete")
-    args.ckpt_loc = path_to_diffusers
-    print("Custom model path is : ", args.ckpt_loc)
+    print("Custom model path is : ", path_to_diffusers)
+    return path_to_diffusers
