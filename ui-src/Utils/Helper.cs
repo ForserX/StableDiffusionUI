@@ -15,5 +15,7 @@ namespace SD_FXUI
             SR,
             SRMD
         }
+
+        public static List<string> ModelsList = new List<string>();
     }
 }

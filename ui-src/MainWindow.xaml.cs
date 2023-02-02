@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ namespace SD_FXUI
         public static string ImgPath = string.Empty;
         public static MainWindow Form = null;
         public static HostForm UIHost = null;
+        Configuration Config = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -38,28 +40,50 @@ namespace SD_FXUI
 
             cbUpscaler.SelectedIndex = 0;
             cbModel.SelectedIndex = 0;
-            cbX.SelectedIndex = 1;
-            cbY.SelectedIndex = 1;
+            cbX.SelectedIndex = 3;
+            cbY.SelectedIndex = 3;
             Form = this;
 
             UIHost = new HostForm();
             UIHost.Hide();
-        }
 
+            // Load App data
+            Config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            Load();
+        }
+        void Load()
+        {
+            cbFf16.IsChecked = Config.AppSettings.Settings["fp16"].Value == "true";
+            cbY.Text = Config.AppSettings.Settings["height"].Value;
+            cbX.Text = Config.AppSettings.Settings["width"].Value;
+            NegPrompt.Text = Config.AppSettings.Settings["neg"].Value;
+            tbSteps.Text = Config.AppSettings.Settings["steps"].Value;
+        }
+        void Save()
+        {
+            Config.AppSettings.Settings.Add("fp16", cbFf16.IsChecked == true ? "true" : "false");
+            Config.AppSettings.Settings.Add("height", cbY.Text);
+            Config.AppSettings.Settings.Add("width", cbX.Text);
+            Config.AppSettings.Settings.Add("neg", NegPrompt.Text);
+            Config.AppSettings.Settings.Add("steps", tbSteps.Text);
+
+            Config.Save(ConfigurationSaveMode.Full, true);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
         private string GetCommandLine()
         {
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
-            string CmdLine = "\"../repo/shark.venv/Scripts/python.exe\" ../repo/stable_diffusion/scripts/txt2img.py ";
+            string CmdLine = "\"../../repo/shark.venv/Scripts/python.exe\" ../../repo/stable_diffusion/scripts/txt2img.py ";
             CmdLine += $"--precision={FpMode} --device=vulkan" + $" --prompt=\"{TryPrompt.Text}\" --negative_prompts=\"{NegPrompt.Text}\" ";
             CmdLine += $"--height={cbY.Text} --width={cbX.Text} ";
             CmdLine += $"--guidance_scale={tbCFG.Text.Replace(',', '.')} ";
             CmdLine += $" --steps={tbSteps.Text} --seed={tbSeed.Text} ";
             CmdLine += $"--hf_model_id=\"{cbModel.Text}\" ";
- //           CmdLine += "--import_mlir --ckpt_loc=\"D:\\Neirotrash\\models\\stable-diffusion\\HD-22.ckpt\" ";
-            CmdLine += "--no-use_tuned --local_tank_cache=\"./shark/\" ";
-#if DEBUG
+            //           CmdLine += "--model_variant=\"D:\\Neirotrash\\StableDiffusionUI-Shark-AMD\\data\\models\\anything-v4.0\" -max_length=77 --version=\"v1_4\" ";
+            CmdLine += "--no-use_tuned --local_tank_cache=\".//\" ";
+
             CmdLine += "--enable_stack_trace";
-#endif
+
             // CmdLine += $" --output_dir=\"{ImgPath}\" ";
 
             return CmdLine;
@@ -129,6 +153,13 @@ namespace SD_FXUI
         private void OnClose(object sender, EventArgs e)
         {
             UIHost.Close();
+            Save();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Utils.SharkModelImporter Importer = new Utils.SharkModelImporter();
+            Importer.Show();
         }
     }
 }

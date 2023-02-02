@@ -13,20 +13,19 @@ namespace SD_FXUI
     {
         public static async Task ProcessRunner(string command, int TotalCount, Helper.UpscalerType Type, int UpSize)
         {
-            Host ProcesHost = new Host();
+            Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\");
             ProcesHost.Print("\n Startup generation..... \n");
 
             for (int i = 0; i < TotalCount; i++)
             {
                 ProcesHost.Start();
                 // FX: Dirty hack for cache 
-                string WorkDir = MainWindow.CachePath;
                 ProcesHost.Send(command);
                 ProcesHost.SendExistCommand();
                 ProcesHost.Wait();
 
                 //  process.WaitForInputIdle();
-                var Files = FS.GetFilesFrom(FS.GetModelDir(), new string[] { "png", "jpg" }, false);
+                var Files = FS.GetFilesFrom(FS.GetModelDir() + "\\shark\\", new string[] { "png", "jpg" }, false);
                 foreach (var file in Files)
                 {
                     string NewFilePath = MainWindow.ImgPath + System.IO.Path.GetFileName(file);
@@ -81,7 +80,7 @@ namespace SD_FXUI
                     return;
             }
 
-            Host ProcesHost = new Host(FileName);
+            Host ProcesHost = new Host(FS.GetModelDir(), FileName);
             ProcesHost.Print("\n Startup upscale..... \n");
 
             string OutFile = File.Substring(0, File.Length - 4) + "_upscale.png";

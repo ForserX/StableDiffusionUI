@@ -1,4 +1,5 @@
 data/images/
+data/models/
 data/repo/shark.venv
 data/nodai_SHARK.egg-info/
 .vs/
@@ -16,3 +17,4 @@ ui-src/obj/
 *.mlir
 *.npy
 *.npz
+*.ckpt

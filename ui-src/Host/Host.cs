@@ -12,11 +12,11 @@ namespace SD_FXUI
         Process? Process = null;
         ProcessStartInfo? ProcessStartInfo = null;
 
-        public Host(string FileName = "cmd.exe")
+        public Host(string Dir, string FileName = "cmd.exe")
         {
             ProcessStartInfo = new ProcessStartInfo(FileName);
             ProcessStartInfo.RedirectStandardInput = true;
-            ProcessStartInfo.WorkingDirectory = FS.GetModelDir();
+            ProcessStartInfo.WorkingDirectory = Dir;
             ProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             ProcessStartInfo.CreateNoWindow = true;
             ProcessStartInfo.UseShellExecute = false;

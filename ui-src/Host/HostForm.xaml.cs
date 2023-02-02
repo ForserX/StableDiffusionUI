@@ -31,7 +31,7 @@ namespace SD_FXUI
         {
             message = Regex.Replace(message, @"\s+", "");
 
-            return Char.IsNumber(message[0]);
+            return message.StartsWith("Downloading") || Char.IsNumber(message[0]);
         }
         void ImplPrint(string message)
         {
@@ -61,6 +61,7 @@ namespace SD_FXUI
 
         public void Print(string message)
         {
+            System.Diagnostics.Trace.WriteLine(message);
             message = message.Replace(FS.GetWorkingDir(), "${Workspace}");
 
             Dispatcher.Invoke(() => ImplPrint(message));

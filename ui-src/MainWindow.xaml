@@ -22,18 +22,23 @@
         <TextBox  x:Name="tbCFG" HorizontalAlignment="Left" Margin="205,210,0,0" TextWrapping="Wrap" Text="7,5" VerticalAlignment="Top" Width="34" TextChanged="tbSteps2_TextChanged" Height="18"/>
         <TextBox x:Name="tbSeed" HorizontalAlignment="Left" Margin="304,145,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="120" Height="18"/>
         <Label Content="Seed" HorizontalAlignment="Left" Margin="263,141,0,0" VerticalAlignment="Top" Height="26" Width="36"/>
-        <ComboBox x:Name="cbModel" HorizontalAlignment="Left" Margin="5,293,0,0" VerticalAlignment="Top" Width="344" Height="22">
+        <ComboBox x:Name="cbModel" HorizontalAlignment="Left" Margin="5,293,0,0" VerticalAlignment="Top" Width="294" Height="22">
             <ComboBoxItem Content="Linaqruf/anything-v3.0"/>
+            <ComboBoxItem Content="andite/anything-v4.0"/>
             <ComboBoxItem Content="DGSpitzer/Cyberpunk-Anime-Diffusion"/>
             <ComboBoxItem Content="AIAddicts/VashirLewd"/>
+            <ComboBoxItem Content="nitrosocke/Arcane-Diffusion"/>
+            <ComboBoxItem Content="yulet1de/hentaidiffusion"/>
             <ComboBoxItem Content="stabilityai/stable-diffusion-2-1"/>
             <ComboBoxItem Content="dreamlike-art/dreamlike-diffusion-1.0"/>
+            <ComboBoxItem Content="andite/pastel-mix"/>
+            <ComboBoxItem Content="eimiss/EimisAnimeDiffusion_1.0v"/>
             <ComboBoxItem Content="CompVis/stable-diffusion-v1-4"/>
         </ComboBox>
         <CheckBox x:Name="cbFf16" Content="fp16" HorizontalAlignment="Left" Margin="364,296,0,0" VerticalAlignment="Top" IsChecked="True" Height="15" Width="44"/>
         <ComboBox x:Name="cbX" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="59" Height="22">
             <ComboBoxItem Content="384"/>
-            <ComboBoxItem Content="400"/>
+            <ComboBoxItem Content="416"/>
             <ComboBoxItem Content="512"/>
             <ComboBoxItem Content="640"/>
             <ComboBoxItem Content="728"/>
@@ -41,7 +46,7 @@
         </ComboBox>
         <ComboBox x:Name="cbY" HorizontalAlignment="Left" Margin="85,143,0,0" VerticalAlignment="Top" Width="59" Height="22">
             <ComboBoxItem Content="384"/>
-            <ComboBoxItem Content="400"/>
+            <ComboBoxItem Content="416"/>
             <ComboBoxItem Content="512"/>
             <ComboBoxItem Content="640"/>
             <ComboBoxItem Content="728"/>
@@ -61,5 +66,6 @@
         <TextBox x:Name="tbTotalCount" HorizontalAlignment="Left" Margin="386,170,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="38" Height="18"/>
         <Label Content="Total count" HorizontalAlignment="Left" Margin="316,166,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
         <Image x:Name="btCmd" Margin="42,332,0,0" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Height="44" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
+        <Button Content="Import" HorizontalAlignment="Left" Margin="307,293,0,0" VerticalAlignment="Top" Width="48" Click="Button_Click_1"/>
     </Grid>
 </Window>
