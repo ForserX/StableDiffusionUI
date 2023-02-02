@@ -1,0 +1,14 @@
+﻿<Window x:Class="SD_FXUI.HostForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SD_FXUI"
+        mc:Ignorable="d"
+        Title="Host" Height="450" Width="800" Icon="/cmd.png" ShowInTaskbar="False" Closing="OnClosing" Loaded="OnActiveted">
+    <Grid>
+        <TextBox x:Name="tbHost" TextWrapping="Wrap" Text="Host started..." Background="#FF08090E" FontFamily="Verdana" Foreground="#FF9FA3B8" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True"/>
+        <Image Margin="0,6,14,0" Source="/Host/close.png" MouseLeftButtonDown="OnClosing" HorizontalAlignment="Right" Width="44" Height="46" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

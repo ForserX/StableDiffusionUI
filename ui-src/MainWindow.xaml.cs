@@ -24,6 +24,7 @@ namespace SD_FXUI
         public static string CachePath = string.Empty;
         public static string ImgPath = string.Empty;
         public static MainWindow Form = null;
+        public static HostForm UIHost = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -40,6 +41,9 @@ namespace SD_FXUI
             cbX.SelectedIndex = 1;
             cbY.SelectedIndex = 1;
             Form = this;
+
+            UIHost = new HostForm();
+            UIHost.Show();
         }
 
         private string GetCommandLine()
@@ -115,6 +119,11 @@ namespace SD_FXUI
         {
             string argument = "/select, \"" + ImgPath + "\"";
             System.Diagnostics.Process.Start("explorer.exe", argument);
+        }
+        private void btCmd_ValueChanged(object sender, MouseButtonEventArgs e)
+        {
+            UIHost.Hide();
+            UIHost.Show();
         }
     }
 }

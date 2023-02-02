@@ -11,6 +11,10 @@
 
   <ItemGroup>
     <None Remove="745081.png" />
+    <None Remove="cmd.png" />
+    <None Remove="folder.png" />
+    <None Remove="Host\close.png" />
+    <None Remove="res\745081.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="745081.png" />
+    <Resource Include="cmd.png" />
+    <Resource Include="folder.png" />
+    <Resource Include="Host\close.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +33,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Update="res\Resource1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="res\Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

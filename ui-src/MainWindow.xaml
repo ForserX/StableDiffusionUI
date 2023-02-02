@@ -10,7 +10,7 @@
         <TextBox x:Name="TryPrompt" HorizontalAlignment="Left" Margin="10,19,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="414" Height="54"/>
         <Label Content="Prompt" HorizontalAlignment="Left" Margin="0,-4,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
         <TextBox x:Name="NegPrompt" HorizontalAlignment="Left" Margin="10,97,0,0" TextWrapping="Wrap" Text="" Width="414" Height="39" VerticalAlignment="Top"/>
-        <Button Content="Make!" Margin="366,0,0,10" Click="Button_Click" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="58"/>
+        <Button Content="Make!" Margin="364,0,0,22" Click="Button_Click" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="58"/>
         <Label Content="x" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,141,0,0" Height="26" Width="16"/>
         <Label Content="Neg prompt" HorizontalAlignment="Left" Margin="0,73,0,0" VerticalAlignment="Top" Height="26" Width="75"/>
         <Slider  x:Name="slSteps" HorizontalAlignment="Left" Margin="80,179,0,0" VerticalAlignment="Top" Width="120" Maximum="150" Minimum="5" Value="25" ValueChanged="Slider_ValueChanged" SmallChange="1" Height="18"/>
@@ -55,9 +55,9 @@
         <Label Content="Value" HorizontalAlignment="Left" Margin="205,239,0,0" VerticalAlignment="Top" Height="26" Width="39"/>
         <Slider  x:Name="slUpscale" HorizontalAlignment="Left" Margin="249,243,0,0" VerticalAlignment="Top" Width="58" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Height="18"/>
         <Label x:Name="lbUpscale" Content="x4" HorizontalAlignment="Left" Margin="313,237,0,0" VerticalAlignment="Top" Background="#FFDFD2D2" Height="26" Width="22"/>
-        <Image Margin="0,0,7,2" Source="/745081.png" MouseLeftButtonDown="btFolder_ValueChanged" HorizontalAlignment="Right" Width="50" Height="44" VerticalAlignment="Bottom"/>
+        <Image Margin="2,332,0,0" Source="/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Height="44" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
         <TextBox x:Name="tbTotalCount" HorizontalAlignment="Left" Margin="386,170,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="38" Height="18"/>
         <Label Content="Total count" HorizontalAlignment="Left" Margin="316,166,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
-
+        <Image x:Name="btCmd" Margin="42,332,0,0" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Height="44" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
     </Grid>
 </Window>
