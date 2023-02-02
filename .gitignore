@@ -1,6 +1,9 @@
 data/images/
 data/repo/shark.venv
+data/nodai_SHARK.egg-info/
 .vs/
+ui-src/bin/
+ui-src/obj/
 
 *.vmfb
 *.csv

@@ -2,7 +2,7 @@
   "profiles": {
     "SD-FXUI": {
       "commandName": "Project",
-      "workingDirectory": "D:\\Neirotrash\\shark_sd"
+      "workingDirectory": "D:\\Neirotrash\\StableDiffusionUI-Shark-AMD\\data"
     }
   }
 }

@@ -7,6 +7,7 @@ hf_model_variant_map = {
     "Linaqruf/anything-v3.0": ["anythingv3", "v2_1base"],
     "dreamlike-art/dreamlike-diffusion-1.0": ["dreamlike", "v2_1base"],
     "DGSpitzer/Cyberpunk-Anime-Diffusion": ["CP77AnimeDiff", "v1_4base"],
+    "AIAddicts/VashirLewd": ["VashirLewd", "v1_4base"],
     "prompthero/openjourney": ["openjourney", "v2_1base"],
     "wavymulder/Analog-Diffusion": ["analogdiffusion", "v2_1base"],
     "stabilityai/stable-diffusion-2-1": ["stablediffusion", "v2_1"],

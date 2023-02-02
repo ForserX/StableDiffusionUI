@@ -35,17 +35,21 @@ namespace SD_FXUI
             System.IO.Directory.CreateDirectory(CachePath);
             System.IO.Directory.CreateDirectory(ImgPath);
 
+            cbModel.SelectedIndex = 0;
+            cbX.SelectedIndex = 2;
+            cbY.SelectedIndex = 2;
             Form = this;
         }
 
         private string GetCommandLine()
         {
+            string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
             string CmdLine = "\"../repo/shark.venv/Scripts/python.exe\" ../repo/stable_diffusion/scripts/txt2img.py ";
-            CmdLine += $"--precision=fp32 --device=vulkan" + $" --prompt=\"{TryPrompt.Text}\" --negative_prompts=\"{NegPrompt.Text}\" ";
-            CmdLine += $"--height={tbH.Text} --width={tbX.Text} ";
+            CmdLine += $"--precision={FpMode} --device=vulkan" + $" --prompt=\"{TryPrompt.Text}\" --negative_prompts=\"{NegPrompt.Text}\" ";
+            CmdLine += $"--height={cbY.Text} --width={cbX.Text} ";
             CmdLine += $"--guidance_scale={tbCFG.Text.Replace(',', '.')} ";
             CmdLine += $" --steps={tbSteps.Text} --seed={tbSeed.Text} ";
-            CmdLine += "--hf_model_id=\"DGSpitzer/Cyberpunk-Anime-Diffusion\" ";
+            CmdLine += $"--hf_model_id=\"{cbModel.Text}\" ";
  //           CmdLine += "--import_mlir --ckpt_loc=\"D:\\Neirotrash\\models\\stable-diffusion\\HD-22.ckpt\" ";
             CmdLine += "--no-use_tuned --local_tank_cache=\"./shark/\" ";
 #if DEBUG
