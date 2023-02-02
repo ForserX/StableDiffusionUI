@@ -1,4 +1,4 @@
-# StableDiffusionUI-Shark-AMD
+# StableDiffusionUI Shark AMD
 ### What is it
 Simple re-implement SD UI for Shark API for AMD
 ![image](https://user-images.githubusercontent.com/13867290/216241942-1036905f-6807-4c0d-bb98-c08fb9d4338e.png)
