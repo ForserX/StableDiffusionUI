@@ -63,6 +63,7 @@ namespace SD_FXUI
             cbX.Text = Config.AppSettings.Settings["width"].Value;
             NegPrompt.Text = Config.AppSettings.Settings["neg"].Value;
             tbSteps.Text = Config.AppSettings.Settings["steps"].Value;
+            cbUpscaler.Text = Config.AppSettings.Settings["upscaler"].Value;
 
             var ListModel = Config.AppSettings.Settings["model"].Value.Split('|');
 
@@ -78,6 +79,7 @@ namespace SD_FXUI
             Config.AppSettings.Settings["width"].Value = cbX.Text;
             Config.AppSettings.Settings["neg"].Value = NegPrompt.Text;
             Config.AppSettings.Settings["steps"].Value = tbSteps.Text;
+            Config.AppSettings.Settings["upscaler"].Value = cbUpscaler.Text;
 
             string Models = "";
 
@@ -94,7 +96,7 @@ namespace SD_FXUI
         private string GetCommandLine()
         {
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
-            string Model = cbModel.Text.IndexOf('/') != -1 ? cbModel.Text : FS.GetModelDir() + "\\diff\\" + cbModel.Text;
+            string Model = cbModel.Text.IndexOf('/') != -1 ? cbModel.Text : FS.GetModelDir() + "diff\\" + cbModel.Text;
             string CmdLine = "\"../../repo/shark.venv/Scripts/python.exe\" ../../repo/stable_diffusion/scripts/txt2img.py ";
             CmdLine += $"--precision={FpMode} --device=vulkan" + $" --prompt=\"{TryPrompt.Text}\" --negative_prompts=\"{NegPrompt.Text}\" ";
             CmdLine += $"--height={cbY.Text} --width={cbX.Text} ";

@@ -18,3 +18,5 @@ ui-src/obj/
 *.npy
 *.npz
 *.ckpt
+*.htm
+*.exe

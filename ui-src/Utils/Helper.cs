@@ -13,7 +13,8 @@ namespace SD_FXUI
             ESRGAN,
             ESRGAN_ANIME,
             SR,
-            SRMD
+            SRMD,
+            None
         }
 
         public static List<string> ModelsList = new List<string>();

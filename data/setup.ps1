@@ -1,3 +1,4 @@
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 Write-Host "Installing Build Dependencies"
 python -m venv .\repo\shark.venv\
 .\repo\shark.venv\Scripts\activate

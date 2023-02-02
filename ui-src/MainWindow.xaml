@@ -45,6 +45,7 @@
             <ComboBoxItem Content="ERSGAN: Anime"/>
             <ComboBoxItem Content="SR"/>
             <ComboBoxItem Content="SRMD"/>
+            <ComboBoxItem Content="None"/>
         </ComboBox>
         <Label Content="Upscale" HorizontalAlignment="Left" Margin="2,238,0,0" VerticalAlignment="Top" Height="26" Width="51"/>
         <Label Content="Value" HorizontalAlignment="Left" Margin="205,239,0,0" VerticalAlignment="Top" Height="26" Width="39"/>
