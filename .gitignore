@@ -1,0 +1,15 @@
+data/images/
+data/repo/shark.venv
+.vs/
+
+*.vmfb
+*.csv
+*.pyc
+*.wget-hsts
+*.cache
+*.BuildWithSkipAnalyzers
+*.user
+*.pdb
+*.mlir
+*.npy
+*.npz
