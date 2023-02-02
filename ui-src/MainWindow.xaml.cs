@@ -142,7 +142,7 @@ namespace SD_FXUI
         private void slUpscale_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (lbUpscale != null)
-                lbUpscale.Name = "x" + (slUpscale.Value + 1).ToString();
+                lbUpscale.Content = "x" + (slUpscale.Value + 1).ToString();
         }
 
         private void tbSteps_TextChanged(object sender, TextChangedEventArgs e)
