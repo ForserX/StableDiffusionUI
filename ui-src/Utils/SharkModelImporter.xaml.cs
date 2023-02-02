@@ -34,15 +34,19 @@ namespace SD_FXUI.Utils
             var AllPathces = HuggUrl.Split('/');
             HuggUrl += AllPathces[0] + AllPathces[1];
 
-            Helper.ModelsList.Add(HuggUrl);
+            Helper.ModelsList.Add(HuggUrl.Substring(1));
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            string DiffPath = FS.GetModelDir() + "\\diff\\";
+            string DiffPath = FS.GetModelDir() + "diff\\";
 
             string Name = System.IO.Path.GetFileName(cbPath.Text);
-            FS.CopyDirectory(cbPath.Text, DiffPath + Name, true);
+            
+            if(System.IO.File.Exists(DiffPath + Name))
+            {
+                FS.CopyDirectory(cbPath.Text, DiffPath + Name, true);
+            }
 
             Helper.ModelsList.Add(Name);
         }

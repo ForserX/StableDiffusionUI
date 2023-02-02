@@ -22,19 +22,7 @@
         <TextBox  x:Name="tbCFG" HorizontalAlignment="Left" Margin="205,210,0,0" TextWrapping="Wrap" Text="7,5" VerticalAlignment="Top" Width="34" TextChanged="tbSteps2_TextChanged" Height="18"/>
         <TextBox x:Name="tbSeed" HorizontalAlignment="Left" Margin="304,145,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="120" Height="18"/>
         <Label Content="Seed" HorizontalAlignment="Left" Margin="263,141,0,0" VerticalAlignment="Top" Height="26" Width="36"/>
-        <ComboBox x:Name="cbModel" HorizontalAlignment="Left" Margin="5,293,0,0" VerticalAlignment="Top" Width="294" Height="22">
-            <ComboBoxItem Content="Linaqruf/anything-v3.0"/>
-            <ComboBoxItem Content="andite/anything-v4.0"/>
-            <ComboBoxItem Content="DGSpitzer/Cyberpunk-Anime-Diffusion"/>
-            <ComboBoxItem Content="AIAddicts/VashirLewd"/>
-            <ComboBoxItem Content="nitrosocke/Arcane-Diffusion"/>
-            <ComboBoxItem Content="yulet1de/hentaidiffusion"/>
-            <ComboBoxItem Content="stabilityai/stable-diffusion-2-1"/>
-            <ComboBoxItem Content="dreamlike-art/dreamlike-diffusion-1.0"/>
-            <ComboBoxItem Content="andite/pastel-mix"/>
-            <ComboBoxItem Content="eimiss/EimisAnimeDiffusion_1.0v"/>
-            <ComboBoxItem Content="CompVis/stable-diffusion-v1-4"/>
-        </ComboBox>
+        <ComboBox x:Name="cbModel" HorizontalAlignment="Left" Margin="5,293,0,0" VerticalAlignment="Top" Width="294" Height="22"/>
         <CheckBox x:Name="cbFf16" Content="fp16" HorizontalAlignment="Left" Margin="364,296,0,0" VerticalAlignment="Top" IsChecked="True" Height="15" Width="44"/>
         <ComboBox x:Name="cbX" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="59" Height="22">
             <ComboBoxItem Content="384"/>

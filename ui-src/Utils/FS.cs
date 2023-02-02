@@ -9,13 +9,13 @@ namespace SD_FXUI
 {
     internal class FS
     {
-        public static String[] GetFilesFrom(String searchFolder, String[] filters, bool isRecursive)
+        public static string[] GetFilesFrom(string searchFolder, string[] filters, bool isRecursive)
         {
-            List<String> filesFound = new List<String>();
+            List<string> filesFound = new List<string>();
             var searchOption = isRecursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             foreach (var filter in filters)
             {
-                filesFound.AddRange(Directory.GetFiles(searchFolder, String.Format("*.{0}", filter), searchOption));
+                filesFound.AddRange(Directory.GetFiles(searchFolder, string.Format("*.{0}", filter), searchOption));
             }
             return filesFound.ToArray();
         }

@@ -53,11 +53,23 @@ namespace SD_FXUI
         }
         void Load()
         {
+            if (Config.AppSettings.Settings["fp16"] == null)
+            {
+                return;
+            }
+
             cbFf16.IsChecked = Config.AppSettings.Settings["fp16"].Value == "true";
             cbY.Text = Config.AppSettings.Settings["height"].Value;
             cbX.Text = Config.AppSettings.Settings["width"].Value;
             NegPrompt.Text = Config.AppSettings.Settings["neg"].Value;
             tbSteps.Text = Config.AppSettings.Settings["steps"].Value;
+
+            var ListModel = Config.AppSettings.Settings["model"].Value.Split('|');
+
+            foreach (var model in ListModel)
+            {
+                cbModel.Items.Add(model);
+            }
         }
         void Save()
         {
@@ -66,6 +78,15 @@ namespace SD_FXUI
             Config.AppSettings.Settings.Add("width", cbX.Text);
             Config.AppSettings.Settings.Add("neg", NegPrompt.Text);
             Config.AppSettings.Settings.Add("steps", tbSteps.Text);
+
+            string Models = "";
+
+            foreach (var a in cbModel.Items)
+            {
+                Models += a.ToString() + "|";
+            }
+
+            Config.AppSettings.Settings.Add("model", Models);
 
             Config.Save(ConfigurationSaveMode.Full, true);
             ConfigurationManager.RefreshSection("appSettings");
@@ -116,10 +137,10 @@ namespace SD_FXUI
             if (tbCFG != null)
                 tbCFG.Text = slCFG.Value.ToString();
         }
-        
+
         private void slUpscale_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (lbUpscale!= null)
+            if (lbUpscale != null)
                 lbUpscale.Name = "x" + (slUpscale.Value + 1).ToString();
         }
 
@@ -159,7 +180,16 @@ namespace SD_FXUI
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             Utils.SharkModelImporter Importer = new Utils.SharkModelImporter();
-            Importer.Show();
+            Importer.ShowDialog();
+
+            cbModel.Items.Clear();
+
+            foreach (var Itm in Helper.ModelsList)
+            {
+                cbModel.Items.Add(Itm);
+            }
+
+            cbModel.SelectedIndex = cbModel.Items.Count- 1;
         }
     }
 }
