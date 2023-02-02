@@ -2,13 +2,14 @@ from diffusers import AutoencoderKL, UNet2DConditionModel
 from transformers import CLIPTextModel
 from collections import defaultdict
 import torch
-import sys
+import os, sys, functools, operator
 import traceback
 import re
 from repo.stable_diffusion.src.utils import (
     compile_through_fx,
     get_opt_flags,
     base_models,
+    get_vmfb_path_name,
     args,
 )
 
