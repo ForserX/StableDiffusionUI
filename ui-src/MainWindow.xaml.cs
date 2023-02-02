@@ -73,11 +73,11 @@ namespace SD_FXUI
         }
         void Save()
         {
-            Config.AppSettings.Settings.Add("fp16", cbFf16.IsChecked == true ? "true" : "false");
-            Config.AppSettings.Settings.Add("height", cbY.Text);
-            Config.AppSettings.Settings.Add("width", cbX.Text);
-            Config.AppSettings.Settings.Add("neg", NegPrompt.Text);
-            Config.AppSettings.Settings.Add("steps", tbSteps.Text);
+            Config.AppSettings.Settings["fp16"].Value = cbFf16.IsChecked == true ? "true" : "false";
+            Config.AppSettings.Settings["height"].Value = cbY.Text;
+            Config.AppSettings.Settings["width"].Value = cbX.Text;
+            Config.AppSettings.Settings["neg"].Value = NegPrompt.Text;
+            Config.AppSettings.Settings["steps"].Value = tbSteps.Text;
 
             string Models = "";
 
@@ -86,7 +86,7 @@ namespace SD_FXUI
                 Models += a.ToString() + "|";
             }
 
-            Config.AppSettings.Settings.Add("model", Models);
+            Config.AppSettings.Settings["model"].Value = Models;
 
             Config.Save(ConfigurationSaveMode.Full, true);
             ConfigurationManager.RefreshSection("appSettings");
@@ -94,12 +94,13 @@ namespace SD_FXUI
         private string GetCommandLine()
         {
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
+            string Model = cbModel.Text.IndexOf('/') != -1 ? cbModel.Text : FS.GetModelDir() + "\\diff\\" + cbModel.Text;
             string CmdLine = "\"../../repo/shark.venv/Scripts/python.exe\" ../../repo/stable_diffusion/scripts/txt2img.py ";
             CmdLine += $"--precision={FpMode} --device=vulkan" + $" --prompt=\"{TryPrompt.Text}\" --negative_prompts=\"{NegPrompt.Text}\" ";
             CmdLine += $"--height={cbY.Text} --width={cbX.Text} ";
             CmdLine += $"--guidance_scale={tbCFG.Text.Replace(',', '.')} ";
             CmdLine += $" --steps={tbSteps.Text} --seed={tbSeed.Text} ";
-            CmdLine += $"--hf_model_id=\"{cbModel.Text}\" ";
+            CmdLine += $"--hf_model_id=\"{Model}\" ";
             //           CmdLine += "--model_variant=\"D:\\Neirotrash\\StableDiffusionUI-Shark-AMD\\data\\models\\anything-v4.0\" -max_length=77 --version=\"v1_4\" ";
             CmdLine += "--no-use_tuned --local_tank_cache=\".//\" ";
 
