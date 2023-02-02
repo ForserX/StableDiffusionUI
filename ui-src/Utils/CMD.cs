@@ -11,37 +11,41 @@ namespace SD_FXUI
 {
     internal class CMD
     {
-        public static async Task ProcessRunner(string command, Helper.UpscalerType Type, int UpSize)
+        public static async Task ProcessRunner(string command, int TotalCount, Helper.UpscalerType Type, int UpSize)
         {
-            ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe");
-            processStartInfo.RedirectStandardInput = true;
-            processStartInfo.WorkingDirectory = FS.GetModelDir();
-            processStartInfo.RedirectStandardOutput = false;
-
-            Process process = Process.Start(processStartInfo);
-
-            if (process != null)
+            // #TODO: Opt
+            for(int i = 0; i < TotalCount; i++)
             {
-                // FX: Dirty hack for cache 
-                string WorkDir = MainWindow.CachePath;
+                ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe");
+                processStartInfo.RedirectStandardInput = true;
+                processStartInfo.WorkingDirectory = FS.GetModelDir();
+                processStartInfo.RedirectStandardOutput = false;
 
-                process.StandardInput.WriteLine(command);
-                process.StandardInput.WriteLine("exit");
-                process.StandardInput.Flush();
+                Process process = Process.Start(processStartInfo);
 
-                process.WaitForExit();
-
-                var Files = FS.GetFilesFrom(FS.GetModelDir(), new string[] { "png", "jpg" }, false);
-                foreach (var file in Files)
+                if (process != null)
                 {
-                    string NewFilePath = MainWindow.ImgPath + System.IO.Path.GetFileName(file);
-                    System.IO.File.Move(file, MainWindow.ImgPath + System.IO.Path.GetFileName(file));
+                    // FX: Dirty hack for cache 
+                    string WorkDir = MainWindow.CachePath;
 
-                    MainWindow.Form.UpdateViewImg(NewFilePath);
+                    process.StandardInput.WriteLine(command);
+                    process.StandardInput.WriteLine("exit");
+                    process.StandardInput.Flush();
 
-                    if (UpSize> 0)
+                    process.WaitForExit();
+
+                    var Files = FS.GetFilesFrom(FS.GetModelDir(), new string[] { "png", "jpg" }, false);
+                    foreach (var file in Files)
                     {
-                        await UpscalerRunner(Type, UpSize, NewFilePath);
+                        string NewFilePath = MainWindow.ImgPath + System.IO.Path.GetFileName(file);
+                        System.IO.File.Move(file, MainWindow.ImgPath + System.IO.Path.GetFileName(file));
+
+                        MainWindow.Form.UpdateViewImg(NewFilePath);
+
+                        if (UpSize > 0)
+                        {
+                            await UpscalerRunner(Type, UpSize, NewFilePath);
+                        }
                     }
                 }
             }

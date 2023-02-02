@@ -32,19 +32,17 @@
         </ComboBox>
         <CheckBox x:Name="cbFf16" Content="fp16" HorizontalAlignment="Left" Margin="364,296,0,0" VerticalAlignment="Top" IsChecked="True" Height="15" Width="44"/>
         <ComboBox x:Name="cbX" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="59" Height="22">
-            <ComboBoxItem Content="256"/>
-            <ComboBoxItem Content="320"/>
             <ComboBoxItem Content="384"/>
             <ComboBoxItem Content="512"/>
-            <ComboBoxItem Content="724"/>
+            <ComboBoxItem Content="640"/>
+            <ComboBoxItem Content="728"/>
             <ComboBoxItem Content="1024"/>
         </ComboBox>
         <ComboBox x:Name="cbY" HorizontalAlignment="Left" Margin="85,143,0,0" VerticalAlignment="Top" Width="59" Height="22">
-            <ComboBoxItem Content="256"/>
-            <ComboBoxItem Content="320"/>
             <ComboBoxItem Content="384"/>
             <ComboBoxItem Content="512"/>
-            <ComboBoxItem Content="724"/>
+            <ComboBoxItem Content="640"/>
+            <ComboBoxItem Content="728"/>
             <ComboBoxItem Content="1024"/>
         </ComboBox>
         <ComboBox x:Name="cbUpscaler" HorizontalAlignment="Left" Margin="85,241,0,0" VerticalAlignment="Top" Width="115" Height="22">
@@ -58,6 +56,8 @@
         <Slider  x:Name="slUpscale" HorizontalAlignment="Left" Margin="249,243,0,0" VerticalAlignment="Top" Width="58" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Height="18"/>
         <Label x:Name="lbUpscale" Content="x4" HorizontalAlignment="Left" Margin="313,237,0,0" VerticalAlignment="Top" Background="#FFDFD2D2" Height="26" Width="22"/>
         <Image Margin="0,0,7,2" Source="/745081.png" MouseLeftButtonDown="btFolder_ValueChanged" HorizontalAlignment="Right" Width="50" Height="44" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="tbTotalCount" HorizontalAlignment="Left" Margin="386,170,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="38" Height="18"/>
+        <Label Content="Total count" HorizontalAlignment="Left" Margin="316,166,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
 
     </Grid>
 </Window>

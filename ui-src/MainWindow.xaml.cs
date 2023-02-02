@@ -37,8 +37,8 @@ namespace SD_FXUI
 
             cbUpscaler.SelectedIndex = 0;
             cbModel.SelectedIndex = 0;
-            cbX.SelectedIndex = 3;
-            cbY.SelectedIndex = 3;
+            cbX.SelectedIndex = 1;
+            cbY.SelectedIndex = 1;
             Form = this;
         }
 
@@ -65,8 +65,9 @@ namespace SD_FXUI
             string cmdline = GetCommandLine();
             Helper.UpscalerType Type = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
             int Size = (int)slUpscale.Value;
+            int TotalSize = int.Parse(tbTotalCount.Text);
 
-            await Task.Run(() => CMD.ProcessRunner(cmdline, Type, Size));
+            await Task.Run(() => CMD.ProcessRunner(cmdline, TotalSize, Type, Size));
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
