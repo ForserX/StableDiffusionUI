@@ -1,6 +1,7 @@
 # StableDiffusionUI-Shark-AMD
+### What is it
 Simple re-implement SD UI for Shark API for AMD
-![image](https://user-images.githubusercontent.com/13867290/216232032-190f3769-eb4c-4f8c-b722-e3c1a4dce297.png)
+![image](https://user-images.githubusercontent.com/13867290/216241942-1036905f-6807-4c0d-bb98-c08fb9d4338e.png)
 
 # How to install
 ## Pre-install
@@ -13,3 +14,10 @@ cd ./data/repo/
 ./setup.ps1
 ```
 * Start .exe file
+
+# 3rd 
+* [Shark](https://github.com/nod-ai/SHARK)
+* Real-ESRGAN NCNN Vulkan
+* Real-SR NCNN Vulkan
+* Real-SRMD NCNN Vulkan
+* .NET Core 
