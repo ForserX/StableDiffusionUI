@@ -11,7 +11,7 @@ namespace SD_FXUI
 {
     internal class CMD
     {
-        public static async Task ProcessRunner(string command)
+        public static async Task ProcessRunner(string command, Helper.UpscalerType Type, int UpSize)
         {
             ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe");
             processStartInfo.RedirectStandardInput = true;
@@ -29,18 +29,25 @@ namespace SD_FXUI
                 process.StandardInput.WriteLine("exit");
                 process.StandardInput.Flush();
 
+                process.WaitForExit();
 
                 var Files = FS.GetFilesFrom(FS.GetModelDir(), new string[] { "png", "jpg" }, false);
                 foreach (var file in Files)
                 {
                     string NewFilePath = MainWindow.ImgPath + System.IO.Path.GetFileName(file);
                     System.IO.File.Move(file, MainWindow.ImgPath + System.IO.Path.GetFileName(file));
+
                     MainWindow.Form.UpdateViewImg(NewFilePath);
+
+                    if (UpSize> 0)
+                    {
+                        await UpscalerRunner(Type, UpSize, NewFilePath);
+                    }
                 }
             }
         }
 
-        public static async Task UpscalerRunner(Helper.UpscalerType Type, string File)
+        public static async Task UpscalerRunner(Helper.UpscalerType Type, int Size, string File)
         {
             Process process = new System.Diagnostics.Process();
             ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
@@ -90,8 +97,8 @@ namespace SD_FXUI
             process.StartInfo = startInfo;
             process.Start();
 
-            MainWindow.Form.UpdateViewImg(OutFile);
             process.WaitForExit();
+            MainWindow.Form.UpdateViewImg(OutFile);
         }
     }
 }

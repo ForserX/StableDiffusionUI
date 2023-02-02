@@ -28,16 +28,17 @@ namespace SD_FXUI
         {
             InitializeComponent();
 
-            CachePath = System.IO.Directory.GetCurrentDirectory() + "\\models\\shark\\";
-            ImgPath = System.IO.Directory.GetCurrentDirectory() + "\\images\\" + System.DateTime.Now.ToString().Replace(':', '-').Replace(' ', '_') + "\\";
+            CachePath = FS.GetModelDir() + @"\shark\";
+            ImgPath = FS.GetWorkingDir() + "\\images\\" + System.DateTime.Now.ToString().Replace(':', '-').Replace(' ', '_') + "\\";
             ImgPath.Replace('\\', '/');
 
             System.IO.Directory.CreateDirectory(CachePath);
             System.IO.Directory.CreateDirectory(ImgPath);
 
+            cbUpscaler.SelectedIndex = 0;
             cbModel.SelectedIndex = 0;
-            cbX.SelectedIndex = 2;
-            cbY.SelectedIndex = 2;
+            cbX.SelectedIndex = 3;
+            cbY.SelectedIndex = 3;
             Form = this;
         }
 
@@ -62,7 +63,10 @@ namespace SD_FXUI
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             string cmdline = GetCommandLine();
-            await Task.Run(() => CMD.ProcessRunner(cmdline));
+            Helper.UpscalerType Type = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
+            int Size = (int)slUpscale.Value;
+
+            await Task.Run(() => CMD.ProcessRunner(cmdline, Type, Size));
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -83,6 +87,12 @@ namespace SD_FXUI
             if (tbCFG != null)
                 tbCFG.Text = slCFG.Value.ToString();
         }
+        
+        private void slUpscale_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (lbUpscale!= null)
+                lbUpscale.Name = "x" + (slUpscale.Value + 1).ToString();
+        }
 
         private void tbSteps_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -98,6 +108,12 @@ namespace SD_FXUI
         public void UpdateViewImg(string Img)
         {
             Dispatcher.Invoke(() => SetImg(Img));
+        }
+
+        private void btFolder_ValueChanged(object sender, MouseButtonEventArgs e)
+        {
+            string argument = "/select, \"" + ImgPath + "\"";
+            System.Diagnostics.Process.Start("explorer.exe", argument);
         }
     }
 }
