@@ -22,30 +22,26 @@ namespace SD_FXUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static string CachePath = string.Empty;
-        public static string ImgPath = string.Empty;
-        public static MainWindow Form = null;
-        public static HostForm UIHost = null;
         Configuration Config = null;
         public MainWindow()
         {
             InitializeComponent();
 
-            CachePath = FS.GetModelDir() + @"\shark\";
-            ImgPath = FS.GetWorkingDir() + "\\images\\" + System.DateTime.Now.ToString().Replace(':', '-').Replace(' ', '_') + "\\";
-            ImgPath.Replace('\\', '/');
-
-            System.IO.Directory.CreateDirectory(CachePath);
-            System.IO.Directory.CreateDirectory(ImgPath);
+            Helper.CachePath = FS.GetModelDir() + @"\shark\";
+            Helper.ImgPath = FS.GetWorkingDir() + "\\images\\" + System.DateTime.Now.ToString().Replace(':', '-').Replace(' ', '_') + "\\";
+            Helper.ImgPath.Replace('\\', '/');
+            
+            System.IO.Directory.CreateDirectory(Helper.CachePath);
+            System.IO.Directory.CreateDirectory(Helper.ImgPath);
 
             cbUpscaler.SelectedIndex = 0;
             cbModel.SelectedIndex = 0;
             cbX.SelectedIndex = 3;
             cbY.SelectedIndex = 3;
-            Form = this;
+            Helper.Form = this;
 
-            UIHost = new HostForm();
-            UIHost.Hide();
+            Helper.UIHost = new HostForm();
+            Helper.UIHost.Hide();
 
             // Load App data
             Config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -100,15 +96,12 @@ namespace SD_FXUI
             string CmdLine = "\"../../repo/shark.venv/Scripts/python.exe\" ../../repo/stable_diffusion/scripts/txt2img.py ";
             CmdLine += $"--precision={FpMode} --device=vulkan" + $" --prompt=\"{TryPrompt.Text}\" --negative_prompts=\"{NegPrompt.Text}\" ";
             CmdLine += $"--height={cbY.Text} --width={cbX.Text} ";
-            CmdLine += $"--guidance_scale={tbCFG.Text.Replace(',', '.')} ";
-            CmdLine += $" --steps={tbSteps.Text} --seed={tbSeed.Text} ";
+            CmdLine += $"--guidance_scale={tbCFG.Text.Replace(',', '.')} -scheduler=\"PNDM\"";
+            CmdLine += $" --steps={tbSteps.Text} --seed={tbSeed.Text} --total_count={tbTotalCount.Text} ";
             CmdLine += $"--hf_model_id=\"{Model}\" ";
-            //           CmdLine += "--model_variant=\"D:\\Neirotrash\\StableDiffusionUI-Shark-AMD\\data\\models\\anything-v4.0\" -max_length=77 --version=\"v1_4\" ";
+
             CmdLine += "--no-use_tuned --local_tank_cache=\".//\" ";
-
-            CmdLine += "--enable_stack_trace";
-
-            // CmdLine += $" --output_dir=\"{ImgPath}\" ";
+            CmdLine += "--enable_stack_trace --write_metadata_to_png";
 
             return CmdLine;
         }
@@ -117,9 +110,8 @@ namespace SD_FXUI
             string cmdline = GetCommandLine();
             Helper.UpscalerType Type = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
             int Size = (int)slUpscale.Value;
-            int TotalSize = int.Parse(tbTotalCount.Text);
 
-            await Task.Run(() => CMD.ProcessRunner(cmdline, TotalSize, Type, Size));
+            await Task.Run(() => CMD.ProcessRunner(cmdline, Type, Size));
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -165,19 +157,30 @@ namespace SD_FXUI
 
         private void btFolder_ValueChanged(object sender, MouseButtonEventArgs e)
         {
-            string argument = "/select, \"" + ImgPath + "\"";
+            string argument = "/select, \"" + Helper.ImgPath + "\"";
             System.Diagnostics.Process.Start("explorer.exe", argument);
         }
         private void btCmd_ValueChanged(object sender, MouseButtonEventArgs e)
         {
-            UIHost.Hide();
-            UIHost.Show();
+            Helper.UIHost.Hide();
+            Helper.UIHost.Show();
         }
 
         private void OnClose(object sender, EventArgs e)
         {
-            UIHost.Close();
+            Helper.UIHost.Close();
             Save();
+        }
+
+        private void Button_ClickBreak(object sender, RoutedEventArgs e)
+        {
+            foreach(var Proc in Helper.SecondaryProcessList)
+            {
+                Proc.Kill();
+            }
+
+            Helper.UIHost.Print("\n All task aborted (」°ロ°)」");
+            Helper.SecondaryProcessList.Clear();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

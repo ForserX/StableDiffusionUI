@@ -11,32 +11,29 @@ namespace SD_FXUI
 {
     internal class CMD
     {
-        public static async Task ProcessRunner(string command, int TotalCount, Helper.UpscalerType Type, int UpSize)
+        public static async Task ProcessRunner(string command, Helper.UpscalerType Type, int UpSize)
         {
             Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\");
             ProcesHost.Print("\n Startup generation..... \n");
 
-            for (int i = 0; i < TotalCount; i++)
+            ProcesHost.Start();
+            // FX: Dirty hack for cache 
+            ProcesHost.Send(command);
+            ProcesHost.SendExistCommand();
+            ProcesHost.Wait();
+
+            //  process.WaitForInputIdle();
+            var Files = FS.GetFilesFrom(FS.GetModelDir() + "\\shark\\", new string[] { "png", "jpg" }, false);
+            foreach (var file in Files)
             {
-                ProcesHost.Start();
-                // FX: Dirty hack for cache 
-                ProcesHost.Send(command);
-                ProcesHost.SendExistCommand();
-                ProcesHost.Wait();
+                string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
+                System.IO.File.Move(file, Helper.ImgPath + System.IO.Path.GetFileName(file));
 
-                //  process.WaitForInputIdle();
-                var Files = FS.GetFilesFrom(FS.GetModelDir() + "\\shark\\", new string[] { "png", "jpg" }, false);
-                foreach (var file in Files)
+                Helper.Form.UpdateViewImg(NewFilePath);
+
+                if (UpSize > 0)
                 {
-                    string NewFilePath = MainWindow.ImgPath + System.IO.Path.GetFileName(file);
-                    System.IO.File.Move(file, MainWindow.ImgPath + System.IO.Path.GetFileName(file));
-
-                    MainWindow.Form.UpdateViewImg(NewFilePath);
-
-                    if (UpSize > 0)
-                    {
-                        await Task.Run(()=> UpscalerRunner(Type, UpSize, NewFilePath));
-                    }
+                    await Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
                 }
             }
 
@@ -87,7 +84,7 @@ namespace SD_FXUI
             ProcesHost.Start("-i " + File + " -o " + OutFile + DopCmd);
 
             ProcesHost.Wait();
-            MainWindow.Form.UpdateViewImg(OutFile);
+            Helper.Form.UpdateViewImg(OutFile);
         }
     }
 }

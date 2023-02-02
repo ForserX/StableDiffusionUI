@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace SD_FXUI
 {
@@ -35,7 +36,7 @@ namespace SD_FXUI
                 // Prepend line numbers to each line of the output.
                 if (!String.IsNullOrEmpty(e.Data))
                 {
-                    MainWindow.UIHost.Print(e.Data);
+                    Helper.UIHost.Print(e.Data);
                 }
             });
 
@@ -44,17 +45,19 @@ namespace SD_FXUI
                 // Prepend line numbers to each line of the output.
                 if (!String.IsNullOrEmpty(e.Data))
                 {
-                    MainWindow.UIHost.Print(e.Data);
+                    Helper.UIHost.Print(e.Data);
                 }
             });
 
             Process.BeginOutputReadLine();
             Process.BeginErrorReadLine();
+
+            Helper.SecondaryProcessList.Add(this);
         }
 
         public void Print(string Message)
         {
-            MainWindow.UIHost.Print(Message);
+            Helper.UIHost.Print(Message);
         }
         public void Kill()
         {
@@ -73,6 +76,11 @@ namespace SD_FXUI
         public void Wait()
         {
             Process.WaitForExit();
+
+            if (Helper.SecondaryProcessList.Contains(this))
+            {
+                Helper.SecondaryProcessList.Remove(this);
+            }
         }
     }
 }

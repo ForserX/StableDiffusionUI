@@ -18,5 +18,11 @@ namespace SD_FXUI
         }
 
         public static List<string> ModelsList = new List<string>();
+        public static List<Host> SecondaryProcessList = new List<Host>();
+
+        public static string CachePath = string.Empty;
+        public static string ImgPath = string.Empty;
+        public static MainWindow Form = null;
+        public static HostForm UIHost = null;
     }
 }

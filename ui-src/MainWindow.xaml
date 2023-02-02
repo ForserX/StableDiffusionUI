@@ -56,5 +56,6 @@
         <Label Content="Total count" HorizontalAlignment="Left" Margin="316,166,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
         <Image x:Name="btCmd" Margin="42,332,0,0" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Height="44" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
         <Button Content="Import" HorizontalAlignment="Left" Margin="307,293,0,0" VerticalAlignment="Top" Width="48" Click="Button_Click_1"/>
+        <Button Content="Break!" Margin="295,0,0,22" Click="Button_ClickBreak" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="58"/>
     </Grid>
 </Window>
