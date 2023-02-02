@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SD_FXUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="412" Width="800">
+        Title="MainWindow" Height="412" Width="800" Closed="OnClose">
     <Grid Margin="0,0,0,3">
         <TextBox x:Name="TryPrompt" HorizontalAlignment="Left" Margin="10,19,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="414" Height="54"/>
         <Label Content="Prompt" HorizontalAlignment="Left" Margin="0,-4,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
@@ -33,6 +33,7 @@
         <CheckBox x:Name="cbFf16" Content="fp16" HorizontalAlignment="Left" Margin="364,296,0,0" VerticalAlignment="Top" IsChecked="True" Height="15" Width="44"/>
         <ComboBox x:Name="cbX" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="59" Height="22">
             <ComboBoxItem Content="384"/>
+            <ComboBoxItem Content="400"/>
             <ComboBoxItem Content="512"/>
             <ComboBoxItem Content="640"/>
             <ComboBoxItem Content="728"/>
@@ -40,6 +41,7 @@
         </ComboBox>
         <ComboBox x:Name="cbY" HorizontalAlignment="Left" Margin="85,143,0,0" VerticalAlignment="Top" Width="59" Height="22">
             <ComboBoxItem Content="384"/>
+            <ComboBoxItem Content="400"/>
             <ComboBoxItem Content="512"/>
             <ComboBoxItem Content="640"/>
             <ComboBoxItem Content="728"/>

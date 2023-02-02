@@ -9,8 +9,8 @@ namespace SD_FXUI
 {
     class Host
     {
-        Process Process = null;
-        ProcessStartInfo ProcessStartInfo = null;
+        Process? Process = null;
+        ProcessStartInfo? ProcessStartInfo = null;
 
         public Host(string FileName = "cmd.exe")
         {

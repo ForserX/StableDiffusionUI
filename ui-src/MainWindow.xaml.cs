@@ -43,7 +43,7 @@ namespace SD_FXUI
             Form = this;
 
             UIHost = new HostForm();
-            UIHost.Show();
+            UIHost.Hide();
         }
 
         private string GetCommandLine()
@@ -124,6 +124,11 @@ namespace SD_FXUI
         {
             UIHost.Hide();
             UIHost.Show();
+        }
+
+        private void OnClose(object sender, EventArgs e)
+        {
+            UIHost.Close();
         }
     }
 }

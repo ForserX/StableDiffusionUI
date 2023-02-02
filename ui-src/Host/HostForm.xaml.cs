@@ -61,6 +61,8 @@ namespace SD_FXUI
 
         public void Print(string message)
         {
+            message = message.Replace(FS.GetWorkingDir(), "${Workspace}");
+
             Dispatcher.Invoke(() => ImplPrint(message));
         }
 

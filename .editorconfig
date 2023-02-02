@@ -2,3 +2,21 @@
 
 # CS8600: Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
 dotnet_diagnostic.CS8600.severity = none
+
+# CS8602: Разыменование вероятной пустой ссылки.
+dotnet_diagnostic.CS8602.severity = none
+
+# CS8629: Тип значения, допускающего NULL, может быть NULL.
+dotnet_diagnostic.CS8629.severity = none
+
+# CA2211: Поля, не являющиеся константами, не должны быть видимыми
+dotnet_diagnostic.CA2211.severity = none
+
+# CA1805: Не делайте лишних инициализаций
+dotnet_diagnostic.CA1805.severity = none
+
+# CS8625: Литерал, равный NULL, не может быть преобразован в ссылочный тип, не допускающий значение NULL.
+dotnet_diagnostic.CS8625.severity = none
+
+# CS1998: В асинхронном методе отсутствуют операторы await, будет выполнен синхронный метод
+dotnet_diagnostic.CS1998.severity = none
