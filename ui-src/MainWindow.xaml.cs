@@ -32,6 +32,8 @@ namespace SD_FXUI
             Helper.ImgPath.Replace('\\', '/');
             
             System.IO.Directory.CreateDirectory(Helper.CachePath);
+            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
+            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\diff");
             System.IO.Directory.CreateDirectory(Helper.ImgPath);
 
             cbUpscaler.SelectedIndex = 0;
@@ -61,38 +63,28 @@ namespace SD_FXUI
             cbUpscaler.Text =  Data.Get("upscaler");
             cbDevice.Text =  Data.Get("device");
             cbSampler.Text =  Data.Get("sampler");
-            var ListModel =  Data.Get("model").Split('|');
+            var ListModel =  Data.Get("current_model");
 
-            foreach (var model in ListModel)
-            {
-                if(model.Length > 0)
-                {
-                    cbModel.Items.Add(model);
-                }
-            }
+            UpdateModelsList();
+            cbModel.Text = ListModel.ToString();
         }
+
         void Save()
         {
-             Data.Set("fp16", cbFf16.IsChecked == true ? "true" : "false");
-             Data.Set("height", cbY.Text);
-             Data.Set("width", cbX.Text);
-             Data.Set("neg", NegPrompt.Text);
-             Data.Set("steps", tbSteps.Text);
-             Data.Set("upscaler", cbUpscaler.Text);
-             Data.Set("sampler", cbSampler.Text);
-             Data.Set("device", cbDevice.Text);
+            Data.Set("fp16", cbFf16.IsChecked == true ? "true" : "false");
+            Data.Set("height", cbY.Text);
+            Data.Set("width", cbX.Text);
+            Data.Set("neg", NegPrompt.Text);
+            Data.Set("steps", tbSteps.Text);
+            Data.Set("upscaler", cbUpscaler.Text);
+            Data.Set("sampler", cbSampler.Text);
+            Data.Set("device", cbDevice.Text);
 
-            string Models = "";
-
-            foreach (var a in cbModel.Items)
-            {
-                Models += a.ToString() + "|";
-            }
-
-            Data.Set("model", Models);
+            Data.Set("model", cbModel.Text);
 
             Data.Save();
         }
+
         private string GetCommandLine()
         {
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
@@ -206,16 +198,19 @@ namespace SD_FXUI
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             Utils.SharkModelImporter Importer = new Utils.SharkModelImporter();
-            Importer.ShowDialog();
+            Importer.Show();
+        }
 
+        public void UpdateModelsList()
+        {
             cbModel.Items.Clear();
 
-            foreach (var Itm in Helper.ModelsList)
+            foreach (var Itm in FS.GetModels(Helper.Mode))
             {
                 cbModel.Items.Add(Itm);
             }
 
-            cbModel.SelectedIndex = cbModel.Items.Count- 1;
+            cbModel.SelectedIndex = cbModel.Items.Count - 1;
         }
 
         private void chRandom_Checked(object sender, RoutedEventArgs e)

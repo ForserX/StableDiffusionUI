@@ -64,5 +64,48 @@ namespace SD_FXUI
                 }
             }
         }
+
+        public static List<string> GetModels(Helper.ImplementMode Mode)
+        {
+            string WorkingPath = GetModelDir();
+
+            switch (Mode)
+            {
+                case Helper.ImplementMode.ONNX: WorkingPath += "onnx/"; break;
+                case Helper.ImplementMode.InvokeAI: WorkingPath += "stable-diffusion/"; break;
+                case Helper.ImplementMode.Shark: WorkingPath += "diff/"; break;
+            }
+
+            List<string> Models = new List<string>();
+
+            if (Mode == Helper.ImplementMode.InvokeAI)
+            {
+                foreach (string file in Directory.EnumerateFiles(WorkingPath, "*.ckpt", SearchOption.AllDirectories))
+                {
+                    Models.Add(Path.GetFileName(file));
+                }
+            }
+            else
+            {
+                foreach(var LocPath in Directory.GetDirectories(WorkingPath))
+                {
+                    Models.Add(Path.GetFileName(LocPath));
+                }
+
+                if (Mode == Helper.ImplementMode.Shark)
+                {
+                    WorkingPath = GetModelDir() + @"huggingface/";
+
+                    foreach (string file in Directory.EnumerateFiles(WorkingPath, "*.hgf", SearchOption.AllDirectories))
+                    {
+                        string UrlName = Path.GetFileName(file).Replace("(slash)", "/");
+                        UrlName = UrlName.Remove(UrlName.Length - 4);
+                        Models.Add(UrlName);
+                    }
+                }
+            }
+
+            return Models;
+        }
     }
 }

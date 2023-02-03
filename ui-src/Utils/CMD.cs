@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -11,6 +12,31 @@ namespace SD_FXUI
 {
     internal class CMD
     {
+        public static async Task ProcessConvertCKPT2Diff(string InputFile)
+        {
+            string WorkDir = FS.GetModelDir() + "shark\\";
+            Host ProcesHost = new Host(WorkDir);
+            ProcesHost.Print($"\n Startup extract ckpt({InputFile})..... \n");
+
+            if (!File.Exists(WorkDir + "wget.exe"))
+            {
+                File.Copy(FS.GetToolsDir() + "wget.exe", WorkDir + "wget.exe");
+            }
+
+            string OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+            Directory.CreateDirectory(OutPath);
+
+            ProcesHost.Start("\"../../repo/shark.venv/Scripts/python.exe\" ../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py " +
+                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" --image_size=512");
+
+            ProcesHost.SendExistCommand();
+            ProcesHost.Wait();
+
+            File.Delete(WorkDir + "wget.exe");
+
+            ProcesHost.Print("\n  Extract task is done..... \n");
+        }
+
         public static async Task ProcessRunner(string command, Helper.UpscalerType Type, int UpSize)
         {
             Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/shark.venv/Scripts/python.exe");

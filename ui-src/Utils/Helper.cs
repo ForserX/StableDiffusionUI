@@ -17,12 +17,19 @@ namespace SD_FXUI
             None
         }
 
-        public static List<string> ModelsList = new List<string>();
+        public enum ImplementMode
+        {
+            InvokeAI,
+            Shark,
+            ONNX
+        }
+
         public static List<Host> SecondaryProcessList = new List<Host>();
 
         public static string CachePath = string.Empty;
         public static string ImgPath = string.Empty;
         public static MainWindow Form = null;
         public static HostForm UIHost = null;
+        public static ImplementMode Mode = ImplementMode.Shark;
     }
 }
