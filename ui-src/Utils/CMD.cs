@@ -13,12 +13,10 @@ namespace SD_FXUI
     {
         public static async Task ProcessRunner(string command, Helper.UpscalerType Type, int UpSize)
         {
-            Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\");
+            Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/shark.venv/Scripts/python.exe");
             ProcesHost.Print("\n Startup generation..... \n");
 
-            ProcesHost.Start();
-            // FX: Dirty hack for cache 
-            ProcesHost.Send(command);
+            ProcesHost.Start("../../repo/stable_diffusion/scripts/txt2img.py " + command);
             ProcesHost.SendExistCommand();
             ProcesHost.Wait();
 

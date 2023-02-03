@@ -65,7 +65,10 @@ namespace SD_FXUI
 
             foreach (var model in ListModel)
             {
-                cbModel.Items.Add(model);
+                if(model.Length > 0)
+                {
+                    cbModel.Items.Add(model);
+                }
             }
         }
         void Save()
@@ -94,8 +97,7 @@ namespace SD_FXUI
         {
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
             string Model = cbModel.Text.IndexOf('/') != -1 ? cbModel.Text : FS.GetModelDir() + "diff\\" + cbModel.Text;
-            string CmdLine = "\"../../repo/shark.venv/Scripts/python.exe\" ../../repo/stable_diffusion/scripts/txt2img.py ";
-            CmdLine +=$" --precision={FpMode}" 
+            string CmdLine = $" --precision={FpMode}" 
                     + $" --device=\"{cbDevice.Text}\""
                     + $" --prompt=\"{TryPrompt.Text}\"" 
                     + $" --negative_prompts=\"{NegPrompt.Text}\""
