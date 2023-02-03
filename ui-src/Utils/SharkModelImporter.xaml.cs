@@ -16,9 +16,17 @@ namespace SD_FXUI.Utils
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             string HuggUrl = "huggingface.co";
-            int Idx = cbPath.Text.IndexOf(HuggUrl) + HuggUrl.Length + 1;
 
-            HuggUrl = cbPath.Text.Substring(Idx);
+            if(cbPath.Text.IndexOf(HuggUrl) != -1)
+            {
+                int Idx = cbPath.Text.IndexOf(HuggUrl) + HuggUrl.Length + 1;
+
+                HuggUrl = cbPath.Text.Substring(Idx);
+            }
+            else
+            {
+                HuggUrl= cbPath.Text;
+            }
 
             var AllPathces = HuggUrl.Split('/');
             HuggUrl = AllPathces[0] + "/" + AllPathces[1];
