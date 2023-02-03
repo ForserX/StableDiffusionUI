@@ -38,6 +38,10 @@ namespace SD_FXUI
             cbModel.SelectedIndex = 0;
             cbX.SelectedIndex = 3;
             cbY.SelectedIndex = 3;
+
+            cbSampler.SelectedIndex = 0;
+            cbDevice.SelectedIndex = 0;
+
             Helper.Form = this;
 
             Helper.UIHost = new HostForm();
@@ -61,6 +65,7 @@ namespace SD_FXUI
             tbSteps.Text = Config.AppSettings.Settings["steps"].Value;
             cbUpscaler.Text = Config.AppSettings.Settings["upscaler"].Value;
             cbDevice.Text = Config.AppSettings.Settings["device"].Value;
+            cbSampler.Text = Config.AppSettings.Settings["sampler"].Value;
             var ListModel = Config.AppSettings.Settings["model"].Value.Split('|');
 
             foreach (var model in ListModel)
@@ -76,6 +81,7 @@ namespace SD_FXUI
             Config.AppSettings.Settings["neg"].Value = NegPrompt.Text;
             Config.AppSettings.Settings["steps"].Value = tbSteps.Text;
             Config.AppSettings.Settings["upscaler"].Value = cbUpscaler.Text;
+            Config.AppSettings.Settings["sampler"].Value = cbSampler.Text;
             Config.AppSettings.Settings["device"].Value = cbDevice.Text;
 
             string Models = "";
@@ -95,21 +101,35 @@ namespace SD_FXUI
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
             string Model = cbModel.Text.IndexOf('/') != -1 ? cbModel.Text : FS.GetModelDir() + "diff\\" + cbModel.Text;
             string CmdLine = "\"../../repo/shark.venv/Scripts/python.exe\" ../../repo/stable_diffusion/scripts/txt2img.py ";
-            CmdLine += $"--precision={FpMode} --device=\"{cbDevice.Text}\"" + $" --prompt=\"{TryPrompt.Text}\" --negative_prompts=\"{NegPrompt.Text}\" ";
-            CmdLine += $"--height={cbY.Text} --width={cbX.Text} ";
-            CmdLine += $"--guidance_scale={tbCFG.Text.Replace(',', '.')} -scheduler=\"PNDM\"";
-            CmdLine += $" --steps={tbSteps.Text} --seed={tbSeed.Text} --total_count={tbTotalCount.Text} ";
-            CmdLine += $"--hf_model_id=\"{Model}\" ";
-
-            CmdLine += "--no-use_tuned --local_tank_cache=\".//\" ";
-            CmdLine += "--enable_stack_trace --write_metadata_to_png";
+            CmdLine +=$" --precision={FpMode}" 
+                    + $" --device=\"{cbDevice.Text}\""
+                    + $" --prompt=\"{TryPrompt.Text}\"" 
+                    + $" --negative_prompts=\"{NegPrompt.Text}\""
+                    + $" --height={cbY.Text}"
+                    + $" --width={cbX.Text}"
+                    + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
+                    + $" --scheduler={cbSampler.Text}"
+                    + $" --steps={tbSteps.Text}"
+                    + $" --seed={tbSeed.Text}"
+                    + $" --total_count={tbTotalCount.Text}"
+                    + $" --hf_model_id=\"{Model}\""
+                    + $" --no-use_tuned " 
+                    + $" --local_tank_cache=\".//\""
+                    +  " --enable_stack_trace" 
+                    +  " --write_metadata_to_png"
+            ;
 
             return CmdLine;
         }
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            var rand = new Random();
-            tbSeed.Text = rand.Next().ToString();
+            if(chRandom.IsChecked.Value)
+            {
+                var rand = new Random();
+                tbSeed.Text = rand.Next().ToString();
+            }
+               
+        
 
             string cmdline = GetCommandLine();
             Helper.UpscalerType Type = (Helper.UpscalerType)cbUpscaler.SelectedIndex;

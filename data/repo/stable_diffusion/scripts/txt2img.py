@@ -127,13 +127,15 @@ if __name__ == "__main__":
 
     start_time = time.time()
     
-    print(f"prompt={args.total_count} \n")
+    print(f"images count={args.total_count} \n")
     
 
     for num in range(args.total_count):
-        if args.seed == -1 or args.total_count > 1:
+        if args.seed == -1:
             args.seed = random.randrange(9223372036854775807)
             print(f"Maked random seed at seed={args.seed} \n")
+        else:             
+            print(f"Generating at seed={args.seed} \n")
 
         generated_imgs = txt2img_obj.generate_images(
             args.prompts, args.negative_prompts,
@@ -142,8 +144,9 @@ if __name__ == "__main__":
             args.steps,
             args.guidance_scale, args.seed,
             args.max_length, dtype,
-            args.use_base_vae, cpu_scheduling,
+            args.use_base_vae, cpu_scheduling,                    
         )
+        args.seed = args.seed + 1
         save_output_img(generated_imgs[0])
 
     total_time = time.time() - start_time
