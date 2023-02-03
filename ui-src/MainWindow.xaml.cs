@@ -121,7 +121,7 @@ namespace SD_FXUI
             string CmdLine = $" --precision={FpMode}" 
                     + $" --device=\"{cbDevice.Text}\""
                     + $" --prompt=\"{TryPrompt.Text}\"" 
-                    + $" --negative_prompts=\"{NegPrompt.Text}\""
+                    + $" --negative-prompts=\"{NegPrompt.Text}\""
                     + $" --height={cbY.Text}"
                     + $" --width={cbX.Text}"
                     + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
