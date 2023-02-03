@@ -60,7 +60,7 @@ namespace SD_FXUI
             NegPrompt.Text = Config.AppSettings.Settings["neg"].Value;
             tbSteps.Text = Config.AppSettings.Settings["steps"].Value;
             cbUpscaler.Text = Config.AppSettings.Settings["upscaler"].Value;
-
+            cbDevice.Text = Config.AppSettings.Settings["device"].Value;
             var ListModel = Config.AppSettings.Settings["model"].Value.Split('|');
 
             foreach (var model in ListModel)
@@ -76,6 +76,7 @@ namespace SD_FXUI
             Config.AppSettings.Settings["neg"].Value = NegPrompt.Text;
             Config.AppSettings.Settings["steps"].Value = tbSteps.Text;
             Config.AppSettings.Settings["upscaler"].Value = cbUpscaler.Text;
+            Config.AppSettings.Settings["device"].Value = cbDevice.Text;
 
             string Models = "";
 
@@ -94,7 +95,7 @@ namespace SD_FXUI
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
             string Model = cbModel.Text.IndexOf('/') != -1 ? cbModel.Text : FS.GetModelDir() + "diff\\" + cbModel.Text;
             string CmdLine = "\"../../repo/shark.venv/Scripts/python.exe\" ../../repo/stable_diffusion/scripts/txt2img.py ";
-            CmdLine += $"--precision={FpMode} --device=vulkan" + $" --prompt=\"{TryPrompt.Text}\" --negative_prompts=\"{NegPrompt.Text}\" ";
+            CmdLine += $"--precision={FpMode} --device=\"{cbDevice.Text}\"" + $" --prompt=\"{TryPrompt.Text}\" --negative_prompts=\"{NegPrompt.Text}\" ";
             CmdLine += $"--height={cbY.Text} --width={cbX.Text} ";
             CmdLine += $"--guidance_scale={tbCFG.Text.Replace(',', '.')} -scheduler=\"PNDM\"";
             CmdLine += $" --steps={tbSteps.Text} --seed={tbSeed.Text} --total_count={tbTotalCount.Text} ";
@@ -107,6 +108,9 @@ namespace SD_FXUI
         }
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            var rand = new Random();
+            tbSeed.Text = rand.Next().ToString();
+
             string cmdline = GetCommandLine();
             Helper.UpscalerType Type = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
             int Size = (int)slUpscale.Value;
@@ -196,6 +200,20 @@ namespace SD_FXUI
             }
 
             cbModel.SelectedIndex = cbModel.Items.Count- 1;
+        }
+
+        private void chRandom_Checked(object sender, RoutedEventArgs e)
+        {
+            tbSeed.IsEnabled = false;
+        }
+        private void chRandom_Unchecked(object sender, RoutedEventArgs e)
+        {
+            tbSeed.IsEnabled = true;
+        }
+
+        private void cbDevice_TextChanged(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

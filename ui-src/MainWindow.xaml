@@ -10,7 +10,7 @@
         <TextBox x:Name="TryPrompt" HorizontalAlignment="Left" Margin="10,19,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="414" Height="54"/>
         <Label Content="Prompt" HorizontalAlignment="Left" Margin="0,-4,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
         <TextBox x:Name="NegPrompt" HorizontalAlignment="Left" Margin="10,97,0,0" TextWrapping="Wrap" Text="" Width="414" Height="39" VerticalAlignment="Top"/>
-        <Button Content="Make!" Margin="364,0,0,22" Click="Button_Click" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="58"/>
+        <Button Content="Make!" Margin="364,0,0,12" Click="Button_Click" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="58"/>
         <Label Content="x" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="69,141,0,0" Height="26" Width="16"/>
         <Label Content="Neg prompt" HorizontalAlignment="Left" Margin="0,73,0,0" VerticalAlignment="Top" Height="26" Width="75"/>
         <Slider  x:Name="slSteps" HorizontalAlignment="Left" Margin="80,179,0,0" VerticalAlignment="Top" Width="120" Maximum="150" Minimum="5" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" Height="18" LargeChange="0"/>
@@ -18,12 +18,16 @@
         <TextBox  x:Name="tbSteps" HorizontalAlignment="Left" Margin="205,179,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="34" TextChanged="tbSteps_TextChanged" Height="18"/>
         <Image x:Name="ViewImg" Margin="429,8,5,3"/>
         <Label Content="CFG Scale" HorizontalAlignment="Left" Margin="1,206,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
+        <ComboBox  x:Name="cbDevice" HorizontalAlignment="Left" Margin="324,313,0,0" VerticalAlignment="Top" Width="98" Height="18" Text="vulkan">
+            <ComboBoxItem Content="vulkan"/>
+            <ComboBoxItem Content="cuda"/>
+        </ComboBox>
         <Slider  x:Name="slCFG" HorizontalAlignment="Left" Margin="80,210,0,0" VerticalAlignment="Top" Width="120" Maximum="20" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="5" Value="7.5" ValueChanged="Slider2_ValueChanged" SmallChange="0.5" Height="18"/>
         <TextBox  x:Name="tbCFG" HorizontalAlignment="Left" Margin="205,210,0,0" TextWrapping="Wrap" Text="7,5" VerticalAlignment="Top" Width="34" TextChanged="tbSteps2_TextChanged" Height="18"/>
-        <TextBox x:Name="tbSeed" HorizontalAlignment="Left" Margin="304,145,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="120" Height="18"/>
-        <Label Content="Seed" HorizontalAlignment="Left" Margin="263,141,0,0" VerticalAlignment="Top" Height="26" Width="36"/>
-        <ComboBox x:Name="cbModel" HorizontalAlignment="Left" Margin="5,293,0,0" VerticalAlignment="Top" Width="294" Height="22"/>
-        <CheckBox x:Name="cbFf16" Content="fp16" HorizontalAlignment="Left" Margin="364,296,0,0" VerticalAlignment="Top" IsChecked="True" Height="15" Width="44"/>
+        <TextBox x:Name="tbSeed" HorizontalAlignment="Left" Margin="249,145,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="96" Height="18" IsEnabled="False"/>
+        <Label Content="Seed" HorizontalAlignment="Left" Margin="203,141,0,0" VerticalAlignment="Top" Height="26" Width="36"/>
+        <ComboBox x:Name="cbModel" HorizontalAlignment="Left" Margin="8,282,0,0" VerticalAlignment="Top" Width="294" Height="22"/>
+        <CheckBox x:Name="cbFf16" Content="fp16" HorizontalAlignment="Left" Margin="364,285,0,0" VerticalAlignment="Top" IsChecked="True" Height="15" Width="44"/>
         <ComboBox x:Name="cbX" HorizontalAlignment="Left" Margin="10,143,0,0" VerticalAlignment="Top" Width="59" Height="22">
             <ComboBoxItem Content="384"/>
             <ComboBoxItem Content="416"/>
@@ -51,11 +55,13 @@
         <Label Content="Value" HorizontalAlignment="Left" Margin="205,239,0,0" VerticalAlignment="Top" Height="26" Width="39"/>
         <Slider  x:Name="slUpscale" HorizontalAlignment="Left" Margin="249,243,0,0" VerticalAlignment="Top" Width="58" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Height="18"/>
         <Label x:Name="lbUpscale" Content="x4" HorizontalAlignment="Left" Margin="313,237,0,0" VerticalAlignment="Top" Background="#FFDFD2D2" Height="26" Width="22"/>
-        <Image Margin="2,332,0,0" Source="/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Height="44" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
+        <Image Margin="2,332,0,0" Source="/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="50"/>
         <TextBox x:Name="tbTotalCount" HorizontalAlignment="Left" Margin="386,170,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="38" Height="18"/>
         <Label Content="Total count" HorizontalAlignment="Left" Margin="316,166,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
-        <Image x:Name="btCmd" Margin="42,332,0,0" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Height="44" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
-        <Button Content="Import" HorizontalAlignment="Left" Margin="307,293,0,0" VerticalAlignment="Top" Width="48" Click="Button_Click_1"/>
-        <Button Content="Break!" Margin="295,0,0,22" Click="Button_ClickBreak" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="58"/>
+        <Image x:Name="btCmd" Margin="42,332,0,0" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="50"/>
+        <Button Content="Import" HorizontalAlignment="Left" Margin="307,283,0,0" VerticalAlignment="Top" Width="48" Click="Button_Click_1"/>
+        <Button Content="Break!" Margin="295,0,0,12" Click="Button_ClickBreak" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="58" RenderTransformOrigin="0.484,1.102"/>
+        <Label Content="Device" HorizontalAlignment="Left" Margin="275,309,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
+        <CheckBox x:Name="chRandom" Content="Random" HorizontalAlignment="Left" Margin="351,147,0,0" VerticalAlignment="Top" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked"/>
     </Grid>
 </Window>
