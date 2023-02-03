@@ -33,6 +33,7 @@ namespace SD_FXUI
             
             System.IO.Directory.CreateDirectory(Helper.CachePath);
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
+            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\diff");
             System.IO.Directory.CreateDirectory(Helper.ImgPath);
 
@@ -63,7 +64,16 @@ namespace SD_FXUI
             cbUpscaler.Text =  Data.Get("upscaler");
             cbDevice.Text =  Data.Get("device");
             cbSampler.Text =  Data.Get("sampler");
-            var ListModel =  Data.Get("current_model");
+            var ListModel =  Data.Get("model");
+
+            switch(Data.Get("back_mode"))
+            {
+                case "0": Helper.Mode = Helper.ImplementMode.InvokeAI; break;
+                case "1": btnShark_Click(0, new RoutedEventArgs());  break;
+                case "2": btnONNX_Click(0, new RoutedEventArgs()); break;
+
+                default:  btnShark_Click(0, new RoutedEventArgs()); break;
+            }
 
             UpdateModelsList();
             cbModel.Text = ListModel.ToString();
@@ -81,11 +91,30 @@ namespace SD_FXUI
             Data.Set("device", cbDevice.Text);
 
             Data.Set("model", cbModel.Text);
-
+            Data.Set("back_mode", ((int)(Helper.Mode)).ToString());
             Data.Save();
         }
 
-        private string GetCommandLine()
+        private string GetCommandLineOnnx()
+        {
+            string Model = FS.GetModelDir() + "onnx\\" + cbModel.Text;
+            string CmdLine = $""
+                    + $" --prompt=\"{TryPrompt.Text}\""
+                    + $" --prompt_neg=\"{NegPrompt.Text}\""
+                    + $" --height={cbY.Text}"
+                    + $" --width={cbX.Text}"
+                    + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
+                    + $" --scmode={cbSampler.Text}"
+                    + $" --steps={tbSteps.Text}"
+                    + $" --seed={tbSeed.Text}"
+                    + $" --totalcount={tbTotalCount.Text}"
+                    + $" --model=\"{Model}\""
+                    + $" --outpath=\"{FS.GetWorkingDir()}\""
+            ;
+
+            return CmdLine;
+        }
+        private string GetCommandLineShark()
         {
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
             string Model = cbModel.Text.IndexOf('/') != -1 ? cbModel.Text : FS.GetModelDir() + "diff\\" + cbModel.Text;
@@ -116,14 +145,27 @@ namespace SD_FXUI
                 var rand = new Random();
                 tbSeed.Text = rand.Next().ToString();
             }
-               
-        
 
-            string cmdline = GetCommandLine();
             Helper.UpscalerType Type = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
             int Size = (int)slUpscale.Value;
 
-            await Task.Run(() => CMD.ProcessRunner(cmdline, Type, Size));
+            string cmdline = "";
+            switch (Helper.Mode)
+            {
+                case Helper.ImplementMode.Shark:
+                    {
+                        cmdline += GetCommandLineShark();
+                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Type, Size));
+                        break;
+                    }
+                case Helper.ImplementMode.ONNX:
+                    {
+                        cmdline += GetCommandLineOnnx();
+                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Type, Size));
+                        break;
+                    }
+            }
+            
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -225,6 +267,34 @@ namespace SD_FXUI
         private void cbDevice_TextChanged(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void btnONNX_Click(object sender, RoutedEventArgs e)
+        {
+            if (Helper.Mode != Helper.ImplementMode.ONNX)
+            {
+                Helper.Mode = Helper.ImplementMode.ONNX;
+
+                var Safe = btnONNX.Background;
+                btnONNX.Background = new SolidColorBrush(Colors.Violet);
+                btnShark.Background = Safe;
+
+                UpdateModelsList();
+            }
+        }
+
+        private void btnShark_Click(object sender, RoutedEventArgs e)
+        {
+            if (Helper.Mode != Helper.ImplementMode.Shark)
+            {
+                Helper.Mode = Helper.ImplementMode.Shark;
+
+                var Safe = btnShark.Background;
+                btnShark.Background = new SolidColorBrush(Colors.Violet);
+                btnONNX.Background = Safe;
+
+                UpdateModelsList();
+            }
         }
     }
 }

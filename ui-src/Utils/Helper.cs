@@ -21,7 +21,9 @@ namespace SD_FXUI
         {
             InvokeAI,
             Shark,
-            ONNX
+            ONNX,
+
+            IDK
         }
 
         public static List<Host> SecondaryProcessList = new List<Host>();
@@ -30,6 +32,6 @@ namespace SD_FXUI
         public static string ImgPath = string.Empty;
         public static MainWindow Form = null;
         public static HostForm UIHost = null;
-        public static ImplementMode Mode = ImplementMode.Shark;
+        public static ImplementMode Mode = ImplementMode.IDK;
     }
 }

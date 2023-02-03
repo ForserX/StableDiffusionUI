@@ -29,9 +29,13 @@ namespace SD_FXUI
 
         bool StepTest(string message)
         {
-            message = Regex.Replace(message, @"\s+", "");
+            try
+            {
+                message = Regex.Replace(message, @"\s+", "");
 
-            return message.StartsWith("Downloading") || Char.IsNumber(message[0]);
+                return message.StartsWith("Downloading") || Char.IsNumber(message[0]);
+            }
+            catch { return false; }
         }
         void ImplPrint(string message)
         {

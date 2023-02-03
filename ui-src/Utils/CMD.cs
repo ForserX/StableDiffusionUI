@@ -37,7 +37,33 @@ namespace SD_FXUI
             ProcesHost.Print("\n  Extract task is done..... \n");
         }
 
-        public static async Task ProcessRunner(string command, Helper.UpscalerType Type, int UpSize)
+        public static async Task ProcessRunnerOnnx(string command, Helper.UpscalerType Type, int UpSize)
+        {
+            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/shark.venv/Scripts/python.exe");
+            ProcesHost.Print("\n Startup generation..... \n");
+
+            ProcesHost.Start("./repo/diffusion_scripts/sd_onnx.py " + command);
+            ProcesHost.SendExistCommand();
+            ProcesHost.Wait();
+
+            //  process.WaitForInputIdle();
+            var Files = FS.GetFilesFrom(FS.GetWorkingDir(), new string[] { "png", "jpg" }, false);
+            foreach (var file in Files)
+            {
+                string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
+                System.IO.File.Move(file, Helper.ImgPath + System.IO.Path.GetFileName(file));
+
+                Helper.Form.UpdateViewImg(NewFilePath);
+
+                if (UpSize > 0)
+                {
+                    Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
+                }
+            }
+
+            ProcesHost.Print("\n  Generation Done..... \n");
+        }
+        public static async Task ProcessRunnerShark(string command, Helper.UpscalerType Type, int UpSize)
         {
             Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/shark.venv/Scripts/python.exe");
             ProcesHost.Print("\n Startup generation..... \n");
@@ -57,12 +83,13 @@ namespace SD_FXUI
 
                 if (UpSize > 0)
                 {
-                    await Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
+                    Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
                 }
             }
 
             ProcesHost.Print("\n  Generation Done..... \n");
         }
+
 
         public static async Task UpscalerRunner(Helper.UpscalerType Type, int Size, string File)
         {

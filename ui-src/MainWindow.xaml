@@ -16,7 +16,7 @@
         <Slider  x:Name="slSteps" HorizontalAlignment="Left" Margin="262,149,0,0" VerticalAlignment="Top" Width="120" Maximum="150" Minimum="5" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" Height="18" LargeChange="0"/>
         <Label Content="Steps Count" HorizontalAlignment="Left" Margin="184,145,0,0" VerticalAlignment="Top" Height="26" Width="74"/>
         <TextBox  x:Name="tbSteps" HorizontalAlignment="Left" Margin="388,149,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="34" TextChanged="tbSteps_TextChanged" Height="18"/>
-        <Image x:Name="ViewImg" Margin="429,8,5,3"/>
+        <Image x:Name="ViewImg" Margin="429,42,5,3"/>
         <Label Content="CFG Scale" HorizontalAlignment="Left" Margin="184,176,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
         <ComboBox  x:Name="cbDevice" HorizontalAlignment="Left" Margin="77,334,0,0" VerticalAlignment="Top" Width="116" Height="22" Text="vulkan">
             <ComboBoxItem Content="vulkan"/>
@@ -69,8 +69,8 @@
                 schedulers["EulerAncestralDiscrete"] = EulerAncestralDiscreteScheduler.from_pretrained(
                 schedulers["SharkEulerDiscrete"] = SharkEulerDiscreteScheduler.from_pretrained(
             >-->
-            
-            
+
+
             <!--["pndm", "lms", "heun", "euler","euler-ancestral", "dpm", "ddim"]-->
 
         </ComboBox>
@@ -89,5 +89,7 @@
         <CheckBox x:Name="chRandom" Content="Random" HorizontalAlignment="Left" Margin="175,302,0,0" VerticalAlignment="Top" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked"/>
         <Label Content="Img Size" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,178,0,0" Height="26" Width="54"/>
         <Label Content="Sampler" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,147,0,0" Height="26" Width="54"/>
+        <Button x:Name="btnShark" Content="Shark" Margin="0,7,6,0" VerticalAlignment="Top" Click="btnShark_Click" HorizontalAlignment="Right" Width="37"/>
+        <Button x:Name="btnONNX" Content="ONNX" Margin="0,7,42,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Right" Width="38"/>
     </Grid>
 </Window>
