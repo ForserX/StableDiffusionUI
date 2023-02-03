@@ -22,7 +22,7 @@ namespace SD_FXUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        Configuration Config = null;
+        Config Data = null;
         public MainWindow()
         {
             InitializeComponent();
@@ -48,25 +48,20 @@ namespace SD_FXUI
             Helper.UIHost.Hide();
 
             // Load App data
-            Config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            Data = new Config();
             Load();
         }
         void Load()
         {
-            if (Config.AppSettings.Settings["fp16"] == null)
-            {
-                return;
-            }
-
-            cbFf16.IsChecked = Config.AppSettings.Settings["fp16"].Value == "true";
-            cbY.Text = Config.AppSettings.Settings["height"].Value;
-            cbX.Text = Config.AppSettings.Settings["width"].Value;
-            NegPrompt.Text = Config.AppSettings.Settings["neg"].Value;
-            tbSteps.Text = Config.AppSettings.Settings["steps"].Value;
-            cbUpscaler.Text = Config.AppSettings.Settings["upscaler"].Value;
-            cbDevice.Text = Config.AppSettings.Settings["device"].Value;
-            cbSampler.Text = Config.AppSettings.Settings["sampler"].Value;
-            var ListModel = Config.AppSettings.Settings["model"].Value.Split('|');
+            cbFf16.IsChecked = Data.Get("fp16") == "true";
+            cbY.Text =  Data.Get("height");
+            cbX.Text = Data.Get("width");
+            NegPrompt.Text =  Data.Get("neg");
+            tbSteps.Text =  Data.Get("steps");
+            cbUpscaler.Text =  Data.Get("upscaler");
+            cbDevice.Text =  Data.Get("device");
+            cbSampler.Text =  Data.Get("sampler");
+            var ListModel =  Data.Get("model").Split('|');
 
             foreach (var model in ListModel)
             {
@@ -75,14 +70,14 @@ namespace SD_FXUI
         }
         void Save()
         {
-            Config.AppSettings.Settings["fp16"].Value = cbFf16.IsChecked == true ? "true" : "false";
-            Config.AppSettings.Settings["height"].Value = cbY.Text;
-            Config.AppSettings.Settings["width"].Value = cbX.Text;
-            Config.AppSettings.Settings["neg"].Value = NegPrompt.Text;
-            Config.AppSettings.Settings["steps"].Value = tbSteps.Text;
-            Config.AppSettings.Settings["upscaler"].Value = cbUpscaler.Text;
-            Config.AppSettings.Settings["sampler"].Value = cbSampler.Text;
-            Config.AppSettings.Settings["device"].Value = cbDevice.Text;
+             Data.Set("fp16", cbFf16.IsChecked == true ? "true" : "false");
+             Data.Set("height", cbY.Text);
+             Data.Set("width", cbX.Text);
+             Data.Set("neg", NegPrompt.Text);
+             Data.Set("steps", tbSteps.Text);
+             Data.Set("upscaler", cbUpscaler.Text);
+             Data.Set("sampler", cbSampler.Text);
+             Data.Set("device", cbDevice.Text);
 
             string Models = "";
 
@@ -91,10 +86,9 @@ namespace SD_FXUI
                 Models += a.ToString() + "|";
             }
 
-            Config.AppSettings.Settings["model"].Value = Models;
+            Data.Set("model", Models);
 
-            Config.Save(ConfigurationSaveMode.Full, true);
-            ConfigurationManager.RefreshSection("appSettings");
+            Data.Save();
         }
         private string GetCommandLine()
         {
