@@ -81,15 +81,15 @@ def get_model_specific_args():
     ms_args = []
     if shark_args.enable_conv_transform == True:
         ms_args += [
-            "--iree-preprocessing-pass-pipeline=builtin.module(func.func(iree-flow-convert-conv-nchw-to-nhwc))"
+            "--iree-flow-enable-data-tiling=builtin.module(func.func(iree-flow-convert-conv-nchw-to-nhwc))"
         ]
     if shark_args.enable_img2col_transform == True:
         ms_args += [
-            "--iree-preprocessing-pass-pipeline=builtin.module(func.func(iree-preprocessing-convert-conv2d-to-img2col))"
+            "--iree-flow-enable-data-tiling=builtin.module(func.func(iree-preprocessing-convert-conv2d-to-img2col))"
         ]
     if shark_args.use_winograd == True:
         ms_args += [
-            "--iree-preprocessing-pass-pipeline=builtin.module(func.func(iree-linalg-ext-convert-conv2d-to-winograd))"
+            "--iree-flow-enable-data-tiling=builtin.module(func.func(iree-linalg-ext-convert-conv2d-to-winograd))"
         ]
     return ms_args
 

@@ -21,7 +21,7 @@ from repo.stable_diffusion.src.models import (
     get_unet,
     get_tokenizer,
 )
-from apps.stable_diffusion.src.utils import (
+from repo.stable_diffusion.src.utils import (
     start_profiling,
     end_profiling,
 )

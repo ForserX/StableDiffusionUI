@@ -74,6 +74,7 @@ def get_shark_model(tank_url, model_name, extra_args=[]):
 
 
 # Converts the torch-module into a shark_module.
+
 def compile_through_fx(
     model,
     inputs,
@@ -82,8 +83,8 @@ def compile_through_fx(
     f16_input_mask=None,
     use_tuned=False,
     extra_args=[],
-    from repo.shark.parser import shark_args
 ):
+    from repo.shark.parser import shark_args
 
     if "cuda" in args.device:
         shark_args.enable_tf32 = True
@@ -156,7 +157,7 @@ def get_device_mapping(driver, key_combination=3):
     Returns:
         dict: map to possible device names user can input mapped to desired combination of name/path.
     """
-    from shark.iree_utils._common import iree_device_map
+    from repo.shark.iree_utils._common import iree_device_map
 
     driver = iree_device_map(driver)
     device_list = get_all_devices(driver)

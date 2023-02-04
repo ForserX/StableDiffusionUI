@@ -110,7 +110,7 @@ def annotate_with_lower_configs(
     if use_winograd:
         dump_after = "iree-linalg-ext-convert-conv2d-to-winograd"
         preprocess_flag = (
-            "--iree-preprocessing-pass-pipeline='builtin.module"
+            "--iree-flow-enable-data-tiling='builtin.module"
             "(func.func(iree-preprocessing-convert-conv2d-to-img2col,"
             "iree-preprocessing-pad-linalg-ops{pad-size=32},"
             "iree-linalg-ext-convert-conv2d-to-winograd))' "
@@ -118,7 +118,7 @@ def annotate_with_lower_configs(
     else:
         dump_after = "iree-preprocessing-pad-linalg-ops"
         preprocess_flag = (
-            "--iree-preprocessing-pass-pipeline='builtin.module"
+            "--iree-flow-enable-data-tiling='builtin.module"
             "(func.func(iree-preprocessing-convert-conv2d-to-img2col,"
             "iree-preprocessing-pad-linalg-ops{pad-size=32}))' "
         )

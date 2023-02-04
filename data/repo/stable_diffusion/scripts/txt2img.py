@@ -123,6 +123,7 @@ if __name__ == "__main__":
         args.height,
         args.width,
         args.use_base_vae,
+        False
     )
 
     start_time = time.time()
