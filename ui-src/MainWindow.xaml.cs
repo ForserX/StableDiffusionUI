@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace SD_FXUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<string> ImgList = new List<string>();
         Config Data = null;
         public MainWindow()
         {
@@ -165,7 +167,7 @@ namespace SD_FXUI
                         break;
                     }
             }
-            
+            ClearImages();
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -202,7 +204,14 @@ namespace SD_FXUI
 
         void SetImg(string Img)
         {
-            ViewImg.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri(Img));
+            ViewImg.Source = new BitmapImage(new Uri(Img));
+            ListViewItemsCollections.Add(new ListViewItemsData()
+            {
+                GridViewColumnName_ImageSource = Img
+            });
+
+            ListView1.ItemsSource = ListViewItemsCollections;
+            ImgList.Add(Img);
         }
         public void UpdateViewImg(string Img)
         {
@@ -295,6 +304,37 @@ namespace SD_FXUI
 
                 UpdateModelsList();
             }
+        }
+
+        public ObservableCollection<ListViewItemsData> ListViewItemsCollections { get { return _ListViewItemsCollections; } }
+        ObservableCollection<ListViewItemsData> _ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
+        public class ListViewItemsData
+        {
+            public string GridViewColumnName_ImageSource { get; set; }
+            public string GridViewColumnName_ID { get; set; }
+        }
+
+        private void ListView1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(ImgList.Count> 0)
+            {
+                ViewImg.Source = new BitmapImage(new Uri(ImgList[ListView1.SelectedIndex]));
+            }
+        }
+        void ClearImages()
+        {
+            ImgList.Clear();
+            ViewImg.Source = null;
+
+            ListView1.UnselectAll();
+            ListView1.ItemsSource = null;
+            ListView1.Items.Clear();
+            ListViewItemsCollections.Clear();
+        }
+
+        public void InvokeClearImages()
+        {
+            Dispatcher.Invoke(() => { InvokeClearImages(); });
         }
     }
 }

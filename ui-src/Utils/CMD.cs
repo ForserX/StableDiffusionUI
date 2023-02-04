@@ -15,7 +15,7 @@ namespace SD_FXUI
         public static async Task ProcessConvertCKPT2Diff(string InputFile)
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
-            Host ProcesHost = new Host(WorkDir);
+            Host ProcesHost = new Host(WorkDir, "repo/shark.venv/Scripts/python.exe");
             ProcesHost.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
             if (!File.Exists(WorkDir + "wget.exe"))
@@ -23,11 +23,24 @@ namespace SD_FXUI
                 File.Copy(FS.GetToolsDir() + "wget.exe", WorkDir + "wget.exe");
             }
 
-            string OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+            string OutPath = null;
+            string AddCmd = "";
+
+            if (InputFile.EndsWith(".safetensors"))
+            {
+                OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
+                AddCmd = " --from_safetensors";
+            }
+            else
+            {
+                OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+            }
+
             Directory.CreateDirectory(OutPath);
 
-            ProcesHost.Start("\"../../repo/shark.venv/Scripts/python.exe\" ../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py " +
-                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" --image_size=512");
+            ProcesHost.Start("\"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
+                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" --image_size=512 " + 
+                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\"" + AddCmd);
 
             ProcesHost.SendExistCommand();
             ProcesHost.Wait();
@@ -53,11 +66,13 @@ namespace SD_FXUI
                 string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
                 System.IO.File.Move(file, Helper.ImgPath + System.IO.Path.GetFileName(file));
 
-                Helper.Form.UpdateViewImg(NewFilePath);
-
                 if (UpSize > 0)
                 {
                     Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
+                }
+                else
+                {
+                    Helper.Form.UpdateViewImg(NewFilePath);
                 }
             }
 
@@ -79,11 +94,13 @@ namespace SD_FXUI
                 string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
                 System.IO.File.Move(file, Helper.ImgPath + System.IO.Path.GetFileName(file));
 
-                Helper.Form.UpdateViewImg(NewFilePath);
-
                 if (UpSize > 0)
                 {
                     Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
+                }
+                else
+                {
+                    Helper.Form.UpdateViewImg(NewFilePath);
                 }
             }
 
