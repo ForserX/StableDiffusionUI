@@ -56,6 +56,7 @@ namespace SD_FXUI
             // Load App data
             Data = new Config();
             Load();
+            ChangeTheme();
         }
         void Load()
         {
@@ -286,7 +287,7 @@ namespace SD_FXUI
                 Helper.Mode = Helper.ImplementMode.ONNX;
 
                 var Safe = btnONNX.Background;
-                btnONNX.Background = new SolidColorBrush(Colors.Violet);
+                btnONNX.Background = new SolidColorBrush(Colors.DarkOrchid);
                 btnShark.Background = Safe;
 
                 UpdateModelsList();
@@ -300,7 +301,7 @@ namespace SD_FXUI
                 Helper.Mode = Helper.ImplementMode.Shark;
 
                 var Safe = btnShark.Background;
-                btnShark.Background = new SolidColorBrush(Colors.Violet);
+                btnShark.Background = new SolidColorBrush(Colors.DarkMagenta);
                 btnONNX.Background = Safe;
 
                 UpdateModelsList();
@@ -338,7 +339,7 @@ namespace SD_FXUI
             Dispatcher.Invoke(() => { InvokeClearImages(); });
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void ChangeTheme()
         {            
             {
                 Resources.MergedDictionaries.Clear();
