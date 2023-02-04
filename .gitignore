@@ -21,3 +21,4 @@ ui-src/obj/
 *.ckpt
 *.htm
 *.exe
+*.json
