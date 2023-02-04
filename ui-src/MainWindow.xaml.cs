@@ -381,11 +381,11 @@ namespace SD_FXUI
                         {
                             if (cbDevice.SelectedItem.ToString() == "GPU: 1")
                             {
-                                str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 1}] sess_options=sess_options)";
+                                str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 1}], sess_options=sess_options)";
                             }
                             else
                             {
-                                str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 0}] sess_options=sess_options)";
+                                str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 0}], sess_options=sess_options)";
                             }
                             break;
                         }

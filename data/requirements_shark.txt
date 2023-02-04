@@ -30,5 +30,6 @@ pefile
 pyinstaller
 
 # ONNX Trash
+onnx
 onnxruntime
-onnxruntime_directml
+onnxruntime_directml --force
