@@ -11,10 +11,11 @@ from repo.shark.iree_utils.gpu_utils import get_cuda_sm_cc
 from repo.stable_diffusion.src.utils.stable_args import args
 from repo.stable_diffusion.src.utils.resources import opt_flags
 from repo.stable_diffusion.src.utils.sd_annotation import sd_model_annotation
-import sys
+import sys, functools, operator
 from diffusers.pipelines.stable_diffusion.convert_from_ckpt import (
     load_pipeline_from_original_stable_diffusion_ckpt,
 )
+
 
 def get_vmfb_path_name(model_name):
     device = (
@@ -81,17 +82,17 @@ def compile_through_fx(
     f16_input_mask=None,
     use_tuned=False,
     extra_args=[],
-): 
     from repo.shark.parser import shark_args
+):
 
     if "cuda" in args.device:
         shark_args.enable_tf32 = True
+
     mlir_module, func_name = import_with_fx(
         model, inputs, is_f16, f16_input_mask
     )
-    
+
     if use_tuned:
-        model_name = model_name + "_tuned"
         tuned_model_path = f"{args.annotation_output}/{model_name}_torch.mlir"
         if not os.path.exists(tuned_model_path):
             if "vae" in model_name.split("_")[0]:
@@ -106,13 +107,12 @@ def compile_through_fx(
         with open(tuned_model_path, "rb") as f:
             mlir_module = f.read()
             f.close()
-            
+
     shark_module = SharkInference(
         mlir_module,
         device=args.device,
         mlir_dialect="linalg",
     )
-
     return _compile_module(shark_module, model_name, extra_args)
 
 
@@ -156,7 +156,7 @@ def get_device_mapping(driver, key_combination=3):
     Returns:
         dict: map to possible device names user can input mapped to desired combination of name/path.
     """
-    from repo.shark.iree_utils._common import iree_device_map
+    from shark.iree_utils._common import iree_device_map
 
     driver = iree_device_map(driver)
     device_list = get_all_devices(driver)
@@ -232,10 +232,10 @@ def set_init_device_flags():
     elif args.hf_model_id == "prompthero/openjourney":
         args.max_length = 64
 
-    # Use tuned models in the case of a specific setting.
+    # Use tuned models in the case of fp16, vulkan rdna3 or cuda sm devices.
     if (
-        args.hf_model_id
-        in ["prompthero/openjourney", "dreamlike-art/dreamlike-diffusion-1.0"]
+        args.hf_model_id == "prompthero/openjourney"
+        or args.ckpt_loc != ""
         or args.precision != "fp16"
         or args.height != 512
         or args.width != 512
@@ -254,7 +254,6 @@ def set_init_device_flags():
         "sm_80",
         "sm_84",
         "sm_86",
-        "sm_89",
     ]:
         args.use_tuned = False
 
@@ -341,7 +340,7 @@ def get_opt_flags(model, precision="fp16"):
         iree_flags += opt_flags[model][is_tuned][precision][
             "default_compilation_flags"
         ]
-        
+
     if "specified_compilation_flags" in opt_flags[model][is_tuned][precision]:
         device = (
             args.device
@@ -358,40 +357,77 @@ def get_opt_flags(model, precision="fp16"):
         iree_flags += opt_flags[model][is_tuned][precision][
             "specified_compilation_flags"
         ][device]
-
     return iree_flags
 
 
-def preprocessCKPT():
-    from pathlib import Path
-
-    path = Path(args.ckpt_loc)
+def get_path_to_diffusers_checkpoint(custom_weights):
+    path = Path(custom_weights)
     diffusers_path = path.parent.absolute()
     diffusers_directory_name = path.stem
     complete_path_to_diffusers = diffusers_path / diffusers_directory_name
     complete_path_to_diffusers.mkdir(parents=True, exist_ok=True)
-    print(
-        "Created directory : ",
-        diffusers_directory_name,
-        " at -> ",
-        diffusers_path,
-    )
     path_to_diffusers = complete_path_to_diffusers.as_posix()
+    return path_to_diffusers
+
+
+def preprocessCKPT(custom_weights):
+    path_to_diffusers = get_path_to_diffusers_checkpoint(custom_weights)
+    if next(Path(path_to_diffusers).iterdir(), None):
+        print("Checkpoint already loaded at : ", path_to_diffusers)
+        return
+    else:
+        print(
+            "Diffusers' checkpoint will be identified here : ",
+            path_to_diffusers,
+        )
     from_safetensors = (
-        True if args.ckpt_loc.lower().endswith(".safetensors") else False
+        True if custom_weights.lower().endswith(".safetensors") else False
     )
     # EMA weights usually yield higher quality images for inference but non-EMA weights have
     # been yielding better results in our case.
     # TODO: Add an option `--ema` (`--no-ema`) for users to specify if they want to go for EMA
     #       weight extraction or not.
     extract_ema = False
-    print("Loading pipeline from original stable diffusion checkpoint")
+    print(
+        "Loading diffusers' pipeline from original stable diffusion checkpoint"
+    )
     pipe = load_pipeline_from_original_stable_diffusion_ckpt(
-        checkpoint_path=args.ckpt_loc,
+        checkpoint_path=custom_weights,
         extract_ema=extract_ema,
         from_safetensors=from_safetensors,
     )
     pipe.save_pretrained(path_to_diffusers)
     print("Loading complete")
-    print("Custom model path is : ", path_to_diffusers)
-    return path_to_diffusers
+
+
+def load_vmfb(vmfb_path, model, precision):
+    model = "vae" if "base_vae" in model else model
+    precision = "fp32" if "clip" in model else precision
+    extra_args = get_opt_flags(model, precision)
+    shark_module = SharkInference(mlir_module=None, device=args.device)
+    shark_module.load_module(vmfb_path, extra_args=extra_args)
+    return shark_module
+
+
+# This utility returns vmfbs of Clip, Unet and Vae, in case all three of them
+# are present; deletes them otherwise.
+def fetch_or_delete_vmfbs(basic_model_name, use_base_vae, precision="fp32"):
+    model_name = ["clip", "unet", "base_vae" if use_base_vae else "vae"]
+    vmfb_path = [
+        get_vmfb_path_name(model + basic_model_name)[0] for model in model_name
+    ]
+    vmfb_present = [os.path.isfile(vmfb) for vmfb in vmfb_path]
+    all_vmfb_present = functools.reduce(operator.__and__, vmfb_present)
+    compiled_models = [None] * 3
+    # We need to delete vmfbs only if some of the models were compiled.
+    if not all_vmfb_present:
+        for i in range(len(vmfb_path)):
+            if vmfb_present[i]:
+                os.remove(vmfb_path[i])
+                print("Deleted: ", vmfb_path[i])
+    else:
+        for i in range(len(vmfb_path)):
+            compiled_models[i] = load_vmfb(
+                vmfb_path[i], model_name[i], precision
+            )
+    return compiled_models
