@@ -39,13 +39,40 @@ namespace SD_FXUI
             Directory.CreateDirectory(OutPath);
 
             ProcesHost.Start("\"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
-                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" --image_size=512 " + 
+                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " + 
                                                                             $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\"" + AddCmd);
 
             ProcesHost.SendExistCommand();
             ProcesHost.Wait();
 
             File.Delete(WorkDir + "wget.exe");
+
+            ProcesHost.Print("\n  Extract task is done..... \n");
+        }
+        public static async Task ProcessConvertDiff2Onnx(string InputFile)
+        {
+            string WorkDir = FS.GetModelDir() + "onnx\\";
+            Host ProcesHost = new Host(WorkDir, "repo/onnx.venv/Scripts/python.exe");
+            ProcesHost.Print($"\n Startup extract ckpt({InputFile})..... \n");
+
+
+            string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
+            if (Name.Length == 0)
+            {
+                Name = System.IO.Path.GetDirectoryName(InputFile);
+            }
+
+            string OutPath = FS.GetModelDir() + "onnx\\" + Name;
+            OutPath = OutPath.Replace("\\", "/");
+            InputFile = InputFile.Replace("\\", "/");
+
+            Directory.CreateDirectory(OutPath);
+
+            ProcesHost.Start("\"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" + 
+                                                                            $" --model_path=\"{InputFile}\"");
+
+            ProcesHost.SendExistCommand();
+            ProcesHost.Wait();
 
             ProcesHost.Print("\n  Extract task is done..... \n");
         }

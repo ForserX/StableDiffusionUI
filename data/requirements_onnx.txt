@@ -1,0 +1,22 @@
+setuptools
+wheel
+
+# Testing
+Pillow
+parameterized
+
+# Add transformers, diffusers and scipy since it most commonly used
+diffusers
+scipy
+gradio
+altair
+omegaconf
+
+# ONNX Trash
+onnxruntime
+onnxruntime-gpu
+onnxruntime_directml
+torch[onnx]
+tf2onnx
+transformers-onnx
+accelerate

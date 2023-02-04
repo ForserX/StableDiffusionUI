@@ -5,12 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SD_FXUI.Utils"
         mc:Ignorable="d"
-        Title="SharkModelImporter" Height="96" Width="390" ResizeMode="NoResize">
+        Title="SharkModelImporter" Height="116" Width="390" ResizeMode="NoResize">
     <Grid Margin="0,0,0,2">
-        <TextBox x:Name="cbPath" Margin="10,10,10,0" TextWrapping="Wrap" Text="Set your dir/url" VerticalAlignment="Top"/>
-        <Button Content="From huggingface" HorizontalAlignment="Left" Margin="10,36,0,0" Width="109" Click="Button_Click" Height="20" VerticalAlignment="Top"/>
-        <Button Content="From ckpt" Margin="0,36,10,0" HorizontalAlignment="Right" Width="101" Click="Button_Click_2" Height="20" VerticalAlignment="Top"/>
-        <Button Content="From diffusers" Margin="0,36,139,0" HorizontalAlignment="Right" Width="101" Click="Button_Click_1" Height="20" VerticalAlignment="Top"/>
+        <TextBox x:Name="cbPath" Margin="5,5,155,0" TextWrapping="Wrap" Text="Set your dir/url" VerticalAlignment="Top" Height="62"/>
+        <Button Content="Convert!" Margin="0,58,10,0" HorizontalAlignment="Right" Width="101" Click="Button_Click" Height="20" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cbFrom" Margin="0,5,6,0" HorizontalAlignment="Right" Width="112" Height="21" VerticalAlignment="Top">
+            <ComboBoxItem Content=".ckpt"/>
+            <ComboBoxItem Content=".safetensors"/>
+            <ComboBoxItem Content="diffusion"/>
+        </ComboBox>
+        <ComboBox x:Name="cbTo" Margin="0,30,6,0" SelectionChanged="cbTo_SelectionChanged" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112">
+            <ComboBoxItem Content="Shark"/>
+            <ComboBoxItem Content="ONNX"/>
+        </ComboBox>
+        <Label Content="From" HorizontalAlignment="Right" Margin="0,0,118,0" VerticalAlignment="Top"/>
+        <Label Content="To" HorizontalAlignment="Right" Margin="0,29,133,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

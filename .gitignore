@@ -1,5 +1,6 @@
 data/images/
 data/models/
+data/repo/onnx.venv
 data/repo/shark.venv
 data/nodai_SHARK.egg-info/
 .vs/

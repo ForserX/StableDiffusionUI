@@ -12,9 +12,12 @@ namespace SD_FXUI.Utils
         public SharkModelImporter()
         {
             InitializeComponent();
+
+            cbFrom.SelectedIndex = 0;
+            cbTo.SelectedIndex = 0;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void HuggCast()
         {
             string HuggUrl = "huggingface.co";
 
@@ -35,33 +38,70 @@ namespace SD_FXUI.Utils
             string HuggFile = HuggUrl.Substring(0).Replace("/", "(slash)") + ".hgf";
             var Stream = System.IO.File.Create(FS.GetModelDir() + @"huggingface/" + HuggFile);
             Stream.Close();
-
-            Helper.Form.UpdateModelsList();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            string DiffPath = FS.GetModelDir() + "diff\\";
-
-            string Name = System.IO.Path.GetFileName(cbPath.Text);
-
-            if (System.IO.File.Exists(DiffPath + Name) && System.IO.File.Exists(cbPath.Text))
-            {
-                FS.CopyDirectory(cbPath.Text, DiffPath + Name, true);
-            }
-
-            Helper.Form.UpdateModelsList();
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void OrigToDiff(bool bWait = false)
         {
             if (!System.IO.File.Exists(cbPath.Text))
                 return;
 
             string SafeName = cbPath.Text;
-            Task.Run(() => CMD.ProcessConvertCKPT2Diff(SafeName));
+
+            if(bWait)
+            {
+                CMD.ProcessConvertCKPT2Diff(SafeName);
+            }
+            else
+            {
+                Task.Run(() => CMD.ProcessConvertCKPT2Diff(SafeName));
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            int GetFromID = cbFrom.SelectedIndex; 
+            int ToID = cbTo.SelectedIndex;
+
+            // Anyway need cast to diff
+            if (GetFromID == 0 || GetFromID == 1)
+            {
+                OrigToDiff(ToID == 1);
+            }
+
+            if (ToID == 1)
+            {
+                string Name = System.IO.Path.GetFileName(cbPath.Text);
+                if(Name.EndsWith(".ckpt") || Name.EndsWith(".safetensors"))
+                {
+                    Name = System.IO.Path.GetFileNameWithoutExtension(cbPath.Text);
+                }
+
+                string SafeName = FS.GetModelDir() + "diff\\" + Name;
+                Task.Run(() => CMD.ProcessConvertDiff2Onnx(SafeName));
+            }
+            else
+            {
+                if (GetFromID == 2)
+                {
+                    HuggCast();
+                }
+            }
 
             Helper.Form.UpdateModelsList();
+        }
+
+        private void cbTo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            int ToID = cbTo.SelectedIndex;
+
+            if (ToID == 1)
+            {
+                cbFrom.Items.Remove(cbFrom.Items[2]);
+            }
+            else
+            {
+                cbFrom.Items.Insert(2, "huggingface");
+            }
         }
     }
 }

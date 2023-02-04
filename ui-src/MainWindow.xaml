@@ -98,11 +98,11 @@
         <ListView x:Name="ListView1" VirtualizingStackPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,33,0,0" Grid.Column="1" HorizontalAlignment="Right" Width="95" SelectionChanged="ListView1_SelectionChanged">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
-                    <GridViewColumn x:Name="GridViewColumnName" Header=" "  Width="90">
+                    <GridViewColumn x:Name="GridViewColumnName" Header=" "  Width="70">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" CanVerticallyScroll="True">
-                                    <Image x:Name="Image_GridViewColumnName" Width="90" Height="50" Source="{Binding GridViewColumnName_ImageSource}" />
+                                    <Image x:Name="Image_GridViewColumnName" Width="70" Height="70" Source="{Binding GridViewColumnName_ImageSource}" />
                                     <Label Content="{Binding GridViewColumnName_ID}" Visibility="Hidden" />
                                 </StackPanel>
                             </DataTemplate>
