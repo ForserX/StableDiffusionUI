@@ -66,7 +66,6 @@ namespace SD_FXUI
             NegPrompt.Text =  Data.Get("neg");
             tbSteps.Text =  Data.Get("steps");
             cbUpscaler.Text =  Data.Get("upscaler");
-            cbDevice.Text =  Data.Get("device");
             cbSampler.Text =  Data.Get("sampler");
             var ListModel =  Data.Get("model");
 
@@ -81,6 +80,7 @@ namespace SD_FXUI
 
             UpdateModelsList();
             cbModel.Text = ListModel.ToString();
+            cbDevice.Text = Data.Get("device");
         }
 
         void Save()
@@ -291,6 +291,12 @@ namespace SD_FXUI
                 btnShark.Background = Safe;
 
                 UpdateModelsList();
+
+                cbDevice.Items.Clear();
+                cbDevice.Items.Add("GPU: 0");
+
+                // #TODO: GPU List check
+                cbDevice.Items.Add("GPU: 1");
             }
         }
 
@@ -305,6 +311,9 @@ namespace SD_FXUI
                 btnONNX.Background = Safe;
 
                 UpdateModelsList();
+                cbDevice.Items.Clear();
+                cbDevice.Items.Add("vulkan");
+                cbDevice.Items.Add("CUDA");
             }
         }
 
@@ -351,6 +360,45 @@ namespace SD_FXUI
                 {
                     Source = new Uri("pack://application:,,,/HandyControl;component/Themes/Theme.xaml")
                 });
+            }
+        }
+
+        private void cbDevice_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbDevice.SelectedItem == null)
+                return;
+
+            if (cbDevice.SelectedItem.ToString() == "GPU: 1" || cbDevice.SelectedItem.ToString() == "GPU: 0")
+            {
+                string FileName = FS.GetWorkingDir() + @"\repo\shark.venv\Lib\site-packages\diffusers\pipelines\onnx_utils.py";
+                using (var reader = System.IO.File.OpenText(FileName))
+                {
+                    int LineCounter = 0;
+                    string? str = reader.ReadLine();
+                    while (str != null)
+                    {
+                        if (str.Contains("InferenceSession"))
+                        {
+                            if (cbDevice.SelectedItem.ToString() == "GPU: 1")
+                            {
+                                str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 1}] sess_options=sess_options)";
+                            }
+                            else
+                            {
+                                str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 0}] sess_options=sess_options)";
+                            }
+                            break;
+                        }
+                        str = reader.ReadLine();
+                        LineCounter++;
+                    }
+
+                    reader.Close();
+
+                    string[] Lines = System.IO.File.ReadAllLines(FileName);
+                    Lines[LineCounter] = str;
+                    System.IO.File.WriteAllLines(FileName, Lines);
+                }
             }
         }
     }

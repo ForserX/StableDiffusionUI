@@ -13,7 +13,7 @@
     
         -->
 
-    <Grid Margin="0,0,0,3" Background="#38CCCBE0">
+    <Grid Margin="0,0,0,3" Background="#389D9BC9">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -22,7 +22,7 @@
         </Grid.ColumnDefinitions>
         <TextBox x:Name="TryPrompt" HorizontalAlignment="Left" Margin="5,23,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="339" Height="72" Grid.Column="2" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3"/>
         <Label Content="Prompt" Margin="-10,-3,0,0" VerticalAlignment="Top" Height="30" Width="78" Grid.ColumnSpan="3" HorizontalAlignment="Left" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}"/>
-        <TextBox x:Name="NegPrompt" HorizontalAlignment="Left" Margin="5,112,0,0" TextWrapping="Wrap" Text="" Width="339" Height="64" VerticalAlignment="Top" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Grid.Column="2"/>
+        <TextBox x:Name="NegPrompt" HorizontalAlignment="Left" Margin="5,112,0,0" TextWrapping="Wrap" Text="" Width="339" Height="64" VerticalAlignment="Top" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Grid.Column="2" Background="#FFF9FAFA"/>
         <Button Content="Make!" Margin="0,0,100,3" Click="Button_Click" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="82" Grid.Column="3" Foreground="White">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
@@ -36,9 +36,9 @@
         <Slider  x:Name="slSteps" HorizontalAlignment="Left" Margin="74,270,0,0" VerticalAlignment="Top" Width="127" Maximum="150" Minimum="5" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" Height="18" LargeChange="0" Grid.Column="2"/>
         <Label Content="Steps Count" HorizontalAlignment="Left" Margin="2,262,0,0" Height="30" Width="72" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" Grid.Column="2" VerticalAlignment="Top"/>
         <TextBox  x:Name="tbSteps" HorizontalAlignment="Left" Margin="209,262,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="34" TextChanged="tbSteps_TextChanged" Height="18" Grid.Column="2"/>
-        <Image x:Name="ViewImg" Margin="6,31,104,43" Grid.Column="3"/>
+        <Image x:Name="ViewImg" Margin="6,31,104,43" Grid.Column="3" OpacityMask="#FFAE0000"/>
         <Label Content="CFG Scale" HorizontalAlignment="Left" Margin="1,297,0,0" VerticalAlignment="Top" Height="30" Width="61" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" Grid.Column="2"/>
-        <ComboBox  x:Name="cbDevice" HorizontalAlignment="Left" Margin="44,424,0,0" VerticalAlignment="Top" Width="116" Height="22" Text="vulkan" Grid.Column="2">
+        <ComboBox  x:Name="cbDevice" HorizontalAlignment="Left" Margin="44,424,0,0" VerticalAlignment="Top" Width="116" Height="22" Text="vulkan" Grid.Column="2" SelectionChanged="cbDevice_SelectionChanged">
             <ComboBoxItem Content="vulkan"/>
             <ComboBoxItem Content="cuda"/>
         </ComboBox>
