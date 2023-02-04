@@ -111,7 +111,9 @@ if __name__ == "__main__":
     set_init_device_flags()
     schedulers = get_schedulers(args.hf_model_id)
     scheduler_obj = schedulers[args.scheduler]
-
+    
+    print(f"sampler={args.scheduler}\n")
+    
     txt2img_obj = Text2ImagePipeline.from_pretrained(
         scheduler_obj,
         args.import_mlir,
@@ -127,9 +129,13 @@ if __name__ == "__main__":
 
     start_time = time.time()
     
-    print(f"images count={args.total_count} \n")
+    print(f"images count={args.total_count}\n")
     
-
+    #keep -1 for correct seed;
+    #possible random on 0 input;
+    
+    args.seed = args.seed - 1;
+    
     for num in range(args.total_count):
         if args.seed == -1:
             args.seed = random.randrange(9223372036854775807)
@@ -150,11 +156,11 @@ if __name__ == "__main__":
         save_output_img(generated_imgs[0])
 
     total_time = time.time() - start_time
-    text_output = f"prompt={args.prompts}"
-    text_output += f"\nnegative prompt={args.negative_prompts}"
-    text_output += f"\nmodel_id={args.hf_model_id}, ckpt_loc={args.ckpt_loc}"
-    text_output += f"\nscheduler={args.scheduler}, device={args.device}"
-    text_output += f"\nsteps={args.steps}, guidance_scale={args.guidance_scale}, seed={args.seed}, size={args.height}x{args.width}"
+    text_output = f"prompt={args.prompts}\n"
+    text_output += f"negative prompt={args.negative_prompts}\n"
+    text_output += f"model_id={args.hf_model_id}, ckpt_loc={args.ckpt_loc}\n"
+    text_output += f"scheduler={args.scheduler}, device={args.device}\n"
+    text_output += f"steps={args.steps}, guidance_scale={args.guidance_scale}, seed={args.seed}, size={args.height}x{args.width}\n"
     text_output += (
         f", batch size={args.batch_size}, max_length={args.max_length}"
     )

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HandyControl.Data;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
@@ -19,9 +20,9 @@ using static System.Net.Mime.MediaTypeNames;
 namespace SD_FXUI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for BlurWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : HandyControl.Controls.BlurWindow
     {
         List<string> ImgList = new List<string>();
         Config Data = null;
@@ -335,6 +336,21 @@ namespace SD_FXUI
         public void InvokeClearImages()
         {
             Dispatcher.Invoke(() => { InvokeClearImages(); });
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {            
+            {
+                Resources.MergedDictionaries.Clear();
+                Resources.MergedDictionaries.Add(new ResourceDictionary
+                {
+                    Source = new Uri($"pack://application:,,,/HandyControl;component/Themes/Skin{SkinType.Violet.ToString()}.xaml")
+                });
+                Resources.MergedDictionaries.Add(new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/HandyControl;component/Themes/Theme.xaml")
+                });
+            }
         }
     }
 }

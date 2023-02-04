@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="HandyControl" Version="3.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="cmd.png" />
     <Resource Include="folder.png" />
     <Resource Include="Host\close.png" />

@@ -1,38 +1,48 @@
-﻿<Window x:Class="SD_FXUI.MainWindow"
+﻿<hc:BlurWindow x:Class="SD_FXUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SD_FXUI"
+        xmlns:hc="https://handyorg.github.io/handycontrol"               
         mc:Ignorable="d"
-        Title="MainWindow" Height="509" Width="951" Closed="OnClose">
-    <Grid Margin="0,0,0,3">
+        Background="{DynamicResource DarkDefaultBrush}"
+        WindowStartupLocation="CenterScreen"
+        xmlns:local="clr-namespace:SD_FXUI"               
+        Title="MainWindow" Height="603" Width="951" Closed="OnClose">
+        <!--ActiveGlowColor="{DynamicResource PrimaryColor}"
+    
+        -->
+        
+    <Grid Margin="0,0,0,3" Background="{DynamicResource DarkDefaultBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="398*"/>
+            <ColumnDefinition Width="59*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="331*"/>
             <ColumnDefinition Width="553*"/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="TryPrompt" HorizontalAlignment="Center" Margin="0,22,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="378" Height="64"/>
+        <TextBox x:Name="TryPrompt" HorizontalAlignment="Left" Margin="10,22,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="378" Height="64" Grid.ColumnSpan="3"/>
         <Label Content="Prompt" HorizontalAlignment="Left" Margin="0,-4,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
-        <TextBox x:Name="NegPrompt" HorizontalAlignment="Center" Margin="0,109,0,0" TextWrapping="Wrap" Text="" Width="378" Height="49" VerticalAlignment="Top"/>
-        <Button Content="Make!" Margin="0,0,96,1" Click="Button_Click" Height="20" VerticalAlignment="Bottom" Grid.Column="1" HorizontalAlignment="Right" Width="58"/>
-        <Label Content="x" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="113,196,0,0" Height="26" Width="16"/>
-        <Label Content="Neg prompt" HorizontalAlignment="Left" Margin="0,82,0,0" VerticalAlignment="Top" Height="26" Width="75"/>
-        <Slider  x:Name="slSteps" HorizontalAlignment="Left" Margin="251,167,0,0" VerticalAlignment="Top" Width="114" Maximum="150" Minimum="5" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" Height="18" LargeChange="0"/>
-        <Label Content="Steps Count" HorizontalAlignment="Left" Margin="182,163,0,0" VerticalAlignment="Top" Height="26" Width="74"/>
-        <TextBox  x:Name="tbSteps" HorizontalAlignment="Right" Margin="0,168,2,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="34" TextChanged="tbSteps_TextChanged" Height="18"/>
-        <Image x:Name="ViewImg" Margin="6,31,104,27" Grid.Column="1"/>
-        <Label Content="CFG Scale" HorizontalAlignment="Left" Margin="182,193,0,0" VerticalAlignment="Top" Height="26" Width="62"/>
-        <ComboBox  x:Name="cbDevice" HorizontalAlignment="Left" Margin="77,332,0,0" VerticalAlignment="Top" Width="116" Height="22" Text="vulkan">
+        <TextBox x:Name="NegPrompt" HorizontalAlignment="Left" Margin="10,109,0,0" TextWrapping="Wrap" Text="" Width="378" Height="49" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
+        <Button Content="Make!" Margin="0,0,112,6" Click="Button_Click" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="82" Grid.Column="3"/>
+        <Label Content="x" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="46,196,0,0" Height="26" Width="16" Grid.Column="2"/>
+        <Label Content="Neg prompt" HorizontalAlignment="Left" Margin="0,82,0,0" VerticalAlignment="Top" Height="26" Width="75" Grid.ColumnSpan="3"/>
+        <Slider  x:Name="slSteps" HorizontalAlignment="Left" Margin="184,167,0,0" VerticalAlignment="Top" Width="114" Maximum="150" Minimum="5" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" Height="18" LargeChange="0" Grid.Column="2"/>
+        <Label Content="Steps Count" HorizontalAlignment="Left" Margin="115,163,0,0" VerticalAlignment="Top" Height="26" Width="74" Grid.Column="2"/>
+        <TextBox  x:Name="tbSteps" HorizontalAlignment="Right" Margin="0,168,2,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="34" TextChanged="tbSteps_TextChanged" Height="18" Grid.Column="2"/>
+        <Image x:Name="ViewImg" Margin="6,31,104,27" Grid.Column="3"/>
+        <Label Content="CFG Scale" HorizontalAlignment="Left" Margin="115,193,0,0" VerticalAlignment="Top" Height="26" Width="62" Grid.Column="2"/>
+        <ComboBox  x:Name="cbDevice" HorizontalAlignment="Left" Margin="10,332,0,0" VerticalAlignment="Top" Width="116" Height="22" Text="vulkan" Grid.Column="2">
             <ComboBoxItem Content="vulkan"/>
             <ComboBoxItem Content="cuda"/>
         </ComboBox>
-        <Slider  x:Name="slCFG" HorizontalAlignment="Left" Margin="251,198,0,0" VerticalAlignment="Top" Width="114" Maximum="20" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="5" Value="7.5" ValueChanged="Slider2_ValueChanged" SmallChange="0.5" Height="18"/>
-        <TextBox  x:Name="tbCFG" Margin="0,197,2,0" TextWrapping="Wrap" Text="7,5" VerticalAlignment="Top" TextChanged="tbSteps2_TextChanged" Height="18" HorizontalAlignment="Right" Width="34"/>
-        <TextBox x:Name="tbSeed" HorizontalAlignment="Left" Margin="69,299,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="96" Height="18" IsEnabled="False"/>
+        <Slider  x:Name="slCFG" HorizontalAlignment="Left" Margin="184,198,0,0" VerticalAlignment="Top" Width="114" Maximum="20" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="5" Value="7.5" ValueChanged="Slider2_ValueChanged" SmallChange="0.5" Height="18" Grid.Column="2"/>
+        <TextBox  x:Name="tbCFG" Margin="0,197,2,0" TextWrapping="Wrap" Text="7,5" VerticalAlignment="Top" TextChanged="tbSteps2_TextChanged" Height="18" HorizontalAlignment="Right" Width="34" Grid.Column="2"/>
+        <TextBox x:Name="tbSeed" HorizontalAlignment="Left" Margin="2,299,0,0" TextWrapping="Wrap" Text="-1" VerticalAlignment="Top" Width="96" Height="18" IsEnabled="False" Grid.Column="2"/>
         <Label Content="Seed" HorizontalAlignment="Left" Margin="13,296,0,0" VerticalAlignment="Top" Height="26" Width="36"/>
-        <ComboBox x:Name="cbModel" HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Width="325" Height="22"/>
-        <CheckBox x:Name="cbFf16" Content="fp16" HorizontalAlignment="Right" Margin="0,336,143,0" VerticalAlignment="Top" IsChecked="True" Height="14" Width="44"/>
-        <ComboBox x:Name="cbX" HorizontalAlignment="Left" Margin="61,198,0,0" VerticalAlignment="Top" Width="52" Height="22">
+        <ComboBox x:Name="cbModel" HorizontalAlignment="Left" Margin="10,400,0,0" VerticalAlignment="Top" Width="325" Height="22" Grid.ColumnSpan="3"/>
+        <CheckBox x:Name="cbFf16" Content="fp16" HorizontalAlignment="Right" Margin="0,550,11,0" VerticalAlignment="Top" IsChecked="True" Height="20
+                  " Width="52" Grid.Column="2"/>
+        <ComboBox x:Name="cbX" HorizontalAlignment="Left" Margin="2,198,0,0" VerticalAlignment="Top" Width="52" Height="22" Grid.Column="1" Grid.ColumnSpan="2">
             <ComboBoxItem Content="384"/>
             <ComboBoxItem Content="416"/>
             <ComboBoxItem Content="512"/>
@@ -40,7 +50,7 @@
             <ComboBoxItem Content="728"/>
             <ComboBoxItem Content="1024"/>
         </ComboBox>
-        <ComboBox x:Name="cbY" HorizontalAlignment="Left" Margin="128,198,0,0" VerticalAlignment="Top" Width="52" Height="22">
+        <ComboBox x:Name="cbY" HorizontalAlignment="Left" Margin="61,198,0,0" VerticalAlignment="Top" Width="52" Height="22" Grid.Column="2">
             <ComboBoxItem Content="384"/>
             <ComboBoxItem Content="416"/>
             <ComboBoxItem Content="512"/>
@@ -48,7 +58,7 @@
             <ComboBoxItem Content="728"/>
             <ComboBoxItem Content="1024"/>
         </ComboBox>
-        <ComboBox x:Name="cbUpscaler" HorizontalAlignment="Left" Margin="77,359,0,0" VerticalAlignment="Top" Width="116" Height="22">
+        <ComboBox x:Name="cbUpscaler" HorizontalAlignment="Left" Margin="10,359,0,0" VerticalAlignment="Top" Width="116" Height="22" Grid.Column="2">
             <ComboBoxItem Content="ERSGAN"/>
             <ComboBoxItem Content="ERSGAN: Anime"/>
             <ComboBoxItem Content="SR"/>
@@ -56,7 +66,9 @@
             <ComboBoxItem Content="None"/>
         </ComboBox>
 
-        <ComboBox x:Name="cbSampler" HorizontalAlignment="Left" Margin="61,167,0,0" VerticalAlignment="Top" Width="119" Height="22">
+        <ToggleButton IsChecked="True" Content="Primary" Style="{StaticResource ToggleButtonSwitch}" Margin="248,487,11,0" VerticalAlignment="Top" Height="32" Width="72" Grid.Column="2"/>
+
+        <ComboBox x:Name="cbSampler" HorizontalAlignment="Left" Margin="2,167,0,0" VerticalAlignment="Top" Width="119" Height="22" Grid.Column="1" Grid.ColumnSpan="2">
             <ComboBoxItem Content="DDIM"/>
             <ComboBoxItem Content="EulerDiscrete"/>
             <ComboBoxItem Content="EulerAncestralDiscrete"/>
@@ -79,23 +91,24 @@
 
         </ComboBox>
 
-        <Label Content="Upscale" HorizontalAlignment="Left" Margin="12,357,0,0" VerticalAlignment="Top" Height="26" Width="52" RenderTransformOrigin="0.475,-0.021"/>
-        <Label Content="Value" HorizontalAlignment="Left" Margin="211,359,0,0" VerticalAlignment="Top" Height="26" Width="39"/>
-        <Slider  x:Name="slUpscale" HorizontalAlignment="Left" Margin="255,363,0,0" VerticalAlignment="Top" Width="58" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Height="18"/>
-        <Label x:Name="lbUpscale" Content="x4" HorizontalAlignment="Left" Margin="324,359,0,0" VerticalAlignment="Top" Background="#FFDFD2D2" Height="26" Width="22"/>
+        <Label Content="Upscale" HorizontalAlignment="Left" Margin="110,544,0,0" VerticalAlignment="Top" Height="30" Width="72" RenderTransformOrigin="0.475,-0.021" Grid.Column="2"/>
+        <Label Content="Value" HorizontalAlignment="Left" Margin="144,359,0,0" VerticalAlignment="Top" Height="26" Width="39" Grid.Column="2"/>
+        <Slider  x:Name="slUpscale" HorizontalAlignment="Left" Margin="188,363,0,0" VerticalAlignment="Top" Width="58" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Height="18" Grid.Column="2"/>
+        <Label x:Name="lbUpscale" Content="x4" HorizontalAlignment="Left" Margin="146,452,0,0" VerticalAlignment="Top" Background="#FFDFD2D2" Height="26" Width="36" Grid.Column="2"/>
         <Image Margin="7,0,0,0" Source="/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="50"/>
-        <TextBox x:Name="tbTotalCount" HorizontalAlignment="Left" Margin="321,299,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="38" Height="18"/>
-        <Label Content="Total count" HorizontalAlignment="Left" Margin="251,295,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
-        <Image x:Name="btCmd" Margin="51,0,0,0" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="50"/>
-        <Button Content="Import" HorizontalAlignment="Left" Margin="340,400,0,0" VerticalAlignment="Top" Width="48" Click="Button_Click_1" Height="20"/>
-        <Button Content="Break!" Margin="5,0,0,1" Click="Button_ClickBreak" HorizontalAlignment="Left" Width="58" RenderTransformOrigin="0.484,1.102" Grid.Column="1" Height="20" VerticalAlignment="Bottom"/>
-        <Label Content="Device" HorizontalAlignment="Left" Margin="13,330,0,0" VerticalAlignment="Top" Height="26" Width="49"/>
-        <CheckBox x:Name="chRandom" Content="Random" HorizontalAlignment="Center" Margin="0,300,0,0" VerticalAlignment="Top" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="15" Width="64"/>
+        <TextBox x:Name="tbTotalCount" HorizontalAlignment="Left" Margin="254,299,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="38" Height="18" Grid.Column="2"/>
+        <Label Content="Total count" HorizontalAlignment="Left" Margin="183,544,0,0" VerticalAlignment="Top" Height="30" Width="80" Grid.Column="2"/>
+        <Image x:Name="btCmd" Margin="51,0,0,0" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="50" Grid.ColumnSpan="3"/>
+        <Button Content="Import" HorizontalAlignment="Left" Margin="273,400,0,0" VerticalAlignment="Top" Width="48" Click="Button_Click_1" Height="20" Grid.Column="2"/>
+        <Button Content="Break!" Margin="264,0,0,6" Click="Button_ClickBreak" HorizontalAlignment="Left" Width="82" RenderTransformOrigin="0.484,1.102" Height="36
+                " VerticalAlignment="Bottom" Grid.Column="3"/>
+        <Label Content="Device" HorizontalAlignment="Left" Margin="41,544,0,0" VerticalAlignment="Top" Height="30" Width="72" Grid.Column="2"/>
+        <CheckBox x:Name="chRandom" Content="Random" HorizontalAlignment="Left" Margin="252,524,0,0" VerticalAlignment="Top" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="15" Width="68" Grid.Column="2"/>
         <Label Content="Img Size" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,196,0,0" Height="26" Width="54"/>
-        <Label Content="Sampler" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,165,0,0" Height="26" Width="54"/>
-        <Button x:Name="btnShark" Content="Shark" Margin="0,7,6,0" VerticalAlignment="Top" Click="btnShark_Click" HorizontalAlignment="Right" Width="37" Grid.Column="1" Height="20"/>
-        <Button x:Name="btnONNX" Content="ONNX" Margin="0,7,42,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Right" Width="38" Grid.Column="1" Height="20"/>
-        <ListView x:Name="ListView1" VirtualizingStackPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,33,0,0" Grid.Column="1" HorizontalAlignment="Right" Width="95" SelectionChanged="ListView1_SelectionChanged">
+        <Label Content="Sampler" VerticalAlignment="Top" Margin="0,165,0,0" Height="26" Width="54" Grid.ColumnSpan="2"/>
+        <Button x:Name="btnShark" Content="Shark" Margin="0,7,6,0" VerticalAlignment="Top" Click="btnShark_Click" HorizontalAlignment="Right" Width="37" Grid.Column="3" Height="20"/>
+        <Button x:Name="btnONNX" Content="ONNX" Margin="0,7,42,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Right" Width="38" Grid.Column="3" Height="20"/>
+        <ListView x:Name="ListView1" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,33,0,0" Grid.Column="3" HorizontalAlignment="Right" Width="95" SelectionChanged="ListView1_SelectionChanged">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn x:Name="GridViewColumnName" Header=" "  Width="70">
@@ -111,5 +124,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="13,487,0,0" VerticalAlignment="Top" Height="30" Width="74" Click="Button_Click_2" Grid.ColumnSpan="3"/>
+
     </Grid>
-</Window>
+</hc:BlurWindow>
