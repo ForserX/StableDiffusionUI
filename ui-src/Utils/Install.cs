@@ -66,7 +66,7 @@ namespace SD_FXUI
             ProcesHost.SendExistCommand();
             ProcesHost.Wait();
 
-            File.Delete(WorkDir + "GFPGANv1.3.pth");
+            //File.Delete(WorkDir + "GFPGANv1.3.pth");
 
             Helper.UIHost.Hide();
         }

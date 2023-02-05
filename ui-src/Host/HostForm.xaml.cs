@@ -77,6 +77,9 @@ namespace SD_FXUI
 
         public void Print(string message)
         {
+            if (message.Length > 300)
+                return;
+
             System.Diagnostics.Trace.WriteLine(message);
             message = message.Replace(FS.GetWorkingDir(), "${Workspace}");
 
