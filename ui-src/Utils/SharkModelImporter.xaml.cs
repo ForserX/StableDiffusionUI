@@ -57,6 +57,18 @@ namespace SD_FXUI.Utils
             }
         }
 
+        async Task CastCp2ONNX()
+        {
+            string Name = System.IO.Path.GetFileName(cbPath.Text);
+            if (Name.EndsWith(".ckpt") || Name.EndsWith(".safetensors"))
+            {
+                Name = System.IO.Path.GetFileNameWithoutExtension(cbPath.Text);
+            }
+
+            string SafeName = FS.GetModelDir() + "diff\\" + Name;
+            Task.Run(() => CMD.ProcessConvertDiff2Onnx(SafeName));
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             int GetFromID = cbFrom.SelectedIndex; 
@@ -70,14 +82,7 @@ namespace SD_FXUI.Utils
 
             if (ToID == 1)
             {
-                string Name = System.IO.Path.GetFileName(cbPath.Text);
-                if(Name.EndsWith(".ckpt") || Name.EndsWith(".safetensors"))
-                {
-                    Name = System.IO.Path.GetFileNameWithoutExtension(cbPath.Text);
-                }
-
-                string SafeName = FS.GetModelDir() + "diff\\" + Name;
-                Task.Run(() => CMD.ProcessConvertDiff2Onnx(SafeName));
+                Task.Run(() => CastCp2ONNX());
             }
             else
             {
