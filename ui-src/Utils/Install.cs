@@ -70,5 +70,19 @@ namespace SD_FXUI
 
             Helper.UIHost.Hide();
         }
+
+        internal static void SetupDirs()
+        {
+            Helper.CachePath = FS.GetModelDir() + @"\shark\";
+            Helper.ImgPath = FS.GetImagesDir() + System.DateTime.Now.ToString().Replace(':', '-').Replace(' ', '_') + "\\";
+            Helper.ImgPath.Replace('\\', '/');
+
+            System.IO.Directory.CreateDirectory(Helper.CachePath);
+            System.IO.Directory.CreateDirectory(Helper.CachePath);
+            System.IO.Directory.CreateDirectory(FS.GetImagesDir() + "Best");
+            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
+            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");
+            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\diff");
+        }
     }
 }

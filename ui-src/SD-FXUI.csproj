@@ -12,10 +12,12 @@
   <ItemGroup>
     <None Remove="745081.png" />
     <None Remove="cmd.png" />
+    <None Remove="favor.png" />
     <None Remove="folder.png" />
     <None Remove="history.png" />
     <None Remove="Host\close.png" />
     <None Remove="noimg.jpg" />
+    <None Remove="notfavor.png" />
     <None Remove="res\745081.png" />
   </ItemGroup>
 
@@ -29,10 +31,12 @@
 
   <ItemGroup>
     <Resource Include="cmd.png" />
+    <Resource Include="favor.png" />
     <Resource Include="folder.png" />
     <Resource Include="history.png" />
     <Resource Include="Host\close.png" />
     <Resource Include="noimg.jpg" />
+    <Resource Include="notfavor.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -159,5 +159,8 @@
         <Image Source="/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Margin="45,0,503,33" Grid.Column="3" Height="50" VerticalAlignment="Bottom"/>
         <Image x:Name="btCmd" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Margin="0,0,549,34" HorizontalAlignment="Right" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="48" VerticalAlignment="Bottom"/>
         <Image x:Name="btHistory" Source="/history.png" MouseLeftButtonDown="btHistory_Click" Margin="0,0,105,34" HorizontalAlignment="Right" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="46" VerticalAlignment="Bottom"/>
+        <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Left" Height="39" Margin="445,39,0,0" VerticalAlignment="Top" Width="42" Source="/notfavor.png" MouseLeftButtonDown="btmFavorClick"/>
+        <Image x:Name="imgFavor" Source="/favor.png" />
+        <Image x:Name="imgNotFavor" Source="/notfavor.png" />
     </Grid>
 </hc:BlurWindow>

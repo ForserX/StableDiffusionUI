@@ -11,6 +11,7 @@ namespace SD_FXUI
     {
         public const int GWL_STYLE = -16;
         public const int WS_SYSMENU = 0x80000;
+        public const int WS_CHILDWINDOW	= 0x40000;
         [DllImport("user32.dll", SetLastError = true)]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
         [DllImport("user32.dll")]

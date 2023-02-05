@@ -32,6 +32,12 @@ namespace SD_FXUI
             IDK
         }
 
+        public enum ImageState
+        {
+            Free,
+            Favor
+        }
+
         public static List<Host> SecondaryProcessList = new List<Host>();
 
         public static string CachePath = string.Empty;
@@ -42,5 +48,6 @@ namespace SD_FXUI
         public static DrawingMode DrawMode = DrawingMode.Text2Img;
         public static string InputImagePath = string.Empty;
         public static List<string> PromHistory= new List<string>();
+        public static ImageState ActiveImageState = ImageState.Free;
     }
 }

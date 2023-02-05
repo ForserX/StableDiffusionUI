@@ -24,6 +24,10 @@ namespace SD_FXUI
         {
             return System.IO.Directory.GetCurrentDirectory();
         }
+        public static string GetImagesDir()
+        {
+            return System.IO.Directory.GetCurrentDirectory() + "\\images\\";
+        }
         public static string GetModelDir()
         {
             return System.IO.Directory.GetCurrentDirectory() + "\\models\\";

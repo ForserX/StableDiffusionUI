@@ -35,14 +35,7 @@ namespace SD_FXUI
         {
             InitializeComponent();
 
-            Helper.CachePath = FS.GetModelDir() + @"\shark\";
-            Helper.ImgPath = FS.GetWorkingDir() + "\\images\\" + System.DateTime.Now.ToString().Replace(':', '-').Replace(' ', '_') + "\\";
-            Helper.ImgPath.Replace('\\', '/');
-            
-            System.IO.Directory.CreateDirectory(Helper.CachePath);
-            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
-            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");
-            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\diff");
+            Install.SetupDirs();
 
             cbUpscaler.SelectedIndex = 0;
             cbModel.SelectedIndex = 0;
@@ -382,6 +375,19 @@ namespace SD_FXUI
             if(ImgList.Count> 0)
             {
                 ViewImg.Source = new BitmapImage(new Uri(ImgList[ListView1.SelectedIndex]));
+
+                string Name = FS.GetImagesDir() + "best\\" + System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
+
+                if (System.IO.File.Exists(Name))
+                {
+                    Helper.ActiveImageState = Helper.ImageState.Favor;
+                    btnFavor.Source = imgFavor.Source;
+                }
+                else
+                {
+                    Helper.ActiveImageState = Helper.ImageState.Free;
+                    btnFavor.Source = imgNotFavor.Source;
+                }
             }
         }
         void ClearImages()
@@ -497,6 +503,31 @@ namespace SD_FXUI
         private void BlurWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Install.Check();
+        }
+
+        private void btmFavorClick(object sender, MouseButtonEventArgs e)
+        {
+            if (ListView1.Items .Count == 0)
+            {
+                return;
+            }
+
+            if (Helper.ImageState.Favor == Helper.ActiveImageState)
+            {
+                string Name = System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
+                System.IO.File.Delete(FS.GetImagesDir() + "best\\" + Name);
+                Helper.ActiveImageState = Helper.ImageState.Free;
+
+                btnFavor.Source = imgNotFavor.Source;
+            }
+            else
+            {
+                string Name = System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
+                System.IO.File.Copy(ImgList[ListView1.SelectedIndex], FS.GetImagesDir() + "best\\" + Name);
+                Helper.ActiveImageState = Helper.ImageState.Favor;
+
+                btnFavor.Source = imgFavor.Source;
+            }
         }
     }
 }
