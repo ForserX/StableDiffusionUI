@@ -26,6 +26,7 @@ namespace SD_FXUI
             Cmd.Start();
             Cmd.Send("python -m venv repo\\shark.venv\\");
             Cmd.SendExistCommand();
+            Cmd.Wait();
 
             Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
             Cmd.Print("Install shark runtimes... Please wait");

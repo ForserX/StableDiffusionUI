@@ -186,13 +186,13 @@ namespace SD_FXUI
                 case Helper.ImplementMode.Shark:
                     {
                         cmdline += GetCommandLineShark();
-                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Type, Size));
+                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Helper.CurrentUpscalerType, Size));
                         break;
                     }
                 case Helper.ImplementMode.ONNX:
                     {
                         cmdline += GetCommandLineOnnx();
-                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Type, Size));
+                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Helper.CurrentUpscalerType, Size));
                         break;
                     }
             }

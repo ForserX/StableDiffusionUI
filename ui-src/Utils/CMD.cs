@@ -166,7 +166,7 @@ namespace SD_FXUI
                     }
                 case Helper.UpscalerType.SR:
                     {
-                        FileName += @"\realsr.exe\realsr-ncnn-vulkan.exe";
+                        FileName += @"\realsr\realsr-ncnn-vulkan.exe";
                         break;
                     }
                 case Helper.UpscalerType.SRMD:
