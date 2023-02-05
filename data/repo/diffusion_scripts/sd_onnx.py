@@ -70,6 +70,15 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "-imgscale",
+    "--imgscale",
+    type=float,
+    default=0.44,
+    help="Path to model checkpoint file",
+    dest='imgscale',
+)
+
+parser.add_argument(
     "-prompt_neg",
     "--prompt_neg",
     type=str,
@@ -99,6 +108,15 @@ parser.add_argument(
     default="txt2img",
     help="Specify generation mode",
     dest='mode',
+)
+
+parser.add_argument(
+    "-img",
+    "--img",
+    type=str,
+    default="",
+    help="Specify generation mode",
+    dest='img',
 )
 
 parser.add_argument(
@@ -172,13 +190,17 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_pat
         
     if opt.mode == "img2img":
         print("img2img", flush=True)
-        img=Image.open(init_img_path)
+        # Opt image
+        img=Image.open(init_img_path).convert("RGB")
+        size = width, height
+        img.thumbnail(size, Image.Resampling.LANCZOS)
+        
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {init_strength}')
     if opt.mode == "inpaint":
         print("inpaint", flush=True)
-        img=Image.open(init_img_path)
-        mask=Image.open(mask_img_path)
+        img=Image.open(init_img_path).convert("RGB")
+        mask=Image.open(mask_img_path).convert("RGB")
         image=pipe(prompt=prompt, image=img, mask_image = mask, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f 0.0 -M {mask_img_path}')
 
@@ -191,4 +213,4 @@ print(f'Model loaded.')
 
 for i in range(opt.totalcount):
 #    print(f'Generating {i+1}/{len(data)}: "{argdict["prompt"]}" - {argdict["steps"]} Steps - Scale {argdict["scale"]} - {argdict["w"]}x{argdict["h"]}')
-    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, "" , 1.0, "")
+    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, "")

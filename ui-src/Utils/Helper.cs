@@ -16,6 +16,12 @@ namespace SD_FXUI
             SRMD,
             None
         }
+        public enum DrawingMode
+        {
+            Text2Img,
+            Img2Img,
+            Inpaint
+        }
 
         public enum ImplementMode
         {
@@ -33,5 +39,7 @@ namespace SD_FXUI
         public static MainWindow Form = null;
         public static HostForm UIHost = null;
         public static ImplementMode Mode = ImplementMode.IDK;
+        public static DrawingMode DrawMode = DrawingMode.Text2Img;
+        public static string InputImagePath = string.Empty;
     }
 }

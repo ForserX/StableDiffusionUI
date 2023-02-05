@@ -1,4 +1,6 @@
-﻿using HandyControl.Data;
+﻿using HandyControl.Controls;
+using HandyControl.Data;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,6 +28,8 @@ namespace SD_FXUI
     {
         List<string> ImgList = new List<string>();
         Config Data = null;
+        ImageSource NoImageData = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -57,6 +61,9 @@ namespace SD_FXUI
             Data = new Config();
             Load();
             ChangeTheme();
+
+            gridImg.Visibility = Visibility.Collapsed;
+            NoImageData = ViewImg.Source;
         }
         void Load()
         {
@@ -116,6 +123,11 @@ namespace SD_FXUI
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
             ;
 
+            if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
+            {
+                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale=0.{tbDenoising.Text}";
+            }
+
             return CmdLine;
         }
         private string GetCommandLineShark()
@@ -172,6 +184,11 @@ namespace SD_FXUI
             ClearImages();
         }
 
+        private void Slider_Denoising(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (tbDenoising != null)
+                tbDenoising.Text = slDenoising.Value.ToString();
+        }
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (tbSteps != null)
@@ -298,6 +315,9 @@ namespace SD_FXUI
 
                 // #TODO: GPU List check
                 cbDevice.Items.Add("GPU: 1");
+
+                btImg.Visibility = Visibility.Visible;
+                cbFf16.Visibility = Visibility.Hidden;
             }
         }
 
@@ -315,6 +335,9 @@ namespace SD_FXUI
                 cbDevice.Items.Clear();
                 cbDevice.Items.Add("vulkan");
                 cbDevice.Items.Add("CUDA");
+
+                btImg.Visibility = Visibility.Hidden;
+                cbFf16.Visibility = Visibility.Visible;
             }
         }
 
@@ -336,7 +359,7 @@ namespace SD_FXUI
         void ClearImages()
         {
             ImgList.Clear();
-            ViewImg.Source = null;
+            ViewImg.Source = NoImageData;
 
             ListView1.UnselectAll();
             ListView1.ItemsSource = null;
@@ -401,6 +424,35 @@ namespace SD_FXUI
                     System.IO.File.WriteAllLines(FileName, Lines);
                 }
             }
+        }
+
+        private void btImage_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog OpenDlg = new OpenFileDialog();
+            OpenDlg.Filter = "PNG (*.png)|*.png|JPG (*.jpg)|*.jpg|All files (*.*)|*.*";
+            OpenDlg.Multiselect = false;
+
+            bool? IsOpened = OpenDlg.ShowDialog();
+            if (IsOpened.Value)
+            {
+                Helper.InputImagePath = OpenDlg.FileName;
+                gridImg.Visibility = Visibility.Visible;
+                imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
+                Helper.DrawMode = Helper.DrawingMode.Img2Img;
+            }
+        }
+
+        private void tbDenoising_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            slDenoising.Value = float.Parse(tbDenoising.Text.Replace('.', ','));
+        }
+
+        private void btImageClear_Click(object sender, RoutedEventArgs e)
+        {
+            gridImg.Visibility = Visibility.Collapsed;
+
+            Helper.DrawMode = Helper.DrawingMode.Text2Img;
+            imgLoaded.Source = NoImageData;
         }
     }
 }

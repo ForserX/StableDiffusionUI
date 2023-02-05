@@ -54,13 +54,35 @@
         </ListView>
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="2">
             <StackPanel>
-                <Grid Height="103">
+                <Grid Height="116">
                     <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1"/>
-                    <TextBox x:Name="TryPrompt" TextWrapping="Wrap" Text="" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Margin="5,19,6,10"/>
-                    <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBox x:Name="TryPrompt" TextWrapping="Wrap" Text="" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Margin="5,27,6,4"/>
+                    <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-14,8,0,0"/>
+                    <Button x:Name="btImg" Content="From image" Margin="0,3,6,0" Click="btImage_Click" HorizontalAlignment="Right" Width="96" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0">
+                                <GradientStop Color="#FF523876"/>
+                                <GradientStop Color="#FF4D12AF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                </Grid>
+                <Grid x:Name="gridImg" Height="116" Background="#FFEBE4F9">
+                    <Image x:Name="imgLoaded" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="/noimg.jpg"/>
+                    <Label Content="Denoising Scale" HorizontalAlignment="Left" Margin="115,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.332,-0.041" Background="{x:Null}" BorderBrush="{x:Null}" Width="96" Padding="1,6,1,6"/>
+                    <Slider  x:Name="slDenoising" Maximum="100" Minimum="5" Value="45" ValueChanged="Slider_Denoising" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="115,40,53,0" Height="25" VerticalAlignment="Top"/>
+                    <TextBox x:Name="tbDenoising" TextWrapping="Wrap" Text="45" Height="18" Margin="0,35,10,0" HorizontalAlignment="Right" Width="38" VerticalAlignment="Top" TextChanged="tbDenoising_TextChanged"/>
+                    <Button x:Name="btImageClear" Content="Clear" Margin="0,87,10,0" Click="btImageClear_Click" HorizontalAlignment="Right" Width="96" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0">
+                                <GradientStop Color="#FF523876"/>
+                                <GradientStop Color="#FF4D12AF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
                 </Grid>
                 <Grid Height="95">
-                    <Label Content="Neg prompt" Height="21" Width="95" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Label Content="Neg prompt" Height="21" Width="95" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
                     <TextBox x:Name="NegPrompt" TextWrapping="Wrap" Text="" Height="70" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Background="#FFF9FAFA" Margin="4,17,6,3"/>
                 </Grid>
                 <Grid Height="141" Width="355">
