@@ -95,7 +95,7 @@ namespace SD_FXUI
             foreach (var file in Files)
             {
                 string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
-                System.IO.File.Move(file, Helper.ImgPath + System.IO.Path.GetFileName(file));
+                System.IO.File.Move(file, NewFilePath);
 
                 if (UpSize > 0 && Helper.CurrentUpscalerType != Helper.UpscalerType.None)
                 {

@@ -251,7 +251,7 @@ namespace SD_FXUI
             });
 
             ListView1.ItemsSource = ListViewItemsCollections;
-            ListView1.SelectedIndex = ListView1.Items.Count - 1;
+            ListView1.SelectedIndex = 0;
             ImgList.Add(Img);
         }
         public void UpdateViewImg(string Img)
@@ -363,8 +363,7 @@ namespace SD_FXUI
             }
         }
 
-        public ObservableCollection<ListViewItemsData> ListViewItemsCollections { get { return _ListViewItemsCollections; } }
-        ObservableCollection<ListViewItemsData> _ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
+        ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
         public class ListViewItemsData
         {
             public string GridViewColumnName_ImageSource { get; set; }
@@ -397,8 +396,6 @@ namespace SD_FXUI
             ViewImg.Source = NoImageData;
 
             ListView1.UnselectAll();
-            ListView1.ItemsSource = null;
-            ListView1.Items.Clear();
             ListViewItemsCollections.Clear();
         }
 
@@ -508,7 +505,7 @@ namespace SD_FXUI
 
         private void btmFavorClick(object sender, MouseButtonEventArgs e)
         {
-            if (ListView1.Items .Count == 0)
+            if (ListView1.Items.Count == 0 || ListView1.SelectedItem == null)
             {
                 return;
             }
