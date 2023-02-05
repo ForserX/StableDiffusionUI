@@ -48,6 +48,9 @@ namespace SD_FXUI
             File.Delete(WorkDir + "wget.exe");
 
             ProcesHost.Print("\n  Extract task is done..... \n");
+
+
+            Wrapper.SendNotification("Convertation: done!");
         }
         public static async Task ProcessConvertDiff2Onnx(string InputFile)
         {
@@ -75,6 +78,7 @@ namespace SD_FXUI
             ProcesHost.Wait();
 
             ProcesHost.Print("\n  Extract task is done..... \n");
+            Wrapper.SendNotification("Convertation: done!");
         }
 
         public static async Task ProcessRunnerOnnx(string command, Helper.UpscalerType Type, int UpSize)
@@ -104,6 +108,7 @@ namespace SD_FXUI
             }
 
             ProcesHost.Print("\n  Generation Done..... \n");
+            Wrapper.SendNotification("Generation: done!");
         }
         public static async Task ProcessRunnerShark(string command, Helper.UpscalerType Type, int UpSize)
         {
@@ -132,6 +137,7 @@ namespace SD_FXUI
             }
 
             ProcesHost.Print("\n  Generation Done..... \n");
+            Wrapper.SendNotification("Generation: done!");
         }
 
 
