@@ -42,7 +42,6 @@ namespace SD_FXUI
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\diff");
-            System.IO.Directory.CreateDirectory(Helper.ImgPath);
 
             cbUpscaler.SelectedIndex = 0;
             cbModel.SelectedIndex = 0;
@@ -176,7 +175,9 @@ namespace SD_FXUI
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(chRandom.IsChecked.Value)
+            System.IO.Directory.CreateDirectory(Helper.ImgPath);
+
+            if (chRandom.IsChecked.Value)
             {
                 var rand = new Random();
                 tbSeed.Text = rand.Next().ToString();
