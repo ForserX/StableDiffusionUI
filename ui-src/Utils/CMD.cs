@@ -99,7 +99,7 @@ namespace SD_FXUI
 
                 if (UpSize > 0)
                 {
-                    Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
+                    await Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
                 }
                 else
                 {
@@ -128,7 +128,7 @@ namespace SD_FXUI
 
                 if (UpSize > 0)
                 {
-                    Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
+                    await Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
                 }
                 else
                 {
