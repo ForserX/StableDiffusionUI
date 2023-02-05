@@ -13,9 +13,8 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 * Install python 3.10 + pip + venv
 * __(AMD Only)__ Install IREE drivers: https://www.amd.com/en/support/kb/release-notes/rn-rad-win-22-11-1-mlir-iree
 ## Setup venv
-* Open PowerShell
+* Open PowerShell and run __setup.ps1__ file
 ```cmd
-cd ./data/repo/
 ./setup.ps1
 ```
 * Start .exe file

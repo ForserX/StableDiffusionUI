@@ -214,3 +214,4 @@ print(f'Model loaded.')
 for i in range(opt.totalcount):
 #    print(f'Generating {i+1}/{len(data)}: "{argdict["prompt"]}" - {argdict["steps"]} Steps - Scale {argdict["scale"]} - {argdict["w"]}x{argdict["h"]}')
     generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, "")
+    opt.seed = opt.seed + 1
