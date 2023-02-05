@@ -21,4 +21,6 @@ from repo.stable_diffusion.src.utils.utils import (
     get_available_devices,
     get_opt_flags,
     preprocessCKPT,
+    fetch_or_delete_vmfbs,
+    get_path_to_diffusers_checkpoint,
 )

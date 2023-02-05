@@ -165,6 +165,7 @@ namespace SD_FXUI
                     + $" --no-use_tuned " 
                     + $" --local_tank_cache=\".//\""
                     +  " --enable_stack_trace" 
+                    + " --iree-vulkan-target-triple=rdna3-unknown-windows"
                     +  " --write_metadata_to_png"
             ;
 
