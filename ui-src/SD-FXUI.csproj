@@ -14,6 +14,7 @@
     <None Remove="cmd.png" />
     <None Remove="folder.png" />
     <None Remove="Host\close.png" />
+    <None Remove="noimg.jpg" />
     <None Remove="res\745081.png" />
   </ItemGroup>
 
@@ -29,6 +30,7 @@
     <Resource Include="cmd.png" />
     <Resource Include="folder.png" />
     <Resource Include="Host\close.png" />
+    <Resource Include="noimg.jpg" />
   </ItemGroup>
 
   <ItemGroup>

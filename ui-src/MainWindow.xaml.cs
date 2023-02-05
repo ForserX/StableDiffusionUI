@@ -268,7 +268,8 @@ namespace SD_FXUI
 
         private void chRandom_Checked(object sender, RoutedEventArgs e)
         {
-            tbSeed.IsEnabled = false;
+            if (tbSeed != null)
+                tbSeed.IsEnabled = false;
         }
         private void chRandom_Unchecked(object sender, RoutedEventArgs e)
         {
