@@ -251,6 +251,7 @@ namespace SD_FXUI
             });
 
             ListView1.ItemsSource = ListViewItemsCollections;
+            ListView1.SelectedIndex = ListView1.Items.Count - 1;
             ImgList.Add(Img);
         }
         public void UpdateViewImg(string Img)
