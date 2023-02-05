@@ -10,7 +10,7 @@ import onnxruntime
 
 class GFPGANFaceAugment:
     def __init__(self, model_path, use_gpu = False):
-        self.ort_session = onnxruntime.InferenceSession(model_path)
+        self.ort_session = onnxruntime.InferenceSession(model_path, provider_options=[{'device_id': 1}], providers=['DmlExecutionProvider'])
         self.net_input_name = self.ort_session.get_inputs()[0].name
         _,self.net_input_channels,self.net_input_height,self.net_input_width = self.ort_session.get_inputs()[0].shape
         self.net_output_count = len(self.ort_session.get_outputs())
