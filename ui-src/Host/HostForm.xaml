@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Host" Height="450" Width="800" Icon="/cmd.png" ShowInTaskbar="False" Closing="OnClosing" Loaded="OnActiveted">
     <Grid>
-        <TextBox x:Name="tbHost" TextWrapping="Wrap" Text="Host started..." Background="#FF08090E" FontFamily="Verdana" Foreground="#FF9FA3B8" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True"/>
+        <TextBox x:Name="tbHost" TextWrapping="Wrap" Text="Host started..." Background="#FF08090E" FontFamily="Verdana" Foreground="#FF9FA3B8" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalContentAlignment="Top"/>
         <Image Margin="0,6,14,0" Source="/Host/close.png" MouseLeftButtonDown="OnClosing" HorizontalAlignment="Right" Width="44" Height="46" VerticalAlignment="Top"/>
 
     </Grid>

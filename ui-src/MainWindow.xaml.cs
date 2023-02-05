@@ -68,26 +68,33 @@ namespace SD_FXUI
         void Load()
         {
             cbFf16.IsChecked = Data.Get("fp16") == "true";
-            cbY.Text =  Data.Get("height");
+            cbY.Text = Data.Get("height");
             cbX.Text = Data.Get("width");
-            NegPrompt.Text =  Data.Get("neg");
-            tbSteps.Text =  Data.Get("steps");
-            cbUpscaler.Text =  Data.Get("upscaler");
-            cbSampler.Text =  Data.Get("sampler");
-            var ListModel =  Data.Get("model");
+            NegPrompt.Text = Data.Get("neg");
+            tbSteps.Text = Data.Get("steps");
+            cbUpscaler.Text = Data.Get("upscaler");
+            cbSampler.Text = Data.Get("sampler");
+            var ListModel = Data.Get("model");
 
-            switch(Data.Get("back_mode"))
+            switch (Data.Get("back_mode"))
             {
                 case "0": Helper.Mode = Helper.ImplementMode.InvokeAI; break;
-                case "1": btnShark_Click(0, new RoutedEventArgs());  break;
+                case "1": btnShark_Click(0, new RoutedEventArgs()); break;
                 case "2": btnONNX_Click(0, new RoutedEventArgs()); break;
 
-                default:  btnShark_Click(0, new RoutedEventArgs()); break;
+                default: btnShark_Click(0, new RoutedEventArgs()); break;
             }
 
             UpdateModelsList();
             cbModel.Text = ListModel.ToString();
             cbDevice.Text = Data.Get("device");
+
+            var HistoryStack = Data.Get("history").Split('|');
+            foreach (var item in HistoryStack)
+            {
+                if (item.Length > 0)
+                    Helper.PromHistory.Add(item);
+            }
         }
 
         void Save()
@@ -103,6 +110,15 @@ namespace SD_FXUI
 
             Data.Set("model", cbModel.Text);
             Data.Set("back_mode", ((int)(Helper.Mode)).ToString());
+
+            string HistoryStack = "";
+            foreach (var item in Helper.PromHistory)
+            {
+                HistoryStack += item + "|";
+            }
+            Data.Set("history", HistoryStack);
+
+            // Save to file
             Data.Save();
         }
 
@@ -154,6 +170,9 @@ namespace SD_FXUI
 
             return CmdLine;
         }
+
+        public void SetPrompt(string Prompt) => TryPrompt.Text = Prompt;
+
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             if(chRandom.IsChecked.Value)
@@ -181,6 +200,12 @@ namespace SD_FXUI
                         break;
                     }
             }
+
+            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[Helper.PromHistory.Count- 1] != TryPrompt.Text)
+            {
+                Helper.PromHistory.Add(TryPrompt.Text);
+            }
+
             ClearImages();
         }
 
@@ -453,6 +478,12 @@ namespace SD_FXUI
 
             Helper.DrawMode = Helper.DrawingMode.Text2Img;
             imgLoaded.Source = NoImageData;
+        }
+
+        private void btHistory_Click(object sender, MouseButtonEventArgs e)
+        {
+            Utils.HistoryList HistoryWnd = new Utils.HistoryList();
+            HistoryWnd.ShowDialog();
         }
     }
 }

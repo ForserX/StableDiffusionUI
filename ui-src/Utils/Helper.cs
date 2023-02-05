@@ -41,5 +41,6 @@ namespace SD_FXUI
         public static ImplementMode Mode = ImplementMode.IDK;
         public static DrawingMode DrawMode = DrawingMode.Text2Img;
         public static string InputImagePath = string.Empty;
+        public static List<string> PromHistory= new List<string>();
     }
 }

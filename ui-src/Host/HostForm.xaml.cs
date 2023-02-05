@@ -24,24 +24,37 @@ namespace SD_FXUI
         public HostForm()
         {
             InitializeComponent();
-
         }
 
         bool StepTest(string message)
         {
-            try
-            {
-                message = Regex.Replace(message, @"\s+", "");
-
-                return message.StartsWith("Downloading") || Char.IsNumber(message[0]);
+            if(message == null || message.Length == 0)
+            { 
+                return false; 
             }
-            catch { return false; }
+
+            char Firt = message[0];
+            int ChrId = 0;
+            foreach (char symbol in message)
+            {
+                if (symbol == ' ' || symbol == '\t')
+                {
+                    Firt = message[ChrId + 1];
+                }
+                else
+                {
+                    break;
+                }
+                ChrId++;
+            }
+
+            return message.StartsWith("Downloading") || Char.IsNumber(Firt);
         }
         void ImplPrint(string message)
         {
             if (StepTest(message))
             {
-                string OldText = tbHost.Text.Substring(0, tbHost.Text.Length - 1);
+                string OldText = tbHost.Text.Substring(0, tbHost.Text.Length - 2);
                 int Idx = OldText.LastIndexOf("\n");
 
                 if (Idx != -1 && StepTest(OldText.Substring(Idx + 1)))
@@ -57,9 +70,8 @@ namespace SD_FXUI
             {
                 tbHost.Text += message + "\n";
             }
-            tbHost.SelectionStart = tbHost.Text.Length;
+            tbHost.SelectionStart = tbHost.Text.Length - 1;
             tbHost.SelectionLength = 0;
-
             tbHost.ScrollToEnd();
         }
 
