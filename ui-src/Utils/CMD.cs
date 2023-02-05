@@ -97,7 +97,7 @@ namespace SD_FXUI
                 string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
                 System.IO.File.Move(file, Helper.ImgPath + System.IO.Path.GetFileName(file));
 
-                if (UpSize > 0)
+                if (UpSize > 0 && Helper.CurrentUpscalerType != Helper.UpscalerType.None)
                 {
                     await Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
                 }
@@ -126,7 +126,7 @@ namespace SD_FXUI
                 string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
                 System.IO.File.Move(file, Helper.ImgPath + System.IO.Path.GetFileName(file));
 
-                if (UpSize > 0)
+                if (UpSize > 0 && Helper.CurrentUpscalerType != Helper.UpscalerType.None)
                 {
                     await Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
                 }

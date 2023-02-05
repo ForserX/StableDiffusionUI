@@ -177,7 +177,7 @@ namespace SD_FXUI
                 tbSeed.Text = rand.Next().ToString();
             }
 
-            Helper.UpscalerType Type = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
+            Helper.CurrentUpscalerType = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
             int Size = (int)slUpscale.Value;
 
             string cmdline = "";
