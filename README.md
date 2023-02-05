@@ -1,7 +1,12 @@
-# StableDiffusionUI Shark AMD
+# StableDiffusionUI Shark AMD and Nvidia
 ### What is it
-Simple re-implement SD UI for Shark API for AMD
-![image](https://user-images.githubusercontent.com/13867290/216241942-1036905f-6807-4c0d-bb98-c08fb9d4338e.png)
+Simple re-implement SD UI for AMD and Nvidia GPU 
+![image](https://user-images.githubusercontent.com/13867290/216797865-6303b710-84dd-4812-8d26-fbe6c8b3cd19.png)
+![image](https://user-images.githubusercontent.com/13867290/216797870-3f05fd70-41b0-41e5-b9ea-e7f41f294b65.png)
+
+* Shark (AMD: Vulkan + MRIL/IREE)
+* ONNX (AMD: DirectML/DirectX 12)
+* InvokeAI (Nvidia) [WIP]
 
 # How to install
 ## Pre-install
@@ -17,6 +22,9 @@ cd ./data/repo/
 
 # 3rd 
 * [Shark](https://github.com/nod-ai/SHARK)
+* ONNX
+* InvokeAI
+* [HandyContorls](https://github.com/HandyOrg/HandyControl)
 * Real-ESRGAN NCNN Vulkan
 * Real-SR NCNN Vulkan
 * Real-SRMD NCNN Vulkan
