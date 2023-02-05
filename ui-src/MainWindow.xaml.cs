@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -164,7 +165,7 @@ namespace SD_FXUI
                     + $" --no-use_tuned " 
                     + $" --local_tank_cache=\".//\""
                     +  " --enable_stack_trace" 
-                    + " --iree-vulkan-target-triple=rdna3-unknown-windows"
+//                    + " --iree-vulkan-target-triple=rdna3-unknown-windows"
                     +  " --write_metadata_to_png"
             ;
 
@@ -422,6 +423,11 @@ namespace SD_FXUI
             if (cbDevice.SelectedItem.ToString() == "GPU: 1" || cbDevice.SelectedItem.ToString() == "GPU: 0")
             {
                 string FileName = FS.GetWorkingDir() + @"\repo\shark.venv\Lib\site-packages\diffusers\pipelines\onnx_utils.py";
+
+                if(!System.IO.File.Exists(FileName))
+                {
+                    return;
+                }
                 using (var reader = System.IO.File.OpenText(FileName))
                 {
                     int LineCounter = 0;
@@ -486,6 +492,11 @@ namespace SD_FXUI
         {
             Utils.HistoryList HistoryWnd = new Utils.HistoryList();
             HistoryWnd.ShowDialog();
+        }
+
+        private void BlurWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Install.Check();
         }
     }
 }

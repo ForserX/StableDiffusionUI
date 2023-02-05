@@ -12,18 +12,24 @@ namespace SD_FXUI
     {
         Process? Process = null;
         ProcessStartInfo? ProcessStartInfo = null;
+        bool NeedDraw = false;
 
-        public Host(string Dir, string FileName = "cmd.exe")
+        public Host(string Dir, string FileName = "cmd.exe", bool Show = false)
         {
             ProcessStartInfo = new ProcessStartInfo(FileName);
             ProcessStartInfo.RedirectStandardInput = true;
             ProcessStartInfo.WorkingDirectory = Dir;
-            ProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            ProcessStartInfo.CreateNoWindow = true;
-            ProcessStartInfo.UseShellExecute = false;
 
-            ProcessStartInfo.RedirectStandardOutput = true;
-            ProcessStartInfo.RedirectStandardError = true;
+            if(!Show)
+            {
+                ProcessStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                ProcessStartInfo.CreateNoWindow = true;
+                ProcessStartInfo.UseShellExecute = false;
+
+                ProcessStartInfo.RedirectStandardOutput = true;
+                ProcessStartInfo.RedirectStandardError = true;
+            }
+            NeedDraw = Show;
         }
 
         public void Start(string arg = "")
@@ -31,26 +37,30 @@ namespace SD_FXUI
             ProcessStartInfo.Arguments = arg;
 
             Process = Process.Start(ProcessStartInfo);
-            Process.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
-            {
-                // Prepend line numbers to each line of the output.
-                if (!String.IsNullOrEmpty(e.Data))
-                {
-                    Helper.UIHost.Print(e.Data);
-                }
-            });
 
-            Process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) =>
+            if (!NeedDraw)
             {
-                // Prepend line numbers to each line of the output.
-                if (!String.IsNullOrEmpty(e.Data))
+                Process.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
                 {
-                    Helper.UIHost.Print(e.Data);
-                }
-            });
+                    // Prepend line numbers to each line of the output.
+                    if (!String.IsNullOrEmpty(e.Data))
+                    {
+                        Helper.UIHost.Print(e.Data);
+                    }
+                });
 
-            Process.BeginOutputReadLine();
-            Process.BeginErrorReadLine();
+                Process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) =>
+                {
+                    // Prepend line numbers to each line of the output.
+                    if (!String.IsNullOrEmpty(e.Data))
+                    {
+                        Helper.UIHost.Print(e.Data);
+                    }
+                });
+
+                Process.BeginOutputReadLine();
+                Process.BeginErrorReadLine();
+            }
 
             Helper.SecondaryProcessList.Add(this);
         }
@@ -66,11 +76,11 @@ namespace SD_FXUI
 
         public void Send(string cmd)
         {
-            Process.StandardInput.WriteLine("@" + cmd);
+            Process.StandardInput.WriteLine(cmd);
         }
         public void SendExistCommand()
         {
-            Send("@exit");
+            Send("exit");
         }
 
         public void Wait()
