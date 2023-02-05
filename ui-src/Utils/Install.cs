@@ -25,7 +25,7 @@ namespace SD_FXUI
             Cmd.Print("Install python venv... Please wait");
             Cmd.Start();
             Cmd.Send("python -m venv repo\\shark.venv\\");
-            Cmd.SendExistCommand();
+            Cmd.SendExitCommand();
             Cmd.Wait();
 
             Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
@@ -36,7 +36,7 @@ namespace SD_FXUI
             Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe --pre torch-mlir torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/cpu -f https://llvm.github.io/torch-mlir/package-index/");
             Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe --upgrade -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html iree-compiler iree-runtime");
             Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe -e . -f https://llvm.github.io/torch-mlir/package-index/ -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html");
-            Cmd.SendExistCommand();
+            Cmd.SendExitCommand();
             Cmd.Wait();
 
             Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
@@ -44,7 +44,7 @@ namespace SD_FXUI
             Cmd.Start();
             Cmd.Send("python -m venv .\\repo\\onnx.venv\\");
             Cmd.Send("repo\\onnx.venv\\Scripts\\pip.exe install -r requirements_onnx.txt");
-            Cmd.SendExistCommand();
+            Cmd.SendExitCommand();
             Cmd.Wait();
 
             //Task.Run(() => InstallGFPGAN());
@@ -57,14 +57,14 @@ namespace SD_FXUI
             Host WGetProc = new Host(WorkDir, WGet);
 
             WGetProc.Start("https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth");
-            WGetProc.SendExistCommand();
+            WGetProc.SendExitCommand();
             WGetProc.Wait();
 
 
             Host ProcesHost = new Host(WorkDir, "repo/onnx.venv/Scripts/python.exe", true);
             ProcesHost.Start($"../../repo/diffusion_scripts/torch2onnx.py --src_model_path=\"{WorkDir}GFPGANv1.3.pth\" --dst_model_path=\"{WorkDir}GFPGANv1.3.onnx\" --img_size=512");
 
-            ProcesHost.SendExistCommand();
+            ProcesHost.SendExitCommand();
             ProcesHost.Wait();
 
             //File.Delete(WorkDir + "GFPGANv1.3.pth");

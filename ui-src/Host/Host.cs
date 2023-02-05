@@ -78,7 +78,7 @@ namespace SD_FXUI
         {
             Process.StandardInput.WriteLine(cmd);
         }
-        public void SendExistCommand()
+        public void SendExitCommand()
         {
             Send("exit");
         }
@@ -86,7 +86,6 @@ namespace SD_FXUI
         public void Wait()
         {
             Process.WaitForExit();
-
             if (Helper.SecondaryProcessList.Contains(this))
             {
                 Helper.SecondaryProcessList.Remove(this);

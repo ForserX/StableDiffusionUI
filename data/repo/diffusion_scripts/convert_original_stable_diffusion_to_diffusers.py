@@ -113,3 +113,4 @@ if __name__ == "__main__":
         from_safetensors=args.from_safetensors,
     )
     pipe.save_pretrained(args.dump_path, safe_serialization=args.to_safetensors)
+    print("SD: Done: Diffusion")

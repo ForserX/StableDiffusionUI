@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace SD_FXUI
 {
@@ -15,13 +16,8 @@ namespace SD_FXUI
         public static async Task ProcessConvertCKPT2Diff(string InputFile)
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
-            Host ProcesHost = new Host(WorkDir, "repo/shark.venv/Scripts/python.exe");
+            Host ProcesHost = new Host(WorkDir);
             ProcesHost.Print($"\n Startup extract ckpt({InputFile})..... \n");
-
-            if (!File.Exists(WorkDir + "wget.exe"))
-            {
-                File.Copy(FS.GetToolsDir() + "wget.exe", WorkDir + "wget.exe");
-            }
 
             string OutPath = null;
             string AddCmd = "";
@@ -38,19 +34,59 @@ namespace SD_FXUI
 
             Directory.CreateDirectory(OutPath);
 
-            ProcesHost.Start("\"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
-                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " + 
+            ProcesHost.Start();
+            ProcesHost.Send("\"../../repo/shark.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
+                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
                                                                             $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\"" + AddCmd);
 
-            ProcesHost.SendExistCommand();
-            ProcesHost.Wait();
-
-            File.Delete(WorkDir + "wget.exe");
+            ProcesHost.SendExitCommand();
 
             ProcesHost.Print("\n  Extract task is done..... \n");
 
+            Wrapper.SendNotification("Convertation: ~5min!");
+        }
+        public static async Task ProcessConvertCKPT2ONNX(string InputFile)
+        {
+            string WorkDir = FS.GetModelDir() + "shark\\";
+            Host ProcesHost = new Host(WorkDir);
+            ProcesHost.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
-            Wrapper.SendNotification("Convertation: done!");
+            string OutPath = null;
+            string AddCmd = "";
+
+            if (InputFile.EndsWith(".safetensors"))
+            {
+                OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
+                AddCmd = " --from_safetensors";
+            }
+            else
+            {
+                OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+            }
+
+            Directory.CreateDirectory(OutPath);
+
+            ProcesHost.Start();
+            ProcesHost.Send("\"../../repo/shark.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
+                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
+                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\"" + AddCmd);
+
+
+            string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
+            if (Name.Length == 0)
+            {
+                Name = System.IO.Path.GetDirectoryName(InputFile);
+            }
+
+            string OutPathONNX = FS.GetModelDir() + "onnx\\" + Name;
+            OutPath = OutPath.Replace("\\", "/");
+
+            ProcesHost.Send("\"../../repo/onnx.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " +
+                                                                            $"--model_path=\"{OutPath}\" --output_path=\"{OutPathONNX}\"");
+
+            ProcesHost.SendExitCommand();
+
+            Wrapper.SendNotification("Convertation: ~5min!");
         }
         public static async Task ProcessConvertDiff2Onnx(string InputFile)
         {
@@ -74,7 +110,7 @@ namespace SD_FXUI
             ProcesHost.Start("\"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" + 
                                                                             $" --model_path=\"{InputFile}\"");
 
-            ProcesHost.SendExistCommand();
+            ProcesHost.SendExitCommand();
             ProcesHost.Wait();
 
             ProcesHost.Print("\n  Extract task is done..... \n");
@@ -87,7 +123,7 @@ namespace SD_FXUI
             ProcesHost.Print("\n Startup generation..... \n");
 
             ProcesHost.Start("./repo/diffusion_scripts/sd_onnx.py " + command);
-            ProcesHost.SendExistCommand();
+            ProcesHost.SendExitCommand();
             ProcesHost.Wait();
 
             //  process.WaitForInputIdle();
@@ -116,7 +152,7 @@ namespace SD_FXUI
             ProcesHost.Print("\n Startup generation..... \n");
 
             ProcesHost.Start("../../repo/stable_diffusion/scripts/txt2img.py " + command);
-            ProcesHost.SendExistCommand();
+            ProcesHost.SendExitCommand();
             ProcesHost.Wait();
 
             //  process.WaitForInputIdle();

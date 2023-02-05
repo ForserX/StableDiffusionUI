@@ -262,3 +262,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     print(args.output_path)
     convert_models(args.model_path, args.output_path, args.opset, args.fp16)
+    print("SD: Done: ONNX")
