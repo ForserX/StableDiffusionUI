@@ -367,5 +367,11 @@ namespace SD_FXUI
         {
             Helper.CurrentUpscalerType = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
         }
+
+        private void cbGfpgan_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (cbGfpgan.IsChecked != null)
+                Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
+        }
     }
 }

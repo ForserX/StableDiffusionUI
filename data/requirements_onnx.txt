@@ -23,3 +23,4 @@ torchvision
 tf2onnx
 transformers-onnx
 accelerate
+gfpgan

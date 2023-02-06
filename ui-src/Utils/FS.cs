@@ -91,7 +91,7 @@ namespace SD_FXUI
             }
             else
             {
-                foreach(var LocPath in Directory.GetDirectories(WorkingPath))
+                foreach (var LocPath in Directory.GetDirectories(WorkingPath))
                 {
                     Models.Add(Path.GetFileName(LocPath));
                 }
@@ -110,6 +110,24 @@ namespace SD_FXUI
             }
 
             return Models;
+        }
+
+        internal class Dir
+        {
+            static public void Delete(string Name, bool Recursive)
+            {
+                if (Directory.Exists(Name))
+                {
+                    if (Recursive)
+                    {
+                        Directory.Delete(Name, true);
+                    }
+                    else
+                    {
+                        Directory.Delete(Name);
+                    }
+                }
+            }
         }
     }
 }

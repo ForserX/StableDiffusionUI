@@ -125,8 +125,8 @@
                     <Label Content="Total count" Height="30" Width="69" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="237,78,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="tbTotalCount" TextWrapping="Wrap" Text="1" Height="18" Margin="311,78,6,33"/>
                 </Grid>
-                <Grid Height="114">
-                    <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,40,0,0" VerticalAlignment="Top"/>
+                <Grid Height="152">
+                    <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,71,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbUpscaler" Margin="50,6,132,0" Height="30" VerticalAlignment="Top" SelectionChanged="cbUpscaler_SelectionChanged">
                         <ComboBoxItem Content="Real-ESRGAN: AnimeVideo(v3)"/>
                         <ComboBoxItem Content="Real-ESRGAN:(x4plus)"/>
@@ -139,8 +139,8 @@
                     <Label Content="Upscale" Height="30" Width="51" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,6,0,0"/>
                     <Slider  x:Name="slUpscale" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Margin="0,11,10,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"/>
                     <Label x:Name="lbUpscale" Content="x4" Background="#FF611F7E" Height="26" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,7,101,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="cbModel" Height="22" Margin="50,41,75,43"/>
-                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_1" Height="29" HorizontalAlignment="Right" Margin="0,41,4,0" VerticalAlignment="Top">
+                    <ComboBox x:Name="cbModel" Height="22" Margin="50,71,75,0" VerticalAlignment="Top"/>
+                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_1" Height="30" HorizontalAlignment="Left" Margin="285,71,0,0" VerticalAlignment="Top">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -148,12 +148,14 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <ComboBox  x:Name="cbDevice" Height="22" Text="vulkan" SelectionChanged="cbDevice_SelectionChanged" Margin="50,76,189,8">
+                    <ComboBox  x:Name="cbDevice" Height="22" Text="vulkan" SelectionChanged="cbDevice_SelectionChanged" Margin="50,107,166,0" VerticalAlignment="Top">
                         <ComboBoxItem Content="vulkan"/>
                         <ComboBoxItem Content="cuda"/>
                     </ComboBox>
-                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="172,0,0,13" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="52" Height="20"/>
-                    <Label Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,76,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="194,0,0,20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="52" Height="20"/>
+                    <Label Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,107,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
+                    <ToggleButton x:Name="cbGfpgan" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="chRandom_Unchecked" Margin="153,41,0,89" HorizontalAlignment="Left" Width="36"/>
                 </Grid>
             </StackPanel>
         </ScrollViewer>

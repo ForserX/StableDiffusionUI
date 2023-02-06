@@ -51,6 +51,7 @@ namespace SD_FXUI
         public static string InputImagePath = string.Empty;
         public static List<string> PromHistory= new List<string>();
         public static ImageState ActiveImageState = ImageState.Free;
+        public static bool EnableGFPGAN = false;
         public static UpscalerType CurrentUpscalerType = UpscalerType.None;
     }
 }
