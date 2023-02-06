@@ -175,7 +175,6 @@ namespace SD_FXUI
 
             Host.Print("\n  Task Done..... \n");
             Wrapper.SendNotification("Task: done!");
-            Helper.Form.InvokeProgressUpdate(100);
         }
 
 
@@ -224,13 +223,9 @@ namespace SD_FXUI
             ProcesHost.Start("-i " + File + " -o " + OutFile + DopCmd);
 
             ProcesHost.Wait();
-            // FX: Very bad working...
-            //Host ProcessGfpgan = new Host(FS.GetWorkingDir(), "repo/onnx.venv/Scripts/python.exe", true);
-            //ProcessGfpgan.Start($"repo/diffusion_scripts/gfpgan_onnx.py --model_path=\"{FS.GetModelDir() + "onnx\\"}GFPGANv1.3.onnx\" --image_path=\"{OutFile}\" --save_path=\"{OutFileG}\"");
-            //ProcessGfpgan.Wait();
 
             Helper.Form.UpdateViewImg(OutFile);
-            //Helper.Form.UpdateViewImg(OutFileG);
+            Helper.Form.InvokeProgressApply();
         }
     }
 }

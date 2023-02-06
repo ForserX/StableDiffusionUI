@@ -203,7 +203,7 @@ namespace SD_FXUI
             }
 
             ClearImages();
-            InvokeProgressUpdate(0);
+            InvokeProgressUpdate(10);
         }
 
         private void Slider_Denoising(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -399,6 +399,9 @@ namespace SD_FXUI
 
             ListView1.UnselectAll();
             ListViewItemsCollections.Clear();
+
+            Helper.ActiveImageState = Helper.ImageState.Free;
+            btnFavor.Source = imgNotFavor.Source;
         }
 
         public void InvokeClearImages()
@@ -533,6 +536,13 @@ namespace SD_FXUI
         public void InvokeProgressUpdate(int value)
         {
             Dispatcher.Invoke(() => { pbGen.Value = value; });
+        }
+        public void InvokeProgressApply()
+        {
+            Dispatcher.Invoke(() => 
+            { 
+                pbGen.Value += (40 / int.Parse(tbTotalCount.Text)); 
+            });
         }
     }
 }

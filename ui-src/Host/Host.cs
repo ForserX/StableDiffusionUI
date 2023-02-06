@@ -81,12 +81,17 @@ namespace SD_FXUI
 
             if (Message.Contains("SD: Model loaded"))
             {
-                Helper.Form.InvokeProgressUpdate(30);
+                Helper.Form.InvokeProgressUpdate(20);
             }
             
             if (Message.Contains("SD: Generating done"))
             {
-                Helper.Form.InvokeProgressUpdate(70);
+                Helper.Form.InvokeProgressUpdate(60);
+            }
+            
+            if (Message.Contains("Image generate"))
+            {
+                Helper.Form.InvokeProgressApply();
             }
 
             Helper.UIHost.Print(Message);
