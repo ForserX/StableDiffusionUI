@@ -9,18 +9,6 @@
     <StartupObject>SD_FXUI.App</StartupObject>
   </PropertyGroup>
 
-	<ItemGroup>
-    <None Remove="745081.png" />
-    <None Remove="cmd.png" />
-    <None Remove="favor.png" />
-    <None Remove="folder.png" />
-    <None Remove="history.png" />
-    <None Remove="Host\close.png" />
-    <None Remove="noimg.jpg" />
-    <None Remove="notfavor.png" />
-    <None Remove="res\745081.png" />
-  </ItemGroup>
-
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>

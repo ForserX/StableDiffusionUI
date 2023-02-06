@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"               
         mc:Ignorable="d"
-        Background="{DynamicResource DarkDefaultBrush}"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
         Title="MainWindow" Height="633" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded">
@@ -159,7 +158,7 @@
         <Image Source="/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Margin="45,0,503,31" Grid.Column="3" Height="50" VerticalAlignment="Bottom"/>
         <Image x:Name="btCmd" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Margin="0,0,549,32" HorizontalAlignment="Right" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="48" VerticalAlignment="Bottom"/>
         <Image x:Name="btHistory" Source="/history.png" MouseLeftButtonDown="btHistory_Click" Margin="0,0,105,37" HorizontalAlignment="Right" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
-        <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Left" Height="39" Margin="445,39,0,0" VerticalAlignment="Top" Width="42" Source="/notfavor.png" MouseLeftButtonDown="btmFavorClick"/>
+        <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="456,43,0,0" VerticalAlignment="Top" Width="26" Source="/notfavor.png" MouseLeftButtonDown="btmFavorClick"/>
         <Image x:Name="imgFavor" Source="/favor.png" />
         <Image x:Name="imgNotFavor" Source="/notfavor.png" />
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,75" VerticalAlignment="Bottom"/>
