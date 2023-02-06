@@ -76,7 +76,6 @@ namespace SD_FXUI
                 tbSeed.Text = rand.Next().ToString();
             }
 
-            Helper.CurrentUpscalerType = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
             int Size = (int)slUpscale.Value;
 
             string cmdline = "";
@@ -85,13 +84,13 @@ namespace SD_FXUI
                 case Helper.ImplementMode.Shark:
                     {
                         cmdline += GetCommandLineShark();
-                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Helper.CurrentUpscalerType, Size));
+                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Size));
                         break;
                     }
                 case Helper.ImplementMode.ONNX:
                     {
                         cmdline += GetCommandLineOnnx();
-                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Helper.CurrentUpscalerType, Size));
+                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
                         break;
                     }
             }
@@ -102,7 +101,7 @@ namespace SD_FXUI
             }
 
             ClearImages();
-            InvokeProgressUpdate(10);
+            InvokeProgressUpdate(3);
         }
 
         private void Slider_Denoising(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -362,6 +361,11 @@ namespace SD_FXUI
 
                 btnFavor.Source = imgFavor.Source;
             }
+        }
+
+        private void cbUpscaler_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Helper.CurrentUpscalerType = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
         }
     }
 }

@@ -11,7 +11,9 @@ namespace SD_FXUI
         public enum UpscalerType
         {
             ESRGAN,
+            ESRGAN_X4,
             ESRGAN_ANIME,
+            ESRGAN_NET,
             SR,
             SRMD,
             None

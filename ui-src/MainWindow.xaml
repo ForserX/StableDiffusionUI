@@ -128,10 +128,12 @@
                 <Grid Height="114">
                     <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,40,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbUpscaler" Margin="50,6,132,0" Height="30" VerticalAlignment="Top">
-                        <ComboBoxItem Content="ERSGAN"/>
-                        <ComboBoxItem Content="ERSGAN: Anime"/>
-                        <ComboBoxItem Content="SR"/>
-                        <ComboBoxItem Content="SRMD"/>
+                        <ComboBoxItem Content="Real-ESRGAN: AnimeVideo(v3)"/>
+                        <ComboBoxItem Content="Real-ESRGAN:(x4plus)"/>
+                        <ComboBoxItem Content="Real-ESRGAN:(x4plus) Anime"/>
+                        <ComboBoxItem Content="Real-ESRNET:(x4plus)"/>
+                        <ComboBoxItem Content="Real-SR"/>
+                        <ComboBoxItem Content="Real-SRMD"/>
                         <ComboBoxItem Content="None"/>
                     </ComboBox>
                     <Label Content="Upscale" Height="30" Width="51" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,6,0,0"/>

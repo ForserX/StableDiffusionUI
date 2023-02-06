@@ -117,13 +117,15 @@ namespace SD_FXUI
             Wrapper.SendNotification("Convertation: done!");
         }
 
-        public static async Task ProcessRunnerOnnx(string command, Helper.UpscalerType Type, int UpSize)
+        public static async Task ProcessRunnerOnnx(string command, int UpSize)
         {
             Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/shark.venv/Scripts/python.exe");
             Host.Print("\n Startup generation..... \n");
 
+            Helper.Form.InvokeProgressUpdate(7);
             ProcesHost.Start("./repo/diffusion_scripts/sd_onnx.py " + command);
             ProcesHost.SendExitCommand();
+            Helper.Form.InvokeProgressUpdate(10);
             ProcesHost.Wait();
 
             //  process.WaitForInputIdle();
@@ -135,7 +137,7 @@ namespace SD_FXUI
 
                 if (UpSize > 0 && Helper.CurrentUpscalerType != Helper.UpscalerType.None)
                 {
-                    await Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
+                    await Task.Run(() => UpscalerRunner(UpSize, NewFilePath));
                 }
                 else
                 {
@@ -147,13 +149,15 @@ namespace SD_FXUI
             Wrapper.SendNotification("Task: done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
-        public static async Task ProcessRunnerShark(string command, Helper.UpscalerType Type, int UpSize)
+        public static async Task ProcessRunnerShark(string command, int UpSize)
         {
             Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/shark.venv/Scripts/python.exe");
             Host.Print("\n Startup generation..... \n");
+            Helper.Form.InvokeProgressUpdate(7);
 
             ProcesHost.Start("../../repo/stable_diffusion/scripts/txt2img.py " + command);
             ProcesHost.SendExitCommand();
+            Helper.Form.InvokeProgressUpdate(10);
             ProcesHost.Wait();
 
             //  process.WaitForInputIdle();
@@ -165,7 +169,7 @@ namespace SD_FXUI
 
                 if (UpSize > 0 && Helper.CurrentUpscalerType != Helper.UpscalerType.None)
                 {
-                    await Task.Run(() => UpscalerRunner(Type, UpSize, NewFilePath));
+                    await Task.Run(() => UpscalerRunner(UpSize, NewFilePath));
                 }
                 else
                 {
@@ -178,19 +182,32 @@ namespace SD_FXUI
         }
 
 
-        public static async Task UpscalerRunner(Helper.UpscalerType Type, int Size, string File)
+        public static async Task UpscalerRunner(int Size, string File)
         {
             string DopCmd = "4";
             DopCmd = " -s " + DopCmd;
 
             string FileName = FS.GetToolsDir();
 
-            switch (Type)
+            switch (Helper.CurrentUpscalerType)
             {
                 case Helper.UpscalerType.ESRGAN:
                     {
                         FileName += @"\realesrgan\realesrgan-ncnn-vulkan.exe";
-                        DopCmd += " -n realesrgan-x4plus";
+                        DopCmd += " -v ";
+                        break;
+                    }
+                case Helper.UpscalerType.ESRGAN_X4:
+                    {
+                        FileName += @"\realesrgan\realesrgan-ncnn-vulkan.exe";
+                        DopCmd += " -n realesrgan-x4plus -v ";
+                        break;
+                    }
+                    
+                case Helper.UpscalerType.ESRGAN_NET:
+                    {
+                        FileName += @"\realesrgan\realesrgan-ncnn-vulkan.exe";
+                        DopCmd += " -n realesrnet-x4plus -v ";
                         break;
                     }
 
@@ -198,7 +215,7 @@ namespace SD_FXUI
                     {
                         FileName += @"\realesrgan\realesrgan-ncnn-vulkan.exe";
 
-                        DopCmd += " -n realesrgan-x4plus-anime";
+                        DopCmd += " -n realesrgan-x4plus-anime -v ";
                         break;
                     }
                 case Helper.UpscalerType.SR:
