@@ -3,7 +3,7 @@ import sys
 import time
 import torch
 import numpy as np
-from diffusers import OnnxStableDiffusionPipeline, OnnxStableDiffusionImg2ImgPipeline, OnnxStableDiffusionInpaintPipeline
+from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionInpaintPipeline
 from diffusers import EulerAncestralDiscreteScheduler, PNDMScheduler, LMSDiscreteScheduler, DDIMScheduler, DPMSolverMultistepScheduler, EulerDiscreteScheduler, DDPMScheduler
 
 import argparse
@@ -120,15 +120,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-device",
-    "--device",
-    choices=['dml', 'cuda', 'cpu'],
-    default="dml",
-    help="Specify generation device",
-    dest='device',
-)
-
-parser.add_argument(
     "-scmode",
     "--scmode",
     choices=['EulerAncestralDiscrete', 'EulerDiscrete', 'PNDM', 'DPMSolverMultistep', 'LMSDiscrete', 'SharkEulerDiscrete', 'DDIM'],
@@ -144,19 +135,14 @@ if len(sys.argv)==1:
 opt = parser.parse_args()
 eta = 0.0
 
-if opt.device == "dml":
-    prov = "DmlExecutionProvider"
-if opt.device == "cuda":
-    prov = "CUDAExecutionProvider"
-if opt.device == "cpu":
-    prov = "CPUExecutionProvider"
-
 if opt.mode == "txt2img":
-    pipe = OnnxStableDiffusionPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", safety_checker=None)
+    pipe = OnnxStableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion_onnx", safety_checker=None)
 if opt.mode == "img2img":
-    pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", safety_checker=None)
+    pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion_onnx", safety_checker=None)
 if opt.mode == "inpaint":
-    pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", safety_checker=None)
+    pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion_onnx", safety_checker=None)
+
+pipe.to("cuda")
 
 if opt.scmode == "EulerAncestralDiscrete":
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
@@ -182,11 +168,9 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_pat
     info = PngImagePlugin.PngInfo()
     neg_prompt_meta_text = "" if prompt_neg == "" else f' [{prompt_neg}]'
         
-    rng = torch.Generator(device="cpu").manual_seed(seed)
-    
     if opt.mode == "txt2img":
         print("txt2img", flush=True)
-        image=pipe(prompt=prompt, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, generator=rng).images[0]
+        image=pipe(prompt=prompt, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale}')
         
     if opt.mode == "img2img":
@@ -196,13 +180,13 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_pat
         size = width, height
         img.thumbnail(size, Image.Resampling.LANCZOS)
         
-        image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength, generator=rng).images[0]
+        image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {init_strength}')
     if opt.mode == "inpaint":
         print("inpaint", flush=True)
         img=Image.open(init_img_path).convert("RGB")
         mask=Image.open(mask_img_path).convert("RGB")
-        image=pipe(prompt=prompt, image=img, mask_image = mask, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
+        image=pipe(prompt=prompt, image=img, mask_image = mask, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f 0.0 -M {mask_img_path}')
 
     image.save(os.path.join(opt.outpath, f"{time.time_ns()}.png"), 'PNG', pnginfo=info)
