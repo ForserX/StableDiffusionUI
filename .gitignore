@@ -22,3 +22,5 @@ ui-src/obj/
 *.htm
 *.exe
 *.json
+
+*\temp*

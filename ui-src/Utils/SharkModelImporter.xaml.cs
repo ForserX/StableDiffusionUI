@@ -79,7 +79,7 @@ namespace SD_FXUI.Utils
             {
                 if(ToID == 1)
                 {
-                    CMD.ProcessConvertCKPT2ONNX(cbPath.Text);
+                    CMD.ProcessConvertCKPT2ONNX(cbPath.Text, chBoxEmaOnly.IsChecked.Value);
                 }
                 else
                 {
@@ -119,5 +119,6 @@ namespace SD_FXUI.Utils
                 cbFrom.Items.Insert(2, "huggingface");
             }
         }
+
     }
 }

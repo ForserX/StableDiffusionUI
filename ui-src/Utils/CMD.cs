@@ -13,7 +13,7 @@ namespace SD_FXUI
 {
     internal class CMD
     {
-        public static async Task ProcessConvertCKPT2Diff(string InputFile)
+        public static async Task ProcessConvertCKPT2Diff(string InputFile, bool emaOnly = false)
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
             Host ProcesHost = new Host(WorkDir);
@@ -34,10 +34,15 @@ namespace SD_FXUI
 
             Directory.CreateDirectory(OutPath);
 
+            if (emaOnly)
+            {
+                AddCmd += " --extract_ema";
+            }
+
             ProcesHost.Start();
             ProcesHost.Send("\"../../repo/shark.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
-                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" --extract_ema" + AddCmd);
+                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
 
             ProcesHost.SendExitCommand();
 
@@ -45,7 +50,7 @@ namespace SD_FXUI
 
             Wrapper.SendNotification("Convertation: ~5min!");
         }
-        public static async Task ProcessConvertCKPT2ONNX(string InputFile)
+        public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false)
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
             Host ProcesHost = new Host(WorkDir);
@@ -65,11 +70,16 @@ namespace SD_FXUI
             }
 
             Directory.CreateDirectory(OutPath);
+            
+            if (emaOnly)
+            {
+                AddCmd += " --extract_ema";
+            }
 
             ProcesHost.Start();
             ProcesHost.Send("\"../../repo/shark.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
-                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" --extract_ema" + AddCmd);
+                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
 
 
             string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
