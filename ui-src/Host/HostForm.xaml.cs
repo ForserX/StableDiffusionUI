@@ -80,11 +80,6 @@ namespace SD_FXUI
             if (message.Length > 300)
                 return;
 
-            if (message.Contains("SD: Done"))
-            {
-                Wrapper.SendNotification(message);
-            }
-
             System.Diagnostics.Trace.WriteLine(message);
             message = message.Replace(FS.GetWorkingDir(), "${Workspace}");
 

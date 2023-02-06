@@ -17,7 +17,7 @@ namespace SD_FXUI
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
             Host ProcesHost = new Host(WorkDir);
-            ProcesHost.Print($"\n Startup extract ckpt({InputFile})..... \n");
+            Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
             string OutPath = null;
             string AddCmd = "";
@@ -41,7 +41,7 @@ namespace SD_FXUI
 
             ProcesHost.SendExitCommand();
 
-            ProcesHost.Print("\n  Extract task is done..... \n");
+            Host.Print("\n  Extract task is done..... \n");
 
             Wrapper.SendNotification("Convertation: ~5min!");
         }
@@ -49,7 +49,7 @@ namespace SD_FXUI
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
             Host ProcesHost = new Host(WorkDir);
-            ProcesHost.Print($"\n Startup extract ckpt({InputFile})..... \n");
+            Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
             string OutPath = null;
             string AddCmd = "";
@@ -92,7 +92,7 @@ namespace SD_FXUI
         {
             string WorkDir = FS.GetModelDir() + "onnx\\";
             Host ProcesHost = new Host(WorkDir, "repo/onnx.venv/Scripts/python.exe");
-            ProcesHost.Print($"\n Startup extract ckpt({InputFile})..... \n");
+            Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
 
             string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
@@ -113,14 +113,14 @@ namespace SD_FXUI
             ProcesHost.SendExitCommand();
             ProcesHost.Wait();
 
-            ProcesHost.Print("\n  Extract task is done..... \n");
+            Host.Print("\n  Extract task is done..... \n");
             Wrapper.SendNotification("Convertation: done!");
         }
 
         public static async Task ProcessRunnerOnnx(string command, Helper.UpscalerType Type, int UpSize)
         {
             Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/shark.venv/Scripts/python.exe");
-            ProcesHost.Print("\n Startup generation..... \n");
+            Host.Print("\n Startup generation..... \n");
 
             ProcesHost.Start("./repo/diffusion_scripts/sd_onnx.py " + command);
             ProcesHost.SendExitCommand();
@@ -143,13 +143,14 @@ namespace SD_FXUI
                 }
             }
 
-            ProcesHost.Print("\n  Generation Done..... \n");
-            Wrapper.SendNotification("Generation: done!");
+            Host.Print("\n  Task Done..... \n");
+            Wrapper.SendNotification("Task: done!");
+            Helper.Form.InvokeProgressUpdate(100);
         }
         public static async Task ProcessRunnerShark(string command, Helper.UpscalerType Type, int UpSize)
         {
             Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/shark.venv/Scripts/python.exe");
-            ProcesHost.Print("\n Startup generation..... \n");
+            Host.Print("\n Startup generation..... \n");
 
             ProcesHost.Start("../../repo/stable_diffusion/scripts/txt2img.py " + command);
             ProcesHost.SendExitCommand();
@@ -172,8 +173,9 @@ namespace SD_FXUI
                 }
             }
 
-            ProcesHost.Print("\n  Generation Done..... \n");
-            Wrapper.SendNotification("Generation: done!");
+            Host.Print("\n  Task Done..... \n");
+            Wrapper.SendNotification("Task: done!");
+            Helper.Form.InvokeProgressUpdate(100);
         }
 
 
@@ -215,7 +217,7 @@ namespace SD_FXUI
             }
 
             Host ProcesHost = new Host(FS.GetModelDir(), FileName);
-            ProcesHost.Print("\n Startup upscale..... \n");
+            Host.Print("\n Startup upscale..... \n");
 
             string OutFile = File.Substring(0, File.Length - 4) + "_upscale.png";
             string OutFileG = File.Substring(0, File.Length - 4) + "_upscalegg.png";

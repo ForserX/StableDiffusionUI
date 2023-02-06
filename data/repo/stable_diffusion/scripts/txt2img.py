@@ -127,6 +127,8 @@ if __name__ == "__main__":
         args.use_base_vae,
         False
     )
+    
+    print("SD: Model loaded")
 
     start_time = time.time()
     
@@ -156,6 +158,7 @@ if __name__ == "__main__":
         args.seed = args.seed + 1
         save_output_img(generated_imgs[0])
 
+    print("SD: Generating done!")
     total_time = time.time() - start_time
     text_output = f"prompt={args.prompts}\n"
     text_output += f"negative prompt={args.negative_prompts}\n"

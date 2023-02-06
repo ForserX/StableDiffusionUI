@@ -143,9 +143,9 @@ namespace SD_FXUI
         {
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
             string Model = cbModel.Text.IndexOf('/') != -1 ? cbModel.Text : FS.GetModelDir() + "diff\\" + cbModel.Text;
-            string CmdLine = $" --precision={FpMode}" 
+            string CmdLine = $" --precision={FpMode}"
                     + $" --device=\"{cbDevice.Text}\""
-                    + $" --prompt=\"{TryPrompt.Text}\"" 
+                    + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --negative-prompts=\"{NegPrompt.Text}\""
                     + $" --height={cbY.Text}"
                     + $" --width={cbX.Text}"
@@ -155,11 +155,11 @@ namespace SD_FXUI
                     + $" --seed={tbSeed.Text}"
                     + $" --total_count={tbTotalCount.Text}"
                     + $" --hf_model_id=\"{Model}\""
-                    + $" --no-use_tuned " 
+                    + $" --no-use_tuned "
                     + $" --local_tank_cache=\".//\""
-                    +  " --enable_stack_trace" 
-//                    + " --iree-vulkan-target-triple=rdna3-unknown-windows"
-                    +  " --write_metadata_to_png"
+                    + " --enable_stack_trace"
+                    //                    + " --iree-vulkan-target-triple=rdna3-unknown-windows"
+                    + " --write_metadata_to_png"
             ;
 
             return CmdLine;
@@ -197,12 +197,13 @@ namespace SD_FXUI
                     }
             }
 
-            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[Helper.PromHistory.Count- 1] != TryPrompt.Text)
+            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[Helper.PromHistory.Count - 1] != TryPrompt.Text)
             {
                 Helper.PromHistory.Add(TryPrompt.Text);
             }
 
             ClearImages();
+            InvokeProgressUpdate(0);
         }
 
         private void Slider_Denoising(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -278,13 +279,14 @@ namespace SD_FXUI
 
         private void Button_ClickBreak(object sender, RoutedEventArgs e)
         {
-            foreach(var Proc in Helper.SecondaryProcessList)
+            foreach (var Proc in Helper.SecondaryProcessList)
             {
                 Proc.Kill();
             }
 
-            Helper.UIHost.Print("\n All task aborted (」°ロ°)」");
+            Host.Print("\n All task aborted (」°ロ°)」");
             Helper.SecondaryProcessList.Clear();
+            InvokeProgressUpdate(0);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -372,7 +374,7 @@ namespace SD_FXUI
 
         private void ListView1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(ImgList.Count> 0)
+            if (ImgList.Count > 0)
             {
                 ViewImg.Source = new BitmapImage(new Uri(ImgList[ListView1.SelectedIndex]));
 
@@ -405,7 +407,7 @@ namespace SD_FXUI
         }
 
         private void ChangeTheme()
-        {            
+        {
             {
                 Resources.MergedDictionaries.Clear();
                 Resources.MergedDictionaries.Add(new ResourceDictionary
@@ -428,7 +430,7 @@ namespace SD_FXUI
             {
                 string FileName = FS.GetWorkingDir() + @"\repo\shark.venv\Lib\site-packages\diffusers\pipelines\onnx_utils.py";
 
-                if(!System.IO.File.Exists(FileName))
+                if (!System.IO.File.Exists(FileName))
                 {
                     return;
                 }
@@ -526,6 +528,11 @@ namespace SD_FXUI
 
                 btnFavor.Source = imgFavor.Source;
             }
+        }
+
+        public void InvokeProgressUpdate(int value)
+        {
+            Dispatcher.Invoke(() => { pbGen.Value = value; });
         }
     }
 }

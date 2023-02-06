@@ -22,14 +22,14 @@ namespace SD_FXUI
         {
             Helper.UIHost.Show();
             Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
-            Cmd.Print("Install python venv... Please wait");
+            Host.Print("Install python venv... Please wait");
             Cmd.Start();
             Cmd.Send("python -m venv repo\\shark.venv\\");
             Cmd.SendExitCommand();
             Cmd.Wait();
 
             Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
-            Cmd.Print("Install shark runtimes... Please wait");
+            Host.Print("Install shark runtimes... Please wait");
             Cmd.Start();
             Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe install -r requirements_shark.txt");
             Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe install onnxruntime_directml --force");
@@ -40,7 +40,7 @@ namespace SD_FXUI
             Cmd.Wait();
 
             Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
-            Cmd.Print("Install ONNX runtimes... Please wait");
+            Host.Print("Install ONNX runtimes... Please wait");
             Cmd.Start();
             Cmd.Send("python -m venv .\\repo\\onnx.venv\\");
             Cmd.Send("repo\\onnx.venv\\Scripts\\pip.exe install -r requirements_onnx.txt");

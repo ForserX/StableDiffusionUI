@@ -45,7 +45,7 @@ namespace SD_FXUI
                     // Prepend line numbers to each line of the output.
                     if (!String.IsNullOrEmpty(e.Data))
                     {
-                        Helper.UIHost.Print(e.Data);
+                        Print(e.Data);
                     }
                 });
 
@@ -54,7 +54,8 @@ namespace SD_FXUI
                     // Prepend line numbers to each line of the output.
                     if (!String.IsNullOrEmpty(e.Data))
                     {
-                        Helper.UIHost.Print(e.Data);
+                        Print(e.Data);
+                    //    Helper.UIHost.Dispatcher.Invoke(()=> Helper.UIHost.Show());
                     }
                 });
 
@@ -65,8 +66,29 @@ namespace SD_FXUI
             Helper.SecondaryProcessList.Add(this);
         }
 
-        public void Print(string Message)
+        static public void Print(string Message)
         {
+            if (Message.Contains("SD: Done"))
+            {
+                Wrapper.SendNotification(Message);
+            }
+
+            if (Message.Contains("Traceback (most recent call last)"))
+            {
+                Helper.UIHost.Show();
+                Wrapper.SendNotification("Error! See host for details!");
+            }
+
+            if (Message.Contains("SD: Model loaded"))
+            {
+                Helper.Form.InvokeProgressUpdate(30);
+            }
+            
+            if (Message.Contains("SD: Generating done"))
+            {
+                Helper.Form.InvokeProgressUpdate(70);
+            }
+
             Helper.UIHost.Print(Message);
         }
         public void Kill()
