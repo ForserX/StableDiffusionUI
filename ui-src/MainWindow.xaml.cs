@@ -95,7 +95,7 @@ namespace SD_FXUI
                     }
             }
 
-            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[Helper.PromHistory.Count - 1] != TryPrompt.Text)
+            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != TryPrompt.Text)
             {
                 Helper.PromHistory.Insert(0, TryPrompt.Text);
             }
@@ -370,8 +370,7 @@ namespace SD_FXUI
 
         private void cbGfpgan_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            if (cbGfpgan.IsChecked != null)
-                Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
+            Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
         }
     }
 }

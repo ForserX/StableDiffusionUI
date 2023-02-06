@@ -75,7 +75,7 @@ namespace SD_FXUI
 
             if (Message.Contains("Traceback (most recent call last)"))
             {
-                Helper.UIHost.Show();
+                Helper.UIHost.Dispatcher.Invoke(()=> { Helper.UIHost.Show(); });
                 Wrapper.SendNotification("Error! See host for details!");
             }
 

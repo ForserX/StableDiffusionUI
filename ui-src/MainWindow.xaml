@@ -155,7 +155,7 @@
                     <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="194,0,0,20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="52" Height="20"/>
                     <Label Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,107,0,0" VerticalAlignment="Top"/>
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
-                    <ToggleButton x:Name="cbGfpgan" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="chRandom_Unchecked" Margin="153,41,0,89" HorizontalAlignment="Left" Width="36"/>
+                    <ToggleButton x:Name="cbGfpgan" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="153,41,0,89" HorizontalAlignment="Left" Width="36"/>
                 </Grid>
             </StackPanel>
         </ScrollViewer>

@@ -37,7 +37,7 @@ namespace SD_FXUI
             ProcesHost.Start();
             ProcesHost.Send("\"../../repo/shark.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
-                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\"" + AddCmd);
+                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" --extract_ema" + AddCmd);
 
             ProcesHost.SendExitCommand();
 
@@ -69,7 +69,7 @@ namespace SD_FXUI
             ProcesHost.Start();
             ProcesHost.Send("\"../../repo/shark.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
-                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\"" + AddCmd);
+                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" --extract_ema" + AddCmd);
 
 
             string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
@@ -90,6 +90,7 @@ namespace SD_FXUI
         }
         public static async Task ProcessConvertDiff2Onnx(string InputFile)
         {
+            Wrapper.SendNotification("Convertation: ~3min!");
             string WorkDir = FS.GetModelDir() + "onnx\\";
             Host ProcesHost = new Host(WorkDir, "repo/onnx.venv/Scripts/python.exe");
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
