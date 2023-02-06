@@ -236,7 +236,6 @@ namespace SD_FXUI
             Host.Print("\n Startup upscale..... \n");
 
             string OutFile = File.Substring(0, File.Length - 4) + "_upscale.png";
-            string OutFileG = File.Substring(0, File.Length - 4) + "_upscalegg.png";
             ProcesHost.Start("-i " + File + " -o " + OutFile + DopCmd);
 
             ProcesHost.Wait();

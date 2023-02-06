@@ -97,7 +97,7 @@ namespace SD_FXUI
 
             if (Helper.PromHistory.Count == 0 || Helper.PromHistory[Helper.PromHistory.Count - 1] != TryPrompt.Text)
             {
-                Helper.PromHistory.Add(TryPrompt.Text);
+                Helper.PromHistory.Insert(0, TryPrompt.Text);
             }
 
             ClearImages();
