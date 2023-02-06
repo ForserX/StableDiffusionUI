@@ -30,6 +30,7 @@ namespace SD_FXUI
             InvokeAI,
             Shark,
             ONNX,
+            DiffCUDA,
 
             IDK
         }

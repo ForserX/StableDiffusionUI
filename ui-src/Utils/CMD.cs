@@ -147,6 +147,35 @@ namespace SD_FXUI
             Wrapper.SendNotification("Task: done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
+        public static async Task ProcessRunnerDiffCuda(string command, int UpSize)
+        {
+            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/onnx.venv/Scripts/python.exe");
+            Host.Print("\n Startup generation..... \n");
+
+            Helper.Form.InvokeProgressUpdate(7);
+            ProcesHost.Start("./repo/diffusion_scripts/sd_diffusers_cuda.py " + command);
+            ProcesHost.SendExitCommand();
+            Helper.Form.InvokeProgressUpdate(10);
+            ProcesHost.Wait();
+
+            //  process.WaitForInputIdle();
+            var Files = FS.GetFilesFrom(FS.GetWorkingDir(), new string[] { "png", "jpg" }, false);
+            foreach (var file in Files)
+            {
+                string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
+                System.IO.File.Move(file, NewFilePath);
+
+                await Task.Run(() => UpscalerRunner(UpSize, NewFilePath));
+                if (UpSize == 0 || Helper.CurrentUpscalerType == Helper.UpscalerType.None)
+                {
+                    Helper.Form.UpdateViewImg(NewFilePath);
+                }
+            }
+
+            Host.Print("\n  Task Done..... \n");
+            Wrapper.SendNotification("Task: done!");
+            Helper.Form.InvokeProgressUpdate(100);
+        }
         public static async Task ProcessRunnerShark(string command, int UpSize)
         {
             Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/shark.venv/Scripts/python.exe");

@@ -100,6 +100,35 @@ namespace SD_FXUI
 
             return CmdLine;
         }
+        private string GetCommandLineDiffCuda()
+        {
+            string Model = FS.GetModelDir() + "diff\\" + cbModel.Text;
+            string CmdLine = $""
+                    + $" --prompt=\"{TryPrompt.Text}\""
+                    + $" --prompt_neg=\"{NegPrompt.Text}\""
+                    + $" --height={cbY.Text}"
+                    + $" --width={cbX.Text}"
+                    + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
+                    + $" --scmode={cbSampler.Text}"
+                    + $" --steps={tbSteps.Text}"
+                    + $" --seed={tbSeed.Text}"
+                    + $" --totalcount={tbTotalCount.Text}"
+                    + $" --model=\"{Model}\""
+                    + $" --outpath=\"{FS.GetWorkingDir()}\""
+            ;
+
+            if(CPUUse)
+            {
+                CmdLine += " --device=\"cpu\"";
+            }
+
+            if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
+            {
+                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale=0.{tbDenoising.Text}";
+            }
+
+            return CmdLine;
+        }
         private string GetCommandLineShark()
         {
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";

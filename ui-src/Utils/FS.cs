@@ -78,13 +78,14 @@ namespace SD_FXUI
                 case Helper.ImplementMode.ONNX: WorkingPath += "onnx/"; break;
                 case Helper.ImplementMode.InvokeAI: WorkingPath += "stable-diffusion/"; break;
                 case Helper.ImplementMode.Shark: WorkingPath += "diff/"; break;
+                case Helper.ImplementMode.DiffCUDA: WorkingPath += "diff/"; break;
             }
 
             List<string> Models = new List<string>();
 
             if (Mode == Helper.ImplementMode.InvokeAI)
             {
-                foreach (string file in Directory.EnumerateFiles(WorkingPath, "*.ckpt", SearchOption.AllDirectories))
+                foreach (string file in Directory.EnumerateFiles(WorkingPath + @"stable-diffusion/", "*.ckpt", SearchOption.AllDirectories))
                 {
                     Models.Add(Path.GetFileName(file));
                 }

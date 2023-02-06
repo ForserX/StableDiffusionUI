@@ -37,7 +37,7 @@ namespace SD_FXUI
             public string GridViewColumnName_ID { get; set; }
         }
 
-
+        bool CPUUse = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -82,17 +82,23 @@ namespace SD_FXUI
             switch (Helper.Mode)
             {
                 case Helper.ImplementMode.Shark:
-                    {
-                        cmdline += GetCommandLineShark();
-                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Size));
-                        break;
-                    }
+                {
+                    cmdline += GetCommandLineShark();
+                    Task.Run(() => CMD.ProcessRunnerShark(cmdline, Size));
+                    break;
+                }
                 case Helper.ImplementMode.ONNX:
-                    {
-                        cmdline += GetCommandLineOnnx();
-                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
-                        break;
-                    }
+                {
+                    cmdline += GetCommandLineOnnx();
+                    Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
+                    break;
+                }
+                case Helper.ImplementMode.DiffCUDA:
+                {
+                    cmdline += GetCommandLineDiffCuda();
+                    Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size));
+                    break;
+                }
             }
 
             if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != TryPrompt.Text)
@@ -200,6 +206,8 @@ namespace SD_FXUI
                 var Safe = btnONNX.Background;
                 btnONNX.Background = new SolidColorBrush(Colors.DarkOrchid);
                 btnShark.Background = Safe;
+                btnDiffCuda.Background = Safe;
+                btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
 
@@ -211,6 +219,29 @@ namespace SD_FXUI
 
                 btImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
+                lbDevice.Visibility = Visibility.Visible;
+                cbDevice.Visibility = Visibility.Visible;
+            }
+        }
+        private void btnDiffCuda_Click(object sender, RoutedEventArgs e)
+        {
+            if (Helper.Mode != Helper.ImplementMode.DiffCUDA || (CPUUse == true && Helper.Mode == Helper.ImplementMode.DiffCUDA))
+            {
+                Helper.Mode = Helper.ImplementMode.DiffCUDA;
+
+                var Safe = btnDiffCuda.Background;
+                btnDiffCuda.Background = new SolidColorBrush(Colors.DarkCyan);
+                btnONNX.Background = Safe;
+                btnShark.Background = Safe;
+                btnDiffCpu.Background = Safe;
+
+                UpdateModelsList();
+                lbDevice.Visibility = Visibility.Collapsed;
+                cbDevice.Visibility = Visibility.Collapsed;
+
+                btImg.Visibility = Visibility.Visible;
+                cbFf16.Visibility = Visibility.Visible;
+                CPUUse = false;
             }
         }
 
@@ -221,8 +252,10 @@ namespace SD_FXUI
                 Helper.Mode = Helper.ImplementMode.Shark;
 
                 var Safe = btnShark.Background;
-                btnShark.Background = new SolidColorBrush(Colors.DarkMagenta);
+                btnShark.Background = new SolidColorBrush(Colors.DarkSlateBlue);
                 btnONNX.Background = Safe;
+                btnDiffCuda.Background = Safe;
+                btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
                 cbDevice.Items.Clear();
@@ -231,9 +264,31 @@ namespace SD_FXUI
 
                 btImg.Visibility = Visibility.Hidden;
                 cbFf16.Visibility = Visibility.Visible;
+                cbDevice.Visibility = Visibility.Visible;
+                lbDevice.Visibility = Visibility.Visible;
             }
         }
+        private void btnDiffCpu_Click(object sender, RoutedEventArgs e)
+        {
+            if (Helper.Mode != Helper.ImplementMode.DiffCUDA || (CPUUse != true && Helper.Mode == Helper.ImplementMode.DiffCUDA))
+            {
+                Helper.Mode = Helper.ImplementMode.DiffCUDA;
 
+                var Safe = btnDiffCpu.Background;
+                btnDiffCpu.Background = new SolidColorBrush(Colors.DarkSalmon);
+                btnONNX.Background = Safe;
+                btnShark.Background = Safe;
+                btnDiffCuda.Background = Safe;
+
+                UpdateModelsList();
+                lbDevice.Visibility = Visibility.Collapsed;
+                cbDevice.Visibility = Visibility.Collapsed;
+
+                btImg.Visibility = Visibility.Visible;
+                cbFf16.Visibility = Visibility.Visible;
+                CPUUse = true;
+            }
+        }
         private void ListView1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ImgList.Count > 0)

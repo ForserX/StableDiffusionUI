@@ -33,8 +33,8 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="btnShark" Content="Shark" Margin="0,7,6,0" VerticalAlignment="Top" Click="btnShark_Click" HorizontalAlignment="Right" Width="37" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
-        <Button x:Name="btnONNX" Content="ONNX" Margin="0,7,42,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Right" Width="38" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
+        <Button x:Name="btnShark" Content="Shark(Vulkan)" Margin="0,4,239,0" VerticalAlignment="Top" Click="btnShark_Click" HorizontalAlignment="Right" Width="79" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
+        <Button x:Name="btnONNX" Content="Diffusers(ONNX)" Margin="0,4,317,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
         <ListView x:Name="ListView1" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,39,3,10" Grid.Column="3" HorizontalAlignment="Right" Width="95" SelectionChanged="ListView1_SelectionChanged" Background="{x:Null}" BorderBrush="#8C7400AE">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
@@ -152,8 +152,8 @@
                         <ComboBoxItem Content="vulkan"/>
                         <ComboBoxItem Content="cuda"/>
                     </ComboBox>
-                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="194,0,0,20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="52" Height="20"/>
-                    <Label Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,107,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="293,0,0,89" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="52" Height="20"/>
+                    <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,107,0,0" VerticalAlignment="Top"/>
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
                     <ToggleButton x:Name="cbGfpgan" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="153,41,0,89" HorizontalAlignment="Left" Width="36"/>
                 </Grid>
@@ -166,5 +166,7 @@
         <Image x:Name="imgFavor" Source="/favor.png" />
         <Image x:Name="imgNotFavor" Source="/notfavor.png" />
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,75" VerticalAlignment="Bottom"/>
+        <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="0,4,407,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click"/>
+        <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="0,4,497,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click"/>
     </Grid>
 </hc:BlurWindow>
