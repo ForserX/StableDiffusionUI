@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Usb;
 
 namespace SD_FXUI
 {
@@ -88,6 +89,46 @@ namespace SD_FXUI
             }
 
         }
+
+        public static void WrapONNXGPU(bool Discrete)
+        {
+
+            string FileName = FS.GetWorkingDir() + @"\repo\onnx.venv\Lib\site-packages\diffusers\pipelines\onnx_utils.py";
+
+            if (!System.IO.File.Exists(FileName))
+            {
+                return;
+            }
+            using (var reader = System.IO.File.OpenText(FileName))
+            {
+                int LineCounter = 0;
+                string? str = reader.ReadLine();
+                while (str != null)
+                {
+                    if (str.Contains("InferenceSession"))
+                    {
+                        if (Discrete)
+                        {
+                            str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 1}], sess_options=sess_options)";
+                        }
+                        else
+                        {
+                            str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 0}], sess_options=sess_options)";
+                        }
+                        break;
+                    }
+                    str = reader.ReadLine();
+                    LineCounter++;
+                }
+
+                reader.Close();
+
+                string[] Lines = System.IO.File.ReadAllLines(FileName);
+                Lines[LineCounter] = str;
+                System.IO.File.WriteAllLines(FileName, Lines);
+            }
+        }
+
         public static async Task InstallGFPGAN()
         {
             string WorkDir = FS.GetModelDir() + "onnx\\";

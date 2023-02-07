@@ -48,6 +48,14 @@ namespace SD_FXUI
                 if (item.Length > 0)
                     Helper.PromHistory.Add(item);
             }
+
+
+            bool FirstStart = Data.Get("welcomewnd") != "true";
+            if (FirstStart)
+            {
+                Welcome Hellow = new Welcome();
+                Hellow.ShowDialog();
+            }
         }
 
         void Save()
@@ -73,6 +81,7 @@ namespace SD_FXUI
             Data.Set("history", HistoryStack);
 
             // Save to file
+            Data.Set("welcomewnd", "true");
             Data.Save();
         }
 

@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Startup\diff.png" />
+    <None Remove="Startup\donai.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
@@ -26,6 +31,8 @@
     <Resource Include="Host\close.png" />
     <Resource Include="noimg.jpg" />
     <Resource Include="notfavor.png" />
+    <Resource Include="Startup\diff.png" />
+    <Resource Include="Startup\donai.png" />
   </ItemGroup>
 
   <ItemGroup>

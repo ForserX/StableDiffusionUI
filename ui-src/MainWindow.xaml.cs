@@ -321,40 +321,7 @@ namespace SD_FXUI
 
             if (cbDevice.SelectedItem.ToString() == "GPU: 1" || cbDevice.SelectedItem.ToString() == "GPU: 0")
             {
-                string FileName = FS.GetWorkingDir() + @"\repo\onnx.venv\Lib\site-packages\diffusers\pipelines\onnx_utils.py";
-
-                if (!System.IO.File.Exists(FileName))
-                {
-                    return;
-                }
-                using (var reader = System.IO.File.OpenText(FileName))
-                {
-                    int LineCounter = 0;
-                    string? str = reader.ReadLine();
-                    while (str != null)
-                    {
-                        if (str.Contains("InferenceSession"))
-                        {
-                            if (cbDevice.SelectedItem.ToString() == "GPU: 1")
-                            {
-                                str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 1}], sess_options=sess_options)";
-                            }
-                            else
-                            {
-                                str = "        return ort.InferenceSession(path, providers=[provider], provider_options=[{'device_id': 0}], sess_options=sess_options)";
-                            }
-                            break;
-                        }
-                        str = reader.ReadLine();
-                        LineCounter++;
-                    }
-
-                    reader.Close();
-
-                    string[] Lines = System.IO.File.ReadAllLines(FileName);
-                    Lines[LineCounter] = str;
-                    System.IO.File.WriteAllLines(FileName, Lines);
-                }
+                Install.WrapONNXGPU(cbDevice.SelectedItem.ToString() == "GPU: 1");
             }
         }
 

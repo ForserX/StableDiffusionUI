@@ -1,0 +1,30 @@
+﻿<Window x:Class="SD_FXUI.Welcome"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SD_FXUI"
+        mc:Ignorable="d"
+        Title="Welcome" Height="450" Width="801">
+    <Grid  Background="#389D9BC9">
+        <Label Content="This UI has several implementations of Stable Diffusion, which may be suitable for both AMD and NVIDIA users." HorizontalAlignment="Stretch" Margin="86,10,104,0" VerticalAlignment="Top"/>
+        <Image HorizontalAlignment="Left" Height="65" Margin="22,55,0,0" VerticalAlignment="Top" Width="254" Source="/Startup/diff.png"/>
+        <TextBlock TextWrapping="WrapWithOverflow" Margin="25,120,0,0" Background="White" HorizontalAlignment="Left" Width="251" Height="168" VerticalAlignment="Top">
+            Diffusers is an API that works on: CUDA (NVIDIA), ONNX (DirectX 12), and CPU. For AMD (ONNX) users, it is recommended minimum 12gb VRAM.
+            <LineBreak/>
+            <LineBreak/>
+            This algorithm works with models in diffuser. To transfer your .ckpt/.safetensors file to diffuser - use the import button.
+        </TextBlock>
+        <Image HorizontalAlignment="Right" Height="65" Margin="0,54,63,0" VerticalAlignment="Top" Width="193" Source="/Startup/donai.png"/>
+        <TextBlock TextWrapping="WrapWithOverflow" Margin="0,120,23,0" Background="White" HorizontalAlignment="Right" Width="251" Height="168" VerticalAlignment="Top">
+            <Run Text="NodAI: Shark- is an API that works on AMD MLIR (Vulkan). To work with it, you will need to install special drivers."/>
+            <LineBreak/>
+            <LineBreak/>
+            <Run Text="This algorithm works with models in diffuser. To transfer your .ckpt/.safetensors file to diffuser - use the import button."/>
+            <LineBreak/>
+            <LineBreak/>
+            <Run Text="Warning: This algorithm is under development. There may be problems." FontWeight="Bold" />
+        </TextBlock>
+        <Button Content="Okay, close" Margin="0,0,0,10" VerticalAlignment="Bottom" Click="Button_Click"/>
+    </Grid>
+</Window>
