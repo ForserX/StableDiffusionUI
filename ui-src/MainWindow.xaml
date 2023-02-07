@@ -162,7 +162,7 @@
         <Image Source="/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Margin="45,0,503,31" Grid.Column="3" Height="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         <Image x:Name="btCmd" Source="/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Margin="0,0,549,32" HorizontalAlignment="Left" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="48" VerticalAlignment="Bottom"/>
         <Image x:Name="btHistory" Source="/history.png" MouseLeftButtonDown="btHistory_Click" Margin="0,0,105,37" HorizontalAlignment="Right" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
-        <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="456,43,0,0" VerticalAlignment="Top" Width="26" Source="/notfavor.png" MouseLeftButtonDown="btmFavorClick"/>
+        <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,43,112,0" VerticalAlignment="Top" Width="26" Source="/notfavor.png" MouseLeftButtonDown="btmFavorClick"/>
         <Image x:Name="imgFavor" Source="/favor.png" />
         <Image x:Name="imgNotFavor" Source="/notfavor.png" />
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,75" VerticalAlignment="Bottom"/>
