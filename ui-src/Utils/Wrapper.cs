@@ -32,7 +32,7 @@ namespace SD_FXUI
         public static bool MsgBox(string text, string caption = "Info")
         {
             return
-                MessageBox.Show("Need install packages for use CUDA", "Info", MessageBoxButton.OKCancel) == MessageBoxResult.OK;
+                MessageBox.Show(text, caption, MessageBoxButton.OKCancel) == MessageBoxResult.OK;
         }
     }
 }
