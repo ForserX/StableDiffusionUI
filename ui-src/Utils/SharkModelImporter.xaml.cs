@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -120,5 +121,58 @@ namespace SD_FXUI.Utils
             }
         }
 
+        private void cbPath_Drop(object sender, DragEventArgs e)
+        {
+           
+                // Note that you can have more than one file.
+                cbPath.Text = ((string[]) e.Data.GetData(DataFormats.FileDrop))[0];
+
+            // Assuming you have one file that you care about, pass it off to whatever
+            // handling code you have defined.
+
+            if (cbPath.Text.EndsWith(".ckpt")) cbFrom.SelectedIndex = 0;
+            else if (cbPath.Text.EndsWith(".safetensors")) cbFrom.SelectedIndex = 1;
+            else cbFrom.SelectedIndex = 2;
+
+            return;
+            
+        }
+
+        private void cbPath_DragEnter(object sender, DragEventArgs e)
+        {
+            var path = e.Source;
+        }
+
+        private void cbPath_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            
+        }
+
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+            if (null != e.Data && e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var data = e.Data.GetData(DataFormats.FileDrop) as string[];
+                // handle the files here!
+                cbPath_Drop(sender, e);
+            }
+        }
+
+        private void Grid_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void cbPath_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 }
