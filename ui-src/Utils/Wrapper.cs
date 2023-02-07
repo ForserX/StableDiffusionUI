@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,12 @@ namespace SD_FXUI
             .AddText(Caption)
             .AddText(Message)
             .Show();
+        }
+
+        public static bool MsgBox(string text, string caption = "Info")
+        {
+            return
+                MessageBox.Show("Need install packages for use CUDA", "Info", MessageBoxButton.OKCancel) == MessageBoxResult.OK;
         }
     }
 }

@@ -202,6 +202,7 @@ namespace SD_FXUI
             if (Helper.Mode != Helper.ImplementMode.ONNX)
             {
                 Helper.Mode = Helper.ImplementMode.ONNX;
+                Install.CheckAndInstallONNX();
 
                 var Safe = btnONNX.Background;
                 btnONNX.Background = new SolidColorBrush(Colors.DarkOrchid);
@@ -229,6 +230,8 @@ namespace SD_FXUI
             {
                 Helper.Mode = Helper.ImplementMode.DiffCUDA;
 
+                Install.CheckAndInstallCUDA();
+
                 var Safe = btnDiffCuda.Background;
                 btnDiffCuda.Background = new SolidColorBrush(Colors.DarkCyan);
                 btnONNX.Background = Safe;
@@ -250,6 +253,7 @@ namespace SD_FXUI
             if (Helper.Mode != Helper.ImplementMode.Shark)
             {
                 Helper.Mode = Helper.ImplementMode.Shark;
+                Install.CheckAndInstallShark();
 
                 var Safe = btnShark.Background;
                 btnShark.Background = new SolidColorBrush(Colors.DarkSlateBlue);
@@ -273,6 +277,7 @@ namespace SD_FXUI
             if (Helper.Mode != Helper.ImplementMode.DiffCUDA || (CPUUse != true && Helper.Mode == Helper.ImplementMode.DiffCUDA))
             {
                 Helper.Mode = Helper.ImplementMode.DiffCUDA;
+                Install.CheckAndInstallONNX();
 
                 var Safe = btnDiffCpu.Background;
                 btnDiffCpu.Background = new SolidColorBrush(Colors.DarkSalmon);
@@ -316,7 +321,7 @@ namespace SD_FXUI
 
             if (cbDevice.SelectedItem.ToString() == "GPU: 1" || cbDevice.SelectedItem.ToString() == "GPU: 0")
             {
-                string FileName = FS.GetWorkingDir() + @"\repo\shark.venv\Lib\site-packages\diffusers\pipelines\onnx_utils.py";
+                string FileName = FS.GetWorkingDir() + @"\repo\onnx.venv\Lib\site-packages\diffusers\pipelines\onnx_utils.py";
 
                 if (!System.IO.File.Exists(FileName))
                 {

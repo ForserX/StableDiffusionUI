@@ -130,7 +130,7 @@ namespace SD_FXUI
 
         public static async Task ProcessRunnerOnnx(string command, int UpSize)
         {
-            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/shark.venv/Scripts/python.exe");
+            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/onnx.venv/Scripts/python.exe");
             Host.Print("\n Startup generation..... \n");
 
             Helper.Form.InvokeProgressUpdate(7);
@@ -159,7 +159,7 @@ namespace SD_FXUI
         }
         public static async Task ProcessRunnerDiffCuda(string command, int UpSize)
         {
-            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/onnx.venv/Scripts/python.exe");
+            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/cuda.venv/Scripts/python.exe");
             Host.Print("\n Startup generation..... \n");
 
             Helper.Form.InvokeProgressUpdate(7);
