@@ -5,19 +5,16 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 ![image](https://user-images.githubusercontent.com/13867290/216797870-3f05fd70-41b0-41e5-b9ea-e7f41f294b65.png)
 
 * Shark (AMD: Vulkan + MRIL/IREE)
-* ONNX (AMD: DirectML/DirectX 12)
-* InvokeAI (Nvidia) [WIP]
+* Diffuser ONNX (AMD: DirectML/DirectX 12)
+* Diffuser (CPU/CUDA)
 
 # How to install
 ## Pre-install
 * Install python 3.10 + pip + venv
 * __(AMD Only)__ Install IREE drivers: https://www.amd.com/en/support/kb/release-notes/rn-rad-win-22-11-1-mlir-iree
-## Setup venv
-* Open PowerShell and run __setup.ps1__ file
-```cmd
-./setup.ps1
-```
-* Start .exe file
+
+## Setup
+* Start .exe file and select backend type
 
 # 3rd 
 * [Shark](https://github.com/nod-ai/SHARK)
