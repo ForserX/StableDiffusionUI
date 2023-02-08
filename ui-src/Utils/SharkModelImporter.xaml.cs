@@ -1,7 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿using HandyControl.Tools.Extension;
+using System;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using Windows.Devices.Geolocation;
 
 namespace SD_FXUI.Utils
 {
@@ -16,8 +23,12 @@ namespace SD_FXUI.Utils
 
             cbFrom.SelectedIndex = 0;
             cbTo.SelectedIndex = 0;
-        }
 
+            //System.Threading.Timer timer = new System.Threading.Timer(timerTick, new AutoResetEvent(false), 1000, 250);
+
+            
+        }
+               
         private void HuggCast()
         {
             string HuggUrl = "huggingface.co";
@@ -124,8 +135,8 @@ namespace SD_FXUI.Utils
         private void cbPath_Drop(object sender, DragEventArgs e)
         {
            
-                // Note that you can have more than one file.
-                cbPath.Text = ((string[]) e.Data.GetData(DataFormats.FileDrop))[0];
+            // Note that you can have more than one file.
+            cbPath.Text = ((string[]) e.Data.GetData(DataFormats.FileDrop))[0];
 
             // Assuming you have one file that you care about, pass it off to whatever
             // handling code you have defined.
@@ -134,19 +145,25 @@ namespace SD_FXUI.Utils
             else if (cbPath.Text.EndsWith(".safetensors")) cbFrom.SelectedIndex = 1;
             else cbFrom.SelectedIndex = 2;
 
+
             return;
-            
+
         }
 
-        private void cbPath_DragEnter(object sender, DragEventArgs e)
-        {
-            var path = e.Source;
+
+
+        private void cbPath_PreviewDragEnter(object sender, DragEventArgs e)
+        {           
+            cbPath.Opacity = 0.5;
+            return;
         }
 
-        private void cbPath_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void cbPath_PreviewDragLeave(object sender, DragEventArgs e)
         {
-            
+            cbPath.Opacity = 1.0;
+            return;
         }
+
 
         private void Grid_Drop(object sender, DragEventArgs e)
         {
@@ -158,7 +175,8 @@ namespace SD_FXUI.Utils
             }
         }
 
-        private void Grid_DragOver(object sender, DragEventArgs e)
+
+        private void Grid_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -170,9 +188,6 @@ namespace SD_FXUI.Utils
             }
         }
 
-        private void cbPath_PreviewDragOver(object sender, DragEventArgs e)
-        {
-            e.Handled = true;
-        }
+
     }
 }
