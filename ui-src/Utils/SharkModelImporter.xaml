@@ -18,7 +18,7 @@
         </ComboBox>
         <ComboBox x:Name="cbTo" Margin="0,40,6,0" SelectionChanged="cbTo_SelectionChanged" Height="7" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Padding="1,2,1,2">
             <ComboBoxItem Content="ONNX"/>
-            <ComboBoxItem Content="Shark"/>
+            <ComboBoxItem Content="Diffuser"/>
         </ComboBox>
         <Label Content="From" HorizontalAlignment="Right" Margin="0,5,123,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,1,1,1"/>
         <Label Content="To" HorizontalAlignment="Right" Margin="0,40,123,0" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,1,1,1" VerticalAlignment="Top"/>

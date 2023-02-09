@@ -89,7 +89,7 @@ namespace SD_FXUI.Utils
             // Anyway need cast to diff
             if (GetFromID == 0 || GetFromID == 1)
             {
-                if(ToID == 1)
+                if(ToID == 0)
                 {
                     CMD.ProcessConvertCKPT2ONNX(cbPath.Text, chBoxEmaOnly.IsChecked.Value);
                 }
@@ -99,7 +99,7 @@ namespace SD_FXUI.Utils
                 }
             }
 
-            if (ToID == 1)
+            if (ToID == 0)
             {
                 if(GetFromID == 2)
                 {

@@ -41,6 +41,14 @@ namespace SD_FXUI
             Favor
         }
 
+        public enum VENV
+        {
+            DiffCUDA,
+            DiffONNX,
+            Shark,
+            Any
+        }
+
         public static List<Host> SecondaryProcessList = new List<Host>();
 
         public static string CachePath = string.Empty;
