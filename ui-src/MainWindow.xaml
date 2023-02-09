@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="MainWindow" Height="633" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded">
+        Title="MainWindow" Height="732" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded">
     <Grid Margin="0,0,0,3" Background="#389D9BC9">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -125,7 +125,7 @@
                     <Label Content="Total count" Height="30" Width="69" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="237,78,0,0" VerticalAlignment="Top"/>
                     <TextBox x:Name="tbTotalCount" TextWrapping="Wrap" Text="1" Height="18" Margin="311,78,6,33"/>
                 </Grid>
-                <Grid Height="152">
+                <Grid Height="172">
                     <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,71,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbUpscaler" Margin="50,6,132,0" Height="30" VerticalAlignment="Top" SelectionChanged="cbUpscaler_SelectionChanged">
                         <ComboBoxItem Content="Real-ESRGAN: AnimeVideo(v3)"/>
@@ -152,10 +152,12 @@
                         <ComboBoxItem Content="vulkan"/>
                         <ComboBoxItem Content="cuda"/>
                     </ComboBox>
-                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="293,0,0,89" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="52" Height="20"/>
+                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="293,38,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
                     <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,107,0,0" VerticalAlignment="Top"/>
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
                     <ToggleButton x:Name="cbGfpgan" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="153,41,0,89" HorizontalAlignment="Left" Width="36"/>
+                    <Label x:Name="lbVae" Content="VAE" Height="30" Width="31" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,142,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbVAE" Height="22" Margin="50,142,75,0" VerticalAlignment="Top"/>
                 </Grid>
             </StackPanel>
         </ScrollViewer>

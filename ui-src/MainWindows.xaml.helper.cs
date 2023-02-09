@@ -41,6 +41,12 @@ namespace SD_FXUI
             UpdateModelsList();
             cbModel.Text = ListModel.ToString();
             cbDevice.Text = Data.Get("device");
+            cbVAE.Text = Data.Get("VAE");
+
+            if (cbVAE.Text.Length == 0)
+            {
+                cbVAE.Text = "Default";
+            }
 
             var HistoryStack = Data.Get("history").Split('|');
             foreach (var item in HistoryStack)
@@ -71,6 +77,7 @@ namespace SD_FXUI
             Data.Set("device", cbDevice.Text);
 
             Data.Set("model", cbModel.Text);
+            Data.Set("VAE", cbVAE.Text);
             Data.Set("back_mode", ((int)(Helper.Mode)).ToString());
 
             string HistoryStack = "";
@@ -88,6 +95,13 @@ namespace SD_FXUI
         private string GetCommandLineOnnx()
         {
             string Model = FS.GetModelDir() + "onnx\\" + cbModel.Text;
+
+            string VAE = cbVAE.Text.ToLower();
+            if (VAE != "default")
+            {
+                VAE = FS.GetModelDir() + "onnx\\" + cbVAE.Text.ToLower();
+            }
+
             string CmdLine = $""
                     + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
@@ -99,6 +113,7 @@ namespace SD_FXUI
                     + $" --seed={tbSeed.Text}"
                     + $" --totalcount={tbTotalCount.Text}"
                     + $" --model=\"{Model}\""
+                    + $" --vae=\"{VAE}\""
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
             ;
 
@@ -180,13 +195,17 @@ namespace SD_FXUI
         public void UpdateModelsList()
         {
             cbModel.Items.Clear();
+            cbVAE.Items.Clear();
 
+            cbVAE.Items.Add("Default");
             foreach (var Itm in FS.GetModels(Helper.Mode))
             {
                 cbModel.Items.Add(Itm);
+                cbVAE.Items.Add(Itm);
             }
 
             cbModel.SelectedIndex = cbModel.Items.Count - 1;
+            cbVAE.SelectedIndex = 0;
         }
 
         void ClearImages()

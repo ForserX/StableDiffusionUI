@@ -222,6 +222,8 @@ namespace SD_FXUI
                 cbFf16.Visibility = Visibility.Hidden;
                 lbDevice.Visibility = Visibility.Visible;
                 cbDevice.Visibility = Visibility.Visible;
+                cbVAE.Visibility = Visibility.Visible;
+                lbVae.Visibility = Visibility.Visible;
             }
         }
         private void btnDiffCuda_Click(object sender, RoutedEventArgs e)
@@ -241,6 +243,8 @@ namespace SD_FXUI
                 UpdateModelsList();
                 lbDevice.Visibility = Visibility.Collapsed;
                 cbDevice.Visibility = Visibility.Collapsed;
+                cbVAE.Visibility = Visibility.Collapsed;
+                lbVae.Visibility = Visibility.Collapsed;
 
                 btImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
@@ -270,6 +274,8 @@ namespace SD_FXUI
                 cbFf16.Visibility = Visibility.Visible;
                 cbDevice.Visibility = Visibility.Visible;
                 lbDevice.Visibility = Visibility.Visible;
+                cbVAE.Visibility = Visibility.Collapsed;
+                lbVae.Visibility = Visibility.Collapsed;
             }
         }
         private void btnDiffCpu_Click(object sender, RoutedEventArgs e)
@@ -291,6 +297,8 @@ namespace SD_FXUI
 
                 btImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
+                cbVAE.Visibility = Visibility.Collapsed;
+                lbVae.Visibility = Visibility.Collapsed;
                 CPUUse = true;
             }
         }
