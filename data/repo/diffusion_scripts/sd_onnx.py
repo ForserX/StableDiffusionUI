@@ -3,7 +3,7 @@ import sys
 import time
 import torch
 import numpy as np
-from diffusers import OnnxStableDiffusionPipeline, OnnxStableDiffusionImg2ImgPipeline, OnnxStableDiffusionInpaintPipeline
+from diffusers import OnnxStableDiffusionPipeline, OnnxStableDiffusionImg2ImgPipeline, OnnxStableDiffusionInpaintPipeline, OnnxRuntimeModel
 from diffusers import EulerAncestralDiscreteScheduler, PNDMScheduler, LMSDiscreteScheduler, DDIMScheduler, DPMSolverMultistepScheduler, EulerDiscreteScheduler, DDPMScheduler
 
 import argparse
@@ -14,7 +14,6 @@ os.chdir(sys.path[0])
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
-    "-m",
     "--model",
     type=str,
     help="Path to model checkpoint file",
@@ -22,7 +21,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-width",
     "--width",
     type=int,
     help="Path to model checkpoint file",
@@ -30,7 +28,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-guidance_scale",
     "--guidance_scale",
     type=float,
     help="Path to model checkpoint file",
@@ -38,7 +35,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-height",
     "--height",
     type=int,
     help="Path to model checkpoint file",
@@ -46,7 +42,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-totalcount",
     "--totalcount",
     type=int,
     help="Path to model checkpoint file",
@@ -54,7 +49,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-steps",
     "--steps",
     type=int,
     help="Path to model checkpoint file",
@@ -62,7 +56,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-seed",
     "--seed",
     type=int,
     help="Path to model checkpoint file",
@@ -70,7 +63,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-imgscale",
     "--imgscale",
     type=float,
     default=0.44,
@@ -79,7 +71,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-prompt_neg",
     "--prompt_neg",
     type=str,
     help="Path to model checkpoint file",
@@ -87,7 +78,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-prompt",
     "--prompt",
     type=str,
     help="Path to model checkpoint file",
@@ -95,14 +85,12 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-o",
     "--outpath",
     type=str,
     help="Output path",
     dest='outpath',
 )
 parser.add_argument(
-    "-mode",
     "--mode",
     choices=['txt2img', 'img2img', 'inpaint'],
     default="txt2img",
@@ -111,7 +99,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-img",
     "--img",
     type=str,
     default="",
@@ -120,7 +107,6 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-device",
     "--device",
     choices=['dml', 'cuda', 'cpu'],
     default="dml",
@@ -129,12 +115,17 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "-scmode",
     "--scmode",
     choices=['EulerAncestralDiscrete', 'EulerDiscrete', 'PNDM', 'DPMSolverMultistep', 'LMSDiscrete', 'SharkEulerDiscrete', 'DDIM'],
     default="eulera",
     help="Specify generation scmode",
     dest='scmode',
+)
+
+parser.add_argument(
+    "--vae",
+    help="Specify generation vae path",
+    dest='vae',
 )
 
 if len(sys.argv)==1:
@@ -150,13 +141,21 @@ if opt.device == "cuda":
     prov = "CUDAExecutionProvider"
 if opt.device == "cpu":
     prov = "CPUExecutionProvider"
+    
+if opt.vae == "default":
+    cpuvae = OnnxRuntimeModel.from_pretrained(opt.mdlpath + "/vae_decoder", provider=prov)
+else:
+    cpuvae = OnnxRuntimeModel.from_pretrained(opt.vae + "/vae_decoder", provider=prov)
+
+# TextEnc moved to CPUs
+cputextenc = OnnxRuntimeModel.from_pretrained(opt.mdlpath+"/text_encoder", provider="CPUExecutionProvider")
 
 if opt.mode == "txt2img":
-    pipe = OnnxStableDiffusionPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", safety_checker=None)
+    pipe = OnnxStableDiffusionPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, vae_encoder=None, safety_checker=None)
 if opt.mode == "img2img":
-    pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", safety_checker=None)
+    pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, vae_encoder=None, safety_checker=None)
 if opt.mode == "inpaint":
-    pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", safety_checker=None)
+    pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, vae_encoder=None, safety_checker=None)
 
 if opt.scmode == "EulerAncestralDiscrete":
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)

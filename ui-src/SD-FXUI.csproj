@@ -12,6 +12,7 @@
   <ItemGroup>
     <None Remove="Startup\diff.png" />
     <None Remove="Startup\donai.png" />
+    <None Remove="Utils\dropFiles.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +34,7 @@
     <Resource Include="notfavor.png" />
     <Resource Include="Startup\diff.png" />
     <Resource Include="Startup\donai.png" />
+    <Resource Include="Utils\dropFiles.jpg" />
   </ItemGroup>
 
   <ItemGroup>

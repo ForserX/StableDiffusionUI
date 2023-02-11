@@ -37,7 +37,7 @@ namespace SD_FXUI
                 Host.Print("Install CUDA runtimes... Please wait");
                 Cmd.Start();
                 Cmd.Send("python -m venv .\\repo\\cuda.venv\\");
-                Cmd.Send("repo\\cuda.venv\\Scripts\\pip.exe install -r requirements_cuda.txt");
+                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA) + " install -r requirements_cuda.txt");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
             }
@@ -59,11 +59,11 @@ namespace SD_FXUI
                 Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Host.Print("Install shark runtimes... Please wait");
                 Cmd.Start();
-                Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe install -r requirements_shark.txt");
-                Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe install onnxruntime_directml --force");
-                Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe --pre torch-mlir torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/cpu -f https://llvm.github.io/torch-mlir/package-index/");
-                Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe --upgrade -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html iree-compiler iree-runtime");
-                Cmd.Send("repo\\shark.venv\\Scripts\\pip.exe -e . -f https://llvm.github.io/torch-mlir/package-index/ -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html");
+                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " install -r requirements_shark.txt");
+                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " install onnxruntime_directml --force");
+                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " --pre torch-mlir torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/cpu -f https://llvm.github.io/torch-mlir/package-index/");
+                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " --upgrade -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html iree-compiler iree-runtime");
+                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " -e . -f https://llvm.github.io/torch-mlir/package-index/ -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
 
@@ -83,7 +83,7 @@ namespace SD_FXUI
                 Host.Print("Install ONNX runtimes... Please wait");
                 Cmd.Start();
                 Cmd.Send("python -m venv .\\repo\\onnx.venv\\");
-                Cmd.Send("repo\\onnx.venv\\Scripts\\pip.exe install -r requirements_onnx.txt");
+                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + " install -r requirements_onnx.txt");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
             }
@@ -127,28 +127,6 @@ namespace SD_FXUI
                 Lines[LineCounter] = str;
                 System.IO.File.WriteAllLines(FileName, Lines);
             }
-        }
-
-        public static async Task InstallGFPGAN()
-        {
-            string WorkDir = FS.GetModelDir() + "onnx\\";
-            string WGet = FS.GetToolsDir() + "wget.exe";
-            Host WGetProc = new Host(WorkDir, WGet);
-
-            WGetProc.Start("https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.3.pth");
-            WGetProc.SendExitCommand();
-            WGetProc.Wait();
-
-
-            Host ProcesHost = new Host(WorkDir, "repo/onnx.venv/Scripts/python.exe", true);
-            ProcesHost.Start($"../../repo/diffusion_scripts/torch2onnx.py --src_model_path=\"{WorkDir}GFPGANv1.3.pth\" --dst_model_path=\"{WorkDir}GFPGANv1.3.onnx\" --img_size=512");
-
-            ProcesHost.SendExitCommand();
-            ProcesHost.Wait();
-
-            //File.Delete(WorkDir + "GFPGANv1.3.pth");
-
-            Helper.UIHost.Hide();
         }
 
         internal static void SetupDirs()

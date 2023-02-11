@@ -40,7 +40,7 @@ namespace SD_FXUI
             }
 
             ProcesHost.Start();
-            ProcesHost.Send("\"../../repo/shark.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
+            ProcesHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
                                                                             $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
 
@@ -48,7 +48,7 @@ namespace SD_FXUI
 
             Host.Print("\n  Extract task is done..... \n");
 
-            Wrapper.SendNotification("Convertation: ~5min!");
+            Wrapper.SendNotification("Convertation: ~3min!");
         }
         public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false)
         {
@@ -77,10 +77,9 @@ namespace SD_FXUI
             }
 
             ProcesHost.Start();
-            ProcesHost.Send("\"../../repo/shark.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
+            ProcesHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
                                                                             $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
-
 
             string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
             if (Name.Length == 0)
@@ -91,7 +90,7 @@ namespace SD_FXUI
             string OutPathONNX = FS.GetModelDir() + "onnx\\" + Name;
             OutPath = OutPath.Replace("\\", "/");
 
-            ProcesHost.Send("\"../../repo/onnx.venv/Scripts/python.exe\" \"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " +
+            ProcesHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " +
                                                                             $"--model_path=\"{OutPath}\" --output_path=\"{OutPathONNX}\"");
 
             ProcesHost.SendExitCommand();
@@ -102,7 +101,7 @@ namespace SD_FXUI
         {
             Wrapper.SendNotification("Convertation: ~3min!");
             string WorkDir = FS.GetModelDir() + "onnx\\";
-            Host ProcesHost = new Host(WorkDir, "repo/onnx.venv/Scripts/python.exe");
+            Host ProcesHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
 
@@ -130,7 +129,7 @@ namespace SD_FXUI
 
         public static async Task ProcessRunnerOnnx(string command, int UpSize)
         {
-            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/onnx.venv/Scripts/python.exe");
+            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
             Host.Print("\n Startup generation..... \n");
 
             Helper.Form.InvokeProgressUpdate(7);
@@ -159,7 +158,7 @@ namespace SD_FXUI
         }
         public static async Task ProcessRunnerDiffCuda(string command, int UpSize)
         {
-            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/cuda.venv/Scripts/python.exe");
+            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffCUDA));
             Host.Print("\n Startup generation..... \n");
 
             Helper.Form.InvokeProgressUpdate(7);
@@ -188,7 +187,7 @@ namespace SD_FXUI
         }
         public static async Task ProcessRunnerShark(string command, int UpSize)
         {
-            Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/shark.venv/Scripts/python.exe");
+            Host ProcesHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/" + PythonEnv.GetPy(Helper.VENV.Shark));
             Host.Print("\n Startup generation..... \n");
             Helper.Form.InvokeProgressUpdate(7);
 
@@ -221,7 +220,7 @@ namespace SD_FXUI
             string NewFile = null;
             if (Helper.EnableGFPGAN)
             {
-                Host FaceFixProc = new Host(FS.GetModelDir() + "stable-diffusion//", "repo/onnx.venv/Scripts/python.exe");
+                Host FaceFixProc = new Host(FS.GetModelDir() + "stable-diffusion//", "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
                 FaceFixProc.Start($"../../repo/diffusion_scripts/inference_gfpgan.py -i {File} -o {FS.GetImagesDir()} -v 1.4 -s 1");
 
                 FaceFixProc.SendExitCommand();
