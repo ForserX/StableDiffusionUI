@@ -16,6 +16,13 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 ## Setup
 * Start .exe file and select backend type
 
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/ForserX/StableDiffusionUI.svg)](https://starchart.cc/ForserX/StableDiffusionUI)
+
+
+
 # 3rd 
 * [Shark](https://github.com/nod-ai/SHARK)
 * ONNX
