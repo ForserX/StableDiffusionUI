@@ -27,7 +27,7 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 * [Shark](https://github.com/nod-ai/SHARK)
 * ONNX
 * InvokeAI
-* [HandyContorls](https://github.com/HandyOrg/HandyControl)
+* [HandyControls](https://github.com/HandyOrg/HandyControl)
 * Real-ESRGAN NCNN Vulkan
 * Real-SR NCNN Vulkan
 * Real-SRMD NCNN Vulkan
