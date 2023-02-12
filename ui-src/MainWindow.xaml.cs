@@ -95,6 +95,7 @@ namespace SD_FXUI
                     Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
                     break;
                 }
+                case Helper.ImplementMode.DiffCPU:
                 case Helper.ImplementMode.DiffCUDA:
                 {
                     cmdline += GetCommandLineDiffCuda();
