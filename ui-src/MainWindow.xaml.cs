@@ -153,7 +153,8 @@ namespace SD_FXUI
         private void btFolder_ValueChanged(object sender, MouseButtonEventArgs e)
         {
             string argument = "/select, \"" + Helper.ImgPath + "\"";
-            System.Diagnostics.Process.Start("explorer.exe", argument);
+            Host Explorer = new Host("", "explorer.exe");
+            Explorer.Start(argument);
         }
         private void btCmd_ValueChanged(object sender, MouseButtonEventArgs e)
         {
