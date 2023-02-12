@@ -10,12 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Startup\diff.png" />
-    <None Remove="Startup\donai.png" />
-    <None Remove="Utils\dropFiles.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
@@ -25,16 +19,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="cmd.png" />
-    <Resource Include="favor.png" />
-    <Resource Include="folder.png" />
-    <Resource Include="history.png" />
-    <Resource Include="Host\close.png" />
-    <Resource Include="noimg.jpg" />
-    <Resource Include="notfavor.png" />
-    <Resource Include="Startup\diff.png" />
-    <Resource Include="Startup\donai.png" />
-    <Resource Include="Utils\dropFiles.jpg" />
+    <Resource Include="res\cmd.png" />
+    <Resource Include="res\favor.png" />
+    <Resource Include="res\folder.png" />
+    <Resource Include="res\history.png" />
+    <Resource Include="res\close.png" />
+    <Resource Include="res\noimg.jpg" />
+    <Resource Include="res\notfavor.png" />
+    <Resource Include="res\diff.png" />
+    <Resource Include="res\donai.png" />
+    <Resource Include="res\dropFiles.jpg" />
   </ItemGroup>
 
   <ItemGroup>
