@@ -112,13 +112,13 @@
                         <ComboBoxItem Content="1024"/>
                     </ComboBox>
                     <hc:ComboBox x:Name="cbSampler" Height="22" Style="{StaticResource ComboBoxExtend}" Margin="61,4,139,107">
-                        <ComboBoxItem Content="DDIM"/>
-                        <ComboBoxItem Content="EulerDiscrete"/>
-                        <ComboBoxItem Content="EulerAncestralDiscrete"/>
-                        <ComboBoxItem Content="DPMSolverMultistep"/>
-                        <ComboBoxItem Content="PNDM"/>
-                        <ComboBoxItem Content="LMSDiscrete"/>
-                        <ComboBoxItem Content="SharkEulerDiscrete"/>
+                        <ComboBoxItem Content="DDIM"                    />
+                        <ComboBoxItem Content="EulerDiscrete"           />
+                        <ComboBoxItem Content="EulerAncestralDiscrete"  />
+                        <ComboBoxItem Content="DPMSolverMultistep"      />
+                        <ComboBoxItem Content="PNDM"                    />
+                        <ComboBoxItem Content="LMSDiscrete"             />
+                        <ComboBoxItem Content="SharkEulerDiscrete"      />
                     </hc:ComboBox>
                     <Label Content="Seed" Height="30" Width="31" BorderBrush="{x:Null}" Background="{x:Null}" HorizontalAlignment="Left" Margin="237,4,0,0" VerticalAlignment="Top" Padding="1,6,1,6"/>
                     <TextBox x:Name="tbSeed" TextWrapping="Wrap" Text="-1" Height="18" IsEnabled="False" Margin="237,39,6,72"/>

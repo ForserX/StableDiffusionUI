@@ -226,6 +226,15 @@ namespace SD_FXUI
                 cbDevice.Visibility = Visibility.Visible;
                 cbVAE.Visibility = Visibility.Visible;
                 lbVae.Visibility = Visibility.Visible;
+
+                cbSampler.Items.Clear();
+                foreach (string Name in Schedulers.Diffusers)
+                {
+                    cbSampler.Items.Add(Name);
+                }
+
+                cbSampler.Text = Data.Get("sampler");
+                cbDevice.Text = Data.Get("device");
             }
         }
         private void btnDiffCuda_Click(object sender, RoutedEventArgs e)
@@ -251,6 +260,15 @@ namespace SD_FXUI
                 btImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
                 CPUUse = false;
+
+                cbSampler.Items.Clear();
+                foreach (string Name in Schedulers.Diffusers)
+                {
+                    cbSampler.Items.Add(Name);
+                }
+
+                cbSampler.Text = Data.Get("sampler");
+                cbDevice.Text = Data.Get("device");
             }
         }
 
@@ -278,6 +296,15 @@ namespace SD_FXUI
                 lbDevice.Visibility = Visibility.Visible;
                 cbVAE.Visibility = Visibility.Collapsed;
                 lbVae.Visibility = Visibility.Collapsed;
+
+                cbSampler.Items.Clear();
+                foreach (string Name in Schedulers.Shark)
+                {
+                    cbSampler.Items.Add(Name);
+                }
+
+                cbSampler.Text = Data.Get("sampler");
+                cbDevice.Text = Data.Get("device");
             }
         }
         private void btnDiffCpu_Click(object sender, RoutedEventArgs e)
@@ -302,6 +329,15 @@ namespace SD_FXUI
                 cbVAE.Visibility = Visibility.Visible;
                 lbVae.Visibility = Visibility.Visible;
                 CPUUse = true;
+
+                cbSampler.Items.Clear();
+                foreach(string Name in Schedulers.Diffusers)
+                {
+                    cbSampler.Items.Add(Name);
+                }
+
+                cbSampler.Text = Data.Get("sampler");
+                cbDevice.Text = Data.Get("device");
             }
         }
         private void ListView1_SelectionChanged(object sender, SelectionChangedEventArgs e)
