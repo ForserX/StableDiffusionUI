@@ -239,7 +239,7 @@ namespace SD_FXUI
         }
         private void btnDiffCuda_Click(object sender, RoutedEventArgs e)
         {
-            if (Helper.Mode != Helper.ImplementMode.DiffCUDA || (CPUUse == true && Helper.Mode == Helper.ImplementMode.DiffCUDA))
+            if (Helper.Mode != Helper.ImplementMode.DiffCUDA)
             {
                 Helper.Mode = Helper.ImplementMode.DiffCUDA;
 
@@ -309,9 +309,9 @@ namespace SD_FXUI
         }
         private void btnDiffCpu_Click(object sender, RoutedEventArgs e)
         {
-            if (Helper.Mode != Helper.ImplementMode.DiffCUDA || (CPUUse != true && Helper.Mode == Helper.ImplementMode.DiffCUDA))
+            if (Helper.Mode != Helper.ImplementMode.DiffCPU)
             {
-                Helper.Mode = Helper.ImplementMode.DiffCUDA;
+                Helper.Mode = Helper.ImplementMode.DiffCPU;
                 Install.CheckAndInstallONNX();
 
                 var Safe = btnDiffCpu.Background;

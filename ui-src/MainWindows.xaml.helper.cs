@@ -34,8 +34,10 @@ namespace SD_FXUI
                 case "0": Helper.Mode = Helper.ImplementMode.InvokeAI; break;
                 case "1": btnShark_Click(0, new RoutedEventArgs()); break;
                 case "2": btnONNX_Click(0, new RoutedEventArgs()); break;
+                case "4": btnDiffCpu_Click(0, new RoutedEventArgs()); break;
+                case "3": btnDiffCuda_Click(0, new RoutedEventArgs()); break;
 
-                default: btnShark_Click(0, new RoutedEventArgs()); break;
+                default: btnONNX_Click(0, new RoutedEventArgs()); break;
             }
 
             UpdateModelsList();

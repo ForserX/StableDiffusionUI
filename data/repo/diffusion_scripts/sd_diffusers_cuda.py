@@ -145,9 +145,7 @@ if opt.mode == "img2img":
 if opt.mode == "inpaint":
     pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=None)
 
-
 pipe.to(opt.device)
-
 
 if opt.scmode == "EulerAncestralDiscrete":
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)

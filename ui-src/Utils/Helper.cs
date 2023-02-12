@@ -31,6 +31,7 @@ namespace SD_FXUI
             Shark,
             ONNX,
             DiffCUDA,
+            DiffCPU,
 
             IDK
         }
