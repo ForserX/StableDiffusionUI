@@ -27,7 +27,11 @@ namespace SD_FXUI
             "DPMSolverMultistep",
             "PNDM",
             "LMSDiscrete",
-            "DDPM"
+            "DDPM",
+
+            // Extra steps schedulers 
+            "DPMDiscrete",
+            "HeunDiscrete"
         };
     }
 }

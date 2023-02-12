@@ -2,9 +2,8 @@ import os
 import sys
 import time
 import torch
-import numpy as np
 from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionInpaintPipeline, AutoencoderKL
-from diffusers import EulerAncestralDiscreteScheduler, PNDMScheduler, LMSDiscreteScheduler, DDIMScheduler, DPMSolverMultistepScheduler, EulerDiscreteScheduler, DDPMScheduler
+from diffusers import EulerAncestralDiscreteScheduler, PNDMScheduler, LMSDiscreteScheduler, DDIMScheduler, DPMSolverMultistepScheduler, EulerDiscreteScheduler, DDPMScheduler, KDPM2DiscreteScheduler, HeunDiscreteScheduler
 
 import argparse
 from PIL import PngImagePlugin, Image
@@ -116,7 +115,6 @@ parser.add_argument(
 
 parser.add_argument(
     "--scmode",
-    choices=['EulerAncestralDiscrete', 'EulerDiscrete', 'PNDM', 'DPMSolverMultistep', 'LMSDiscrete', 'DDPM', 'DDIM'],
     default="eulera",
     help="Specify generation scmode",
     dest='scmode',
@@ -165,6 +163,10 @@ if opt.scmode == "LMSDiscrete":
     pipe.scheduler = LMSDiscreteScheduler.from_config(pipe.scheduler.config)
 if opt.scmode == "DDPM":
     pipe.scheduler = DDPMScheduler.from_config(pipe.scheduler.config)
+if opt.scmode == "DPMDiscrete":
+    pipe.scheduler = KDPM2DiscreteScheduler.from_config(pipe.scheduler.config)
+if opt.scmode == "HeunDiscrete":
+    pipe.scheduler = HeunDiscreteScheduler.from_config(pipe.scheduler.config)
 
 def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_path = None, init_strength = 0.75, mask_img_path = None):
     start_time = time.time()
