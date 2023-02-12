@@ -79,6 +79,8 @@ namespace SD_FXUI
             int Size = (int)slUpscale.Value;
 
             string cmdline = "";
+            bool SafeCPUFlag = CPUUse;
+
             switch (Helper.Mode)
             {
                 case Helper.ImplementMode.Shark:
@@ -96,7 +98,7 @@ namespace SD_FXUI
                 case Helper.ImplementMode.DiffCUDA:
                 {
                     cmdline += GetCommandLineDiffCuda();
-                    Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size));
+                    Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
                     break;
                 }
             }
@@ -243,8 +245,8 @@ namespace SD_FXUI
                 UpdateModelsList();
                 lbDevice.Visibility = Visibility.Collapsed;
                 cbDevice.Visibility = Visibility.Collapsed;
-                cbVAE.Visibility = Visibility.Collapsed;
-                lbVae.Visibility = Visibility.Collapsed;
+                cbVAE.Visibility = Visibility.Visible;
+                lbVae.Visibility = Visibility.Visible;
 
                 btImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
@@ -297,8 +299,8 @@ namespace SD_FXUI
 
                 btImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
-                cbVAE.Visibility = Visibility.Collapsed;
-                lbVae.Visibility = Visibility.Collapsed;
+                cbVAE.Visibility = Visibility.Visible;
+                lbVae.Visibility = Visibility.Visible;
                 CPUUse = true;
             }
         }

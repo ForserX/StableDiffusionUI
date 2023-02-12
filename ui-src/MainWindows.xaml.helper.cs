@@ -127,6 +127,12 @@ namespace SD_FXUI
         private string GetCommandLineDiffCuda()
         {
             string Model = FS.GetModelDir() + "diff\\" + cbModel.Text;
+            string VAE = cbVAE.Text.ToLower();
+            if (VAE != "default")
+            {
+                VAE = FS.GetModelDir() + "diff\\" + cbVAE.Text.ToLower();
+            }
+
             string CmdLine = $""
                     + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
@@ -138,6 +144,7 @@ namespace SD_FXUI
                     + $" --seed={tbSeed.Text}"
                     + $" --totalcount={tbTotalCount.Text}"
                     + $" --model=\"{Model}\""
+                    + $" --vae=\"{VAE}\""
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
             ;
 

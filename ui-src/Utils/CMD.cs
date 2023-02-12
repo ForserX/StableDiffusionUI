@@ -156,9 +156,9 @@ namespace SD_FXUI
             Wrapper.SendNotification("Task: done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
-        public static async Task ProcessRunnerDiffCuda(string command, int UpSize)
+        public static async Task ProcessRunnerDiffCuda(string command, int UpSize, bool IsCPU)
         {
-            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffCUDA));
+            Host ProcesHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(IsCPU ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
             Host.Print("\n Startup generation..... \n");
 
             Helper.Form.InvokeProgressUpdate(7);
