@@ -341,5 +341,39 @@ namespace SD_FXUI
             Host.Print("\n  Convert task is done..... \n");
             Wrapper.SendNotification("Convertation: done!");
         }
+
+        internal static void ProcessConvertVaePt2ONNX(string InputFile)
+        {
+            if (InputFile.EndsWith("pt"))
+            {
+                ProcessConvertVaePt2Diff(InputFile);
+
+                InputFile = System.IO.Path.GetFileNameWithoutExtension(InputFile);
+                InputFile = FS.GetModelDir() + "vae\\" + InputFile;
+            }
+
+            Wrapper.SendNotification("Convertation: ~few seconds");
+            string WorkDir = FS.GetModelDir() + "vae\\";
+            Host ProcesHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
+            Host.Print($"\n Startup convert vae ({InputFile})..... \n");
+
+
+            string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
+
+            string OutPath = WorkDir + Name;
+            OutPath = OutPath.Replace("\\", "/");
+            InputFile = InputFile.Replace("\\", "/");
+
+            Directory.CreateDirectory(OutPath);
+
+            ProcesHost.Start("\"../../repo/diffusion_scripts/convert_vae_pt_to_onnx.py\" " + $"--model_path=\"{InputFile}\"" +
+                                                                            $" --output_path=\"{OutPath}\"");
+
+            ProcesHost.SendExitCommand();
+            ProcesHost.Wait();
+
+            Host.Print("\n  Convert task is done..... \n");
+            Wrapper.SendNotification("Convertation: done!");
+        }
     }
 }

@@ -103,7 +103,14 @@ namespace SD_FXUI.Utils
             {
                 string sCommand = cbPath.Text;
 
-                Task.Run(() => CMD.ProcessConvertVaePt2Diff(sCommand));               
+                if (ToID == 0)
+                {
+                    Task.Run(() => CMD.ProcessConvertVaePt2ONNX(sCommand));
+                }
+                else
+                {
+                    Task.Run(() => CMD.ProcessConvertVaePt2Diff(sCommand));
+                }    
             }
 
             if (ToID == 0)
@@ -129,14 +136,14 @@ namespace SD_FXUI.Utils
         {
             int ToID = cbTo.SelectedIndex;
 
-            if (ToID == 1)
-            {
-                cbFrom.Items.Remove(cbFrom.Items[2]);
-            }
-            else
-            {
-                cbFrom.Items.Insert(2, "huggingface");
-            }
+            //if (ToID == 1)
+            //{
+            //    cbFrom.Items.Remove(cbFrom.Items[2]);
+            //}
+            //else
+            //{
+            //    cbFrom.Items.Insert(2, "huggingface");
+            //}
         }
 
         private void cbPath_Drop(object sender, DragEventArgs e)
