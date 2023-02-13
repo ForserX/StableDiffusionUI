@@ -226,9 +226,23 @@ namespace SD_FXUI
                 cbModel.Items.Add(Itm);
                 cbVAE.Items.Add(Itm);
             }
-            foreach (var Itm in System.IO.Directory.GetDirectories(FS.GetModelDir()+"vae\\"))
+            foreach (var Itm in System.IO.Directory.GetDirectories(FS.GetModelDir() + "vae\\"))
             {
-                
+                if (Helper.Mode == Helper.ImplementMode.ONNX)
+                {
+                    if (!System.IO.File.Exists(Itm + "\\vae_decoder\\model.onnx"))
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (!System.IO.File.Exists(Itm + "\\vae\\diffusion_pytorch_model.bin"))
+                    {
+                        continue;
+                    }
+                }
+
                 cbVAE.Items.Add("vae\\"+System.IO.Path.GetFileName(Itm));
             }
 
