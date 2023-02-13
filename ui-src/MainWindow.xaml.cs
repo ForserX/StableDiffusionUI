@@ -447,11 +447,5 @@ namespace SD_FXUI
         {
             Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
         }
-
-        private void Button_Click_Import_Vae(object sender, RoutedEventArgs e)
-        {
-            Utils.VaeImporter Importer = new Utils.VaeImporter();
-            Importer.Show();
-        }
     }
 }
