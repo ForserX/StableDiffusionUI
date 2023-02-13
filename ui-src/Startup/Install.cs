@@ -1,12 +1,4 @@
-﻿using HandyControl.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Devices.Usb;
-
-namespace SD_FXUI
+﻿namespace SD_FXUI
 {
     internal class Install
     {

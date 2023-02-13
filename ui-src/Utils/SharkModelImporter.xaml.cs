@@ -1,14 +1,5 @@
-﻿using HandyControl.Tools.Extension;
-using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
+﻿using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Windows.Devices.Geolocation;
 
 namespace SD_FXUI.Utils
 {

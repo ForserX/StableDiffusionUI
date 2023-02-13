@@ -1,13 +1,6 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Shapes;
-using System.Xml.Linq;
 
 namespace SD_FXUI
 {
