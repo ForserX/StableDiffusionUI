@@ -99,9 +99,16 @@ namespace SD_FXUI.Utils
                 }
             }
 
+            if(GetFromID == 2)
+            {
+                string sCommand = cbPath.Text;
+
+                Task.Run(() => CMD.ProcessConvertVaePt2Diff(sCommand));               
+            }
+
             if (ToID == 0)
             {
-                if(GetFromID == 2)
+                if(GetFromID == 3)
                 {
                     string SafeNameStr = cbPath.Text;
                     await Task.Run(() => CastCp2ONNX(SafeNameStr));
@@ -109,7 +116,7 @@ namespace SD_FXUI.Utils
             }
             else
             {
-                if (GetFromID == 2)
+                if (GetFromID == 4)
                 {
                     HuggCast();
                 }
@@ -141,9 +148,21 @@ namespace SD_FXUI.Utils
             // Assuming you have one file that you care about, pass it off to whatever
             // handling code you have defined.
 
-            if (cbPath.Text.EndsWith(".ckpt")) cbFrom.SelectedIndex = 0;
+
+
+            if (cbPath.Text.EndsWith("vae-ft-mse-840000-ema-pruned.ckpt"))
+            {
+                cbTo.SelectedIndex = 1;
+                cbFrom.SelectedIndex = 2;  // this vae .pt file In fact
+            }
+            else if (cbPath.Text.EndsWith(".ckpt")) cbFrom.SelectedIndex = 0;
             else if (cbPath.Text.EndsWith(".safetensors")) cbFrom.SelectedIndex = 1;
-            else cbFrom.SelectedIndex = 2;
+            else if (cbPath.Text.EndsWith(".pt"))
+            {
+                cbTo.SelectedIndex = 1;
+                cbFrom.SelectedIndex = 2;
+            }
+            else cbFrom.SelectedIndex = 3;
 
 
             return;
@@ -152,13 +171,13 @@ namespace SD_FXUI.Utils
 
 
 
-        private void cbPath_PreviewDragEnter(object sender, DragEventArgs e)
+        private void cbPath_DragEnter(object sender, DragEventArgs e)
         {           
             cbPath.Opacity = 0.5;
             return;
         }
 
-        private void cbPath_PreviewDragLeave(object sender, DragEventArgs e)
+        private void cbPath_DragLeave(object sender, DragEventArgs e)
         {
             cbPath.Opacity = 1.0;
             return;
@@ -169,8 +188,9 @@ namespace SD_FXUI.Utils
         {
             if (null != e.Data && e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                var data = e.Data.GetData(DataFormats.FileDrop) as string[];
+                //var data = e.Data.GetData(DataFormats.FileDrop) as string[];
                 // handle the files here!
+                cbPath.Opacity = 1.0;
                 cbPath_Drop(sender, e);
             }
         }

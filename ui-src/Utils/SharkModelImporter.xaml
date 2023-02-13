@@ -14,6 +14,7 @@
         <ComboBox x:Name="cbFrom" Margin="0,2,6,0" HorizontalAlignment="Right" Width="112" Height="21" VerticalAlignment="Top" Padding="1,2,1,2">
             <ComboBoxItem Content=".ckpt"/>
             <ComboBoxItem Content=".safetensors"/>
+            <ComboBoxItem Content=".pt (vae)"/>
             <ComboBoxItem Content="diffusion"/>
         </ComboBox>
         <ComboBox x:Name="cbTo" Margin="0,40,6,0" SelectionChanged="cbTo_SelectionChanged" Height="7" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Padding="1,2,1,2">
@@ -23,8 +24,8 @@
         <Label Content="From" HorizontalAlignment="Right" Margin="0,5,123,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,1,1,1"/>
         <Label Content="To" HorizontalAlignment="Right" Margin="0,40,123,0" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,1,1,1" VerticalAlignment="Top"/>
         <CheckBox x:Name="chBoxEmaOnly" Content="extract ema only" HorizontalAlignment="Left" Margin="125,0,0,6" VerticalAlignment="Bottom"/>
-        <TextBox x:Name="cbPath" Margin="5,5,155,0" TextWrapping="Wrap" Text="Set your dir/url" VerticalAlignment="Top" Height="57" PreviewDragEnter="cbPath_PreviewDragEnter" PreviewDragLeave="cbPath_PreviewDragLeave" AllowDrop="True" Opacity="1.0"/>
-        <Image x:Name="imgPreview" Margin="13,67,183,0" AllowDrop="True" PreviewDragEnter="cbPath_PreviewDragEnter" PreviewDragLeave="cbPath_PreviewDragLeave" Source="/res/dropFiles.jpg" Height="70" VerticalAlignment="Top"/>
+        <TextBox x:Name="cbPath" Margin="5,5,155,0" TextWrapping="Wrap" Text="Set your dir/url" VerticalAlignment="Top" Height="57" DragEnter="cbPath_DragEnter" DragLeave="cbPath_DragLeave" AllowDrop="True" Opacity="1.0"/>
+        <Image x:Name="imgPreview" Margin="13,67,183,0" AllowDrop="True" DragEnter="cbPath_DragEnter" DragLeave="cbPath_DragLeave" Source="/res/dropFiles.jpg" Height="70" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

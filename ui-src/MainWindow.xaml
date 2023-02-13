@@ -140,7 +140,7 @@
                     <Slider  x:Name="slUpscale" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Margin="0,11,10,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"/>
                     <Label x:Name="lbUpscale" Content="x4" Background="#FF611F7E" Height="26" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,7,101,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbModel" Height="22" Margin="50,71,75,0" VerticalAlignment="Top"/>
-                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_1" Height="30" HorizontalAlignment="Right" Margin="285,71,0,0" VerticalAlignment="Top">
+                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="30" HorizontalAlignment="Right" Margin="285,71,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.512,2.77">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>

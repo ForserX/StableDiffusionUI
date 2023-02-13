@@ -180,7 +180,7 @@ namespace SD_FXUI
             InvokeProgressUpdate(0);
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Click_Import_Model(object sender, RoutedEventArgs e)
         {
             Utils.SharkModelImporter Importer = new Utils.SharkModelImporter();
             Importer.Show();
@@ -446,6 +446,12 @@ namespace SD_FXUI
         private void cbGfpgan_SelectionChanged(object sender, RoutedEventArgs e)
         {
             Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
+        }
+
+        private void Button_Click_Import_Vae(object sender, RoutedEventArgs e)
+        {
+            Utils.VaeImporter Importer = new Utils.VaeImporter();
+            Importer.Show();
         }
     }
 }

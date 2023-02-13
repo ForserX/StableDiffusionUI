@@ -26,3 +26,4 @@ torchvision==0.13.0+cu116 ; platform_system == 'Linux' or platform_system == 'Wi
 transformers
 picklescan
 gfpgan
+omegaconf

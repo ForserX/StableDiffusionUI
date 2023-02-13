@@ -17,7 +17,7 @@ namespace SD_FXUI
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
             Host ProcesHost = new Host(WorkDir);
-            Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
+            Host.Print($"\n Startup extract ckpt ({InputFile})..... \n");
 
             string OutPath = null;
             string AddCmd = "";
@@ -313,6 +313,33 @@ namespace SD_FXUI
             }
 
             Helper.Form.InvokeProgressApply();
+        }
+
+
+        public static async Task ProcessConvertVaePt2Diff (string InputFile)
+        {
+            Wrapper.SendNotification("Convertation: ~few seconds");
+            string WorkDir = FS.GetModelDir() + "vae\\";
+            Host ProcesHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
+            Host.Print($"\n Startup convert vae ({InputFile})..... \n");
+
+
+            string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
+            
+            string OutPath = WorkDir + Name;
+            OutPath = OutPath.Replace("\\", "/");
+            InputFile = InputFile.Replace("\\", "/");
+
+            Directory.CreateDirectory(OutPath);
+
+            ProcesHost.Start("\"../../repo/diffusion_scripts/convert_vae_pt_to_diffusers.py\" " + $"--vae_pt_path=\"{InputFile}\"" +
+                                                                            $" --dump_path=\"{OutPath+"/vae"}\"");
+
+            ProcesHost.SendExitCommand();
+            ProcesHost.Wait();
+
+            Host.Print("\n  Convert task is done..... \n");
+            Wrapper.SendNotification("Convertation: done!");
         }
     }
 }

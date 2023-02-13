@@ -33,11 +33,10 @@ namespace SD_FXUI
                 Helper.UIHost.Show();
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
 
-                Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Host.Print("Install CUDA runtimes... Please wait");
                 Cmd.Start();
-                Cmd.Send("python -m venv .\\repo\\cuda.venv\\");
-                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA) + " install -r requirements_cuda.txt");
+                Cmd.Send("python -m venv .\\repo\\cuda.venv\\");                
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA)+"\"" + " install -r requirements_cuda.txt ");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
             }
@@ -141,6 +140,7 @@ namespace SD_FXUI
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\diff");
+            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\vae");
         }
     }
 }

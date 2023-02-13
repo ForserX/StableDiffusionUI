@@ -101,7 +101,14 @@ namespace SD_FXUI
             string VAE = cbVAE.Text.ToLower();
             if (VAE != "default")
             {
-                VAE = FS.GetModelDir() + "onnx\\" + cbVAE.Text.ToLower();
+                if (VAE.StartsWith("vae\\"))
+                {
+                    VAE = FS.GetModelDir() + cbVAE.Text.ToLower();
+                }
+                else
+                {
+                    VAE = FS.GetModelDir() + "onnx\\" + cbVAE.Text.ToLower();
+                }
             }
 
             string CmdLine = $""
@@ -132,7 +139,14 @@ namespace SD_FXUI
             string VAE = cbVAE.Text.ToLower();
             if (VAE != "default")
             {
-                VAE = FS.GetModelDir() + "diff\\" + cbVAE.Text.ToLower();
+                if (VAE.StartsWith("vae\\"))
+                {
+                    VAE = FS.GetModelDir() + cbVAE.Text.ToLower();
+                }
+                else
+                {
+                    VAE = FS.GetModelDir() + "diff\\" + cbVAE.Text.ToLower();
+                }
             }
 
             string CmdLine = $""
@@ -212,6 +226,12 @@ namespace SD_FXUI
                 cbModel.Items.Add(Itm);
                 cbVAE.Items.Add(Itm);
             }
+            foreach (var Itm in System.IO.Directory.GetDirectories(FS.GetModelDir()+"vae\\"))
+            {
+                
+                cbVAE.Items.Add("vae\\"+System.IO.Path.GetFileName(Itm));
+            }
+
 
             cbModel.SelectedIndex = cbModel.Items.Count - 1;
             cbVAE.SelectedIndex = 0;
