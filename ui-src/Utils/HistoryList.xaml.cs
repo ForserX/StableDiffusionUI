@@ -39,10 +39,30 @@ namespace SD_FXUI.Utils
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            if(lbHistory.SelectedItem != null)
+            if (lbHistory.SelectedItem != null)
             {
                 Helper.PromHistory.Remove(lbHistory.SelectedItem.ToString());
                 lbHistory.Items.Remove(lbHistory.SelectedItem);
+            }
+        }
+
+        private new void KeyDown(object sender, KeyEventArgs e)
+        {
+            if (lbHistory.SelectedItem == null)
+                return;
+
+            if (e.Key == Key.Delete)
+            {
+                int Idx = lbHistory.SelectedIndex;
+
+                Helper.PromHistory.Remove(lbHistory.SelectedItem.ToString());
+                lbHistory.Items.Remove(lbHistory.SelectedItem);
+
+                lbHistory.SelectedIndex = Idx;
+            }
+            else if (e.Key == Key.Enter)
+            {
+                Helper.Form.SetPrompt(lbHistory.SelectedItem.ToString());
             }
         }
     }
