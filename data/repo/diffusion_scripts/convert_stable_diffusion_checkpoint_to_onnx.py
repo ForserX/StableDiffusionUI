@@ -236,8 +236,6 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 
     del pipeline
     del onnx_pipeline
-    _ = OnnxStableDiffusionPipeline.from_pretrained(output_path, provider="CPUExecutionProvider")
-    print("ONNX pipeline is loadable")
 
 
 if __name__ == "__main__":
