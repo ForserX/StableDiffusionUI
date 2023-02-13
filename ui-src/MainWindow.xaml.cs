@@ -237,6 +237,8 @@ namespace SD_FXUI
 
                 cbSampler.Text = Data.Get("sampler");
                 cbDevice.Text = Data.Get("device");
+
+                Title = "Stable Diffusion XUI : ONNX venv";
             }
         }
         private void btnDiffCuda_Click(object sender, RoutedEventArgs e)
@@ -271,6 +273,8 @@ namespace SD_FXUI
 
                 cbSampler.Text = Data.Get("sampler");
                 cbDevice.Text = Data.Get("device");
+
+                Title = "Stable Diffusion XUI : CUDA venv";
             }
         }
 
@@ -307,6 +311,8 @@ namespace SD_FXUI
 
                 cbSampler.Text = Data.Get("sampler");
                 cbDevice.Text = Data.Get("device");
+
+                Title = "Stable Diffusion XUI : Shark venv";
             }
         }
         private void btnDiffCpu_Click(object sender, RoutedEventArgs e)
@@ -340,6 +346,8 @@ namespace SD_FXUI
 
                 cbSampler.Text = Data.Get("sampler");
                 cbDevice.Text = Data.Get("device");
+
+                Title = "Stable Diffusion XUI : CPU venv";
             }
         }
         private void ListView1_SelectionChanged(object sender, SelectionChangedEventArgs e)
