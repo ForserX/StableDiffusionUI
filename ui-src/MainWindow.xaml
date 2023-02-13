@@ -79,6 +79,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
+                    <Image x:Name="imgToImg" HorizontalAlignment="Right" Height="23" Margin="0,5,10,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png"/>
                 </Grid>
                 <Grid Height="95">
                     <Label Content="Neg prompt" Height="21" Width="95" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
@@ -170,5 +171,6 @@
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,99" VerticalAlignment="Bottom"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="0,4,407,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click"/>
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="0,4,497,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click"/>
+        <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,77,112,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btmToImg_Click"/>
     </Grid>
 </hc:BlurWindow>
