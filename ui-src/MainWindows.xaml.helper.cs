@@ -15,6 +15,7 @@ namespace SD_FXUI
         public void UpdateViewImg(string Img) => Dispatcher.Invoke(() => SetImg(Img));
         public void InvokeClearImages() => Dispatcher.Invoke(() => { InvokeClearImages(); });
         public void InvokeProgressUpdate(int value) => Dispatcher.Invoke(() => { pbGen.Value = value; });
+        public void InvokeUpdateModelsList() => Dispatcher.Invoke(() => { UpdateModelsList(); });
         public void InvokeProgressApply() => Dispatcher.Invoke(() => { pbGen.Value += (40 / int.Parse(tbTotalCount.Text)); });
 
         void Load()

@@ -71,6 +71,7 @@ namespace SD_FXUI
             if (Message.Contains("SD: Done"))
             {
                 Wrapper.SendNotification(Message);
+                Helper.Form.InvokeUpdateModelsList();
             }
 
             if (Message.Contains("Traceback (most recent call last)"))
