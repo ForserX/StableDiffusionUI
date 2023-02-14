@@ -89,6 +89,10 @@ namespace SD_FXUI
             {
                 Helper.Form.InvokeProgressApply();
             }
+            if (Message.Contains("DeepDanBooru: Finished!"))
+            {
+                Helper.Form.InvokeSetPrompt(Message);
+            }
 
             Helper.UIHost.Print(Message);
         }
@@ -101,6 +105,13 @@ namespace SD_FXUI
         {
             Process.StandardInput.WriteLine(cmd);
         }
+        /*
+        public string ReadFrom()
+        {
+            return Process.StandardOutput.ReadToEnd();
+        }
+        */
+
         public void SendExitCommand()
         {
             Send("exit");

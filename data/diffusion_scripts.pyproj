@@ -19,9 +19,12 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CLIP.py" />
     <Compile Include="convert_original_stable_diffusion_to_diffusers.py" />
     <Compile Include="convert_stable_diffusion_checkpoint_to_onnx.py" />
     <Compile Include="convert_vae_pt_to_diffusers.py" />
+    <Compile Include="danbooru.py" />
+    <Compile Include="danbooru_model.py" />
     <Compile Include="inference_gfpgan.py" />
     <Compile Include="pix2pix.py" />
     <Compile Include="sd_diffusers_cuda.py" />

@@ -156,7 +156,7 @@
                     <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="293,38,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
                     <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,107,0,0" VerticalAlignment="Top"/>
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
-                    <ToggleButton x:Name="cbGfpgan" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,43,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
+                    <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,43,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
                     <Label x:Name="lbVae" Content="VAE" Height="30" Width="31" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,142,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbVAE" Height="22" Margin="50,142,75,0" VerticalAlignment="Top"/>
                 </Grid>
@@ -171,7 +171,7 @@
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,99" VerticalAlignment="Bottom"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="0,4,407,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click"/>
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="0,4,497,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click"/>
-        <Button Grid.Column="3" Content="Interrogate Clip" HorizontalAlignment="Left" Margin="375,551,0,0" VerticalAlignment="Top" Width="116" Click="Button_Click_Clip"/>
+        <Button Grid.Column="3" Content="Interrogate DeepDanbooru" HorizontalAlignment="Left" Margin="320,546,0,0" VerticalAlignment="Top" Width="176" Click="Button_Click_DeepDanbooru"/>
         <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,77,112,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btmToImg_Click"/>
     </Grid>
 </hc:BlurWindow>

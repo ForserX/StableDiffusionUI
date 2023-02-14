@@ -11,6 +11,7 @@ namespace SD_FXUI
         int CurrentSelIdx = 0;
 
         public void SetPrompt(string Prompt) => TryPrompt.Text = Prompt;
+        public void InvokeSetPrompt(string Prompt) => Dispatcher.Invoke(() => SetPrompt(Prompt));
         public void UpdateViewImg(string Img) => Dispatcher.Invoke(() => SetImg(Img));
         public void InvokeClearImages() => Dispatcher.Invoke(() => { InvokeClearImages(); });
         public void InvokeProgressUpdate(int value) => Dispatcher.Invoke(() => { pbGen.Value = value; });

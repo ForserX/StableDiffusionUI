@@ -21,6 +21,9 @@ namespace SD_FXUI
         Config Data = null;
         ImageSource NoImageData = null;
         ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
+        string currentImage = null;
+
+
         public class ListViewItemsData
         {
             public string GridViewColumnName_ImageSource { get; set; }
@@ -346,8 +349,8 @@ namespace SD_FXUI
             if (ImgList.Count > 0)
             {
                 CurrentSelIdx = ListView1.SelectedIndex;
-
-                ViewImg.Source = new BitmapImage(new Uri(ImgList[ListView1.SelectedIndex]));
+                currentImage = (ImgList[ListView1.SelectedIndex]);
+                ViewImg.Source = new BitmapImage(new Uri(currentImage));
 
                 string Name = FS.GetImagesDir() + "best\\" + System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
 
@@ -392,7 +395,7 @@ namespace SD_FXUI
 
         private void btmToImg_Click(object sender, MouseButtonEventArgs e)
         {
-            if(ImgList.Count <= 0)
+            if (ImgList.Count <= 0)
                 return;
 
             Helper.InputImagePath = ImgList[CurrentSelIdx];
@@ -459,7 +462,7 @@ namespace SD_FXUI
         {
             Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
         }
-
+        /*
         private void CheckOrInstallClip(object sender, RoutedEventArgs e)
         {
 
@@ -472,8 +475,14 @@ namespace SD_FXUI
             Task.Run(() => CMD.InstallClip());
 
         }
-
-        private void Grid_Drop(object sender, DragEventArgs e)
+        */
+       
+    private void Button_Click_DeepDanbooru(object sender, RoutedEventArgs e)
+        {
+            if(currentImage != null && currentImage != "") Task.Run(() => CMD.DeepDanbooruProcess(currentImage));
+        }
+    
+    private void Grid_Drop(object sender, DragEventArgs e)
         {
             if (null != e.Data && e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -491,6 +500,7 @@ namespace SD_FXUI
 
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
+                currentImage = dropedFile;
                 ViewImg.Source = new BitmapImage(new Uri(dropedFile));
             }
 
@@ -501,9 +511,8 @@ namespace SD_FXUI
 
         }
 
-        private void Button_Click_Clip(object sender, RoutedEventArgs e)
+        private void Button_Click_Send_to_Img2img(object sender, RoutedEventArgs e)
         {
-            CheckOrInstallClip(sender, e);
 
         }
     }

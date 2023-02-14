@@ -368,6 +368,8 @@ namespace SD_FXUI
             Host.Print("\n  Convert task is done..... \n");
             Wrapper.SendNotification("Convertation: done!");
         }
+
+        /*
         public static async Task InstallClip()
         {
             Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA));
@@ -380,6 +382,23 @@ namespace SD_FXUI
 
             Host.Print("\n  Installing CLIP Done..... \n");
             Wrapper.SendNotification("Installing CLIP: done!");
+            Helper.Form.InvokeProgressUpdate(100);
+        }
+        */
+
+        public static async Task DeepDanbooruProcess(string currentImage)
+        {
+            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffCUDA));
+            Host.Print("\n Processing DeepDanbooru.... \n");            
+            ProcessHost.Start($"repo/diffusion_scripts/danbooru.py --img=\"{currentImage}\" --model=\"{FS.GetModelDir()}deepdanbooru/model-resnet_custom_v3.pt\"  ");
+            Helper.Form.InvokeProgressUpdate(10);
+            ProcessHost.SendExitCommand();
+            ProcessHost.Wait();
+            
+           
+
+            Host.Print("\n Processing DeepDanbooru: Done..... \n");
+            Wrapper.SendNotification("Processing DeepDanbooru: Done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
     }
