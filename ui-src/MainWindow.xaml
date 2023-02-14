@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
         Title="Stable Diffusion XUI" Height="664" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded">
-    <Grid Margin="0,0,0,3" Background="#389D9BC9">
+    <Grid Margin="0,0,0,3" Background="#389D9BC9" AllowDrop="True" DragDrop.Drop="Grid_Drop">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -23,7 +23,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Image x:Name="ViewImg" Margin="5,41,105,114" Grid.Column="3" Source="/res/noimg.jpg"/>
+        <Image x:Name="ViewImg" Margin="5,41,105,114" Grid.Column="3" Source="/res/noimg.jpg" AllowDrop="True"/>
         <Button Content="Break!" Margin="6,0,0,0" Click="Button_ClickBreak" HorizontalAlignment="Left" Width="82" RenderTransformOrigin="0.484,1.102" Height="36
                 " VerticalAlignment="Bottom" Grid.Column="3" Foreground="White">
             <Button.Background>
@@ -35,7 +35,7 @@
         </Button>
         <Button x:Name="btnShark" Content="Shark(Vulkan)" Margin="0,4,239,0" VerticalAlignment="Top" Click="btnShark_Click" HorizontalAlignment="Right" Width="79" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
         <Button x:Name="btnONNX" Content="Diffusers(ONNX)" Margin="0,4,317,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
-        <ListView x:Name="ListView1" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,39,3,10" Grid.Column="3" HorizontalAlignment="Right" Width="95" SelectionChanged="ListView1_SelectionChanged" Background="{x:Null}" BorderBrush="#8C7400AE">
+        <ListView x:Name="ListView1" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,39,3,10" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="95" Height="550" SelectionChanged="ListView1_SelectionChanged" Background="{x:Null}" BorderBrush="#8C7400AE">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn x:Name="GridViewColumnName" Header=" "  Width="75">
@@ -164,13 +164,14 @@
         </ScrollViewer>
         <Image Source="/res/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Margin="45,0,503,31" Grid.Column="3" Height="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         <Image x:Name="btCmd" Source="/res/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Margin="0,0,549,32" HorizontalAlignment="Left" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="48" VerticalAlignment="Bottom"/>
-        <Image x:Name="btHistory" Source="/res/history.png" MouseLeftButtonDown="btHistory_Click" Margin="0,0,105,37" HorizontalAlignment="Right" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
+        <Image x:Name="btHistory" Source="/res/history.png" MouseLeftButtonDown="btHistory_Click" Margin="0,0,31,10" HorizontalAlignment="Right" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
         <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,43,112,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btmFavorClick"/>
         <Image x:Name="imgFavor" Source="/res/favor.png" />
         <Image x:Name="imgNotFavor" Source="/res/notfavor.png" />
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,99" VerticalAlignment="Bottom"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="0,4,407,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click"/>
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="0,4,497,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click"/>
+        <Button Grid.Column="3" Content="Interrogate Clip" HorizontalAlignment="Left" Margin="375,551,0,0" VerticalAlignment="Top" Width="116" Click="Button_Click_Clip"/>
         <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,77,112,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btmToImg_Click"/>
     </Grid>
 </hc:BlurWindow>

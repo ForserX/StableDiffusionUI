@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -74,24 +75,24 @@ namespace SD_FXUI
             switch (Helper.Mode)
             {
                 case Helper.ImplementMode.Shark:
-                {
-                    cmdline += GetCommandLineShark();
-                    Task.Run(() => CMD.ProcessRunnerShark(cmdline, Size));
-                    break;
-                }
+                    {
+                        cmdline += GetCommandLineShark();
+                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Size));
+                        break;
+                    }
                 case Helper.ImplementMode.ONNX:
-                {
-                    cmdline += GetCommandLineOnnx();
-                    Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
-                    break;
-                }
+                    {
+                        cmdline += GetCommandLineOnnx();
+                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
+                        break;
+                    }
                 case Helper.ImplementMode.DiffCPU:
                 case Helper.ImplementMode.DiffCUDA:
-                {
-                    cmdline += GetCommandLineDiffCuda();
-                    Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
-                    break;
-                }
+                    {
+                        cmdline += GetCommandLineDiffCuda();
+                        Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
+                        break;
+                    }
             }
 
             if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != TryPrompt.Text)
@@ -329,7 +330,7 @@ namespace SD_FXUI
                 CPUUse = true;
 
                 cbSampler.Items.Clear();
-                foreach(string Name in Schedulers.Diffusers)
+                foreach (string Name in Schedulers.Diffusers)
                 {
                     cbSampler.Items.Add(Name);
                 }
@@ -457,6 +458,53 @@ namespace SD_FXUI
         private void cbGfpgan_SelectionChanged(object sender, RoutedEventArgs e)
         {
             Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
+        }
+
+        private void CheckOrInstallClip(object sender, RoutedEventArgs e)
+        {
+
+            string dirPath = FS.GetWorkingDir() + "/repo/" + PythonEnv.GetEnv(Helper.VENV.DiffCUDA) + "/Lib/site-packages/clip";
+
+            if (Directory.Exists(dirPath)
+                && Directory.GetFiles(dirPath).Length > 0) return;
+
+
+            Task.Run(() => CMD.InstallClip());
+
+        }
+
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+            if (null != e.Data && e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                //var data = e.Data.GetData(DataFormats.FileDrop) as string[];
+                // handle the files here!
+                imgView_Drop(sender, e);
+            }
+        }
+
+        private void imgView_Drop(object sender, DragEventArgs e)
+        {
+            // Note that you can have more than one file.
+            string dropedFile = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+            
+
+            if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
+            {
+                ViewImg.Source = new BitmapImage(new Uri(dropedFile));
+            }
+
+
+            // Assuming you have one file that you care about, pass it off to whatever
+            // handling code you have defined.
+
+
+        }
+
+        private void Button_Click_Clip(object sender, RoutedEventArgs e)
+        {
+            CheckOrInstallClip(sender, e);
+
         }
     }
 }
