@@ -7,6 +7,9 @@ namespace SD_FXUI
 {
     public partial class MainWindow
     {
+        // Temporary hack
+        int CurrentSelIdx = 0;
+
         public void SetPrompt(string Prompt) => TryPrompt.Text = Prompt;
         public void UpdateViewImg(string Img) => Dispatcher.Invoke(() => SetImg(Img));
         public void InvokeClearImages() => Dispatcher.Invoke(() => { InvokeClearImages(); });
@@ -208,7 +211,7 @@ namespace SD_FXUI
             });
 
             ListView1.ItemsSource = ListViewItemsCollections;
-            ListView1.SelectedIndex = 0;
+            CurrentSelIdx = ListViewItemsCollections.Count - 1;
             ImgList.Add(Img);
         }
 

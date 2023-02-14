@@ -57,6 +57,7 @@ namespace SD_FXUI
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            CurrentSelIdx = 0;
             System.IO.Directory.CreateDirectory(Helper.ImgPath);
 
             if (chRandom.IsChecked.Value)
@@ -343,6 +344,8 @@ namespace SD_FXUI
         {
             if (ImgList.Count > 0)
             {
+                CurrentSelIdx = ListView1.SelectedIndex;
+
                 ViewImg.Source = new BitmapImage(new Uri(ImgList[ListView1.SelectedIndex]));
 
                 string Name = FS.GetImagesDir() + "best\\" + System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
@@ -384,6 +387,17 @@ namespace SD_FXUI
                 imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
                 Helper.DrawMode = Helper.DrawingMode.Img2Img;
             }
+        }
+
+        private void btmToImg_Click(object sender, MouseButtonEventArgs e)
+        {
+            if(ImgList.Count <= 0)
+                return;
+
+            Helper.InputImagePath = ImgList[CurrentSelIdx];
+            gridImg.Visibility = Visibility.Visible;
+            imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
+            Helper.DrawMode = Helper.DrawingMode.Img2Img;
         }
 
         private void tbDenoising_TextChanged(object sender, TextChangedEventArgs e)
