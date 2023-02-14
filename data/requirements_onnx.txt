@@ -24,3 +24,5 @@ tf2onnx
 transformers-onnx
 accelerate
 gfpgan
+ftfy
+regex 

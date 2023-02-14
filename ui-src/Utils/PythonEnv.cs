@@ -97,5 +97,52 @@ namespace SD_FXUI
 
             return Any;
         }
+
+        public static string GetEnv(Helper.VENV Type)
+        {
+            switch (Type)
+            {
+                case Helper.VENV.DiffCUDA:
+                    {
+                        return "cuda.venv";
+                    }
+
+                case Helper.VENV.DiffONNX:
+                    {
+                        return "onnx.venv";
+                    }
+
+                case Helper.VENV.Shark:
+                    {
+                        return "shark.venv";
+                    }
+            }
+
+            string Any = "";
+            bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/shark.venv");
+
+            if (bDirCheck)
+            {
+                return GetPy(Helper.VENV.Shark);
+            }
+
+            bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
+
+            if (bDirCheck)
+            {
+                return GetPy(Helper.VENV.DiffONNX);
+            }
+
+            bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/cuda.venv");
+
+            if (bDirCheck)
+            {
+                return GetPy(Helper.VENV.DiffCUDA);
+            }
+
+            return Any;
+        }
+
+
     }
 }
