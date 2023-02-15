@@ -23,11 +23,11 @@ namespace SD_FXUI
 
         public enum ImplementMode
         {
-            InvokeAI,
-            Shark,
-            ONNX,
             DiffCUDA,
+            ONNX,
+            Shark,
             DiffCPU,
+            InvokeAI,
 
             IDK
         }
@@ -43,6 +43,7 @@ namespace SD_FXUI
             DiffCUDA,
             DiffONNX,
             Shark,
+            DiffCPU,
             Any
         }
 

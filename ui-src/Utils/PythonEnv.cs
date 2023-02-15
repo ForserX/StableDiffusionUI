@@ -17,6 +17,11 @@ namespace SD_FXUI
                     return "cuda.venv/Scripts/python.exe";
                 }
                     
+                case Helper.VENV.DiffCPU:
+                {
+                    return "onnx.venv/Scripts/python.exe";
+                }
+
                 case Helper.VENV.DiffONNX:
                 {
                     return "onnx.venv/Scripts/python.exe";
@@ -29,6 +34,17 @@ namespace SD_FXUI
             }
 
             string Any = "";
+            int CurModeIdx = (int)Helper.Mode;
+            if (CurModeIdx < 4)
+            {
+                Any = GetPy((Helper.VENV)CurModeIdx);
+
+                bool DirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + Any);
+
+                if (DirCheck)
+                    return Any;
+            }
+
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/shark.venv");
 
             if(bDirCheck)

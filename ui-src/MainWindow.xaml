@@ -80,6 +80,14 @@
                         </Button.Background>
                     </Button>
                     <Image x:Name="imgToImg" HorizontalAlignment="Right" Height="23" Margin="0,5,10,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png"/>
+                    <Button Content="Get tokens" HorizontalAlignment="Left" Margin="117,87,0,0" VerticalAlignment="Top" Width="96" Click="Button_Click_DeepDanbooru2"  Foreground="White" Height="23" Padding="10,1,10,1">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0">
+                                <GradientStop Color="#FF523876"/>
+                                <GradientStop Color="#FF4D12AF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
                 </Grid>
                 <Grid Height="95">
                     <Label Content="Neg prompt" Height="21" Width="95" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
@@ -164,14 +172,21 @@
         </ScrollViewer>
         <Image Source="/res/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Margin="45,0,503,31" Grid.Column="3" Height="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         <Image x:Name="btCmd" Source="/res/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Margin="0,0,549,32" HorizontalAlignment="Left" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="48" VerticalAlignment="Bottom"/>
-        <Image x:Name="btHistory" Source="/res/history.png" MouseLeftButtonDown="btHistory_Click" Margin="0,0,31,10" HorizontalAlignment="Right" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
+        <Image x:Name="btHistory" Source="/res/history.png" MouseLeftButtonDown="btHistory_Click" Margin="0,0,106,35" HorizontalAlignment="Right" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
         <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,43,112,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btmFavorClick"/>
         <Image x:Name="imgFavor" Source="/res/favor.png" />
         <Image x:Name="imgNotFavor" Source="/res/notfavor.png" />
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,99" VerticalAlignment="Bottom"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="0,4,407,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click"/>
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="0,4,497,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click"/>
-        <Button Grid.Column="3" Content="Interrogate DeepDanbooru" HorizontalAlignment="Left" Margin="320,546,0,0" VerticalAlignment="Top" Width="176" Click="Button_Click_DeepDanbooru"/>
+        <Button Grid.Column="3" Content="Get text tokens (DeepDanbooru)" HorizontalAlignment="Left" Margin="159,559,0,0" VerticalAlignment="Top" Width="196" Click="Button_Click_DeepDanbooru2"  Foreground="White">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="1,0">
+                    <GradientStop Color="#FF523876"/>
+                    <GradientStop Color="#FF4D12AF" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
         <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,77,112,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btmToImg_Click"/>
     </Grid>
 </hc:BlurWindow>

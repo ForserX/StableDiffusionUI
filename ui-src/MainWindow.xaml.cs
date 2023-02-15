@@ -462,27 +462,19 @@ namespace SD_FXUI
         {
             Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
         }
-        /*
-        private void CheckOrInstallClip(object sender, RoutedEventArgs e)
+
+        private void Button_Click_DeepDanbooru2(object sender, RoutedEventArgs e)
         {
-
-            string dirPath = FS.GetWorkingDir() + "/repo/" + PythonEnv.GetEnv(Helper.VENV.DiffCUDA) + "/Lib/site-packages/clip";
-
-            if (Directory.Exists(dirPath)
-                && Directory.GetFiles(dirPath).Length > 0) return;
-
-
-            Task.Run(() => CMD.InstallClip());
-
+           Task.Run(() => CMD.DeepDanbooruProcess(Helper.InputImagePath));
         }
-        */
-       
-    private void Button_Click_DeepDanbooru(object sender, RoutedEventArgs e)
+
+
+        private void Button_Click_DeepDanbooru(object sender, RoutedEventArgs e)
         {
-            if(currentImage != null && currentImage != "") Task.Run(() => CMD.DeepDanbooruProcess(currentImage));
+            if (currentImage != null && currentImage != "") Task.Run(() => CMD.DeepDanbooruProcess(currentImage));
         }
-    
-    private void Grid_Drop(object sender, DragEventArgs e)
+
+        private void Grid_Drop(object sender, DragEventArgs e)
         {
             if (null != e.Data && e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -496,7 +488,7 @@ namespace SD_FXUI
         {
             // Note that you can have more than one file.
             string dropedFile = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-            
+
 
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {

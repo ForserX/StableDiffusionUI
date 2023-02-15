@@ -63,36 +63,10 @@ namespace SD_FXUI
 
         static public void Print(string Message)
         {
-            if (Message.Contains("SD: Done"))
-            {
-                Wrapper.SendNotification(Message);
-                Helper.Form.InvokeUpdateModelsList();
-            }
-
-            if (Message.Contains("Traceback (most recent call last)"))
-            {
-                Helper.UIHost.Dispatcher.Invoke(()=> { Helper.UIHost.Show(); });
-                Wrapper.SendNotification("Error! See host for details!");
-            }
-
-            if (Message.Contains("SD: Model loaded"))
-            {
-                Helper.Form.InvokeProgressUpdate(20);
-            }
-            
-            if (Message.Contains("SD: Generating done"))
-            {
-                Helper.Form.InvokeProgressUpdate(60);
-            }
-            
-            if (Message.Contains("Image generate"))
-            {
-                Helper.Form.InvokeProgressApply();
-            }
-            if (Message.Contains("DeepDanBooru: Finished!"))
-            {
-                Helper.Form.InvokeSetPrompt(Message);
-            }
+            HostFilter.CheckTraceBack(Message);
+            HostFilter.CheckConvertState(Message);
+            HostFilter.CheckImageState(Message);
+            HostFilter.CheckDeepDanBooru(Message);
 
             Helper.UIHost.Print(Message);
         }
