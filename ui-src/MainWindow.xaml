@@ -35,14 +35,14 @@
         </Button>
         <Button x:Name="btnShark" Content="Shark(Vulkan)" Margin="0,4,239,0" VerticalAlignment="Top" Click="btnShark_Click" HorizontalAlignment="Right" Width="79" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
         <Button x:Name="btnONNX" Content="Diffusers(ONNX)" Margin="0,4,317,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
-        <ListView x:Name="ListView1" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,39,3,10" Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="95" Height="550" SelectionChanged="ListView1_SelectionChanged" Background="{x:Null}" BorderBrush="#8C7400AE">
+        <ListView x:Name="ListView1" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,39,3,56" Grid.Column="3" HorizontalAlignment="Right" Width="95" SelectionChanged="ListView1_SelectionChanged" Background="{x:Null}" BorderBrush="#8C7400AE">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
-                    <GridViewColumn x:Name="GridViewColumnName" Header=" "  Width="75">
+                    <GridViewColumn x:Name="GridViewColumnName" Header=" "  Width="70">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" CanVerticallyScroll="True">
-                                    <Image x:Name="Image_GridViewColumnName" Width="70" Height="50" Source="{Binding GridViewColumnName_ImageSource}" />
+                                    <Image x:Name="Image_GridViewColumnName" Width="60" Height="50" Source="{Binding GridViewColumnName_ImageSource}" />
                                     <Label Content="{Binding GridViewColumnName_ID}" Visibility="Hidden" />
                                 </StackPanel>
                             </DataTemplate>
@@ -188,5 +188,13 @@
             </Button.Background>
         </Button>
         <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,77,112,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btmToImg_Click"/>
+        <Button x:Name="btnBestOpen" Content="Open Best Collection!" Margin="0,0,3,0" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="152" Grid.Column="3" Foreground="White" Click="btnBestOpen_Click">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="1,0">
+                    <GradientStop Color="#FF523876"/>
+                    <GradientStop Color="#FF4D12AF" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
     </Grid>
 </hc:BlurWindow>

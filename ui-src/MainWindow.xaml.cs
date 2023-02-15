@@ -352,8 +352,8 @@ namespace SD_FXUI
             {
                 CurrentSelIdx = ListView1.SelectedIndex;
                 currentImage = (ImgList[ListView1.SelectedIndex]);
-                currentImage = currentImage.Replace("_upscale.", ".");
                 ViewImg.Source = new BitmapImage(new Uri(currentImage));
+                currentImage = currentImage.Replace("_upscale.", ".");
 
                 string Name = FS.GetImagesDir() + "best\\" + System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
 
@@ -471,18 +471,18 @@ namespace SD_FXUI
            Task.Run(() => CMD.DeepDanbooruProcess(Helper.InputImagePath));
         }
 
-
         private void Button_Click_DeepDanbooru(object sender, RoutedEventArgs e)
         {
-            if (currentImage != null && currentImage != "") Task.Run(() => CMD.DeepDanbooruProcess(currentImage));
+            if (currentImage != null && currentImage != "")
+            {
+                Task.Run(() => CMD.DeepDanbooruProcess(currentImage));
+            }
         }
 
         private void Grid_Drop(object sender, DragEventArgs e)
         {
             if (null != e.Data && e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                //var data = e.Data.GetData(DataFormats.FileDrop) as string[];
-                // handle the files here!
                 imgView_Drop(sender, e);
             }
         }
@@ -492,24 +492,22 @@ namespace SD_FXUI
             // Note that you can have more than one file.
             string dropedFile = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
 
-
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
                 currentImage = dropedFile;
                 ViewImg.Source = new BitmapImage(new Uri(dropedFile));
                 btnDDB.Visibility = Visibility.Visible;
             }
-
-
-            // Assuming you have one file that you care about, pass it off to whatever
-            // handling code you have defined.
-
-
         }
 
-        private void Button_Click_Send_to_Img2img(object sender, RoutedEventArgs e)
+        private void btnBestOpen_Click(object sender, RoutedEventArgs e)
         {
 
+            var Files = FS.GetFilesFrom(FS.GetImagesDir() + "\\best", new string[] { "png", "jpg" }, false);
+            foreach (string file in Files)
+            {
+                SetImg(file);
+            }
         }
     }
 }
