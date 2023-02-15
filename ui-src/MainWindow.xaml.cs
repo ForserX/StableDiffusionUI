@@ -400,12 +400,22 @@ namespace SD_FXUI
 
         private void btmToImg_Click(object sender, MouseButtonEventArgs e)
         {
-            if (ImgList.Count <= 0)
+            if (currentImage == null && ImgList.Count <= 0)
+            {
                 return;
-
-            Helper.InputImagePath = ImgList[CurrentSelIdx];
-            gridImg.Visibility = Visibility.Visible;
-            imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
+            }
+            else if (currentImage != null)
+            {
+                imgLoaded.Source = new BitmapImage(new Uri(currentImage));
+            }
+            else
+            {
+                imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
+                Helper.InputImagePath = ImgList[CurrentSelIdx];
+            }
+                
+            
+            gridImg.Visibility = Visibility.Visible;            
             Helper.DrawMode = Helper.DrawingMode.Img2Img;
         }
 
