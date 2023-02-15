@@ -20,3 +20,9 @@ dotnet_diagnostic.CS8625.severity = none
 
 # CS1998: В асинхронном методе отсутствуют операторы await, будет выполнен синхронный метод
 dotnet_diagnostic.CS1998.severity = none
+
+# IDE1006: Стили именования
+dotnet_diagnostic.IDE1006.severity = none
+
+# IDE0090: Используйте "new(...)".
+csharp_style_implicit_object_creation_when_type_is_apparent = false

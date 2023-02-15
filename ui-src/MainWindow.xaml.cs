@@ -77,6 +77,7 @@ namespace SD_FXUI
             string cmdline = "";
             bool SafeCPUFlag = CPUUse;
 
+#pragma warning disable CS4014
             switch (Helper.Mode)
             {
                 case Helper.ImplementMode.Shark:
@@ -100,6 +101,7 @@ namespace SD_FXUI
                     }
             }
 
+#pragma warning restore CS4014
             if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != TryPrompt.Text)
             {
                 Helper.PromHistory.Insert(0, TryPrompt.Text);
@@ -355,9 +357,9 @@ namespace SD_FXUI
                 ViewImg.Source = new BitmapImage(new Uri(currentImage));
                 currentImage = currentImage.Replace("_upscale.", ".");
 
-                string Name = FS.GetImagesDir() + "best\\" + System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
+                string Name = FS.GetImagesDir() + "best\\" + Path.GetFileName(ImgList[ListView1.SelectedIndex]);
 
-                if (System.IO.File.Exists(Name))
+                if (File.Exists(Name))
                 {
                     Helper.ActiveImageState = Helper.ImageState.Favor;
                     btnFavor.Source = imgFavor.Source;
@@ -440,16 +442,16 @@ namespace SD_FXUI
 
             if (Helper.ImageState.Favor == Helper.ActiveImageState)
             {
-                string Name = System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
-                System.IO.File.Delete(FS.GetImagesDir() + "best\\" + Name);
+                string Name = Path.GetFileName(ImgList[ListView1.SelectedIndex]);
+                File.Delete(FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Free;
 
                 btnFavor.Source = imgNotFavor.Source;
             }
             else
             {
-                string Name = System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
-                System.IO.File.Copy(ImgList[ListView1.SelectedIndex], FS.GetImagesDir() + "best\\" + Name);
+                string Name = Path.GetFileName(ImgList[ListView1.SelectedIndex]);
+                File.Copy(ImgList[ListView1.SelectedIndex], FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Favor;
 
                 btnFavor.Source = imgFavor.Source;
@@ -502,8 +504,12 @@ namespace SD_FXUI
 
         private void btnBestOpen_Click(object sender, RoutedEventArgs e)
         {
+            string Path = FS.GetImagesDir() + "\\best";
+            
+            if (!Directory.Exists(Path))
+                return;
 
-            var Files = FS.GetFilesFrom(FS.GetImagesDir() + "\\best", new string[] { "png", "jpg" }, false);
+            var Files = FS.GetFilesFrom(Path, new string[] { "png", "jpg" }, false);
             foreach (string file in Files)
             {
                 SetImg(file);
