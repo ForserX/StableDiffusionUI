@@ -32,11 +32,11 @@ namespace SD_FXUI
 
             switch (Data.Get("back_mode"))
             {
-                case "0": Helper.Mode = Helper.ImplementMode.InvokeAI; break;
-                case "1": btnShark_Click(0, new RoutedEventArgs()); break;
-                case "2": btnONNX_Click(0, new RoutedEventArgs()); break;
-                case "4": btnDiffCpu_Click(0, new RoutedEventArgs()); break;
-                case "3": btnDiffCuda_Click(0, new RoutedEventArgs()); break;
+                case "2": btnShark_Click(0, new RoutedEventArgs()); break;
+                case "1": btnONNX_Click(0, new RoutedEventArgs()); break;
+                case "3": btnDiffCpu_Click(0, new RoutedEventArgs()); break;
+                case "4": Helper.Mode = Helper.ImplementMode.InvokeAI; break;
+                case "0": btnDiffCuda_Click(0, new RoutedEventArgs()); break;
 
                 default: btnONNX_Click(0, new RoutedEventArgs()); break;
             }
@@ -215,6 +215,8 @@ namespace SD_FXUI
             ListView1.ItemsSource = ListViewItemsCollections;
             CurrentSelIdx = ListViewItemsCollections.Count - 1;
             ImgList.Add(Img);
+
+            btnDDB.Visibility = Visibility.Visible;
         }
 
         public void UpdateModelsList()

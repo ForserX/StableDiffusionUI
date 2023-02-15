@@ -56,13 +56,15 @@ namespace SD_FXUI
             ChangeTheme();
 
             gridImg.Visibility = Visibility.Collapsed;
+            btnDDB.Visibility = Visibility.Collapsed;
             NoImageData = ViewImg.Source;
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             CurrentSelIdx = 0;
-            System.IO.Directory.CreateDirectory(Helper.ImgPath);
+            Directory.CreateDirectory(Helper.ImgPath);
+            btnDDB.Visibility = Visibility.Collapsed;
 
             if (chRandom.IsChecked.Value)
             {
@@ -350,6 +352,7 @@ namespace SD_FXUI
             {
                 CurrentSelIdx = ListView1.SelectedIndex;
                 currentImage = (ImgList[ListView1.SelectedIndex]);
+                currentImage = currentImage.Replace("_upscale.", ".");
                 ViewImg.Source = new BitmapImage(new Uri(currentImage));
 
                 string Name = FS.GetImagesDir() + "best\\" + System.IO.Path.GetFileName(ImgList[ListView1.SelectedIndex]);
@@ -494,6 +497,7 @@ namespace SD_FXUI
             {
                 currentImage = dropedFile;
                 ViewImg.Source = new BitmapImage(new Uri(dropedFile));
+                btnDDB.Visibility = Visibility.Visible;
             }
 
 

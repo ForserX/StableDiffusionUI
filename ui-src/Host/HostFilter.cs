@@ -12,7 +12,12 @@ namespace SD_FXUI
         {
             if (Message.Contains("Traceback (most recent call last)"))
             {
-                Helper.UIHost.Dispatcher.Invoke(() => { Helper.UIHost.Show(); });
+                Helper.UIHost.Dispatcher.Invoke(() => 
+                { 
+                    Helper.UIHost.Hide(); 
+                    Helper.UIHost.Show(); 
+                });
+
                 Wrapper.SendNotification("Error! See host for details!");
             }
         }
@@ -54,6 +59,8 @@ namespace SD_FXUI
                 NewPrompt = NewPrompt.Replace("]", string.Empty);
                 NewPrompt = NewPrompt.Replace("DeepDanBooru: Finished!", string.Empty);
                 NewPrompt = NewPrompt.Replace("rating:safe", string.Empty);
+                NewPrompt = NewPrompt.Replace("rating:questionable", string.Empty);
+                NewPrompt = NewPrompt.Replace("rating:explicit", string.Empty);
 
                 //NewPrompt = NewPrompt.Substring(1, NewPrompt.Length - 2);
                 Helper.Form.InvokeSetPrompt(NewPrompt);

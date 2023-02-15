@@ -179,7 +179,7 @@
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,99" VerticalAlignment="Bottom"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="0,4,407,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click"/>
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="0,4,497,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click"/>
-        <Button Grid.Column="3" Content="Get text tokens (DeepDanbooru)" HorizontalAlignment="Left" Margin="159,559,0,0" VerticalAlignment="Top" Width="196" Click="Button_Click_DeepDanbooru"  Foreground="White">
+        <Button x:Name="btnDDB" Grid.Column="3" Content="Get text tokens (DeepDanbooru)" HorizontalAlignment="Left" Margin="159,559,0,0" VerticalAlignment="Top" Width="196" Click="Button_Click_DeepDanbooru"  Foreground="White">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
                     <GradientStop Color="#FF523876"/>
