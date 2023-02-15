@@ -1,4 +1,4 @@
-import os
+from asyncio.constants import DEBUG_STACK_DEPTH
 import re
 
 import torch
@@ -34,14 +34,28 @@ model.load_state_dict(torch.load(opt.model))
 
 
 model.eval()
-model.half()
-model.cuda()
+
+if torch.cuda.is_available(): 
+    device = "cuda"
+    dtype = torch.float16
+    ntype =np.float32
+else:
+    device = "cpu"
+    dtype = torch.float32
+    ntype = np.float16
+    
+model.to(torch.device(device), dtype)
+
 
 pic = Image.open(opt.img).convert("RGB").resize((512, 512))
-a = np.expand_dims(np.array(pic, dtype=np.float32), 0) / 255
+a = np.expand_dims(np.array(pic, dtype=ntype), 0) / 255
 
-with torch.no_grad(), torch.autocast("cuda"):
-    x = torch.from_numpy(a).cuda()
+with torch.no_grad():
+
+    if torch.cuda.is_available(): 
+        x = torch.from_numpy(a).cuda()
+    else:
+        x = torch.from_numpy(a).cpu()
 
     # first run
     y = model(x)[0].detach().cpu().numpy()
@@ -52,7 +66,7 @@ with torch.no_grad(), torch.autocast("cuda"):
 
 output = []
 for i, p in enumerate(y):
-    if p >= 0.5:        
+    if p >= 0.5:
         output.append(model.tags[i])
         
 print(output,"DeepDanBooru: Finished!")
