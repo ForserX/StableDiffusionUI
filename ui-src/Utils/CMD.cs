@@ -63,7 +63,7 @@ namespace SD_FXUI
             }
 
             Directory.CreateDirectory(OutPath);
-            
+
             if (emaOnly)
             {
                 AddCmd += " --extract_ema";
@@ -110,7 +110,7 @@ namespace SD_FXUI
 
             Directory.CreateDirectory(OutPath);
 
-            ProcessHost.Start("\"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" + 
+            ProcessHost.Start("\"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
                                                                             $" --model_path=\"{InputFile}\"");
 
             ProcessHost.SendExitCommand();
@@ -251,7 +251,7 @@ namespace SD_FXUI
                         DopCmd += " -n realesrgan-x4plus -v ";
                         break;
                     }
-                    
+
                 case Helper.UpscalerType.ESRGAN_NET:
                     {
                         FileName += @"\realesrgan\realesrgan-ncnn-vulkan.exe";
@@ -309,7 +309,7 @@ namespace SD_FXUI
         }
 
 
-        public static async Task ProcessConvertVaePt2Diff (string InputFile)
+        public static async Task ProcessConvertVaePt2Diff(string InputFile)
         {
             Wrapper.SendNotification("Convertation: ~few seconds");
             string WorkDir = FS.GetModelDir() + "vae\\";
@@ -318,7 +318,7 @@ namespace SD_FXUI
 
 
             string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
-            
+
             string OutPath = WorkDir + Name;
             OutPath = OutPath.Replace("\\", "/");
             InputFile = InputFile.Replace("\\", "/");
@@ -326,7 +326,7 @@ namespace SD_FXUI
             Directory.CreateDirectory(OutPath);
 
             ProcessHost.Start("\"../../repo/diffusion_scripts/convert_vae_pt_to_diffusers.py\" " + $"--vae_pt_path=\"{InputFile}\"" +
-                                                                            $" --dump_path=\"{OutPath+"/vae"}\"");
+                                                                            $" --dump_path=\"{OutPath + "/vae"}\"");
 
             ProcessHost.SendExitCommand();
             ProcessHost.Wait();
@@ -388,14 +388,27 @@ namespace SD_FXUI
 
         public static async Task DeepDanbooruProcess(string currentImage)
         {
-            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffCUDA));
-            Host.Print("\n Processing DeepDanbooru.... \n");            
-            ProcessHost.Start($"repo/diffusion_scripts/danbooru.py --img=\"{currentImage}\" --model=\"{FS.GetModelDir()}deepdanbooru/model-resnet_custom_v3.pt\"  ");
+            string DDBModel = FS.GetModelDir() + "deepdanbooru\\model-resnet_custom_v3.pt";
+            if (!File.Exists(DDBModel))
+            {
+                Wrapper.SendNotification("Starting downloading deepdanbooru model...");
+                Directory.CreateDirectory(FS.GetModelDir() + "deepdanbooru\\");
+
+                Host ProcessWGet = new Host(FS.GetModelDir() + "deepdanbooru\\", FS.GetToolsDir() + "wget.exe");
+                ProcessWGet.Start("https://github.com/AUTOMATIC1111/TorchDeepDanbooru/releases/download/v1/model-resnet_custom_v3.pt");
+                ProcessWGet.SendExitCommand();
+                ProcessWGet.Wait();
+                Wrapper.SendNotification("Downloading deepdanbooru model: done!");
+            }
+
+            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
+            Host.Print("\n Processing DeepDanbooru.... \n");
+            ProcessHost.Start($"repo/diffusion_scripts/danbooru.py --img=\"{currentImage}\" --model=\"{DDBModel}\"  ");
             Helper.Form.InvokeProgressUpdate(10);
             ProcessHost.SendExitCommand();
             ProcessHost.Wait();
-            
-           
+
+
 
             Host.Print("\n Processing DeepDanbooru: Done..... \n");
             Wrapper.SendNotification("Processing DeepDanbooru: Done!");
