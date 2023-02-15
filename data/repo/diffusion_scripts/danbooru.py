@@ -1,4 +1,3 @@
-from asyncio.constants import DEBUG_STACK_DEPTH
 import re
 
 import torch
@@ -9,7 +8,6 @@ import tqdm
 import danbooru_model
 
 re_special = re.compile(r'([\\()])')
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -31,8 +29,6 @@ model = danbooru_model.DeepDanbooruModel()
 print(opt.model)
 
 model.load_state_dict(torch.load(opt.model))
-
-
 model.eval()
 
 if torch.cuda.is_available(): 
@@ -45,7 +41,6 @@ else:
     ntype = np.float16
     
 model.to(torch.device(device), dtype)
-
 
 pic = Image.open(opt.img).convert("RGB").resize((512, 512))
 a = np.expand_dims(np.array(pic, dtype=ntype), 0) / 255
@@ -70,5 +65,3 @@ for i, p in enumerate(y):
         output.append(model.tags[i])
         
 print(output,"DeepDanBooru: Finished!")
-#processed = model.tag(pic)
-#print(processed)
