@@ -49,11 +49,11 @@ namespace SD_FXUI
             if (Message.Contains("DeepDanBooru: Finished!"))
             {
                 string NewPrompt = Message;
-                NewPrompt = NewPrompt.Replace('\'', '\0');
-                NewPrompt = NewPrompt.Replace('[', '\0');
-                NewPrompt = NewPrompt.Replace(']', '\0');
-                NewPrompt = NewPrompt.Replace("DeepDanBooru: Finished!", "\0");
-                NewPrompt = NewPrompt.Replace("rating:safe", "\0");
+                NewPrompt = NewPrompt.Replace("\'", string.Empty);
+                NewPrompt = NewPrompt.Replace("[", string.Empty);
+                NewPrompt = NewPrompt.Replace("]", string.Empty);
+                NewPrompt = NewPrompt.Replace("DeepDanBooru: Finished!", string.Empty);
+                NewPrompt = NewPrompt.Replace("rating:safe", string.Empty);
 
                 //NewPrompt = NewPrompt.Substring(1, NewPrompt.Length - 2);
                 Helper.Form.InvokeSetPrompt(NewPrompt);
