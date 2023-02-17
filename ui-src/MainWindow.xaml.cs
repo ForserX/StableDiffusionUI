@@ -410,8 +410,8 @@ namespace SD_FXUI
             }
             else
             {
-                imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
                 Helper.InputImagePath = ImgList[CurrentSelIdx];
+                imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
             }
                 
             
