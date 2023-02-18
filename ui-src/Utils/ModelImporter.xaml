@@ -24,7 +24,7 @@
         <Label Content="From" HorizontalAlignment="Right" Margin="0,5,123,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,1,1,1"/>
         <Label Content="To" HorizontalAlignment="Right" Margin="0,40,123,0" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,1,1,1" VerticalAlignment="Top"/>
         <CheckBox x:Name="chBoxEmaOnly" Content="extract ema only" HorizontalAlignment="Left" Margin="125,0,0,6" VerticalAlignment="Bottom"/>
-        <TextBox x:Name="cbPath" Margin="5,5,155,0" TextWrapping="Wrap" Text="Set your dir/url" VerticalAlignment="Top" Height="57" DragEnter="cbPath_DragEnter" DragLeave="cbPath_DragLeave" AllowDrop="True" Opacity="1.0"/>
+        <TextBox x:Name="cbPath" Margin="5,5,155,0" TextWrapping="Wrap" Text="Set your dir/url" VerticalAlignment="Top" Height="57" DragEnter="cbPath_DragEnter" DragLeave="cbPath_DragLeave" AllowDrop="True" Opacity="1.0" LostFocus="cbPathLost" GotFocus="cbPathSet"/>
         <Image x:Name="imgPreview" Margin="8,67,202,0" AllowDrop="True" DragEnter="cbPath_DragEnter" DragLeave="cbPath_DragLeave" Source="/res/dropFiles.jpg" Height="67" VerticalAlignment="Top"/>
 
     </Grid>

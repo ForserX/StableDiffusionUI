@@ -206,6 +206,16 @@ namespace SD_FXUI.Utils
             }
         }
 
+        private void cbPathLost(object sender, RoutedEventArgs e)
+        {
+            if (cbPath.Text == "")
+                cbPath.Text = "Set your dir/url";
+        }
 
+        private void cbPathSet(object sender, RoutedEventArgs e)
+        {
+            if (cbPath.Text == "Set your dir/url")
+                cbPath.Text = "";
+        }
     }
 }
