@@ -110,6 +110,25 @@ namespace SD_FXUI
             return Models;
         }
 
+        public static bool HasExt(string File, string[] Formats)
+        {
+            foreach (string Format in Formats)
+            {
+                if (File.EndsWith(Format))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool IsDirectory(string Path)
+        {
+            FileAttributes attr = File.GetAttributes(Path);
+            return (attr.HasFlag(FileAttributes.Directory));
+        }
+
         internal class Dir
         {
             static public void Delete(string Name, bool Recursive)

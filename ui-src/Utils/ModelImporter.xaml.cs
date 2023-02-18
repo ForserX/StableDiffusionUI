@@ -146,7 +146,11 @@ namespace SD_FXUI.Utils
             // Assuming you have one file that you care about, pass it off to whatever
             // handling code you have defined.
 
-
+            if (!FS.HasExt(cbPath.Text, new string[] { ".pt", ".ckpt", ".safetensors" }) && !FS.IsDirectory(cbPath.Text)) 
+            {
+                cbPath.Text = "";
+                Wrapper.MsgBox("Incorrect file!");
+            }
 
             if (cbPath.Text.EndsWith("vae-ft-mse-840000-ema-pruned.ckpt"))
             {
