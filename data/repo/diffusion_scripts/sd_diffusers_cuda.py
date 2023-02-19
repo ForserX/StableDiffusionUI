@@ -184,16 +184,16 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_pat
     if opt.mode == "img2img":
         print("img2img", flush=True)
         # Opt image
-        img=Image.open(init_img_path).convert("RGB")
-        size = width, height
-        img.thumbnail(size, Image.Resampling.LANCZOS)
+        img=Image.open(init_img_path).convert("RGB").resize((width, height))
         
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {init_strength}')
     if opt.mode == "inpaint":
         print("inpaint", flush=True)
-        img=Image.open(init_img_path).convert("RGB")
-        mask=Image.open(mask_img_path).convert("RGB")
+
+        img=Image.open(init_img_path).convert("RGB").resize((width, height))
+        mask=Image.open(mask_img_path).convert("RGB").resize((width, height))
+
         image=pipe(prompt=prompt, image=img, mask_image = mask, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f 0.0 -M {mask_img_path}')
 
