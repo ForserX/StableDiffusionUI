@@ -1,8 +1,9 @@
 # StableDiffusionUI Shark AMD and Nvidia
 ### What is it
 Simple re-implement SD UI for AMD and Nvidia GPU 
-![image](https://user-images.githubusercontent.com/13867290/216797865-6303b710-84dd-4812-8d26-fbe6c8b3cd19.png)
+![image](https://user-images.githubusercontent.com/17796364/219934822-4b75e15b-b5d8-44d7-8f0b-bfedd172659f.png)
 ![image](https://user-images.githubusercontent.com/13867290/216797870-3f05fd70-41b0-41e5-b9ea-e7f41f294b65.png)
+
 
 * Shark (AMD: Vulkan + MRIL/IREE)
 * Diffuser ONNX (AMD: DirectML/DirectX 12)
