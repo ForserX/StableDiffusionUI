@@ -137,7 +137,7 @@ if len(sys.argv)==1:
     parser.exit()
 
 opt = parser.parse_args()
-eta = opt.eta
+eta = 0
 prov = "DmlExecutionProvider"
 NSFW = None
 
@@ -162,6 +162,7 @@ if opt.mode == "inpaint":
 
 if opt.scmode == "EulerAncestralDiscrete":
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
+    eta = opt.eta
 if opt.scmode == "EulerDiscrete":
     pipe.scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config)
 if opt.scmode == "PNDM":
