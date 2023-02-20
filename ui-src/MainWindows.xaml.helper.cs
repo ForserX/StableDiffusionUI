@@ -1,5 +1,6 @@
 ﻿using HandyControl.Data;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -131,6 +132,12 @@ namespace SD_FXUI
             if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
                 CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale=0.{tbDenoising.Text}";
+
+                if (!File.Exists(Helper.InputImagePath))
+                {
+                    Wrapper.MsgBox("Incorrect image path!");
+                    CmdLine = "";
+                }
             }
 
             return CmdLine;
@@ -174,6 +181,12 @@ namespace SD_FXUI
             if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
                 CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale=0.{tbDenoising.Text}";
+
+                if (!File.Exists(Helper.InputImagePath))
+                {
+                    Wrapper.MsgBox("Incorrect image path!");
+                    CmdLine = "";
+                }
             }
 
             return CmdLine;
