@@ -26,3 +26,6 @@ dotnet_diagnostic.IDE1006.severity = none
 
 # IDE0090: Используйте "new(...)".
 csharp_style_implicit_object_creation_when_type_is_apparent = false
+
+# CS8604: Возможно, аргумент-ссылка, допускающий значение NULL.
+dotnet_diagnostic.CS8604.severity = none

@@ -33,12 +33,18 @@ namespace SD_FXUI.Utils
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (lbHistory == null)
+                return;
+
             Helper.Form.SetPrompt(lbHistory.SelectedItem.ToString());
             this.Close();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            if (lbHistory == null)
+                return;
+
             if (lbHistory.SelectedItem != null)
             {
                 Helper.PromHistory.Remove(lbHistory.SelectedItem.ToString());
@@ -48,6 +54,9 @@ namespace SD_FXUI.Utils
 
         private new void KeyDown(object sender, KeyEventArgs e)
         {
+            if (lbHistory == null)
+                return;
+
             if (lbHistory.SelectedItem == null)
                 return;
 

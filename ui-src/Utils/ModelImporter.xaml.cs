@@ -14,10 +14,6 @@ namespace SD_FXUI.Utils
 
             cbFrom.SelectedIndex = 0;
             cbTo.SelectedIndex = 0;
-
-            //System.Threading.Timer timer = new System.Threading.Timer(timerTick, new AutoResetEvent(false), 1000, 250);
-
-            
         }
                
         private void HuggCast()

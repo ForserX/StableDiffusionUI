@@ -27,8 +27,8 @@ namespace SD_FXUI
 
         public class ListViewItemsData
         {
-            public string GridViewColumnName_ImageSource { get; set; }
-            public string GridViewColumnName_ID { get; set; }
+            public string? GridViewColumnName_ImageSource { get; set; }
+            public string? GridViewColumnName_ID { get; set; }
         }
 
         bool CPUUse = false;
