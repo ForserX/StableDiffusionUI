@@ -12,6 +12,9 @@ os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser()
 
+eta = 0.0
+
+
 parser.add_argument(
     "--model",
     type=str,
@@ -167,24 +170,34 @@ pipe.to(opt.device)
 
 if opt.scmode == "EulerAncestralDiscrete":
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
+    eta = opt.eta
+
 if opt.scmode == "EulerDiscrete":
     pipe.scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config)
+    
 if opt.scmode == "PNDM":
     pipe.scheduler = PNDMScheduler.from_config(pipe.scheduler.config)
+    
 if opt.scmode == "DDIM":
     pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+    
 if opt.scmode == "DPMSolverMultistep":
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+    
 if opt.scmode == "LMSDiscrete":
     pipe.scheduler = LMSDiscreteScheduler.from_config(pipe.scheduler.config)
+    
 if opt.scmode == "DDPM":
     pipe.scheduler = DDPMScheduler.from_config(pipe.scheduler.config)
+    
 if opt.scmode == "DPMDiscrete":
     pipe.scheduler = KDPM2DiscreteScheduler.from_config(pipe.scheduler.config)
+    
 if opt.scmode == "HeunDiscrete":
     pipe.scheduler = HeunDiscreteScheduler.from_config(pipe.scheduler.config)
+    
 
-def generate(prompt, prompt_neg, steps, width, height, seed, scale, eta = 0.0, init_img_path = None, init_strength = 0.75, mask_img_path = None):
+def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_path = None, init_strength = 0.75, mask_img_path = None):
     start_time = time.time()
     
     seed = int(seed)
@@ -223,7 +236,7 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, eta = 0.0, i
 print("SD: Model loaded")
 
 for i in range(opt.totalcount):
-    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.eta , opt.img , opt.imgscale, "")
+    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, "")
     opt.seed = opt.seed + 1
     
 print("SD: Generating done!")

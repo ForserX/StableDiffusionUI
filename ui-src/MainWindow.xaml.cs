@@ -406,7 +406,8 @@ namespace SD_FXUI
             }
             else if (currentImage != null)
             {
-                imgLoaded.Source = new BitmapImage(new Uri(currentImage));
+                Helper.InputImagePath = currentImage;
+                imgLoaded.Source = new BitmapImage(new Uri(currentImage));               
             }
             else
             {

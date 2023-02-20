@@ -117,7 +117,7 @@ namespace SD_FXUI
             }
             float ETA = float.Parse(tbETA.Text);
             ETA /= 100;
-
+            string newETA = ETA.ToString().Replace(",", ".");
             string CmdLine = $""
                     + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
@@ -127,7 +127,7 @@ namespace SD_FXUI
                     + $" --scmode={cbSampler.Text}"
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"
-                    + $" --eta={ETA}"
+                    + $" --eta={newETA}"
                     + $" --totalcount={tbTotalCount.Text}"
                     + $" --model=\"{Model}\""
                     + $" --vae=\"{VAE}\""
@@ -144,7 +144,8 @@ namespace SD_FXUI
                 float Denoising = float.Parse(tbDenoising.Text);
                 Denoising /= 100;
 
-                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={Denoising}";
+                string newDenoising = Denoising.ToString().Replace(",", ".");
+                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
 
                 if (!File.Exists(Helper.InputImagePath))
                 {
@@ -174,6 +175,8 @@ namespace SD_FXUI
             float ETA = float.Parse(tbETA.Text);
             ETA /= 100;
 
+            string newETA = ETA.ToString().Replace(",", ".");
+
             string CmdLine = $""
                     + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
@@ -183,7 +186,7 @@ namespace SD_FXUI
                     + $" --scmode={cbSampler.Text}"
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"
-                    + $" --eta={ETA}"
+                    + $" --eta={newETA}"
                     + $" --totalcount={tbTotalCount.Text}"
                     + $" --model=\"{Model}\""
                     + $" --vae=\"{VAE}\""
@@ -205,7 +208,9 @@ namespace SD_FXUI
                 float Denoising = float.Parse(tbDenoising.Text);
                 Denoising /= 100;
 
-                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={Denoising}";
+                string newDenoising = Denoising.ToString().Replace(",", ".");
+
+                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
 
                 if (!File.Exists(Helper.InputImagePath))
                 {
