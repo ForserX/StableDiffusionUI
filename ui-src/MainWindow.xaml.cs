@@ -529,13 +529,13 @@ namespace SD_FXUI
 
         private void slEMA_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (tbEMA != null)
-                tbEMA.Text = slEMA.Value.ToString();
+            if (tbETA != null)
+                tbETA.Text = slETA.Value.ToString();
         }
 
         private void tbEMA_TextChanged(object sender, TextChangedEventArgs e)
         {
-            slEMA.Value = float.Parse(tbEMA.Text.Replace('.', ','));
+            slETA.Value = float.Parse(tbETA.Text.Replace('.', ','));
         }
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
