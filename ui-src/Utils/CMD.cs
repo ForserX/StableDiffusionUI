@@ -41,7 +41,7 @@ namespace SD_FXUI
 
             Host.Print("\n  Extract task is done..... \n");
 
-            Wrapper.SendNotification("Convertation: ~3min!");
+            Notification.SendNotification("Convertation: ~3min!");
         }
         public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false)
         {
@@ -88,11 +88,11 @@ namespace SD_FXUI
 
             ProcessHost.SendExitCommand();
 
-            Wrapper.SendNotification("Convertation: ~5min!");
+            Notification.SendNotification("Convertation: ~5min!");
         }
         public static async Task ProcessConvertDiff2Onnx(string InputFile)
         {
-            Wrapper.SendNotification("Convertation: ~3min!");
+            Notification.SendNotification("Convertation: ~3min!");
             string WorkDir = FS.GetModelDir() + "onnx\\";
             Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
@@ -117,7 +117,7 @@ namespace SD_FXUI
             ProcessHost.Wait();
 
             Host.Print("\n  Extract task is done..... \n");
-            Wrapper.SendNotification("Convertation: done!");
+            Notification.SendNotification("Convertation: done!");
         }
 
         public static async Task ProcessRunnerOnnx(string command, int UpSize)
@@ -146,7 +146,7 @@ namespace SD_FXUI
             }
 
             Host.Print("\n  Task Done..... \n");
-            Wrapper.SendNotification("Task: done!");
+            Notification.SendNotification("Task: done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
         public static async Task ProcessRunnerDiffCuda(string command, int UpSize, bool IsCPU)
@@ -175,7 +175,7 @@ namespace SD_FXUI
             }
 
             Host.Print("\n  Task Done..... \n");
-            Wrapper.SendNotification("Task: done!");
+            Notification.SendNotification("Task: done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
         public static async Task ProcessRunnerShark(string command, int UpSize)
@@ -204,7 +204,7 @@ namespace SD_FXUI
             }
 
             Host.Print("\n  Task Done..... \n");
-            Wrapper.SendNotification("Task: done!");
+            Notification.SendNotification("Task: done!");
         }
 
 
@@ -311,7 +311,7 @@ namespace SD_FXUI
 
         public static async Task ProcessConvertVaePt2Diff(string InputFile)
         {
-            Wrapper.SendNotification("Convertation: ~few seconds");
+            Notification.SendNotification("Convertation: ~few seconds");
             string WorkDir = FS.GetModelDir() + "vae\\";
             Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print($"\n Startup convert vae ({InputFile})..... \n");
@@ -332,7 +332,7 @@ namespace SD_FXUI
             ProcessHost.Wait();
 
             Host.Print("\n  Convert task is done..... \n");
-            Wrapper.SendNotification("Convertation: done!");
+            Notification.SendNotification("Convertation: done!");
         }
 
         internal static void ProcessConvertVaePt2ONNX(string InputFile)
@@ -345,7 +345,7 @@ namespace SD_FXUI
                 InputFile = FS.GetModelDir() + "vae\\" + InputFile;
             }
 
-            Wrapper.SendNotification("Convertation: ~few seconds");
+            Notification.SendNotification("Convertation: ~few seconds");
             string WorkDir = FS.GetModelDir() + "vae\\";
             Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print($"\n Startup convert vae ({InputFile})..... \n");
@@ -366,7 +366,7 @@ namespace SD_FXUI
             ProcessHost.Wait();
 
             Host.Print("\n  Convert task is done..... \n");
-            Wrapper.SendNotification("Convertation: done!");
+            Notification.SendNotification("Convertation: done!");
         }
 
         /*
@@ -381,7 +381,7 @@ namespace SD_FXUI
             ProcessHost.Wait();
 
             Host.Print("\n  Installing CLIP Done..... \n");
-            Wrapper.SendNotification("Installing CLIP: done!");
+            Notification.SendNotification("Installing CLIP: done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
         */
@@ -391,14 +391,14 @@ namespace SD_FXUI
             string DDBModel = FS.GetModelDir() + "deepdanbooru\\model-resnet_custom_v3.pt";
             if (!File.Exists(DDBModel))
             {
-                Wrapper.SendNotification("Starting downloading deepdanbooru model...");
+                Notification.SendNotification("Starting downloading deepdanbooru model...");
                 Directory.CreateDirectory(FS.GetModelDir() + "deepdanbooru\\");
 
                 Host ProcessWGet = new Host(FS.GetModelDir() + "deepdanbooru\\", FS.GetToolsDir() + "wget.exe");
                 ProcessWGet.Start("https://github.com/AUTOMATIC1111/TorchDeepDanbooru/releases/download/v1/model-resnet_custom_v3.pt");
                 ProcessWGet.SendExitCommand();
                 ProcessWGet.Wait();
-                Wrapper.SendNotification("Downloading deepdanbooru model: done!");
+                Notification.SendNotification("Downloading deepdanbooru model: done!");
             }
 
             Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
@@ -411,7 +411,7 @@ namespace SD_FXUI
 
 
             Host.Print("\n Processing DeepDanbooru: Done..... \n");
-            Wrapper.SendNotification("Processing DeepDanbooru: Done!");
+            Notification.SendNotification("Processing DeepDanbooru: Done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
     }

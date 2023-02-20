@@ -20,7 +20,7 @@
         public static void CheckAndInstallCUDA()
         {
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/cuda.venv");
-            if (!bDirCheck && Wrapper.MsgBox("Need install packages for use CUDA"))
+            if (!bDirCheck && Notification.MsgBox("Need install packages for use CUDA"))
             {
                 Helper.UIHost.Show();
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
@@ -37,7 +37,7 @@
         public static void CheckAndInstallShark()
         {
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/shark.venv");
-            if (!bDirCheck && Wrapper.MsgBox("Need install packages for use Shark"))
+            if (!bDirCheck && Notification.MsgBox("Need install packages for use Shark"))
             {
                 Helper.UIHost.Show();
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
@@ -65,7 +65,7 @@
         public static void CheckAndInstallONNX()
         {
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
-            if (!bDirCheck && Wrapper.MsgBox("Need install packages for use ONNX"))
+            if (!bDirCheck && Notification.MsgBox("Need install packages for use ONNX"))
             {
                 Helper.UIHost.Show();
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);

@@ -149,7 +149,7 @@ namespace SD_FXUI.Utils
             if (!FS.HasExt(cbPath.Text, new string[] { ".pt", ".ckpt", ".safetensors" }) && !FS.IsDirectory(cbPath.Text)) 
             {
                 cbPath.Text = "";
-                Wrapper.MsgBox("Incorrect file!");
+                Notification.MsgBox("Incorrect file!");
             }
 
             if (cbPath.Text.EndsWith("vae-ft-mse-840000-ema-pruned.ckpt"))

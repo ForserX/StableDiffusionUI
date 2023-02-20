@@ -136,7 +136,7 @@ namespace SD_FXUI
 
                 if (!File.Exists(Helper.InputImagePath))
                 {
-                    Wrapper.MsgBox("Incorrect image path!");
+                    Notification.MsgBox("Incorrect image path!");
                     CmdLine = "";
                 }
             }
@@ -186,7 +186,7 @@ namespace SD_FXUI
 
                 if (!File.Exists(Helper.InputImagePath))
                 {
-                    Wrapper.MsgBox("Incorrect image path!");
+                    Notification.MsgBox("Incorrect image path!");
                     CmdLine = "";
                 }
             }

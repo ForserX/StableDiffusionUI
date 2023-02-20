@@ -18,7 +18,7 @@ namespace SD_FXUI
                     Helper.UIHost.Show(); 
                 });
 
-                Wrapper.SendNotification("Error! See host for details!");
+                Notification.SendNotification("Error! See host for details!");
             }
         }
 
@@ -26,7 +26,7 @@ namespace SD_FXUI
         {
             if (Message.Contains("SD: Done"))
             {
-                Wrapper.SendNotification(Message);
+                Notification.SendNotification(Message);
                 Helper.Form.InvokeUpdateModelsList();
             }
         }
