@@ -126,12 +126,19 @@ parser.add_argument(
     dest='vae',
 )
 
+parser.add_argument(
+    "--eta",
+    help="Eta",
+    dest='eta',
+    default=0.0,
+)
+
 if len(sys.argv)==1:
     parser.print_help()
     parser.exit()
 
 opt = parser.parse_args()
-eta = 0.0
+
 
 if opt.vae == "default":
     vae = AutoencoderKL.from_pretrained(opt.mdlpath + "/vae")
@@ -166,7 +173,7 @@ if opt.scmode == "DPMDiscrete":
 if opt.scmode == "HeunDiscrete":
     pipe.scheduler = HeunDiscreteScheduler.from_config(pipe.scheduler.config)
 
-def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_path = None, init_strength = 0.75, mask_img_path = None):
+def generate(prompt, prompt_neg, steps, width, height, seed, scale, eta = 0.0, init_img_path = None, init_strength = 0.75, mask_img_path = None):
     start_time = time.time()
     
     seed = int(seed)
@@ -205,7 +212,7 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_pat
 print("SD: Model loaded")
 
 for i in range(opt.totalcount):
-    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, "")
+    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.eta , opt.img , opt.imgscale, "")
     opt.seed = opt.seed + 1
     
 print("SD: Generating done!")
