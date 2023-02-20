@@ -121,13 +121,6 @@
                         <ComboBoxItem Content="1024"/>
                     </ComboBox>
                     <hc:ComboBox x:Name="cbSampler" Height="22" Style="{StaticResource ComboBoxExtend}" Margin="61,4,139,0" VerticalAlignment="Top">
-                        <ComboBoxItem Content="DDIM"                    />
-                        <ComboBoxItem Content="EulerDiscrete"           />
-                        <ComboBoxItem Content="EulerAncestralDiscrete"  />
-                        <ComboBoxItem Content="DPMSolverMultistep"      />
-                        <ComboBoxItem Content="PNDM"                    />
-                        <ComboBoxItem Content="LMSDiscrete"             />
-                        <ComboBoxItem Content="SharkEulerDiscrete"      />
                     </hc:ComboBox>
                     <Label Content="Seed" Height="30" Width="31" BorderBrush="{x:Null}" Background="{x:Null}" HorizontalAlignment="Left" Margin="237,4,0,0" VerticalAlignment="Top" Padding="1,6,1,6"/>
                     <TextBox x:Name="tbSeed" TextWrapping="Wrap" Text="-1" Height="18" IsEnabled="False" Margin="237,39,6,0" VerticalAlignment="Top"/>
@@ -161,8 +154,6 @@
                         </Button.Background>
                     </Button>
                     <ComboBox  x:Name="cbDevice" Height="22" Text="vulkan" SelectionChanged="cbDevice_SelectionChanged" Margin="50,107,166,0" VerticalAlignment="Top">
-                        <ComboBoxItem Content="vulkan"/>
-                        <ComboBoxItem Content="cuda"/>
                     </ComboBox>
                     <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="202,44,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
                     <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,107,0,0" VerticalAlignment="Top"/>
