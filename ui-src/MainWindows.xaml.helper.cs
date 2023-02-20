@@ -115,6 +115,8 @@ namespace SD_FXUI
                     VAE = FS.GetModelDir() + "onnx\\" + cbVAE.Text.ToLower();
                 }
             }
+            float ETA = float.Parse(tbETA.Text);
+            ETA /= 100;
 
             string CmdLine = $""
                     + $" --prompt=\"{TryPrompt.Text}\""
@@ -125,7 +127,7 @@ namespace SD_FXUI
                     + $" --scmode={cbSampler.Text}"
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"
-                    + $" --eta=0.{tbETA.Text}"
+                    + $" --eta={ETA}"
                     + $" --totalcount={tbTotalCount.Text}"
                     + $" --model=\"{Model}\""
                     + $" --vae=\"{VAE}\""
@@ -139,7 +141,10 @@ namespace SD_FXUI
 
             if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
-                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale=0.{tbDenoising.Text}";
+                float Denoising = float.Parse(tbDenoising.Text);
+                Denoising /= 100;
+
+                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={Denoising}";
 
                 if (!File.Exists(Helper.InputImagePath))
                 {
@@ -166,6 +171,9 @@ namespace SD_FXUI
                 }
             }
 
+            float ETA = float.Parse(tbETA.Text);
+            ETA /= 100;
+
             string CmdLine = $""
                     + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
@@ -175,7 +183,7 @@ namespace SD_FXUI
                     + $" --scmode={cbSampler.Text}"
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"
-                    + $" --eta=0.{tbETA.Text}"
+                    + $" --eta={ETA}"
                     + $" --totalcount={tbTotalCount.Text}"
                     + $" --model=\"{Model}\""
                     + $" --vae=\"{VAE}\""
@@ -194,7 +202,10 @@ namespace SD_FXUI
 
             if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
-                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale=0.{tbDenoising.Text}";
+                float Denoising = float.Parse(tbDenoising.Text);
+                Denoising /= 100;
+
+                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={Denoising}";
 
                 if (!File.Exists(Helper.InputImagePath))
                 {
