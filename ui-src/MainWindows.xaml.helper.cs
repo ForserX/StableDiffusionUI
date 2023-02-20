@@ -23,6 +23,7 @@ namespace SD_FXUI
         {
             cbFf16.IsChecked = Data.Get("fp16") == "true";
             cbGfpgan.IsChecked = Data.Get("cbGfpgan") == "true";
+            cbNSFW.IsChecked = Data.Get("cbNSFW") == "true";
             cbY.Text = Data.Get("height");
             cbX.Text = Data.Get("width");
             NegPrompt.Text = Data.Get("neg");
@@ -73,6 +74,7 @@ namespace SD_FXUI
         {
             Data.Set("fp16", cbFf16.IsChecked == true ? "true" : "false");
             Data.Set("cbGfpgan", cbGfpgan.IsChecked == true ? "true" : "false");
+            Data.Set("cbNSFW", cbNSFW.IsChecked == true ? "true" : "false");
             Data.Set("height", cbY.Text);
             Data.Set("width", cbX.Text);
             Data.Set("neg", NegPrompt.Text);
@@ -130,6 +132,11 @@ namespace SD_FXUI
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
             ;
 
+            if (cbNSFW.IsChecked.Value)
+            {
+                CmdLine += " --nsfw=True";
+            }
+
             if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
                 CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale=0.{tbDenoising.Text}";
@@ -175,7 +182,12 @@ namespace SD_FXUI
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
             ;
 
-            if(CPUUse)
+            if (cbNSFW.IsChecked.Value)
+            {
+                CmdLine += " --nsfw=True";
+            }
+
+            if (CPUUse)
             {
                 CmdLine += " --device=\"cpu\"";
             }

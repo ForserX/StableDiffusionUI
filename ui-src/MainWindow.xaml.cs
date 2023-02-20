@@ -24,7 +24,6 @@ namespace SD_FXUI
         ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
         string currentImage = null;
 
-
         public class ListViewItemsData
         {
             public string? GridViewColumnName_ImageSource { get; set; }

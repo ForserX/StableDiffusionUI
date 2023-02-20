@@ -133,12 +133,23 @@ parser.add_argument(
     default=1.0,
 )
 
+parser.add_argument(
+    "--nsfw",
+    help="nsfw checker",
+    dest='nsfw',
+    default=False,
+)
+
 if len(sys.argv)==1:
     parser.print_help()
     parser.exit()
 
 opt = parser.parse_args()
 
+NSFW = None
+
+if opt.nsfw:
+    NSFW = StableDiffusionSafetyChecker.from_pretrained(opt.mdlpath + "/safety_checker")
 
 if opt.vae == "default":
     vae = AutoencoderKL.from_pretrained(opt.mdlpath + "/vae")
@@ -146,11 +157,11 @@ else:
     vae = AutoencoderKL.from_pretrained(opt.vae + "/vae")
 
 if opt.mode == "txt2img":
-    pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=None)
+    pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=NSFW)
 if opt.mode == "img2img":
-    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=None)
+    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=NSFW)
 if opt.mode == "inpaint":
-    pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=None)
+    pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=NSFW)
 
 pipe.to(opt.device)
 

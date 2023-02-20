@@ -125,6 +125,13 @@ parser.add_argument(
     default=1.0,
 )
 
+parser.add_argument(
+    "--nsfw",
+    help="nsfw checker",
+    dest='nsfw',
+    default=False,
+)
+
 if len(sys.argv)==1:
     parser.print_help()
     parser.exit()
@@ -132,7 +139,11 @@ if len(sys.argv)==1:
 opt = parser.parse_args()
 eta = opt.eta
 prov = "DmlExecutionProvider"
-    
+NSFW = None
+
+if opt.nsfw:
+    NSFW = OnnxRuntimeModel.from_pretrained(opt.mdlpath + "/safety_checker", provider=prov)
+
 if opt.vae == "default":
     cpuvae = OnnxRuntimeModel.from_pretrained(opt.mdlpath + "/vae_decoder", provider=prov)
 else:
@@ -141,12 +152,13 @@ else:
 # TextEnc moved to CPUs
 cputextenc = OnnxRuntimeModel.from_pretrained(opt.mdlpath+"/text_encoder", provider="CPUExecutionProvider")
 
+
 if opt.mode == "txt2img":
-    pipe = OnnxStableDiffusionPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, safety_checker=None)
+    pipe = OnnxStableDiffusionPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, safety_checker=NSFW)
 if opt.mode == "img2img":
-    pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, safety_checker=None)
+    pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, safety_checker=NSFW)
 if opt.mode == "inpaint":
-    pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, safety_checker=None)
+    pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, safety_checker=NSFW)
 
 if opt.scmode == "EulerAncestralDiscrete":
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
