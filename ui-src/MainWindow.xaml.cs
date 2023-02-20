@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -413,9 +414,9 @@ namespace SD_FXUI
                 Helper.InputImagePath = ImgList[CurrentSelIdx];
                 imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
             }
-                
-            
-            gridImg.Visibility = Visibility.Visible;            
+
+
+            gridImg.Visibility = Visibility.Visible;
             Helper.DrawMode = Helper.DrawingMode.Img2Img;
         }
 
@@ -480,7 +481,7 @@ namespace SD_FXUI
 
         private void Button_Click_DeepDanbooru2(object sender, RoutedEventArgs e)
         {
-           Task.Run(() => CMD.DeepDanbooruProcess(Helper.InputImagePath));
+            Task.Run(() => CMD.DeepDanbooruProcess(Helper.InputImagePath));
         }
 
         private void Button_Click_DeepDanbooru(object sender, RoutedEventArgs e)
@@ -515,7 +516,7 @@ namespace SD_FXUI
         private void btnBestOpen_Click(object sender, RoutedEventArgs e)
         {
             string Path = FS.GetImagesDir() + "\\best";
-            
+
             if (!Directory.Exists(Path))
                 return;
 
@@ -524,6 +525,22 @@ namespace SD_FXUI
             {
                 SetImg(file);
             }
+        }
+
+        private void slEMA_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (tbEMA != null)
+                tbEMA.Text = slEMA.Value.ToString();
+        }
+
+        private void tbEMA_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            slEMA.Value = float.Parse(tbEMA.Text.Replace('.', ','));
+        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

@@ -57,7 +57,7 @@
                     <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1"/>
                     <TextBox x:Name="TryPrompt" TextWrapping="Wrap" Text="" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Margin="5,27,6,4"/>
                     <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-14,8,0,0"/>
-                    <Button x:Name="btImg" Content="From image" Margin="0,3,6,0" Click="btImage_Click" HorizontalAlignment="Right" Width="96" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
+                    <Button x:Name="btImg" Content="From image" Margin="0,1,6,0" Click="btImage_Click" HorizontalAlignment="Right" Width="96" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -93,16 +93,16 @@
                     <Label Content="Neg prompt" Height="21" Width="95" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
                     <TextBox x:Name="NegPrompt" TextWrapping="Wrap" Text="" Height="70" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Background="#FFF9FAFA" Margin="4,17,6,3"/>
                 </Grid>
-                <Grid Height="141" Width="355">
+                <Grid Height="176" Width="355">
                     <Label Content="Img Size" Height="30" Width="57" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="2,40,0,0" VerticalAlignment="Top"/>
                     <Label Content="Sampler" Height="30" Width="52" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="3,6,3,6" HorizontalAlignment="Left" Margin="2,4,0,0" VerticalAlignment="Top"/>
-                    <ToggleButton x:Name="chRandom" Content="Random" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="30" Width="68" Margin="279,4,8,107"/>
-                    <Slider  x:Name="slSteps" Maximum="150" Minimum="5" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="73,80,155,36"/>
+                    <ToggleButton x:Name="chRandom" Content="Random" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="30" Width="68" Margin="279,5,8,0" VerticalAlignment="Top"/>
+                    <Slider  x:Name="slSteps" Maximum="150" Minimum="5" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="71,80,157,70"/>
                     <Label Content="Steps Count" Height="30" Width="72" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" Margin="0,74,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <TextBox  x:Name="tbSteps" TextWrapping="Wrap" Text="25" TextChanged="tbSteps_TextChanged" Height="13" Margin="199,76,122,0" VerticalAlignment="Top" Padding="8,2,8,2"/>
-                    <Label Content="CFG Scale" Height="30" Width="61" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-1,105,0,0" VerticalAlignment="Top"/>
-                    <Slider  x:Name="slCFG" Maximum="20" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="5" Value="7.5" ValueChanged="Slider2_ValueChanged" SmallChange="0.5" Margin="73,112,155,0" Height="24" VerticalAlignment="Top"/>
-                    <TextBox  x:Name="tbCFG" TextWrapping="Wrap" Text="7,5" TextChanged="tbSteps2_TextChanged" Height="25" Margin="199,110,122,0" VerticalAlignment="Top"/>
+                    <TextBox  x:Name="tbSteps" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="25" TextChanged="tbSteps_TextChanged" Height="13" Margin="199,0,0,0" VerticalAlignment="Center" Padding="3,2,1,2" HorizontalAlignment="Left" Width="34"/>
+                    <Label Content="CFG Scale" Height="30" Width="61" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-1,106,0,0" VerticalAlignment="Top"/>
+                    <Slider  x:Name="slCFG" Maximum="20" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="5" Value="7.5" ValueChanged="Slider2_ValueChanged" SmallChange="0.5" Margin="70,112,158,0" Height="24" VerticalAlignment="Top"/>
+                    <TextBox  x:Name="tbCFG" TextWrapping="Wrap" PreviewTextInput="NumberValidationTextBox" Text="7,5" TextChanged="tbSteps2_TextChanged" Height="25" Margin="0,107,122,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="3,6,1,6"/>
                     <ComboBox x:Name="cbX" Margin="61,39,227,0" Height="24" VerticalAlignment="Top">
                         <ComboBoxItem Content="384"/>
                         <ComboBoxItem Content="416"/>
@@ -112,7 +112,7 @@
                         <ComboBoxItem Content="1024"/>
                     </ComboBox>
                     <Label Content="x" Height="30" Width="14" BorderBrush="{x:Null}" Background="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="133,39,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="cbY" Margin="150,40,139,71">
+                    <ComboBox x:Name="cbY" Margin="150,40,139,0" Height="30" VerticalAlignment="Top">
                         <ComboBoxItem Content="384"/>
                         <ComboBoxItem Content="416"/>
                         <ComboBoxItem Content="512"/>
@@ -120,7 +120,7 @@
                         <ComboBoxItem Content="728"/>
                         <ComboBoxItem Content="1024"/>
                     </ComboBox>
-                    <hc:ComboBox x:Name="cbSampler" Height="22" Style="{StaticResource ComboBoxExtend}" Margin="61,4,139,107">
+                    <hc:ComboBox x:Name="cbSampler" Height="22" Style="{StaticResource ComboBoxExtend}" Margin="61,4,139,0" VerticalAlignment="Top">
                         <ComboBoxItem Content="DDIM"                    />
                         <ComboBoxItem Content="EulerDiscrete"           />
                         <ComboBoxItem Content="EulerAncestralDiscrete"  />
@@ -130,9 +130,12 @@
                         <ComboBoxItem Content="SharkEulerDiscrete"      />
                     </hc:ComboBox>
                     <Label Content="Seed" Height="30" Width="31" BorderBrush="{x:Null}" Background="{x:Null}" HorizontalAlignment="Left" Margin="237,4,0,0" VerticalAlignment="Top" Padding="1,6,1,6"/>
-                    <TextBox x:Name="tbSeed" TextWrapping="Wrap" Text="-1" Height="18" IsEnabled="False" Margin="237,39,6,72"/>
+                    <TextBox x:Name="tbSeed" TextWrapping="Wrap" Text="-1" Height="18" IsEnabled="False" Margin="237,39,6,0" VerticalAlignment="Top"/>
                     <Label Content="Total count" Height="30" Width="69" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="237,78,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="tbTotalCount" TextWrapping="Wrap" Text="1" Height="18" Margin="311,78,6,33"/>
+                    <TextBox x:Name="tbTotalCount" TextWrapping="Wrap" Text="1" Height="18" Margin="311,77,6,0" VerticalAlignment="Top"/>
+                    <Label Content="ETA Weight" Height="30" Width="79" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-3,137,0,0" VerticalAlignment="Top"/>
+                    <Slider  x:Name="slETA" Maximum="100" IsSnapToTickEnabled="True" TickFrequency="1" Value="100" SmallChange="1" Margin="70,143,158,0" Height="24" VerticalAlignment="Top" ValueChanged="slEMA_ValueChanged"/>
+                    <TextBox  x:Name="tbETA" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,138,122,0" VerticalAlignment="Top" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
                 </Grid>
                 <Grid Height="172">
                     <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,71,0,0" VerticalAlignment="Top"/>
@@ -149,7 +152,7 @@
                     <Slider  x:Name="slUpscale" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Margin="0,11,10,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"/>
                     <Label x:Name="lbUpscale" Content="x4" Background="#FF611F7E" Height="26" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,7,101,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbModel" Height="22" Margin="50,71,75,0" VerticalAlignment="Top"/>
-                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="30" HorizontalAlignment="Right" Margin="285,71,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.512,2.77">
+                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="30" HorizontalAlignment="Right" Margin="0,0,3,0" RenderTransformOrigin="0.512,2.77">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -161,7 +164,7 @@
                         <ComboBoxItem Content="vulkan"/>
                         <ComboBoxItem Content="cuda"/>
                     </ComboBox>
-                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="293,38,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
+                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="202,44,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
                     <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,107,0,0" VerticalAlignment="Top"/>
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
                     <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,43,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>

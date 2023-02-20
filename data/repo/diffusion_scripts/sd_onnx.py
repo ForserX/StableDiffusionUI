@@ -126,12 +126,19 @@ parser.add_argument(
     dest='vae',
 )
 
+parser.add_argument(
+    "--eta",
+    help="Eta",
+    dest='eta',
+    default=1.0,
+)
+
 if len(sys.argv)==1:
     parser.print_help()
     parser.exit()
 
 opt = parser.parse_args()
-eta = 0.0
+eta = opt.eta
 
 if opt.device == "dml":
     prov = "DmlExecutionProvider"

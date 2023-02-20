@@ -130,7 +130,7 @@ parser.add_argument(
     "--eta",
     help="Eta",
     dest='eta',
-    default=0.0,
+    default=1.0,
 )
 
 if len(sys.argv)==1:
