@@ -106,6 +106,14 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "--imgmask",
+    type=str,
+    default="",
+    help="Specify generation image mask",
+    dest='imgmask',
+)
+
+parser.add_argument(
     "--scmode",
     default="eulera",
     help="Specify generation scmode",
@@ -220,7 +228,7 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_pat
 print("SD: Model loaded")
 
 for i in range(opt.totalcount):
-    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, "")
+    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, opt.imgmask)
     opt.seed = opt.seed + 1
     
 print("SD: Generating done!")

@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
         Title="Stable Diffusion XUI" Height="664" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded">
-    <Grid Margin="0,0,0,3" Background="#389D9BC9" AllowDrop="True" DragDrop.Drop="Grid_Drop">
+    <Grid Margin="0,0,0,3" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -23,7 +23,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Image x:Name="ViewImg" Margin="5,41,105,114" Grid.Column="3" Source="/res/noimg.jpg" AllowDrop="True"/>
+        <Image x:Name="ViewImg" Margin="5,41,105,114" Grid.Column="3" Source="/res/noimg.jpg" DragDrop.Drop="Grid_Drop"/>
         <Button Content="Break!" Margin="6,0,0,0" Click="Button_ClickBreak" HorizontalAlignment="Left" Width="82" RenderTransformOrigin="0.484,1.102" Height="36
                 " VerticalAlignment="Bottom" Grid.Column="3" Foreground="White">
             <Button.Background>
@@ -67,12 +67,12 @@
                     </Button>
                     <CheckBox x:Name="cbNSFW" Content="NSFW check" IsChecked="True" Margin="0,2,107,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Height="20" Visibility="Hidden"/>
                 </Grid>
-                <Grid x:Name="gridImg" Height="116" Background="#FFEBE4F9">
+                <Grid x:Name="gridImg" Height="146" Background="#FFEBE4F9" DragDrop.Drop="gridImg_Drop">
                     <Image x:Name="imgLoaded" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="/res/noimg.jpg"/>
-                    <Label Content="Denoising Scale" HorizontalAlignment="Left" Margin="115,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.332,-0.041" Background="{x:Null}" BorderBrush="{x:Null}" Width="96" Padding="1,6,1,6"/>
-                    <Slider  x:Name="slDenoising" Maximum="100" Minimum="5" Value="45" ValueChanged="Slider_Denoising" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="115,40,53,0" Height="25" VerticalAlignment="Top"/>
-                    <TextBox x:Name="tbDenoising" TextWrapping="Wrap" Text="45" Height="18" Margin="0,35,10,0" HorizontalAlignment="Right" Width="38" VerticalAlignment="Top" TextChanged="tbDenoising_TextChanged"/>
-                    <Button x:Name="btImageClear" Content="Clear" Margin="0,87,10,0" Click="btImageClear_Click" HorizontalAlignment="Right" Width="96" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
+                    <Label Content="Denoising Scale" HorizontalAlignment="Left" Margin="116,1,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.332,-0.041" Background="{x:Null}" BorderBrush="{x:Null}" Width="96" Padding="1,6,1,6"/>
+                    <Slider  x:Name="slDenoising" Maximum="100" Minimum="5" Value="45" ValueChanged="Slider_Denoising" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="116,31,52,0" Height="25" VerticalAlignment="Top"/>
+                    <TextBox x:Name="tbDenoising" TextWrapping="Wrap" Text="45" Height="18" Margin="0,26,9,0" HorizontalAlignment="Right" Width="38" VerticalAlignment="Top" TextChanged="tbDenoising_TextChanged"/>
+                    <Button x:Name="btImageClear" Content="Clear" Margin="0,118,2,0" Click="btImageClear_Click" HorizontalAlignment="Right" Width="69" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -80,8 +80,17 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <Image x:Name="imgToImg" HorizontalAlignment="Right" Height="23" Margin="0,5,10,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png"/>
-                    <Button Content="Get tokens" HorizontalAlignment="Left" Margin="117,87,0,0" VerticalAlignment="Top" Width="96" Click="Button_Click_DeepDanbooru2"  Foreground="White" Height="23" Padding="10,1,10,1">
+                    <Image x:Name="imgToImgMask" HorizontalAlignment="Right" Height="23" Margin="0,1,2,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png"/>
+                    <Button Content="Get tokens" HorizontalAlignment="Left" Margin="20,115,0,0" VerticalAlignment="Top" Width="80" Click="Button_Click_DeepDanbooru2"  Foreground="White" Height="23" Padding="10,1,10,1">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0">
+                                <GradientStop Color="#FF523876"/>
+                                <GradientStop Color="#FF4D12AF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                    <Image x:Name="imgMask" HorizontalAlignment="Left" Height="54" Margin="114,56,0,0" VerticalAlignment="Top" Width="56" Source="/res/nomask.jpg" AllowDrop="True"/>
+                    <Button x:Name="btImageClearMask" Content="Clear Mask" Margin="0,92,132,0" HorizontalAlignment="Right" Width="50" RenderTransformOrigin="0.484,1.102" Height="18" VerticalAlignment="Top" Foreground="White" Padding="2,1,2,1" Click="btImageClearMask_Click" FontSize="8" Visibility="Collapsed">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -98,7 +107,7 @@
                     <Label Content="Img Size" Height="30" Width="57" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="2,40,0,0" VerticalAlignment="Top"/>
                     <Label Content="Sampler" Height="30" Width="52" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="3,6,3,6" HorizontalAlignment="Left" Margin="2,4,0,0" VerticalAlignment="Top"/>
                     <ToggleButton x:Name="chRandom" Content="Random" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="30" Width="68" Margin="279,5,8,0" VerticalAlignment="Top"/>
-                    <Slider  x:Name="slSteps" Maximum="150" Minimum="5" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="71,80,157,70"/>
+                    <Slider  x:Name="slSteps" Maximum="150" Minimum="1" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="71,80,157,70"/>
                     <Label Content="Steps Count" Height="30" Width="72" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" Margin="0,74,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     <TextBox  x:Name="tbSteps" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="25" TextChanged="tbSteps_TextChanged" Height="13" Margin="199,0,0,0" VerticalAlignment="Center" Padding="3,2,1,2" HorizontalAlignment="Left" Width="34"/>
                     <Label Content="CFG Scale" Height="30" Width="61" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-1,106,0,0" VerticalAlignment="Top"/>
@@ -146,7 +155,7 @@
                     <Slider  x:Name="slUpscale" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Margin="0,11,10,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"/>
                     <Label x:Name="lbUpscale" Content="x4" Background="#FF611F7E" Height="26" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,7,101,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbModel" Height="22" Margin="50,71,75,0" VerticalAlignment="Top"/>
-                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Left" Margin="285,70,0,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="7" VerticalAlignment="Top">
+                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,70,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -162,7 +171,7 @@
                     <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,43,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
                     <Label x:Name="lbVae" Content="VAE" Height="30" Width="31" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,142,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbVAE" Height="22" Margin="50,142,75,0" VerticalAlignment="Top"/>
-                    <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Left" Margin="285,87,0,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="7" VerticalAlignment="Top" Click="btnDownload_Click">
+                    <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Right" Margin="0,87,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnDownload_Click">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -182,7 +191,7 @@
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,99" VerticalAlignment="Bottom"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="0,4,407,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click"/>
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="0,4,497,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click"/>
-        <Button x:Name="btnDDB" Grid.Column="3" Content="Get text tokens (DeepDanbooru)" HorizontalAlignment="Stretch" Margin="200,609,199,0" VerticalAlignment="Top" Click="Button_Click_DeepDanbooru"  Foreground="White" Height="36">
+        <Button x:Name="btnDDB" Grid.Column="3" Content="Get text tokens (DeepDanbooru)" HorizontalAlignment="Stretch" Margin="200,0,199,0" VerticalAlignment="Bottom" Click="Button_Click_DeepDanbooru"  Foreground="White" Height="36">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
                     <GradientStop Color="#FF523876"/>

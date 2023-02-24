@@ -145,7 +145,16 @@ namespace SD_FXUI
                 Denoising /= 100;
 
                 string newDenoising = Denoising.ToString().Replace(",", ".");
-                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+
+                if(Helper.ImgMaskPath != string.Empty)
+                {
+                    CmdLine += $" --mode=\"inpaint\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                    CmdLine += $" --imgmask=\"{Helper.ImgMaskPath}\"";
+                }
+                else
+                {
+                    CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                }
 
                 if (!File.Exists(Helper.InputImagePath))
                 {

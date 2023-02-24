@@ -58,6 +58,7 @@ namespace SD_FXUI
             gridImg.Visibility = Visibility.Collapsed;
             btnDDB.Visibility = Visibility.Collapsed;
             NoImageData = ViewImg.Source;
+            Helper.SafeMaskFreeImg = imgMask.Source;
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -431,6 +432,11 @@ namespace SD_FXUI
 
             Helper.DrawMode = Helper.DrawingMode.Text2Img;
             imgLoaded.Source = NoImageData;
+
+            // Mask clear
+            imgMask.Source = Helper.SafeMaskFreeImg;
+            Helper.ImgMaskPath = string.Empty;
+            imgMask.Visibility = Visibility.Collapsed;
         }
 
         private void btHistory_Click(object sender, MouseButtonEventArgs e)
@@ -547,6 +553,26 @@ namespace SD_FXUI
         {
             Utils.HuggDownload DownloadWnd = new Utils.HuggDownload();
             DownloadWnd.Show();
+        }
+
+        private void btImageClearMask_Click(object sender, RoutedEventArgs e)
+        {
+            btImageClearMask.Visibility = Visibility.Collapsed;
+
+            imgMask.Source = Helper.SafeMaskFreeImg;
+            Helper.ImgMaskPath = string.Empty;
+        }
+
+        private void gridImg_Drop(object sender, DragEventArgs e)
+        {
+            string dropedFile = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+
+            if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
+            {
+                Helper.ImgMaskPath = dropedFile;
+                imgMask.Source = new BitmapImage(new Uri(dropedFile));
+                btImageClearMask.Visibility = Visibility.Visible;
+            }
         }
     }
 }

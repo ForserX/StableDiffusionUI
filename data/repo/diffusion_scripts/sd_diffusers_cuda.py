@@ -109,6 +109,14 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "--imgmask",
+    type=str,
+    default="",
+    help="Specify generation image mask",
+    dest='imgmask',
+)
+
+parser.add_argument(
     "--device",
     type=str,
     default="cuda",
@@ -209,7 +217,7 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_pat
         
     if opt.mode == "txt2img":
         print("txt2img", flush=True)
-        image=pipe(prompt=prompt, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, generator=rng).images[0]
+        image=pipe(prompt=prompt, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale}')
         
     if opt.mode == "img2img":
@@ -236,7 +244,7 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_pat
 print("SD: Model loaded")
 
 for i in range(opt.totalcount):
-    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, "")
+    generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, opt.imgmask)
     opt.seed = opt.seed + 1
     
 print("SD: Generating done!")

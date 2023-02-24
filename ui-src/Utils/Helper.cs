@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace SD_FXUI
 {
@@ -51,6 +52,8 @@ namespace SD_FXUI
 
         public static string CachePath = string.Empty;
         public static string ImgPath = string.Empty;
+        public static string ImgMaskPath = string.Empty;
+        public static ImageSource SafeMaskFreeImg = null;
         public static MainWindow Form = null;
         public static HostForm UIHost = null;
         public static ImplementMode Mode = ImplementMode.IDK;
