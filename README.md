@@ -12,17 +12,13 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 # How to install
 ## Pre-install
 * Install python 3.10 + pip + venv
-* __(AMD Only)__ Install IREE drivers: https://www.amd.com/en/support/kb/release-notes/rn-rad-win-22-11-1-mlir-iree
+* __(SHARK Only)__ Install IREE drivers: https://www.amd.com/en/support/kb/release-notes/rn-rad-win-22-11-1-mlir-iree
 
 ## Setup
 * Start .exe file and select backend type
 
-
 ## Stargazers over time
-
 [![Stargazers over time](https://starchart.cc/ForserX/StableDiffusionUI.svg)](https://starchart.cc/ForserX/StableDiffusionUI)
-
-
 
 # 3rd 
 * [Shark](https://github.com/nod-ai/SHARK)
