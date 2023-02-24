@@ -16,29 +16,6 @@ namespace SD_FXUI.Utils
             cbTo.SelectedIndex = 0;
         }
                
-        private void HuggCast()
-        {
-            string HuggUrl = "huggingface.co";
-
-            if(cbPath.Text.IndexOf(HuggUrl) != -1)
-            {
-                int Idx = cbPath.Text.IndexOf(HuggUrl) + HuggUrl.Length + 1;
-
-                HuggUrl = cbPath.Text.Substring(Idx);
-            }
-            else
-            {
-                HuggUrl= cbPath.Text;
-            }
-
-            var AllPathces = HuggUrl.Split('/');
-            HuggUrl = AllPathces[0] + "/" + AllPathces[1];
-
-            string HuggFile = HuggUrl.Substring(0).Replace("/", "(slash)") + ".hgf";
-            var Stream = System.IO.File.Create(FS.GetModelDir() + @"huggingface/" + HuggFile);
-            Stream.Close();
-        }
-
         private void OrigToDiff(bool bWait = false)
         {
             if (!System.IO.File.Exists(cbPath.Text))
@@ -110,10 +87,12 @@ namespace SD_FXUI.Utils
             }
             else
             {
+                /*
                 if (GetFromID == 4)
                 {
                     HuggCast();
                 }
+                */
             }
 
             Helper.Form.UpdateModelsList();

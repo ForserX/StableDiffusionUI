@@ -542,5 +542,11 @@ namespace SD_FXUI
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
+
+        private void btnDownload_Click(object sender, RoutedEventArgs e)
+        {
+            Utils.HuggDownload DownloadWnd = new Utils.HuggDownload();
+            DownloadWnd.Show();
+        }
     }
 }

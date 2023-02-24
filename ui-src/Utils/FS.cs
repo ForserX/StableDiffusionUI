@@ -94,14 +94,13 @@ namespace SD_FXUI
                     Models.Add(Path.GetFileName(LocPath));
                 }
 
-                if (Mode == Helper.ImplementMode.Shark)
+                if (Mode != Helper.ImplementMode.ONNX)
                 {
                     WorkingPath = GetModelDir() + @"huggingface/";
 
                     foreach (string file in Directory.EnumerateFiles(WorkingPath, "*.hgf", SearchOption.AllDirectories))
                     {
                         string UrlName = Path.GetFileName(file).Replace("(slash)", "/");
-                        UrlName = UrlName.Remove(UrlName.Length - 4);
                         Models.Add(UrlName);
                     }
                 }

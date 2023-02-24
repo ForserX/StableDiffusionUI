@@ -146,7 +146,7 @@
                     <Slider  x:Name="slUpscale" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Margin="0,11,10,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"/>
                     <Label x:Name="lbUpscale" Content="x4" Background="#FF611F7E" Height="26" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,7,101,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbModel" Height="22" Margin="50,71,75,0" VerticalAlignment="Top"/>
-                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="30" HorizontalAlignment="Right" Margin="0,0,3,0" RenderTransformOrigin="0.512,2.77">
+                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Left" Margin="285,70,0,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="7" VerticalAlignment="Top">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -162,6 +162,14 @@
                     <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,43,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
                     <Label x:Name="lbVae" Content="VAE" Height="30" Width="31" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,142,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbVAE" Height="22" Margin="50,142,75,0" VerticalAlignment="Top"/>
+                    <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Left" Margin="285,87,0,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="7" VerticalAlignment="Top" Click="btnDownload_Click">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0">
+                                <GradientStop Color="#FF523876"/>
+                                <GradientStop Color="#FF4D12AF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
                 </Grid>
             </StackPanel>
         </ScrollViewer>
@@ -174,7 +182,7 @@
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,99" VerticalAlignment="Bottom"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="0,4,407,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click"/>
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="0,4,497,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click"/>
-        <Button x:Name="btnDDB" Grid.Column="3" Content="Get text tokens (DeepDanbooru)" HorizontalAlignment="Stretch" Margin="159,0,239,56" VerticalAlignment="Bottom" Click="Button_Click_DeepDanbooru"  Foreground="White">
+        <Button x:Name="btnDDB" Grid.Column="3" Content="Get text tokens (DeepDanbooru)" HorizontalAlignment="Stretch" Margin="200,609,199,0" VerticalAlignment="Top" Click="Button_Click_DeepDanbooru"  Foreground="White" Height="36">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
                     <GradientStop Color="#FF523876"/>
@@ -183,7 +191,7 @@
             </Button.Background>
         </Button>
         <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,77,112,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btmToImg_Click"/>
-        <Button x:Name="btnBestOpen" Content="Open Best Collection!" Margin="0,0,3,0" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="152" Grid.Column="3" Foreground="White" Click="btnBestOpen_Click">
+        <Button x:Name="btnBestOpen" Content="Load Collection" Margin="0,0,3,0" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="95" Grid.Column="3" Foreground="White" Click="btnBestOpen_Click" Padding="4,6,4,6">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
                     <GradientStop Color="#FF523876"/>

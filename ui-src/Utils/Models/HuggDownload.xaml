@@ -1,0 +1,14 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SD_FXUI.Utils"
+        xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="SD_FXUI.Utils.HuggDownload"
+        mc:Ignorable="d"
+        Title="HuggDownload" Height="104" Width="800">
+    <Grid>
+        <hc:TextBox x:Name="tbUrl" HorizontalAlignment="Right" Margin="0,10,51,0" TextWrapping="Wrap" Text="Put huggface url" VerticalAlignment="Top" Width="698" Grid.ColumnSpan="2"/>
+        <Button Content="Get" HorizontalAlignment="Left" Margin="612,48,0,0" Width="137" VerticalAlignment="Top" Click="Button_Click"/>
+    </Grid>
+</Window>
