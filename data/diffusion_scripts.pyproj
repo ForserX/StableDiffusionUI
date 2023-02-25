@@ -29,7 +29,6 @@
     <Compile Include="pix2pix.py" />
     <Compile Include="sd_diffusers_cuda.py" />
     <Compile Include="sd_onnx.py" />
-    <Compile Include="torch2onnx.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>
