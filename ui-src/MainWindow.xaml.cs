@@ -108,6 +108,7 @@ namespace SD_FXUI
                 Helper.PromHistory.Insert(0, TryPrompt.Text);
             }
 
+            currentImage = null;
             ClearImages();
             InvokeProgressUpdate(3);
         }
