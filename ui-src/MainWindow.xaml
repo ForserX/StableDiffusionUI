@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="664" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded">
+        Title="Stable Diffusion XUI" Height="659" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded">
     <Grid Margin="0,0,0,3" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -140,7 +140,7 @@
                     <Slider  x:Name="slETA" Maximum="100" IsSnapToTickEnabled="True" TickFrequency="1" Value="100" SmallChange="1" Margin="70,143,158,0" Height="24" VerticalAlignment="Top" ValueChanged="slEMA_ValueChanged"/>
                     <TextBox  x:Name="tbETA" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,138,122,0" VerticalAlignment="Top" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
                 </Grid>
-                <Grid Height="172">
+                <Grid Height="109">
                     <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,71,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbUpscaler" Margin="50,6,132,0" Height="30" VerticalAlignment="Top" SelectionChanged="cbUpscaler_SelectionChanged">
                         <ComboBoxItem Content="Real-ESRGAN: AnimeVideo(v3)"/>
@@ -163,14 +163,9 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <ComboBox  x:Name="cbDevice" Height="22" Text="vulkan" SelectionChanged="cbDevice_SelectionChanged" Margin="50,107,166,0" VerticalAlignment="Top">
-                    </ComboBox>
                     <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="202,44,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
-                    <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,107,0,0" VerticalAlignment="Top"/>
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
                     <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,43,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
-                    <Label x:Name="lbVae" Content="VAE" Height="30" Width="31" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,142,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="cbVAE" Height="22" Margin="50,142,75,0" VerticalAlignment="Top"/>
                     <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Right" Margin="0,87,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnDownload_Click">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
@@ -179,6 +174,14 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
+                </Grid>
+                <Grid x:Name="grVAE" Height="47">
+                    <Label x:Name="lbVae" Content="VAE" Height="30" Width="31" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="7,10,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbVAE" Height="22" Margin="46,10,79,0" VerticalAlignment="Top"/>
+                </Grid>
+                <Grid x:Name="grDevice" Height="47">
+                    <ComboBox  x:Name="cbDevice" Height="22" Text="vulkan" SelectionChanged="cbDevice_SelectionChanged" Margin="48,6,168,0" VerticalAlignment="Top"/>
+                    <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="6,7,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </StackPanel>
         </ScrollViewer>

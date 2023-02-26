@@ -224,10 +224,8 @@ namespace SD_FXUI
 
                 btImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
-                lbDevice.Visibility = Visibility.Visible;
-                cbDevice.Visibility = Visibility.Visible;
-                cbVAE.Visibility = Visibility.Visible;
-                lbVae.Visibility = Visibility.Visible;
+                grDevice.Visibility = Visibility.Visible;
+                grVAE.Visibility = Visibility.Visible;
 
                 cbSampler.Items.Clear();
                 foreach (string Name in Schedulers.Diffusers)
@@ -256,10 +254,8 @@ namespace SD_FXUI
                 btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
-                lbDevice.Visibility = Visibility.Collapsed;
-                cbDevice.Visibility = Visibility.Collapsed;
-                cbVAE.Visibility = Visibility.Visible;
-                lbVae.Visibility = Visibility.Visible;
+                grDevice.Visibility = Visibility.Collapsed;
+                grVAE.Visibility = Visibility.Visible;
 
                 btImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
@@ -298,10 +294,8 @@ namespace SD_FXUI
 
                 btImg.Visibility = Visibility.Hidden;
                 cbFf16.Visibility = Visibility.Visible;
-                cbDevice.Visibility = Visibility.Visible;
-                lbDevice.Visibility = Visibility.Visible;
-                cbVAE.Visibility = Visibility.Collapsed;
-                lbVae.Visibility = Visibility.Collapsed;
+                grDevice.Visibility = Visibility.Visible;
+                grVAE.Visibility = Visibility.Collapsed;
 
                 cbSampler.Items.Clear();
                 foreach (string Name in Schedulers.Shark)
@@ -329,13 +323,11 @@ namespace SD_FXUI
                 btnDiffCuda.Background = Safe;
 
                 UpdateModelsList();
-                lbDevice.Visibility = Visibility.Collapsed;
-                cbDevice.Visibility = Visibility.Collapsed;
+                grDevice.Visibility = Visibility.Collapsed;
 
                 btImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
-                cbVAE.Visibility = Visibility.Visible;
-                lbVae.Visibility = Visibility.Visible;
+                grVAE.Visibility = Visibility.Visible;
                 CPUUse = true;
 
                 cbSampler.Items.Clear();
