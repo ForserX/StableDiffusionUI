@@ -29,6 +29,7 @@ namespace SD_FXUI
             NegPrompt.Text = Data.Get("neg");
             tbSteps.Text = Data.Get("steps");
             cbUpscaler.Text = Data.Get("upscaler");
+            slUpscale.Value = int.Parse(Data.Get("up_value", "4"));
             cbSampler.Text = Data.Get("sampler");
             var ListModel = Data.Get("model");
 
@@ -67,7 +68,6 @@ namespace SD_FXUI
                 Welcome Hellow = new Welcome();
                 Hellow.ShowDialog();
             }
-
         }
 
         void Save()
@@ -80,6 +80,7 @@ namespace SD_FXUI
             Data.Set("neg", NegPrompt.Text);
             Data.Set("steps", tbSteps.Text);
             Data.Set("upscaler", cbUpscaler.Text);
+            Data.Set("up_value", slUpscale.Value.ToString());
             Data.Set("sampler", cbSampler.Text);
             Data.Set("device", cbDevice.Text);
 

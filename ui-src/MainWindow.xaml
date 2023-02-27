@@ -35,7 +35,7 @@
         </Button>
         <Button x:Name="btnShark" Content="Shark(Vulkan)" Margin="0,4,239,0" VerticalAlignment="Top" Click="btnShark_Click" HorizontalAlignment="Right" Width="79" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
         <Button x:Name="btnONNX" Content="Diffusers(ONNX)" Margin="0,4,317,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
-        <ListView x:Name="ListView1" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,39,3,56" Grid.Column="3" HorizontalAlignment="Right" Width="95" SelectionChanged="ListView1_SelectionChanged" Background="{x:Null}" BorderBrush="#8C7400AE">
+        <ListView x:Name="ListView1" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="0,42,3,56" Grid.Column="3" HorizontalAlignment="Right" Width="95" SelectionChanged="ListView1_SelectionChanged" Background="White" BorderBrush="White">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn x:Name="GridViewColumnName" Header=" "  Width="70">
@@ -112,7 +112,7 @@
                     <TextBox  x:Name="tbSteps" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="25" TextChanged="tbSteps_TextChanged" Height="13" Margin="199,0,0,0" VerticalAlignment="Center" Padding="3,2,1,2" HorizontalAlignment="Left" Width="34"/>
                     <Label Content="CFG Scale" Height="30" Width="61" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-1,106,0,0" VerticalAlignment="Top"/>
                     <Slider  x:Name="slCFG" Maximum="20" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="5" Value="7.5" ValueChanged="Slider2_ValueChanged" SmallChange="0.5" Margin="70,112,158,0" Height="24" VerticalAlignment="Top"/>
-                    <TextBox  x:Name="tbCFG" TextWrapping="Wrap" PreviewTextInput="NumberValidationTextBox" Text="7,5" TextChanged="tbSteps2_TextChanged" Height="25" Margin="0,107,122,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="3,6,1,6"/>
+                    <TextBox  x:Name="tbCFG" TextWrapping="Wrap" PreviewTextInput="NumberValidationTextBox" Text="7,5" TextChanged="tbSteps2_TextChanged" Height="25" Margin="0,105,122,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="3,6,1,6"/>
                     <ComboBox x:Name="cbX" Margin="61,39,227,0" Height="24" VerticalAlignment="Top">
                         <ComboBoxItem Content="384"/>
                         <ComboBoxItem Content="416"/>
@@ -194,7 +194,7 @@
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,110,99" VerticalAlignment="Bottom"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="0,4,407,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click"/>
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="0,4,497,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click"/>
-        <Button x:Name="btnDDB" Grid.Column="3" Content="Get text tokens (DeepDanbooru)" HorizontalAlignment="Left" Margin="200,604,0,0" VerticalAlignment="Top" Click="Button_Click_DeepDanbooru"  Foreground="White" Height="36" Width="195">
+        <Button x:Name="btnDDB" Grid.Column="3" Content="Get text tokens (DeepDanbooru)" VerticalAlignment="Bottom" Click="Button_Click_DeepDanbooru"  Foreground="White" Height="36" Width="195">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
                     <GradientStop Color="#FF523876"/>

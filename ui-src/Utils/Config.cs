@@ -10,12 +10,12 @@ namespace SD_FXUI
             ConfigFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         }
 
-        public string Get(string Key)
+        public string Get(string Key, string ExistCode = "")
         {
             if (ConfigFile.AppSettings.Settings[Key] != null)
                 return ConfigFile.AppSettings.Settings[Key].Value;
 
-            return "";
+            return ExistCode;
         }
 
         public void Set(string Key, string Value)
