@@ -38,7 +38,7 @@ namespace SD_FXUI
                 Process.OutputDataReceived += new DataReceivedEventHandler((sender, e) =>
                 {
                     // Prepend line numbers to each line of the output.
-                    if (!String.IsNullOrEmpty(e.Data))
+                    if (!string.IsNullOrEmpty(e.Data))
                     {
                         Print(e.Data);
                     }
@@ -47,7 +47,7 @@ namespace SD_FXUI
                 Process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) =>
                 {
                     // Prepend line numbers to each line of the output.
-                    if (!String.IsNullOrEmpty(e.Data))
+                    if (!string.IsNullOrEmpty(e.Data))
                     {
                         Print(e.Data);
                     //    Helper.UIHost.Dispatcher.Invoke(()=> Helper.UIHost.Show());
@@ -68,11 +68,14 @@ namespace SD_FXUI
             HostFilter.CheckImageState(Message);
             HostFilter.CheckDeepDanBooru(Message);
 
-            if (HostFilter.CheckFalseWarning(Message))
+            string CorrectedString = HostFilter.FixString(Message);
+
+            if (HostFilter.CheckFalseWarning(CorrectedString))
                 return;
 
-            Helper.UIHost.Print(Message);
+            Helper.UIHost.Print(CorrectedString);
         }
+
         public void Kill()
         {
             Process.Kill();
@@ -82,12 +85,6 @@ namespace SD_FXUI
         {
             Process.StandardInput.WriteLine(cmd);
         }
-        /*
-        public string ReadFrom()
-        {
-            return Process.StandardOutput.ReadToEnd();
-        }
-        */
 
         public void SendExitCommand()
         {

@@ -51,8 +51,17 @@ namespace SD_FXUI
 
         public static bool CheckFalseWarning(string Message)
         {
-            if (Message.Length > 400)
+            if (Message == null || Message.Length == 0)
                 return true;
+
+            if (Message.Length > 300)
+                return true;
+
+
+            if (Message.Contains(" warnings.warn("))
+            {
+                return true;
+            }
 
             if (Helper.Mode != Helper.ImplementMode.Shark || Helper.Mode != Helper.ImplementMode.InvokeAI)
             {
@@ -64,6 +73,13 @@ namespace SD_FXUI
             }
 
             return false;
+        }
+
+        public static string FixString(string Message)
+        {
+            string NewMessage = Message;
+
+            return NewMessage;
         }
 
         public static void CheckDeepDanBooru(string Message)

@@ -104,8 +104,8 @@
                     <TextBox x:Name="NegPrompt" TextWrapping="Wrap" Text="" Height="70" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Background="#FFF9FAFA" Margin="4,17,6,3"/>
                 </Grid>
                 <Grid Height="176" Width="355">
-                    <Label Content="Img Size" Height="30" Width="57" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="2,40,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Sampler" Height="30" Width="52" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="3,6,3,6" HorizontalAlignment="Left" Margin="2,4,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Img Size" Height="30" Width="57" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-1,40,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Sampler" Height="30" Width="52" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="3,6,3,6" HorizontalAlignment="Left" Margin="0,4,0,0" VerticalAlignment="Top"/>
                     <ToggleButton x:Name="chRandom" Content="Random" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="30" Width="68" Margin="279,5,8,0" VerticalAlignment="Top"/>
                     <Slider  x:Name="slSteps" Maximum="150" Minimum="1" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="71,80,157,70"/>
                     <Label Content="Steps Count" Height="30" Width="72" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" Margin="0,74,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -134,11 +134,11 @@
                     </hc:ComboBox>
                     <Label Content="Seed" Height="30" Width="31" BorderBrush="{x:Null}" Background="{x:Null}" HorizontalAlignment="Left" Margin="237,4,0,0" VerticalAlignment="Top" Padding="1,6,1,6"/>
                     <TextBox x:Name="tbSeed" TextWrapping="Wrap" Text="-1" Height="18" IsEnabled="False" Margin="237,39,6,0" VerticalAlignment="Top"/>
-                    <Label Content="Total count" Height="30" Width="69" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="237,78,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="tbTotalCount" TextWrapping="Wrap" Text="1" Height="18" Margin="311,77,6,0" VerticalAlignment="Top"/>
-                    <Label Content="ETA Weight" Height="30" Width="79" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-3,137,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Total count" Height="30" Width="69" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="233,0,0,0"/>
+                    <Label Content="ETA Weight" Height="30" Width="79" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-6,137,0,0" VerticalAlignment="Top"/>
                     <Slider  x:Name="slETA" Maximum="100" IsSnapToTickEnabled="True" TickFrequency="1" Value="100" SmallChange="1" Margin="70,143,158,0" Height="24" VerticalAlignment="Top" ValueChanged="slEMA_ValueChanged"/>
                     <TextBox  x:Name="tbETA" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,138,122,0" VerticalAlignment="Top" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
+                    <hc:NumericUpDown x:Name="tbTotalCount" HorizontalAlignment="Left" Margin="303,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="-1.332,-0.546" Width="46" Height="24" Padding="3,2,3,2" MinHeight="20" Value="1"/>
                 </Grid>
                 <Grid Height="109">
                     <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,71,0,0" VerticalAlignment="Top"/>

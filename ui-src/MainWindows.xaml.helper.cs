@@ -17,7 +17,7 @@ namespace SD_FXUI
         public void InvokeClearImages() => Dispatcher.Invoke(() => { InvokeClearImages(); });
         public void InvokeProgressUpdate(int value) => Dispatcher.Invoke(() => { pbGen.Value = value; });
         public void InvokeUpdateModelsList() => Dispatcher.Invoke(() => { UpdateModelsList(); });
-        public void InvokeProgressApply() => Dispatcher.Invoke(() => { pbGen.Value += (40 / int.Parse(tbTotalCount.Text)); });
+        public void InvokeProgressApply() => Dispatcher.Invoke(() => { pbGen.Value += (40 / (int)(tbTotalCount.Value)); });
 
         void Load()
         {
@@ -128,7 +128,7 @@ namespace SD_FXUI
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"
                     + $" --eta={newETA}"
-                    + $" --totalcount={tbTotalCount.Text}"
+                    + $" --totalcount={tbTotalCount.Value.ToString()}"
                     + $" --model=\"{Model}\""
                     + $" --vae=\"{VAE}\""
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
@@ -206,7 +206,7 @@ namespace SD_FXUI
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"
                     + $" --eta={newETA}"
-                    + $" --totalcount={tbTotalCount.Text}"
+                    + $" --totalcount={tbTotalCount.Value.ToString()}"
                     + $" --model=\"{Model}\""
                     + $" --vae=\"{VAE}\""
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
@@ -254,7 +254,7 @@ namespace SD_FXUI
                     + $" --scheduler={cbSampler.Text}"
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"
-                    + $" --total_count={tbTotalCount.Text}"
+                    + $" --total_count={tbTotalCount.Value.ToString()}"
                     + $" --hf_model_id=\"{Model}\""
                     + $" --no-use_tuned "
                     + $" --local_tank_cache=\".//\""
