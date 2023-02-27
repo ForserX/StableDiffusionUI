@@ -80,7 +80,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <Image x:Name="imgToImgMask" HorizontalAlignment="Right" Height="23" Margin="0,1,2,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png"/>
+                    <Image x:Name="imgToImgMask" HorizontalAlignment="Right" Height="23" Margin="0,2,4,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png"/>
                     <Button Content="Get tokens" HorizontalAlignment="Left" Margin="20,115,0,0" VerticalAlignment="Top" Width="80" Click="Button_Click_DeepDanbooru2"  Foreground="White" Height="23" Padding="10,1,10,1">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">

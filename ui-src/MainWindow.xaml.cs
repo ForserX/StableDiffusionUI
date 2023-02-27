@@ -349,7 +349,12 @@ namespace SD_FXUI
                 CurrentSelIdx = ListView1.SelectedIndex;
                 currentImage = (ImgList[ListView1.SelectedIndex]);
                 ViewImg.Source = new BitmapImage(new Uri(currentImage));
-                currentImage = currentImage.Replace("_upscale.", ".");
+                string NewCurrentImage = currentImage.Replace("_upscale.", ".");
+
+                if (File.Exists(NewCurrentImage))
+                {
+                    currentImage = NewCurrentImage;
+                }
 
                 string Name = FS.GetImagesDir() + "best\\" + Path.GetFileName(ImgList[ListView1.SelectedIndex]);
 
@@ -518,6 +523,9 @@ namespace SD_FXUI
 
             if (!Directory.Exists(Path))
                 return;
+
+            currentImage = null;
+            ClearImages();
 
             var Files = FS.GetFilesFrom(Path, new string[] { "png", "jpg" }, false);
             foreach (string file in Files)
