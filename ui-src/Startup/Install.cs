@@ -50,11 +50,11 @@
                 Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Host.Print("Install shark runtimes... Please wait");
                 Cmd.Start();
-                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " install -r requirements_shark.txt");
-                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " install onnxruntime_directml --force");
-                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " --pre torch-mlir torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/cpu -f https://llvm.github.io/torch-mlir/package-index/");
-                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " --upgrade -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html iree-compiler iree-runtime");
-                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.Shark) + " -e . -f https://llvm.github.io/torch-mlir/package-index/ -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " install -r requirements_shark.txt");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " install onnxruntime_directml --force");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " --pre torch-mlir torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/cpu -f https://llvm.github.io/torch-mlir/package-index/");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " --upgrade -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html iree-compiler iree-runtime");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " -e . -f https://llvm.github.io/torch-mlir/package-index/ -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
 
@@ -74,7 +74,7 @@
                 Host.Print("Install ONNX runtimes... Please wait");
                 Cmd.Start();
                 Cmd.Send("python -m venv .\\repo\\onnx.venv\\");
-                Cmd.Send("repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + " install -r requirements_onnx.txt");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install -r requirements_onnx.txt");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
             }
