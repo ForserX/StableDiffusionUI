@@ -161,6 +161,16 @@ namespace SD_FXUI
             Helper.UIHost.Show();
         }
 
+        public static ImageSource BitmapFromUri(Uri source)
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = source;
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            return bitmap;
+        }
+
         private void OnClose(object sender, EventArgs e)
         {
             Helper.UIHost.Close();
@@ -346,7 +356,8 @@ namespace SD_FXUI
             if (ImgList.Count > 0)
             {
                 currentImage = (ImgList[lvImages.SelectedIndex]);
-                ViewImg.Source = new BitmapImage(new Uri(currentImage));
+                               
+                ViewImg.Source = BitmapFromUri(new Uri(currentImage));
                 string NewCurrentImage = currentImage.Replace("_upscale.", ".");
 
                 if (File.Exists(NewCurrentImage))
@@ -390,7 +401,7 @@ namespace SD_FXUI
             {
                 Helper.InputImagePath = OpenDlg.FileName;
                 gridImg.Visibility = Visibility.Visible;
-                imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
+                imgLoaded.Source = BitmapFromUri(new Uri(Helper.InputImagePath));
                 Helper.DrawMode = Helper.DrawingMode.Img2Img;
             }
         }
@@ -404,12 +415,12 @@ namespace SD_FXUI
             else if (currentImage != null)
             {
                 Helper.InputImagePath = currentImage;
-                imgLoaded.Source = new BitmapImage(new Uri(currentImage));               
+                imgLoaded.Source = BitmapFromUri(new Uri(currentImage));               
             }
             else
             {
                 Helper.InputImagePath = ImgList[lvImages.SelectedIndex];
-                imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
+                imgLoaded.Source = BitmapFromUri(new Uri(Helper.InputImagePath));
             }
 
 
@@ -510,7 +521,7 @@ namespace SD_FXUI
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
                 currentImage = dropedFile;
-                ViewImg.Source = new BitmapImage(new Uri(dropedFile));
+                ViewImg.Source = BitmapFromUri(new Uri(dropedFile));
                 btnDDB.Visibility = Visibility.Visible;
             }
         }
@@ -569,7 +580,7 @@ namespace SD_FXUI
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
                 Helper.ImgMaskPath = dropedFile;
-                imgMask.Source = new BitmapImage(new Uri(dropedFile));
+                imgMask.Source = BitmapFromUri(new Uri(dropedFile));
                 btImageClearMask.Visibility = Visibility.Visible;
             }
         }
