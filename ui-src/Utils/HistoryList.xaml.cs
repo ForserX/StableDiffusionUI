@@ -73,6 +73,10 @@ namespace SD_FXUI.Utils
             {
                 Helper.Form.SetPrompt(lbHistory.SelectedItem.ToString());
             }
+            else if (e.Key == Key.Escape) 
+            {
+                this.Close();
+            }
         }
     }
 }
