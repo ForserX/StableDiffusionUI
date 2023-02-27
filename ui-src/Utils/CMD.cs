@@ -148,6 +148,7 @@ namespace SD_FXUI
             Host.Print("\n  Task Done..... \n");
             Notification.SendNotification("Task: done!");
             Helper.Form.InvokeProgressUpdate(100);
+            Helper.Form.UpdateCurrentViewImg();
         }
         public static async Task ProcessRunnerDiffCuda(string command, int UpSize, bool IsCPU)
         {
@@ -177,6 +178,7 @@ namespace SD_FXUI
             Host.Print("\n  Task Done..... \n");
             Notification.SendNotification("Task: done!");
             Helper.Form.InvokeProgressUpdate(100);
+            Helper.Form.UpdateCurrentViewImg();
         }
         public static async Task ProcessRunnerShark(string command, int UpSize)
         {
@@ -205,6 +207,8 @@ namespace SD_FXUI
 
             Host.Print("\n  Task Done..... \n");
             Notification.SendNotification("Task: done!");
+            Helper.Form.InvokeProgressUpdate(100);
+            Helper.Form.UpdateCurrentViewImg();
         }
 
 

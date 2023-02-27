@@ -63,7 +63,6 @@ namespace SD_FXUI
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            CurrentSelIdx = 0;
             Directory.CreateDirectory(Helper.ImgPath);
             btnDDB.Visibility = Visibility.Collapsed;
 
@@ -342,12 +341,11 @@ namespace SD_FXUI
                 Title = "Stable Diffusion XUI : CPU venv";
             }
         }
-        private void ListView1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void lvImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ImgList.Count > 0)
             {
-                CurrentSelIdx = ListView1.SelectedIndex;
-                currentImage = (ImgList[ListView1.SelectedIndex]);
+                currentImage = (ImgList[lvImages.SelectedIndex]);
                 ViewImg.Source = new BitmapImage(new Uri(currentImage));
                 string NewCurrentImage = currentImage.Replace("_upscale.", ".");
 
@@ -356,7 +354,7 @@ namespace SD_FXUI
                     currentImage = NewCurrentImage;
                 }
 
-                string Name = FS.GetImagesDir() + "best\\" + Path.GetFileName(ImgList[ListView1.SelectedIndex]);
+                string Name = FS.GetImagesDir() + "best\\" + Path.GetFileName(ImgList[lvImages.SelectedIndex]);
 
                 if (File.Exists(Name))
                 {
@@ -410,7 +408,7 @@ namespace SD_FXUI
             }
             else
             {
-                Helper.InputImagePath = ImgList[CurrentSelIdx];
+                Helper.InputImagePath = ImgList[lvImages.SelectedIndex];
                 imgLoaded.Source = new BitmapImage(new Uri(Helper.InputImagePath));
             }
 
@@ -450,14 +448,14 @@ namespace SD_FXUI
 
         private void btmFavorClick(object sender, MouseButtonEventArgs e)
         {
-            if (ListView1.Items.Count == 0 || ListView1.SelectedItem == null)
+            if (lvImages.Items.Count == 0 || lvImages.SelectedItem == null)
             {
                 return;
             }
 
             if (Helper.ImageState.Favor == Helper.ActiveImageState)
             {
-                string Name = Path.GetFileName(ImgList[ListView1.SelectedIndex]);
+                string Name = Path.GetFileName(ImgList[lvImages.SelectedIndex]);
                 File.Delete(FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Free;
 
@@ -465,8 +463,8 @@ namespace SD_FXUI
             }
             else
             {
-                string Name = Path.GetFileName(ImgList[ListView1.SelectedIndex]);
-                File.Copy(ImgList[ListView1.SelectedIndex], FS.GetImagesDir() + "best\\" + Name);
+                string Name = Path.GetFileName(ImgList[lvImages.SelectedIndex]);
+                File.Copy(ImgList[lvImages.SelectedIndex], FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Favor;
 
                 btnFavor.Source = imgFavor.Source;

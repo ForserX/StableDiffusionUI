@@ -2,15 +2,13 @@
 using System;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace SD_FXUI
 {
     public partial class MainWindow
     {
-        // Temporary hack
-        int CurrentSelIdx = 0;
-
         public void SetPrompt(string Prompt) => TryPrompt.Text = Prompt;
         public void InvokeSetPrompt(string Prompt) => Dispatcher.Invoke(() => SetPrompt(Prompt));
         public void UpdateViewImg(string Img) => Dispatcher.Invoke(() => SetImg(Img));
@@ -18,6 +16,18 @@ namespace SD_FXUI
         public void InvokeProgressUpdate(int value) => Dispatcher.Invoke(() => { pbGen.Value = value; });
         public void InvokeUpdateModelsList() => Dispatcher.Invoke(() => { UpdateModelsList(); });
         public void InvokeProgressApply() => Dispatcher.Invoke(() => { pbGen.Value += (40 / (int)(tbTotalCount.Value)); });
+        public void UpdateCurrentViewImg() => Dispatcher.Invoke(() =>
+        {
+            if (lvImages.Items.Count > 0)
+            {
+                int NewIndex = lvImages.Items.Count - 1;
+
+                lvImages.SelectedItem = lvImages.Items[NewIndex];
+                lvImages.UpdateLayout();
+                ((ListViewItem)lvImages.ItemContainerGenerator.ContainerFromIndex(NewIndex)).Focus();
+            }
+        });
+
 
         void Load()
         {
@@ -28,6 +38,7 @@ namespace SD_FXUI
             cbX.Text = Data.Get("width");
             NegPrompt.Text = Data.Get("neg");
             tbSteps.Text = Data.Get("steps");
+            tbCFG.Text = Data.Get("cfg");
             cbUpscaler.Text = Data.Get("upscaler");
             slUpscale.Value = int.Parse(Data.Get("up_value", "4"));
             cbSampler.Text = Data.Get("sampler");
@@ -83,6 +94,7 @@ namespace SD_FXUI
             Data.Set("up_value", slUpscale.Value.ToString());
             Data.Set("sampler", cbSampler.Text);
             Data.Set("device", cbDevice.Text);
+            Data.Set("cfg", tbCFG.Text);
 
             Data.Set("model", cbModel.Text);
             Data.Set("VAE", cbVAE.Text);
@@ -275,8 +287,7 @@ namespace SD_FXUI
                 GridViewColumnName_ImageSource = Img
             });
 
-            ListView1.ItemsSource = ListViewItemsCollections;
-            CurrentSelIdx = ListViewItemsCollections.Count - 1;
+            lvImages.ItemsSource = ListViewItemsCollections;
             ImgList.Add(Img);
 
             btnDDB.Visibility = Visibility.Visible;
@@ -323,7 +334,7 @@ namespace SD_FXUI
             ImgList.Clear();
             ViewImg.Source = NoImageData;
 
-            ListView1.UnselectAll();
+            lvImages.UnselectAll();
             ListViewItemsCollections.Clear();
 
             Helper.ActiveImageState = Helper.ImageState.Free;
