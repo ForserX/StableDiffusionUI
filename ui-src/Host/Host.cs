@@ -68,6 +68,9 @@ namespace SD_FXUI
             HostFilter.CheckImageState(Message);
             HostFilter.CheckDeepDanBooru(Message);
 
+            if (HostFilter.CheckFalseWarning(Message))
+                return;
+
             Helper.UIHost.Print(Message);
         }
         public void Kill()

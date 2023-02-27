@@ -49,6 +49,23 @@ namespace SD_FXUI
             }
         }
 
+        public static bool CheckFalseWarning(string Message)
+        {
+            if (Message.Length > 400)
+                return true;
+
+            if (Helper.Mode != Helper.ImplementMode.Shark || Helper.Mode != Helper.ImplementMode.InvokeAI)
+            {
+                if (Message.Contains("Token indices sequence length is longer than the specified maximum sequence length for this model"))
+                {
+                    // Diffusers use long prompt extension
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static void CheckDeepDanBooru(string Message)
         {
             if (Message.Contains("DeepDanBooru: Finished!"))
