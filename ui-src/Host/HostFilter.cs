@@ -22,6 +22,27 @@ namespace SD_FXUI
             }
         }
 
+        public static void CheckOutOfMemory(string Message)
+        {
+            if (Message.Contains("attention_probs = attention_scores.softmax(dim=-1)"))
+            {
+                Helper.UIHost.Dispatcher.Invoke(() =>
+                {
+                    Helper.UIHost.Hide();
+                });
+                Notification.MsgBox("CUDA GPU Error: Out of memory. Use fp16 or reduce the image size!");
+            }
+
+            if (Message.Contains("onnxruntime.capi.onnxruntime_pybind11_state.RuntimeException"))
+            {
+                Helper.UIHost.Dispatcher.Invoke(() =>
+                {
+                    Helper.UIHost.Hide();
+                });
+                Notification.MsgBox("ONNX GPU Error: Out of memory. Use reduce the image size!");
+            }
+        }
+
         public static void CheckConvertState(string Message)
         {
             if (Message.Contains("SD: Done"))

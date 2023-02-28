@@ -67,6 +67,7 @@ namespace SD_FXUI
             HostFilter.CheckConvertState(Message);
             HostFilter.CheckImageState(Message);
             HostFilter.CheckDeepDanBooru(Message);
+            HostFilter.CheckOutOfMemory(Message);
 
             string CorrectedString = HostFilter.FixString(Message);
 
