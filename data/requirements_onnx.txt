@@ -12,8 +12,6 @@ gradio
 altair
 omegaconf
 
-opencv-python
-
 # ONNX Trash
 onnxruntime
 onnxruntime-gpu
@@ -23,6 +21,10 @@ torchvision
 tf2onnx
 transformers-onnx
 accelerate
-gfpgan
 ftfy
 regex 
+
+# GFPGAN
+gfpgan
+realesrgan
+opencv-python

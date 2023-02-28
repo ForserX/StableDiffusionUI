@@ -217,8 +217,15 @@ namespace SD_FXUI
             string NewFile = null;
             if (Helper.EnableGFPGAN)
             {
-                Host FaceFixProc = new Host(FS.GetModelDir() + "stable-diffusion//", "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
-                FaceFixProc.Start($"../../repo/diffusion_scripts/inference_gfpgan.py -i {File} -o {FS.GetImagesDir()} -v 1.4 -s 1");
+                string ModelDir = FS.GetModelDir();
+
+                if (!Directory.Exists(ModelDir + "\\weights"))
+                {
+                    Notification.SendNotification("Starting downloading face restoration...");
+                }
+
+                Host FaceFixProc = new Host(FS.GetModelDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
+                FaceFixProc.Start($"../repo/diffusion_scripts/inference_gfpgan.py -i {File} -o {FS.GetImagesDir()} -v 1.4 -s 1");
 
                 FaceFixProc.SendExitCommand();
                 FaceFixProc.Wait();

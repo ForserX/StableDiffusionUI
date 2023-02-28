@@ -132,6 +132,7 @@
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\diff");
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\vae");
+            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\gfpgan");
         }
     }
 }
