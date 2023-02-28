@@ -34,7 +34,7 @@ model.eval()
 if torch.cuda.is_available(): 
     device = "cuda"
     dtype = torch.float16
-    ntype =np.float32
+    ntype = np.float16
 else:
     device = "cpu"
     dtype = torch.float32
