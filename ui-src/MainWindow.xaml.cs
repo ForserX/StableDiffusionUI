@@ -559,6 +559,23 @@ namespace SD_FXUI
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        private void FloatNumberValidationTextBox(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            if (e.Text.Length > 1)
+            {
+                float SkipFlt = 0;
+                e.Handled = !float.TryParse(e.Text.Replace('.', ','), out SkipFlt);
+            }
+            else if (e.Text == ",")
+            {
+                e.Handled = false;
+                return;
+            }
+
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
         private void btnDownload_Click(object sender, RoutedEventArgs e)
         {
             Utils.HuggDownload DownloadWnd = new Utils.HuggDownload();

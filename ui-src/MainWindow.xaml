@@ -113,7 +113,7 @@
                     <TextBox  x:Name="tbSteps" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="25" TextChanged="tbSteps_TextChanged" Height="13" Margin="199,0,0,0" VerticalAlignment="Center" Padding="3,2,1,2" HorizontalAlignment="Left" Width="34"/>
                     <Label Content="CFG Scale" Height="30" Width="61" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-1,106,0,0" VerticalAlignment="Top"/>
                     <Slider  x:Name="slCFG" Maximum="20" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="5" Value="7.5" ValueChanged="Slider2_ValueChanged" SmallChange="0.5" Margin="70,112,158,0" Height="24" VerticalAlignment="Top"/>
-                    <TextBox  x:Name="tbCFG" TextWrapping="Wrap" PreviewTextInput="NumberValidationTextBox" Text="7,5" TextChanged="tbSteps2_TextChanged" Height="25" Margin="0,105,122,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="3,6,1,6"/>
+                    <TextBox  x:Name="tbCFG" TextWrapping="Wrap" PreviewTextInput="FloatNumberValidationTextBox" Text="7,5" TextChanged="tbSteps2_TextChanged" Height="25" Margin="0,105,122,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="3,6,1,6"/>
                     <ComboBox x:Name="cbX" Margin="61,39,227,0" Height="24" VerticalAlignment="Top">
                         <ComboBoxItem Content="384"/>
                         <ComboBoxItem Content="416"/>
