@@ -127,7 +127,6 @@
             Helper.ImgPath.Replace('\\', '/');
 
             System.IO.Directory.CreateDirectory(Helper.CachePath);
-            System.IO.Directory.CreateDirectory(Helper.CachePath);
             System.IO.Directory.CreateDirectory(FS.GetImagesDir() + "Best");
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
             System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");

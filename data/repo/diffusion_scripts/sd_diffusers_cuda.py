@@ -160,50 +160,49 @@ opt = parser.parse_args()
 NSFW = None
 
 if opt.nsfw:
-    NSFW = StableDiffusionSafetyChecker.from_pretrained(opt.mdlpath + "/safety_checker")
+    NSFW = StableDiffusionSafetyChecker.from_pretrained(opt.mdlpath + "/safety_checker", torch_dtype=torch.float16)
 
 if opt.vae == "default":
-    vae = AutoencoderKL.from_pretrained(opt.mdlpath + "/vae")
+    vae = AutoencoderKL.from_pretrained(opt.mdlpath + "/vae", torch_dtype=torch.float16)
 else:
-    vae = AutoencoderKL.from_pretrained(opt.vae + "/vae")
+    vae = AutoencoderKL.from_pretrained(opt.vae + "/vae", torch_dtype=torch.float16)
 
 if opt.mode == "txt2img":
-    pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=NSFW)
+    pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=torch.float16, vae=vae, safety_checker=NSFW)
 if opt.mode == "img2img":
-    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=NSFW)
+    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=torch.float16, vae=vae, safety_checker=NSFW)
 if opt.mode == "inpaint":
-    pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", vae=vae, safety_checker=NSFW)
+    pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=torch.float16, vae=vae, safety_checker=NSFW)
 
 pipe.to(opt.device)
 
 if opt.scmode == "EulerAncestralDiscrete":
-    pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=torch.float16)
     eta = opt.eta
 
 if opt.scmode == "EulerDiscrete":
-    pipe.scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=torch.float16)
     
 if opt.scmode == "PNDM":
-    pipe.scheduler = PNDMScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler = PNDMScheduler.from_config(pipe.scheduler.config, torch_dtype=torch.float16)
     
 if opt.scmode == "DDIM":
-    pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config, torch_dtype=torch.float16)
     
 if opt.scmode == "DPMSolverMultistep":
-    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config, torch_dtype=torch.float16)
     
 if opt.scmode == "LMSDiscrete":
-    pipe.scheduler = LMSDiscreteScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler = LMSDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=torch.float16)
     
 if opt.scmode == "DDPM":
-    pipe.scheduler = DDPMScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler = DDPMScheduler.from_config(pipe.scheduler.config, torch_dtype=torch.float16)
     
 if opt.scmode == "DPMDiscrete":
-    pipe.scheduler = KDPM2DiscreteScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler = KDPM2DiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=torch.float16)
     
 if opt.scmode == "HeunDiscrete":
-    pipe.scheduler = HeunDiscreteScheduler.from_config(pipe.scheduler.config)
-    
+    pipe.scheduler = HeunDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=torch.float16)
 
 def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_path = None, init_strength = 0.75, mask_img_path = None):
     start_time = time.time()
