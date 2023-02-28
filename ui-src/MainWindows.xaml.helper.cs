@@ -31,7 +31,7 @@ namespace SD_FXUI
 
         void Load()
         {
-            cbFf16.IsChecked = Data.Get("fp16") == "true";
+            cbFf16.IsChecked = Data.Get("fp16", "true") == "true";
             cbGfpgan.IsChecked = Data.Get("cbGfpgan") == "true";
             cbNSFW.IsChecked = Data.Get("cbNSFW") == "true";
             cbY.Text = Data.Get("height", "512");
@@ -185,6 +185,8 @@ namespace SD_FXUI
         }
         private string GetCommandLineDiffCuda()
         {
+            string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
+
             string Model = string.Empty;
             if (cbModel.Text.EndsWith(".hgf"))
             {
@@ -215,6 +217,7 @@ namespace SD_FXUI
             string newETA = ETA.ToString().Replace(",", ".");
 
             string CmdLine = $""
+                    + $" --precision={FpMode}"
                     + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
                     + $" --height={cbY.Text}"
