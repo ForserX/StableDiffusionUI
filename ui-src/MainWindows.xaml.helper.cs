@@ -34,14 +34,14 @@ namespace SD_FXUI
             cbFf16.IsChecked = Data.Get("fp16") == "true";
             cbGfpgan.IsChecked = Data.Get("cbGfpgan") == "true";
             cbNSFW.IsChecked = Data.Get("cbNSFW") == "true";
-            cbY.Text = Data.Get("height");
-            cbX.Text = Data.Get("width");
+            cbY.Text = Data.Get("height", "512");
+            cbX.Text = Data.Get("width", "512");
             NegPrompt.Text = Data.Get("neg");
-            tbSteps.Text = Data.Get("steps");
-            tbCFG.Text = Data.Get("cfg");
-            cbUpscaler.Text = Data.Get("upscaler");
+            tbSteps.Text = Data.Get("steps", "20");
+            tbCFG.Text = Data.Get("cfg", "7");
+            cbUpscaler.Text = Data.Get("upscaler", "None");
             slUpscale.Value = int.Parse(Data.Get("up_value", "4"));
-            cbSampler.Text = Data.Get("sampler");
+            cbSampler.Text = Data.Get("sampler", "DDIM");
             var ListModel = Data.Get("model");
 
             switch (Data.Get("back_mode"))
@@ -59,6 +59,11 @@ namespace SD_FXUI
             cbModel.Text = ListModel.ToString();
             cbDevice.Text = Data.Get("device");
             cbVAE.Text = Data.Get("VAE");
+
+            //if (cbDevice.Text.Length == 0)
+            //{
+            //    cbDevice.SelectedIndex = 0;
+            //}
 
             if (cbVAE.Text.Length == 0)
             {
