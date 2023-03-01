@@ -16,7 +16,6 @@ namespace SD_FXUI
     /// </summary>
     public partial class App : Application
     {
-
     }
 
     

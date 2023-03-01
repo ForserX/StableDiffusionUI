@@ -63,5 +63,7 @@ namespace SD_FXUI
         public static ImageState ActiveImageState = ImageState.Free;
         public static bool EnableGFPGAN = false;
         public static UpscalerType CurrentUpscalerType = UpscalerType.None;
+
+        public static List<string> ImgList = new List<string>();
     }
 }

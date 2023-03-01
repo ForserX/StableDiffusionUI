@@ -1,4 +1,5 @@
 ﻿using HandyControl.Data;
+using SD_FXUI.Properties;
 using System;
 using System.IO;
 using System.Windows;
@@ -43,6 +44,9 @@ namespace SD_FXUI
             slUpscale.Value = int.Parse(Data.Get("up_value", "4"));
             cbSampler.Text = Data.Get("sampler", "DDIM");
             var ListModel = Data.Get("model");
+
+            Utils.Settings.UseNotif = Data.Get("notif", "true") == "true";
+            Utils.Settings.UseNotifImgs = Data.Get("notifi", "true") == "true";
 
             switch (Data.Get("back_mode"))
             {
@@ -91,6 +95,8 @@ namespace SD_FXUI
             Data.Set("fp16", cbFf16.IsChecked == true ? "true" : "false");
             Data.Set("cbGfpgan", cbGfpgan.IsChecked == true ? "true" : "false");
             Data.Set("cbNSFW", cbNSFW.IsChecked == true ? "true" : "false");
+            Data.Set("notif", Utils.Settings.UseNotif ? "true" : "false");
+            Data.Set("notifi", Utils.Settings.UseNotifImgs ? "true" : "false");
             Data.Set("height", cbY.Text);
             Data.Set("width", cbX.Text);
             Data.Set("neg", NegPrompt.Text);
@@ -296,7 +302,7 @@ namespace SD_FXUI
             });
 
             lvImages.ItemsSource = ListViewItemsCollections;
-            ImgList.Add(Img);
+            Helper.ImgList.Add(Img);
 
             btnDDB.Visibility = Visibility.Visible;
         }
@@ -339,7 +345,7 @@ namespace SD_FXUI
 
         void ClearImages()
         {
-            ImgList.Clear();
+            Helper.ImgList.Clear();
             ViewImg.Source = NoImageData;
 
             lvImages.UnselectAll();

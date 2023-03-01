@@ -18,7 +18,7 @@ namespace SD_FXUI
                     Helper.UIHost.Show(); 
                 });
 
-                Notification.SendNotification("Error! See host for details!");
+                Notification.SendErrorNotification("Error! See host for details!");
             }
         }
 

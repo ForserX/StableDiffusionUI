@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,7 +19,6 @@ namespace SD_FXUI
     /// </summary>
     public partial class MainWindow : HandyControl.Controls.BlurWindow
     {
-        List<string> ImgList = new List<string>();
         Config Data = null;
         ImageSource NoImageData = null;
         ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
@@ -59,6 +59,12 @@ namespace SD_FXUI
             btnDDB.Visibility = Visibility.Collapsed;
             NoImageData = ViewImg.Source;
             Helper.SafeMaskFreeImg = imgMask.Source;
+
+
+            ToastNotificationManagerCompat.OnActivated += toastArgs =>
+            {
+                Notification.ToastBtnClickManager(toastArgs);
+            };
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -343,9 +349,9 @@ namespace SD_FXUI
         }
         private void lvImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ImgList.Count > 0)
+            if (Helper.ImgList.Count > 0)
             {
-                currentImage = (ImgList[lvImages.SelectedIndex]);
+                currentImage = (Helper.ImgList[lvImages.SelectedIndex]);
                                
                 ViewImg.Source = FS.BitmapFromUri(new Uri(currentImage));
                 string NewCurrentImage = currentImage.Replace("_upscale.", ".");
@@ -355,7 +361,7 @@ namespace SD_FXUI
                     currentImage = NewCurrentImage;
                 }
 
-                string Name = FS.GetImagesDir() + "best\\" + Path.GetFileName(ImgList[lvImages.SelectedIndex]);
+                string Name = FS.GetImagesDir() + "best\\" + Path.GetFileName(Helper.ImgList[lvImages.SelectedIndex]);
 
                 if (File.Exists(Name))
                 {
@@ -408,7 +414,7 @@ namespace SD_FXUI
 
         private void btmToImg_Click(object sender, MouseButtonEventArgs e)
         {
-            if (currentImage == null && ImgList.Count <= 0)
+            if (currentImage == null && Helper.ImgList.Count <= 0)
             {
                 return;
             }
@@ -419,7 +425,7 @@ namespace SD_FXUI
             }
             else
             {
-                Helper.InputImagePath = ImgList[lvImages.SelectedIndex];
+                Helper.InputImagePath = Helper.ImgList[lvImages.SelectedIndex];
                 imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
             }
 
@@ -466,7 +472,7 @@ namespace SD_FXUI
 
             if (Helper.ImageState.Favor == Helper.ActiveImageState)
             {
-                string Name = Path.GetFileName(ImgList[lvImages.SelectedIndex]);
+                string Name = Path.GetFileName(Helper.ImgList[lvImages.SelectedIndex]);
                 File.Delete(FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Free;
 
@@ -474,8 +480,8 @@ namespace SD_FXUI
             }
             else
             {
-                string Name = Path.GetFileName(ImgList[lvImages.SelectedIndex]);
-                File.Copy(ImgList[lvImages.SelectedIndex], FS.GetImagesDir() + "best\\" + Name);
+                string Name = Path.GetFileName(Helper.ImgList[lvImages.SelectedIndex]);
+                File.Copy(Helper.ImgList[lvImages.SelectedIndex], FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Favor;
 
                 btnFavor.Source = imgFavor.Source;
@@ -588,6 +594,12 @@ namespace SD_FXUI
 
             imgMask.Source = Helper.SafeMaskFreeImg;
             Helper.ImgMaskPath = string.Empty;
+        }
+
+        private void btnSettingsClick(object sender, RoutedEventArgs e)
+        {
+            Utils.Settings SettingsWnd = new Utils.Settings();
+            SettingsWnd.Show();
         }
 
         private void gridImg_Drop(object sender, DragEventArgs e)

@@ -146,7 +146,7 @@ namespace SD_FXUI
             }
 
             Host.Print("\n  Task Done..... \n");
-            Notification.SendNotification("Task: done!");
+            Notification.SendNotification("Task: done!", true);
             Helper.Form.InvokeProgressUpdate(100);
             Helper.Form.UpdateCurrentViewImg();
         }
@@ -176,7 +176,7 @@ namespace SD_FXUI
             }
 
             Host.Print("\n  Task Done..... \n");
-            Notification.SendNotification("Task: done!");
+            Notification.SendNotification("Task: done!", true);
             Helper.Form.InvokeProgressUpdate(100);
             Helper.Form.UpdateCurrentViewImg();
         }
@@ -206,7 +206,7 @@ namespace SD_FXUI
             }
 
             Host.Print("\n  Task Done..... \n");
-            Notification.SendNotification("Task: done!");
+            Notification.SendNotification("Task: done!", true);
             Helper.Form.InvokeProgressUpdate(100);
             Helper.Form.UpdateCurrentViewImg();
         }

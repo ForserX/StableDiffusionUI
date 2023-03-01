@@ -1,0 +1,19 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SD_FXUI.Utils"
+        xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="SD_FXUI.Utils.Settings"
+        mc:Ignorable="d"
+        Title="Settings" Height="450" Width="800" Icon="../res/settings.png">
+    <Grid>
+        <GroupBox Header="Notification">
+            <ToggleButton x:Name="chNotification" Content="           " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="20" Width="68" Margin="206,3,516,0" VerticalAlignment="Top" Checked="chNotification_Checked" Unchecked="chNotification_Checked"/>
+         </GroupBox>
+        <Label Content="Use Windows notifications" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="191"/>
+        <Label Content="Show images into notifications" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="191"/>
+        <ToggleButton x:Name="chNotification_1" Content="           " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="20" Width="68" Margin="211,86,521,0" VerticalAlignment="Top" Checked="chNotification_1_Checked" Unchecked="chNotification_1_Checked"/>
+
+    </Grid>
+</Window>
