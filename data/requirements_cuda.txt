@@ -32,3 +32,4 @@ regex
 # GFPGAN
 gfpgan
 realesrgan
+opencv-python

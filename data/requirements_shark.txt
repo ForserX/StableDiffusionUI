@@ -1,6 +1,10 @@
 setuptools
 wheel
 
+# Testing
+Pillow
+parameterized
+
 # SHARK Runner
 tqdm
 
@@ -11,8 +15,6 @@ google-cloud-storage
 pytest
 pytest-xdist
 pytest-forked
-Pillow
-parameterized
 
 # Add transformers, diffusers and scipy since it most commonly used
 transformers
