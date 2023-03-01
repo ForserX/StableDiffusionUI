@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:SD_FXUI.Utils"
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="SD_FXUI.Utils.ImageView"
         mc:Ignorable="d"
-        Title="ImageView" Height="882" Width="1186">
+        Title="ImageView" Height="882" Width="1186" KeyDown="KeyDownEvent">
     <Grid>
 
-        <Image x:Name="imgView" Margin="0,0,0,0"/>
+        <Image x:Name="imgView" Margin="0,0,0,0" KeyDown="KeyDownEvent"/>
 
     </Grid>
 </Window>
