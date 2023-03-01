@@ -203,7 +203,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,77,16,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btmToImg_Click"/>
+        <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,71,16,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btmToImg_Click"/>
         <Button x:Name="btnBestOpen" Content="Load Collection" Height="36" VerticalAlignment="Bottom" Width="95" Grid.Column="4" Foreground="White" Click="btnBestOpen_Click" Padding="4,6,4,6">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
@@ -212,5 +212,6 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
+        <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,99,17,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btmZoom_Click"/>
     </Grid>
 </hc:BlurWindow>

@@ -30,6 +30,7 @@
     <Resource Include="res\img2img.png" />
     <Resource Include="res\diff.png" />
     <Resource Include="res\donai.png" />
+    <Resource Include="res\zoom.png" />
     <Resource Include="res\dropFiles.jpg" />
   </ItemGroup>
 

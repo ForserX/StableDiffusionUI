@@ -161,16 +161,6 @@ namespace SD_FXUI
             Helper.UIHost.Show();
         }
 
-        public static ImageSource BitmapFromUri(Uri source)
-        {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = source;
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            return bitmap;
-        }
-
         private void OnClose(object sender, EventArgs e)
         {
             Helper.UIHost.Close();
@@ -357,7 +347,7 @@ namespace SD_FXUI
             {
                 currentImage = (ImgList[lvImages.SelectedIndex]);
                                
-                ViewImg.Source = BitmapFromUri(new Uri(currentImage));
+                ViewImg.Source = FS.BitmapFromUri(new Uri(currentImage));
                 string NewCurrentImage = currentImage.Replace("_upscale.", ".");
 
                 if (File.Exists(NewCurrentImage))
@@ -401,9 +391,19 @@ namespace SD_FXUI
             {
                 Helper.InputImagePath = OpenDlg.FileName;
                 gridImg.Visibility = Visibility.Visible;
-                imgLoaded.Source = BitmapFromUri(new Uri(Helper.InputImagePath));
+                imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
                 Helper.DrawMode = Helper.DrawingMode.Img2Img;
             }
+        }
+
+        private void btmZoom_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (currentImage == null || currentImage.Length < 5)
+                return;
+
+            Utils.ImageView ImgViewWnd = new Utils.ImageView();
+            ImgViewWnd.SetImage(currentImage);
+            ImgViewWnd.Show();
         }
 
         private void btmToImg_Click(object sender, MouseButtonEventArgs e)
@@ -415,12 +415,12 @@ namespace SD_FXUI
             else if (currentImage != null)
             {
                 Helper.InputImagePath = currentImage;
-                imgLoaded.Source = BitmapFromUri(new Uri(currentImage));               
+                imgLoaded.Source = FS.BitmapFromUri(new Uri(currentImage));               
             }
             else
             {
                 Helper.InputImagePath = ImgList[lvImages.SelectedIndex];
-                imgLoaded.Source = BitmapFromUri(new Uri(Helper.InputImagePath));
+                imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
             }
 
 
@@ -521,7 +521,7 @@ namespace SD_FXUI
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
                 currentImage = dropedFile;
-                ViewImg.Source = BitmapFromUri(new Uri(dropedFile));
+                ViewImg.Source = FS.BitmapFromUri(new Uri(dropedFile));
                 btnDDB.Visibility = Visibility.Visible;
             }
         }
@@ -597,7 +597,7 @@ namespace SD_FXUI
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
                 Helper.ImgMaskPath = dropedFile;
-                imgMask.Source = BitmapFromUri(new Uri(dropedFile));
+                imgMask.Source = FS.BitmapFromUri(new Uri(dropedFile));
                 btImageClearMask.Visibility = Visibility.Visible;
             }
         }

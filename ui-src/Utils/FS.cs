@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace SD_FXUI
 {
@@ -126,6 +128,16 @@ namespace SD_FXUI
         {
             FileAttributes attr = File.GetAttributes(Path);
             return (attr.HasFlag(FileAttributes.Directory));
+        }
+
+        public static ImageSource BitmapFromUri(System.Uri source)
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = source;
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            return bitmap;
         }
 
         internal class Dir
