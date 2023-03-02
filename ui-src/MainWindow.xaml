@@ -24,7 +24,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Image x:Name="ViewImg" Margin="5,41,4,114" Grid.Column="3" Source="/res/noimg.jpg" DragDrop.Drop="Grid_Drop"/>
+        <Image x:Name="ViewImg" Margin="5,41,4,114" Grid.Column="3" Source="/res/noimg.jpg" DragDrop.Drop="gridDrop"/>
         <Button Content="Break!" Margin="6,0,0,0" Click="Button_ClickBreak" HorizontalAlignment="Left" RenderTransformOrigin="0.484,1.102" Height="36
                 " VerticalAlignment="Bottom" Grid.Column="3" Foreground="White" Width="82">
             <Button.Background>
@@ -58,7 +58,7 @@
                     <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1"/>
                     <TextBox x:Name="TryPrompt" TextWrapping="Wrap" Text="" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Margin="5,27,6,4"/>
                     <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-14,8,0,0"/>
-                    <Button x:Name="btImg" Content="From image" Margin="0,1,6,0" Click="btImage_Click" HorizontalAlignment="Right" Width="96" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
+                    <Button x:Name="btnImg" Content="From image" Margin="0,1,6,0" Click="btnImage_Click" HorizontalAlignment="Right" Width="96" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -73,7 +73,7 @@
                     <Label Content="Denoising Scale" HorizontalAlignment="Left" Margin="116,1,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.332,-0.041" Background="{x:Null}" BorderBrush="{x:Null}" Width="96" Padding="1,6,1,6"/>
                     <Slider  x:Name="slDenoising" Maximum="100" Minimum="5" Value="45" ValueChanged="Slider_Denoising" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="116,31,52,0" Height="25" VerticalAlignment="Top"/>
                     <TextBox x:Name="tbDenoising" TextWrapping="Wrap" Text="45" Height="18" Margin="0,26,9,0" HorizontalAlignment="Right" Width="38" VerticalAlignment="Top" TextChanged="tbDenoising_TextChanged"/>
-                    <Button x:Name="btImageClear" Content="Clear" Margin="0,118,2,0" Click="btImageClear_Click" HorizontalAlignment="Right" Width="69" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
+                    <Button x:Name="btnImageClear" Content="Clear" Margin="0,118,2,0" Click="btnImageClear_Click" HorizontalAlignment="Right" Width="69" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -82,7 +82,7 @@
                         </Button.Background>
                     </Button>
                     <Image x:Name="imgToImgMask" HorizontalAlignment="Right" Height="23" Margin="0,2,4,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png"/>
-                    <Button Content="Get tokens" HorizontalAlignment="Left" Margin="20,115,0,0" VerticalAlignment="Top" Width="80" Click="Button_Click_DeepDanbooru2"  Foreground="White" Height="23" Padding="10,1,10,1">
+                    <Button Content="Get tokens" HorizontalAlignment="Left" Margin="20,115,0,0" VerticalAlignment="Top" Width="80" Click="btnDeepDanbooru_Click"  Foreground="White" Height="23" Padding="10,1,10,1">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -91,7 +91,7 @@
                         </Button.Background>
                     </Button>
                     <Image x:Name="imgMask" HorizontalAlignment="Left" Height="54" Margin="114,56,0,0" VerticalAlignment="Top" Width="56" Source="/res/nomask.jpg" AllowDrop="True"/>
-                    <Button x:Name="btImageClearMask" Content="Clear Mask" Margin="0,92,132,0" HorizontalAlignment="Right" Width="50" RenderTransformOrigin="0.484,1.102" Height="18" VerticalAlignment="Top" Foreground="White" Padding="2,1,2,1" Click="btImageClearMask_Click" FontSize="8" Visibility="Collapsed">
+                    <Button x:Name="btnImageClearMask" Content="Clear Mask" Margin="0,92,132,0" HorizontalAlignment="Right" Width="50" RenderTransformOrigin="0.484,1.102" Height="18" VerticalAlignment="Top" Foreground="White" Padding="2,1,2,1" Click="btnImageClearMask_Click" FontSize="8" Visibility="Collapsed">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -178,8 +178,8 @@
         </ScrollViewer>
         <Image Source="/res/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Margin="45,0,0,31" Grid.Column="3" Height="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         <Image x:Name="btCmd" Source="/res/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Margin="3,0,0,34" HorizontalAlignment="Left" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="48" VerticalAlignment="Bottom"/>
-        <Image x:Name="btHistory" Source="/res/history.png" MouseLeftButtonDown="btHistory_Click" Margin="0,0,0,53" HorizontalAlignment="Right" Width="44" Grid.Column="4" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
-        <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,43,18,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btmFavorClick"/>
+        <Image x:Name="btHistory" Source="/res/history.png" MouseLeftButtonDown="btnHistory_Click" Margin="0,0,0,53" HorizontalAlignment="Right" Width="44" Grid.Column="4" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
+        <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,43,18,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btnFavorClick"/>
         <Image x:Name="imgFavor" Source="/res/favor.png" />
         <Image x:Name="imgNotFavor" Source="/res/notfavor.png" />
         <ProgressBar x:Name="pbGen" Grid.Column="3" Height="12" Margin="10,0,9,99" VerticalAlignment="Bottom"/>
@@ -193,7 +193,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,71,16,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btmToImg_Click"/>
+        <Image x:Name="btnToImg" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,71,16,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png" MouseLeftButtonDown="btnToImg_Click"/>
         <Button x:Name="btnBestOpen" Content="Load Collection" Height="36" VerticalAlignment="Bottom" Width="95" Grid.Column="4" Foreground="White" Click="btnBestOpen_Click" Padding="4,6,4,6">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
@@ -202,7 +202,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,99,17,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btmZoom_Click"/>
+        <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,99,17,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btnZoom_Click"/>
         <Image x:Name="IconRes" Source="res/icon.png" />
         <Image x:Name="btnSettings" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,9,0" VerticalAlignment="Top" Width="41" Source="/res/settings.png" MouseLeftButtonDown="btnSettingsClick"/>
     </Grid>

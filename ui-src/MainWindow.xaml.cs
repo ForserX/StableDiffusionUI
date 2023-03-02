@@ -225,7 +225,7 @@ namespace SD_FXUI
                 // #TODO: GPU List check
                 cbDevice.Items.Add("GPU: 1");
 
-                btImg.Visibility = Visibility.Visible;
+                btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
                 grDevice.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
@@ -260,7 +260,7 @@ namespace SD_FXUI
                 grDevice.Visibility = Visibility.Collapsed;
                 grVAE.Visibility = Visibility.Visible;
 
-                btImg.Visibility = Visibility.Visible;
+                btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
                 CPUUse = false;
 
@@ -295,7 +295,7 @@ namespace SD_FXUI
                 cbDevice.Items.Add("vulkan");
                 cbDevice.Items.Add("CUDA");
 
-                btImg.Visibility = Visibility.Hidden;
+                btnImg.Visibility = Visibility.Hidden;
                 cbFf16.Visibility = Visibility.Visible;
                 grDevice.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Collapsed;
@@ -328,7 +328,7 @@ namespace SD_FXUI
                 UpdateModelsList();
                 grDevice.Visibility = Visibility.Collapsed;
 
-                btImg.Visibility = Visibility.Visible;
+                btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
                 CPUUse = true;
@@ -384,7 +384,7 @@ namespace SD_FXUI
             }
         }
 
-        private void btImage_Click(object sender, RoutedEventArgs e)
+        private void btnImage_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog OpenDlg = new OpenFileDialog();
             OpenDlg.Filter = "PNG (*.png)|*.png|JPG (*.jpg)|*.jpg|All files (*.*)|*.*";
@@ -400,7 +400,7 @@ namespace SD_FXUI
             }
         }
 
-        private void btmZoom_Click(object sender, MouseButtonEventArgs e)
+        private void btnZoom_Click(object sender, MouseButtonEventArgs e)
         {
             if (currentImage == null || currentImage.Length < 5)
                 return;
@@ -410,7 +410,7 @@ namespace SD_FXUI
             ImgViewWnd.Show();
         }
 
-        private void btmToImg_Click(object sender, MouseButtonEventArgs e)
+        private void btnToImg_Click(object sender, MouseButtonEventArgs e)
         {
             if (currentImage == null && Helper.ImgList.Count <= 0)
             {
@@ -437,7 +437,7 @@ namespace SD_FXUI
             slDenoising.Value = float.Parse(tbDenoising.Text.Replace('.', ','));
         }
 
-        private void btImageClear_Click(object sender, RoutedEventArgs e)
+        private void btnImageClear_Click(object sender, RoutedEventArgs e)
         {
             gridImg.Visibility = Visibility.Collapsed;
 
@@ -450,7 +450,7 @@ namespace SD_FXUI
             imgMask.Visibility = Visibility.Collapsed;
         }
 
-        private void btHistory_Click(object sender, MouseButtonEventArgs e)
+        private void btnHistory_Click(object sender, MouseButtonEventArgs e)
         {
             Utils.HistoryList HistoryWnd = new Utils.HistoryList();
             HistoryWnd.ShowDialog();
@@ -461,7 +461,7 @@ namespace SD_FXUI
             Install.Check();
         }
 
-        private void btmFavorClick(object sender, MouseButtonEventArgs e)
+        private void btnFavorClick(object sender, MouseButtonEventArgs e)
         {
             if (lvImages.Items.Count == 0 || lvImages.SelectedItem == null)
             {
@@ -496,7 +496,7 @@ namespace SD_FXUI
             Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
         }
 
-        private void Button_Click_DeepDanbooru2(object sender, RoutedEventArgs e)
+        private void btnDeepDanbooru_Click(object sender, RoutedEventArgs e)
         {
             Task.Run(() => CMD.DeepDanbooruProcess(Helper.InputImagePath));
         }
@@ -509,7 +509,7 @@ namespace SD_FXUI
             }
         }
 
-        private void Grid_Drop(object sender, DragEventArgs e)
+        private void gridDrop(object sender, DragEventArgs e)
         {
             if (null != e.Data && e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -586,9 +586,9 @@ namespace SD_FXUI
             DownloadWnd.Show();
         }
 
-        private void btImageClearMask_Click(object sender, RoutedEventArgs e)
+        private void btnImageClearMask_Click(object sender, RoutedEventArgs e)
         {
-            btImageClearMask.Visibility = Visibility.Collapsed;
+            btnImageClearMask.Visibility = Visibility.Collapsed;
 
             imgMask.Source = Helper.SafeMaskFreeImg;
             Helper.ImgMaskPath = string.Empty;
@@ -608,7 +608,7 @@ namespace SD_FXUI
             {
                 Helper.ImgMaskPath = dropedFile;
                 imgMask.Source = FS.BitmapFromUri(new Uri(dropedFile));
-                btImageClearMask.Visibility = Visibility.Visible;
+                btnImageClearMask.Visibility = Visibility.Visible;
             }
         }
 
