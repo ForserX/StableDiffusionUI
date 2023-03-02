@@ -39,8 +39,6 @@ namespace SD_FXUI
 
             cbUpscaler.SelectedIndex = 0;
             cbModel.SelectedIndex = 0;
-            cbX.SelectedIndex = 3;
-            cbY.SelectedIndex = 3;
 
             cbSampler.SelectedIndex = 0;
             cbDevice.SelectedIndex = 0;
@@ -612,6 +610,45 @@ namespace SD_FXUI
                 imgMask.Source = FS.BitmapFromUri(new Uri(dropedFile));
                 btImageClearMask.Visibility = Visibility.Visible;
             }
+        }
+
+        private void slW_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (tbW != null)
+            {
+                tbW.Text = slW.Value.ToString();
+
+                if (lbRatio != null)
+                    lbRatio.Content = GetRatio(slW.Value, slH.Value);
+            }
+        }
+
+        private void slH_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (tbH != null)
+            {
+                tbH.Text = slH.Value.ToString();
+
+                if (lbRatio != null)
+                    lbRatio.Content = GetRatio(slW.Value, slH.Value);
+            }
+        }
+
+        private void tbW_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            slW.Value = float.Parse(tbW.Text.Replace('.', ','));
+
+            if (lbRatio != null)
+                lbRatio.Content = GetRatio(slW.Value, slH.Value);
+        }
+
+        private void tbH_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            float NewValue = float.Parse(tbH.Text);
+            slH.Value = NewValue;
+
+            if (lbRatio != null)
+                lbRatio.Content = GetRatio(slW.Value, slH.Value);
         }
     }
 }

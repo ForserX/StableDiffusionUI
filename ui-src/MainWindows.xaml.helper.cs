@@ -35,8 +35,8 @@ namespace SD_FXUI
             cbFf16.IsChecked = Data.Get("fp16", "true") == "true";
             cbGfpgan.IsChecked = Data.Get("cbGfpgan") == "true";
             cbNSFW.IsChecked = Data.Get("cbNSFW") == "true";
-            cbY.Text = Data.Get("height", "512");
-            cbX.Text = Data.Get("width", "512");
+            tbH.Text = Data.Get("height", "512");
+            tbW.Text = Data.Get("width", "512");
             NegPrompt.Text = Data.Get("neg");
             tbSteps.Text = Data.Get("steps", "20");
             tbCFG.Text = Data.Get("cfg", "7");
@@ -97,8 +97,8 @@ namespace SD_FXUI
             Data.Set("cbNSFW", cbNSFW.IsChecked == true ? "true" : "false");
             Data.Set("notif", Utils.Settings.UseNotif ? "true" : "false");
             Data.Set("notifi", Utils.Settings.UseNotifImgs ? "true" : "false");
-            Data.Set("height", cbY.Text);
-            Data.Set("width", cbX.Text);
+            Data.Set("height", tbH.Text);
+            Data.Set("width", tbH.Text);
             Data.Set("neg", NegPrompt.Text);
             Data.Set("steps", tbSteps.Text);
             Data.Set("upscaler", cbUpscaler.Text);
@@ -145,8 +145,8 @@ namespace SD_FXUI
             string CmdLine = $""
                     + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
-                    + $" --height={cbY.Text}"
-                    + $" --width={cbX.Text}"
+                    + $" --height={tbH.Text}"
+                    + $" --width={tbW.Text}"
                     + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
                     + $" --scmode={cbSampler.Text}"
                     + $" --steps={tbSteps.Text}"
@@ -226,8 +226,8 @@ namespace SD_FXUI
                     + $" --precision={FpMode}"
                     + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
-                    + $" --height={cbY.Text}"
-                    + $" --width={cbX.Text}"
+                    + $" --height={tbH.Text}"
+                    + $" --width={tbW.Text}"
                     + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
                     + $" --scmode={cbSampler.Text}"
                     + $" --steps={tbSteps.Text}"
@@ -275,8 +275,8 @@ namespace SD_FXUI
                     + $" --device=\"{cbDevice.Text}\""
                     + $" --prompt=\"{TryPrompt.Text}\""
                     + $" --negative-prompts=\"{NegPrompt.Text}\""
-                    + $" --height={cbY.Text}"
-                    + $" --width={cbX.Text}"
+                    + $" --height={tbH.Text}"
+                    + $" --width={tbW.Text}"
                     + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
                     + $" --scheduler={cbSampler.Text}"
                     + $" --steps={tbSteps.Text}"
@@ -353,6 +353,24 @@ namespace SD_FXUI
 
             Helper.ActiveImageState = Helper.ImageState.Free;
             btnFavor.Source = imgNotFavor.Source;
+        }
+
+        private int GCD(int a, int b)
+        {
+            return b == 0 ? a : GCD(b, a % b);
+        }
+
+        private string GetRatio(double Width, double Height)
+        {
+            int gcd = GCD((int)Width, (int)Height);
+            int DeltaWidth = (int)Width / gcd;
+            int DeltaHeight = (int)Height / gcd;
+
+            double TotalPix = Width + Height;
+
+            string OutStr = DeltaWidth.ToString() + ":" + DeltaHeight.ToString() + "; " + TotalPix.ToString();
+
+            return OutStr;
         }
 
         private void ChangeTheme()
