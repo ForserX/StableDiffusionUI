@@ -1,4 +1,6 @@
-﻿namespace SD_FXUI
+﻿using System.IO;
+
+namespace SD_FXUI
 {
     internal class Install
     {
@@ -114,7 +116,7 @@
 
                 reader.Close();
 
-                string[] Lines = System.IO.File.ReadAllLines(FileName);
+                string[] Lines = File.ReadAllLines(FileName);
                 Lines[LineCounter] = str;
                 System.IO.File.WriteAllLines(FileName, Lines);
             }
@@ -126,13 +128,21 @@
             Helper.ImgPath = FS.GetImagesDir() + System.DateTime.Now.ToString().Replace(':', '-').Replace(' ', '_') + "\\";
             Helper.ImgPath.Replace('\\', '/');
 
-            System.IO.Directory.CreateDirectory(Helper.CachePath);
-            System.IO.Directory.CreateDirectory(FS.GetImagesDir() + "Best");
-            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
-            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");
-            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\diff");
-            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\vae");
-            System.IO.Directory.CreateDirectory(FS.GetModelDir() + @"\gfpgan");
+            string OldDiffDirectoryName = FS.GetModelDir() + "diff";
+            string NewDiffDirectoryName = FS.GetModelDir() + "diffusers";
+            if (Directory.Exists(OldDiffDirectoryName))
+            {
+                Directory.Move(OldDiffDirectoryName, NewDiffDirectoryName);
+            }
+
+            Directory.CreateDirectory(Helper.CachePath);
+            Directory.CreateDirectory(FS.GetImagesDir() + "Best");
+            Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
+            Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");
+            Directory.CreateDirectory(NewDiffDirectoryName);
+            Directory.CreateDirectory(FS.GetModelDir() + @"\vae");
+            Directory.CreateDirectory(FS.GetModelDir() + @"\gfpgan");
+            Directory.CreateDirectory(FS.GetModelDir() + @"\deepdanbooru");
         }
     }
 }

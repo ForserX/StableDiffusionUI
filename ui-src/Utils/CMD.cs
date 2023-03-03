@@ -17,12 +17,12 @@ namespace SD_FXUI
 
             if (InputFile.EndsWith(".safetensors"))
             {
-                OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
+                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
                 AddCmd = " --from_safetensors";
             }
             else
             {
-                OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
             }
 
             Directory.CreateDirectory(OutPath);
@@ -54,12 +54,12 @@ namespace SD_FXUI
 
             if (InputFile.EndsWith(".safetensors"))
             {
-                OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
+                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
                 AddCmd = " --from_safetensors";
             }
             else
             {
-                OutPath = FS.GetModelDir() + "diff\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
             }
 
             Directory.CreateDirectory(OutPath);

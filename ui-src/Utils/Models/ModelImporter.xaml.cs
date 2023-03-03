@@ -41,7 +41,7 @@ namespace SD_FXUI.Utils
                 Name = System.IO.Path.GetFileNameWithoutExtension(XName);
             }
 
-            string SafeName = FS.GetModelDir() + "diff\\" + Name;
+            string SafeName = FS.GetModelDir() + "diffusers\\" + Name;
             Task.Run(() => CMD.ProcessConvertDiff2Onnx(SafeName));
         }
 

@@ -76,8 +76,8 @@ namespace SD_FXUI
                 case Helper.ImplementMode.ONNX: WorkingPath += "onnx/"; break;
                 case Helper.ImplementMode.InvokeAI: WorkingPath += "stable-diffusion/"; break;
                 case Helper.ImplementMode.Shark: WorkingPath += "diff/"; break;
-                case Helper.ImplementMode.DiffCUDA: WorkingPath += "diff/"; break;
-                case Helper.ImplementMode.DiffCPU: WorkingPath += "diff/"; break;
+                case Helper.ImplementMode.DiffCUDA: WorkingPath += "diffusers/"; break;
+                case Helper.ImplementMode.DiffCPU: WorkingPath += "diffusers/"; break;
             }
 
             List<string> Models = new List<string>();

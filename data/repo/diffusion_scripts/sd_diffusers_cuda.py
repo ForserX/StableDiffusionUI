@@ -5,6 +5,8 @@ import torch
 from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionInpaintPipeline, AutoencoderKL
 from diffusers import EulerAncestralDiscreteScheduler, PNDMScheduler, LMSDiscreteScheduler, DDIMScheduler, DPMSolverMultistepScheduler, EulerDiscreteScheduler, DDPMScheduler, KDPM2DiscreteScheduler, HeunDiscreteScheduler
 
+from diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
+
 import argparse
 from PIL import PngImagePlugin, Image
 
@@ -173,7 +175,11 @@ else:
 NSFW = None
 
 if opt.nsfw:
-    NSFW = StableDiffusionSafetyChecker.from_pretrained(opt.mdlpath + "/safety_checker", torch_dtype=fptype)
+    safety_model = opt.mdlpath + "/safety_checker/"
+    NSFW = StableDiffusionSafetyChecker.from_pretrained(
+        safety_model,
+        torch_dtype=fptype
+    )
 
 if opt.vae == "default":
     vae = AutoencoderKL.from_pretrained(opt.mdlpath + "/vae", torch_dtype=fptype)

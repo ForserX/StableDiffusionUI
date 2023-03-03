@@ -208,11 +208,11 @@ namespace SD_FXUI
             if (cbModel.Text.EndsWith(".hgf"))
             {
                 Model = cbModel.Text;
-                Model.Replace(".hgf", "");
+                Model = Model.Replace(".hgf", "");
             }
             else
             {
-                Model = FS.GetModelDir() + "diff\\" + cbModel.Text;
+                Model = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
             }
 
             string VAE = cbVAE.Text.ToLower();
@@ -224,7 +224,7 @@ namespace SD_FXUI
                 }
                 else
                 {
-                    VAE = FS.GetModelDir() + "diff\\" + cbVAE.Text.ToLower();
+                    VAE = FS.GetModelDir() + "diffusers\\" + cbVAE.Text.ToLower();
                 }
             }
 
@@ -283,7 +283,7 @@ namespace SD_FXUI
             string Prompt = FixedPrompt(TryPrompt.Text);
 
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
-            string Model = cbModel.Text.EndsWith(".hgf") ? cbModel.Text.Replace(".hgf", "") : FS.GetModelDir() + "diff\\" + cbModel.Text;
+            string Model = cbModel.Text.EndsWith(".hgf") ? cbModel.Text.Replace(".hgf", "") : FS.GetModelDir() + "diffusers\\" + cbModel.Text;
             string CmdLine = $" --precision={FpMode}"
                     + $" --device=\"{cbDevice.Text}\""
                     + $" --prompt=\"{Prompt}\""
