@@ -58,7 +58,6 @@ namespace SD_FXUI
             NoImageData = ViewImg.Source;
             Helper.SafeMaskFreeImg = imgMask.Source;
 
-
             ToastNotificationManagerCompat.OnActivated += toastArgs =>
             {
                 Notification.ToastBtnClickManager(toastArgs);
@@ -227,6 +226,7 @@ namespace SD_FXUI
 
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
+                grLoRA.Visibility = Visibility.Collapsed;
                 grDevice.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
 
@@ -259,6 +259,7 @@ namespace SD_FXUI
                 UpdateModelsList();
                 grDevice.Visibility = Visibility.Collapsed;
                 grVAE.Visibility = Visibility.Visible;
+                grLoRA.Visibility = Visibility.Visible;
 
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
@@ -299,6 +300,7 @@ namespace SD_FXUI
                 cbFf16.Visibility = Visibility.Visible;
                 grDevice.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Collapsed;
+                grLoRA.Visibility = Visibility.Collapsed;
 
                 cbSampler.Items.Clear();
                 foreach (string Name in Schedulers.Shark)
@@ -331,6 +333,7 @@ namespace SD_FXUI
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
+                grLoRA.Visibility = Visibility.Visible;
                 CPUUse = true;
 
                 cbSampler.Items.Clear();

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="665" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="655" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -173,6 +173,11 @@
                 <Grid x:Name="grDevice" Height="47">
                     <ComboBox  x:Name="cbDevice" Height="22" Text="vulkan" SelectionChanged="cbDevice_SelectionChanged" Margin="46,6,170,0" VerticalAlignment="Top"/>
                     <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="3,7,0,0" VerticalAlignment="Top"/>
+                </Grid>
+                <Grid x:Name="grLoRA" Height="47">
+                    <ComboBox  x:Name="cbLoRA" Height="22" Text="" Margin="46,6,79,0" VerticalAlignment="Top"/>
+                    <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,7,0,0" VerticalAlignment="Top"/>
+                    <ToggleButton x:Name="tsLoRA" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,10,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36"/>
                 </Grid>
             </StackPanel>
         </ScrollViewer>

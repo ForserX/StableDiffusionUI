@@ -50,7 +50,7 @@ namespace SD_FXUI
             cbUpscaler.Text = Data.Get("upscaler", "None");
             slUpscale.Value = int.Parse(Data.Get("up_value", "4"));
             cbSampler.Text = Data.Get("sampler", "DDIM");
-            var ListModel = Data.Get("model");
+            tsLoRA.IsChecked = Data.Get("lora_enable", "false") == "true";
 
             Utils.Settings.UseNotif = Data.Get("notif", "true") == "true";
             Utils.Settings.UseNotifImgs = Data.Get("notifi", "true") == "true";
@@ -67,14 +67,10 @@ namespace SD_FXUI
             }
 
             UpdateModelsList();
-            cbModel.Text = ListModel.ToString();
+            cbModel.Text = Data.Get("model");
             cbDevice.Text = Data.Get("device");
             cbVAE.Text = Data.Get("VAE");
-
-            //if (cbDevice.Text.Length == 0)
-            //{
-            //    cbDevice.SelectedIndex = 0;
-            //}
+            cbLoRA.Text = Data.Get("lora");
 
             if (cbVAE.Text.Length == 0)
             {
@@ -100,6 +96,7 @@ namespace SD_FXUI
         void Save()
         {
             Data.Set("fp16", cbFf16.IsChecked == true ? "true" : "false");
+            Data.Set("lora_enable", tsLoRA.IsChecked == true ? "true" : "false");
             Data.Set("cbGfpgan", cbGfpgan.IsChecked == true ? "true" : "false");
             Data.Set("cbNSFW", cbNSFW.IsChecked == true ? "true" : "false");
             Data.Set("notif", Utils.Settings.UseNotif ? "true" : "false");
@@ -112,6 +109,7 @@ namespace SD_FXUI
             Data.Set("up_value", slUpscale.Value.ToString());
             Data.Set("sampler", cbSampler.Text);
             Data.Set("device", cbDevice.Text);
+            Data.Set("lora", cbLoRA.Text);
             Data.Set("cfg", tbCFG.Text);
 
             Data.Set("model", cbModel.Text);
@@ -250,6 +248,12 @@ namespace SD_FXUI
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
             ;
 
+            if (tsLoRA.IsChecked.Value)
+            {
+                string LoRAModel = FS.GetModelDir() + "lora\\" + cbLoRA.Text;
+                CmdLine += $" --lora --lora_path=\"{LoRAModel}\"";
+            }
+
             if (cbNSFW.IsChecked.Value)
             {
                 CmdLine += " --nsfw=True";
@@ -324,31 +328,43 @@ namespace SD_FXUI
         {
             cbModel.Items.Clear();
             cbVAE.Items.Clear();
+            cbLoRA.Items.Clear();
 
             cbVAE.Items.Add("Default");
             foreach (var Itm in FS.GetModels(Helper.Mode))
             {
                 cbModel.Items.Add(Itm);
-                cbVAE.Items.Add(Itm);
+
+                if (!Itm.EndsWith("hgf"))
+                    cbVAE.Items.Add(Itm);
             }
-            foreach (var Itm in System.IO.Directory.GetDirectories(FS.GetModelDir() + "vae\\"))
+
+            // Yeah... LoRA...
+            string LoraPath = FS.GetModelDir() + "lora\\";
+            foreach (var Itm in Directory.GetFiles(LoraPath))
+            {
+                string TryName = Itm.Replace(LoraPath, string.Empty);
+                cbLoRA.Items.Add(TryName);
+            }
+
+            foreach (var Itm in Directory.GetDirectories(FS.GetModelDir() + "vae\\"))
             {
                 if (Helper.Mode == Helper.ImplementMode.ONNX)
                 {
-                    if (!System.IO.File.Exists(Itm + "\\vae_decoder\\model.onnx"))
+                    if (!File.Exists(Itm + "\\vae_decoder\\model.onnx"))
                     {
                         continue;
                     }
                 }
                 else
                 {
-                    if (!System.IO.File.Exists(Itm + "\\vae\\diffusion_pytorch_model.bin"))
+                    if (!File.Exists(Itm + "\\vae\\diffusion_pytorch_model.bin"))
                     {
                         continue;
                     }
                 }
 
-                cbVAE.Items.Add("vae\\"+System.IO.Path.GetFileName(Itm));
+                cbVAE.Items.Add("vae\\" + Path.GetFileName(Itm));
             }
 
 
