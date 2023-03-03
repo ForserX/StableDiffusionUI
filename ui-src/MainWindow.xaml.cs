@@ -423,7 +423,13 @@ namespace SD_FXUI
             }
             else
             {
-                Helper.InputImagePath = Helper.ImgList[lvImages.SelectedIndex];
+                int Idx = lvImages.SelectedIndex;
+                if (lvImages.SelectedIndex == -1)
+                {
+                    Idx = lvImages.Items.Count - 1;
+                }
+
+                Helper.InputImagePath = Helper.ImgList[Idx];
                 imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
             }
 

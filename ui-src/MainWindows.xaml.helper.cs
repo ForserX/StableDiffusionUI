@@ -401,6 +401,11 @@ namespace SD_FXUI
 
         private string FixedPrompt(string Text)
         {
+            if (Text == null)
+            {
+                return Text;
+            }
+
             string NewPrompt = Text.Replace(' ', '_');
 
             NewPrompt = NewPrompt.Replace(")_", ") ");

@@ -243,7 +243,7 @@ namespace SD_FXUI
                 FS.Dir.Delete(FS.GetImagesDir() + "cmp\\", true);
             }
 
-            string DopCmd = "4";
+            string DopCmd = (Size + 1).ToString();
             DopCmd = " -s " + DopCmd;
 
             string FileName = FS.GetToolsDir();

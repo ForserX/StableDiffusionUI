@@ -66,7 +66,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <CheckBox x:Name="cbNSFW" Content="NSFW check" IsChecked="True" Margin="0,2,107,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Height="20" Visibility="Hidden"/>
+                    <CheckBox x:Name="cbNSFW" Content="NSFW check" IsChecked="True" Margin="0,2,107,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Height="20"/>
                 </Grid>
                 <Grid x:Name="gridImg" Height="146" Background="#FFEBE4F9" DragDrop.Drop="gridImg_Drop">
                     <Image x:Name="imgLoaded" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="/res/noimg.jpg"/>
