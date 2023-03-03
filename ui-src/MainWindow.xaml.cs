@@ -387,7 +387,7 @@ namespace SD_FXUI
         private void btnImage_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog OpenDlg = new OpenFileDialog();
-            OpenDlg.Filter = "PNG (*.png)|*.png|JPG (*.jpg)|*.jpg|All files (*.*)|*.*";
+            OpenDlg.Filter = "Image Files|*.jpg;*.jpeg;*.png| PNG (*.png)|*.png|JPG (*.jpg)|*.jpg|All files (*.*)|*.*";
             OpenDlg.Multiselect = false;
 
             bool? IsOpened = OpenDlg.ShowDialog();

@@ -67,14 +67,13 @@ namespace SD_FXUI
             HostFilter.CheckConvertState(Message);
             HostFilter.CheckImageState(Message);
             HostFilter.CheckDeepDanBooru(Message);
+            HostFilter.CheckImageSize(Message);
             HostFilter.CheckOutOfMemory(Message);
 
-            string CorrectedString = HostFilter.FixString(Message);
-
-            if (HostFilter.CheckFalseWarning(CorrectedString))
+            if (HostFilter.CheckFalseWarning(Message))
                 return;
 
-            Helper.UIHost.Print(CorrectedString);
+            Helper.UIHost.Print(Message);
         }
 
         public void Kill()

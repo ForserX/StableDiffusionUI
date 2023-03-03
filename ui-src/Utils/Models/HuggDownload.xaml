@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:SD_FXUI.Utils"
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="SD_FXUI.Utils.HuggDownload"
         mc:Ignorable="d"
-        Title="HuggDownload" Height="104" Width="800">
+        Title="HuggDownload" Height="149" Width="800">
     <Grid>
-        <hc:TextBox x:Name="tbUrl" HorizontalAlignment="Right" Margin="0,10,51,0" TextWrapping="Wrap" Text="Put huggface url" VerticalAlignment="Top" Width="698" Grid.ColumnSpan="2"/>
-        <Button Content="Get" HorizontalAlignment="Left" Margin="612,48,0,0" Width="137" VerticalAlignment="Top" Click="Button_Click"/>
+        <hc:TextBox x:Name="tbUrl" Margin="46,10,56,0" TextWrapping="Wrap" Text="Put huggface url" Height="31" VerticalAlignment="Top"/>
+        <Button Content="Get" HorizontalAlignment="Left" Margin="612,0,0,10" Width="137" VerticalAlignment="Bottom" Click="Button_Click"/>
     </Grid>
 </Window>

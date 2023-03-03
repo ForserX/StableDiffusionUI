@@ -21,7 +21,17 @@ namespace SD_FXUI
                 Notification.SendErrorNotification("Error! See host for details!");
             }
         }
-
+        public static void CheckImageSize(string Message)
+        {
+            if (Message.Contains("ValueError: `height` and `width` have to be divisible by 8"))
+            {
+                Helper.UIHost.Dispatcher.Invoke(() =>
+                {
+                    Helper.UIHost.Hide();
+                });
+                Notification.MsgBox("The image size is not a multiple of 8!");
+            }
+        }
         public static void CheckOutOfMemory(string Message)
         {
             if (Message.Contains("attention_probs = attention_scores.softmax(dim=-1)"))
@@ -75,14 +85,21 @@ namespace SD_FXUI
             if (Message == null || Message.Length == 0)
                 return true;
 
-            if (Message.Length > 300)
-                return true;
-
+            // DeepDanbooru check
+            if (Message.Contains("rating:"))
+                return false;
+            
+            // NSFW messages
+            if (Message.Contains("safety check"))
+                return false;
 
             if (Message.Contains(" warnings.warn("))
             {
                 return true;
             }
+
+            if (Message.Length > 310)
+                return true;
 
             if (Helper.Mode != Helper.ImplementMode.Shark || Helper.Mode != Helper.ImplementMode.InvokeAI)
             {
@@ -94,13 +111,6 @@ namespace SD_FXUI
             }
 
             return false;
-        }
-
-        public static string FixString(string Message)
-        {
-            string NewMessage = Message;
-
-            return NewMessage;
         }
 
         public static void CheckDeepDanBooru(string Message)

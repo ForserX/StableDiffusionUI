@@ -25,7 +25,14 @@ namespace SD_FXUI
 
                 lvImages.SelectedItem = lvImages.Items[NewIndex];
                 lvImages.UpdateLayout();
-                ((ListViewItem)lvImages.ItemContainerGenerator.ContainerFromIndex(NewIndex)).Focus();
+                try
+                {
+                    ((ListViewItem)lvImages.ItemContainerGenerator.ContainerFromIndex(NewIndex)).Focus();
+                }
+                catch
+                {
+                    Host.Print("Error: WPF lv focus exception!");
+                }
             }
         });
 
@@ -98,7 +105,7 @@ namespace SD_FXUI
             Data.Set("notif", Utils.Settings.UseNotif ? "true" : "false");
             Data.Set("notifi", Utils.Settings.UseNotifImgs ? "true" : "false");
             Data.Set("height", tbH.Text);
-            Data.Set("width", tbH.Text);
+            Data.Set("width", tbW.Text);
             Data.Set("neg", NegPrompt.Text);
             Data.Set("steps", tbSteps.Text);
             Data.Set("upscaler", cbUpscaler.Text);
@@ -125,6 +132,8 @@ namespace SD_FXUI
 
         private string GetCommandLineOnnx()
         {
+            string Prompt = FixedPrompt(TryPrompt.Text);
+
             string Model = FS.GetModelDir() + "onnx\\" + cbModel.Text;
 
             string VAE = cbVAE.Text.ToLower();
@@ -139,11 +148,12 @@ namespace SD_FXUI
                     VAE = FS.GetModelDir() + "onnx\\" + cbVAE.Text.ToLower();
                 }
             }
+
             float ETA = float.Parse(tbETA.Text);
             ETA /= 100;
             string newETA = ETA.ToString().Replace(",", ".");
             string CmdLine = $""
-                    + $" --prompt=\"{TryPrompt.Text}\""
+                    + $" --prompt=\"{Prompt}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
                     + $" --height={tbH.Text}"
                     + $" --width={tbW.Text}"
@@ -191,6 +201,7 @@ namespace SD_FXUI
         }
         private string GetCommandLineDiffCuda()
         {
+            string Prompt = FixedPrompt(TryPrompt.Text);
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
 
             string Model = string.Empty;
@@ -224,7 +235,7 @@ namespace SD_FXUI
 
             string CmdLine = $""
                     + $" --precision={FpMode}"
-                    + $" --prompt=\"{TryPrompt.Text}\""
+                    + $" --prompt=\"{Prompt}\""
                     + $" --prompt_neg=\"{NegPrompt.Text}\""
                     + $" --height={tbH.Text}"
                     + $" --width={tbW.Text}"
@@ -269,11 +280,13 @@ namespace SD_FXUI
         }
         private string GetCommandLineShark()
         {
+            string Prompt = FixedPrompt(TryPrompt.Text);
+
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
             string Model = cbModel.Text.EndsWith(".hgf") ? cbModel.Text.Replace(".hgf", "") : FS.GetModelDir() + "diff\\" + cbModel.Text;
             string CmdLine = $" --precision={FpMode}"
                     + $" --device=\"{cbDevice.Text}\""
-                    + $" --prompt=\"{TryPrompt.Text}\""
+                    + $" --prompt=\"{Prompt}\""
                     + $" --negative-prompts=\"{NegPrompt.Text}\""
                     + $" --height={tbH.Text}"
                     + $" --width={tbW.Text}"
@@ -384,6 +397,40 @@ namespace SD_FXUI
             {
                 Source = new Uri("pack://application:,,,/HandyControl;component/Themes/Theme.xaml")
             });
+        }
+
+        private string FixedPrompt(string Text)
+        {
+            string NewPrompt = Text.Replace(' ', '_');
+
+            NewPrompt = NewPrompt.Replace(")_", ") ");
+            NewPrompt = NewPrompt.Replace("(_", "(");
+
+            NewPrompt = NewPrompt.Replace("_)", ")");
+            NewPrompt = NewPrompt.Replace("_(", " (");
+            
+            NewPrompt = NewPrompt.Replace("_[", "[");
+            NewPrompt = NewPrompt.Replace("_]", " ]");
+
+            NewPrompt = NewPrompt.Replace("]_", "] ");
+            NewPrompt = NewPrompt.Replace("[_", "[");
+
+            NewPrompt = NewPrompt.Replace(",_", ", ");
+            NewPrompt = NewPrompt.Replace("_,", " ,");
+
+            NewPrompt = NewPrompt.Replace(":_", ": ");
+            NewPrompt = NewPrompt.Replace("_:", " :");
+
+            NewPrompt = NewPrompt.Replace("-_", "- ");
+            NewPrompt = NewPrompt.Replace("_-", " -");
+            NewPrompt = NewPrompt.Replace(" _", string.Empty);
+
+            NewPrompt = NewPrompt.Replace("*", string.Empty);
+
+            if (NewPrompt[NewPrompt.Length - 1] != ',')
+                NewPrompt += ",";
+
+            return NewPrompt;
         }
     }
 }
