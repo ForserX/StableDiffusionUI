@@ -251,7 +251,7 @@ namespace SD_FXUI
             if (tsLoRA.IsChecked.Value)
             {
                 string LoRAModel = FS.GetModelDir() + "lora\\" + cbLoRA.Text;
-                CmdLine += $" --lora --lora_path=\"{LoRAModel}\"";
+                CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\"";
             }
 
             if (cbNSFW.IsChecked.Value)
