@@ -36,7 +36,6 @@ namespace SD_FXUI
             }
         });
 
-
         void Load()
         {
             cbFf16.IsChecked = Data.Get("fp16", "true") == "true";
@@ -83,7 +82,6 @@ namespace SD_FXUI
                 if (item.Length > 0)
                     Helper.PromHistory.Add(item);
             }
-
 
             bool FirstStart = Data.Get("welcomewnd") != "true";
             if (FirstStart)

@@ -271,7 +271,7 @@ namespace SD_FXUI
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler");
+                cbSampler.Text = Data.Get("sampler", "DDIM");
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : CUDA venv";
@@ -308,7 +308,7 @@ namespace SD_FXUI
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler");
+                cbSampler.Text = Data.Get("sampler", "DDIM");
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : Shark venv";
@@ -342,7 +342,7 @@ namespace SD_FXUI
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler");
+                cbSampler.Text = Data.Get("sampler", "DDIM");
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : CPU venv";
