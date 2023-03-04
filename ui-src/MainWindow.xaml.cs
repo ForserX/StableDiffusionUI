@@ -1,7 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -10,13 +9,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace SD_FXUI
 {
-    /// <summary>
-    /// Interaction logic for BlurWindow.xaml
-    /// </summary>
     public partial class MainWindow : HandyControl.Controls.BlurWindow
     {
         Config Data = null;
@@ -47,6 +42,9 @@ namespace SD_FXUI
 
             Helper.UIHost = new HostForm();
             Helper.UIHost.Hide();
+            Host.Print("\n");
+
+            Helper.GPUID = new GPUInfo();
 
             // Load App data
             Data = new Config();
@@ -219,10 +217,11 @@ namespace SD_FXUI
                 UpdateModelsList();
 
                 cbDevice.Items.Clear();
-                cbDevice.Items.Add("GPU: 0");
 
-                // #TODO: GPU List check
-                cbDevice.Items.Add("GPU: 1");
+                foreach(var item in Helper.GPUID.GPUs)
+                {
+                    cbDevice.Items.Add(item);
+                }
 
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
@@ -272,6 +271,20 @@ namespace SD_FXUI
                 }
 
                 cbSampler.Text = Data.Get("sampler", "DDIM");
+
+                foreach (var item in Helper.GPUID.GPUs)
+                {
+                    if (item.Contains("nvidia"))
+                    {
+                        cbDevice.Items.Add(item);
+                    }
+                }
+                
+                if (cbDevice.Items.Count == 0)
+                {
+                    cbDevice.Items.Add("None");
+                }
+
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : CUDA venv";
@@ -381,9 +394,9 @@ namespace SD_FXUI
             if (cbDevice.SelectedItem == null)
                 return;
 
-            if (cbDevice.SelectedItem.ToString() == "GPU: 1" || cbDevice.SelectedItem.ToString() == "GPU: 0")
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
-                Install.WrapONNXGPU(cbDevice.SelectedItem.ToString() == "GPU: 1");
+                Install.WrapONNXGPU(cbDevice.SelectedIndex > 0);
             }
         }
 

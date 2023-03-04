@@ -56,6 +56,7 @@ namespace SD_FXUI
         public static ImageSource SafeMaskFreeImg = null;
         public static MainWindow Form = null;
         public static HostForm UIHost = null;
+        public static GPUInfo GPUID = null;
         public static ImplementMode Mode = ImplementMode.IDK;
         public static DrawingMode DrawMode = DrawingMode.Text2Img;
         public static string InputImagePath = string.Empty;

@@ -211,7 +211,6 @@ namespace SD_FXUI
             Helper.Form.UpdateCurrentViewImg();
         }
 
-
         public static async Task UpscalerRunner(int Size, string File)
         {
             string NewFile = null;
@@ -234,7 +233,7 @@ namespace SD_FXUI
                 var Files = FS.GetFilesFrom(RestorePath, new string[] { "png", "jpg" }, false);
                 foreach (var file in Files)
                 {
-                    NewFile = Helper.ImgPath + System.IO.Path.GetFileNameWithoutExtension(file) + "_fx.png";
+                    NewFile = Helper.ImgPath + Path.GetFileNameWithoutExtension(file) + "_fx.png";
                     System.IO.File.Move(file, NewFile);
                 }
                 FS.Dir.Delete(RestorePath, true);

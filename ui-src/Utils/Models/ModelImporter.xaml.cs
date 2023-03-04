@@ -140,26 +140,17 @@ namespace SD_FXUI.Utils
                 cbFrom.SelectedIndex = 2;
             }
             else cbFrom.SelectedIndex = 3;
-
-
-            return;
-
         }
-
-
 
         private void cbPath_DragEnter(object sender, DragEventArgs e)
         {           
-            cbPath.Opacity = 0.5;
-            return;
+            cbPath.Visibility = Visibility.Collapsed;
         }
 
         private void cbPath_DragLeave(object sender, DragEventArgs e)
         {
-            cbPath.Opacity = 1.0;
-            return;
+            cbPath.Visibility = Visibility.Visible;
         }
-
 
         private void Grid_Drop(object sender, DragEventArgs e)
         {
@@ -170,6 +161,8 @@ namespace SD_FXUI.Utils
                 cbPath.Opacity = 1.0;
                 cbPath_Drop(sender, e);
             }
+
+            cbPath.Visibility = Visibility.Visible;
         }
 
 

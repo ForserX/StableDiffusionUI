@@ -37,7 +37,7 @@ namespace SD_FXUI
                 ChrId++;
             }
 
-            return message.StartsWith("Downloading") || Char.IsNumber(Firt);
+            return message.StartsWith("Downloading") || char.IsNumber(Firt);
         }
         void ImplPrint(string message)
         {

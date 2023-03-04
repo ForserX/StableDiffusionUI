@@ -171,7 +171,7 @@
                     <ComboBox x:Name="cbVAE" Height="22" Margin="46,10,79,0" VerticalAlignment="Top"/>
                 </Grid>
                 <Grid x:Name="grDevice" Height="47">
-                    <ComboBox  x:Name="cbDevice" Height="22" Text="vulkan" SelectionChanged="cbDevice_SelectionChanged" Margin="46,6,170,0" VerticalAlignment="Top"/>
+                    <ComboBox  x:Name="cbDevice" Height="22" Text="vulkan" SelectionChanged="cbDevice_SelectionChanged" Margin="46,6,79,0" VerticalAlignment="Top"/>
                     <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="3,7,0,0" VerticalAlignment="Top"/>
                 </Grid>
                 <Grid x:Name="grLoRA" Height="47">
