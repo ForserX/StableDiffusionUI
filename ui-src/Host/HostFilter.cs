@@ -60,6 +60,12 @@ namespace SD_FXUI
                 Notification.SendNotification(Message);
                 Helper.Form.InvokeUpdateModelsList();
             }
+
+            if (Message.Contains("SD: TI Done"))
+            {
+                Notification.SendNotification("Textual inversion apply: done!");
+                Helper.Form.InvokeUpdateModelsTIList();
+            }
         }
 
         public static void CheckImageState(string Message)

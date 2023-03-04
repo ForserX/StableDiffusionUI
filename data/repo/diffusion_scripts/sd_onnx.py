@@ -5,6 +5,8 @@ import torch
 from diffusers import OnnxStableDiffusionPipeline, OnnxStableDiffusionImg2ImgPipeline, OnnxStableDiffusionInpaintPipeline, OnnxRuntimeModel
 from diffusers import EulerAncestralDiscreteScheduler, PNDMScheduler, LMSDiscreteScheduler, DDIMScheduler, DPMSolverMultistepScheduler, EulerDiscreteScheduler, DDPMScheduler, KDPM2DiscreteScheduler, HeunDiscreteScheduler
 
+from transformers import CLIPTokenizer
+
 import argparse
 from PIL import PngImagePlugin, Image
 
@@ -140,6 +142,13 @@ parser.add_argument(
     default=False,
 )
 
+parser.add_argument(
+    "--inversion",
+    help="inversion path",
+    dest='inversion',
+    default=None,
+)
+
 if len(sys.argv)==1:
     parser.print_help()
     parser.exit()
@@ -158,15 +167,20 @@ else:
     cpuvae = OnnxRuntimeModel.from_pretrained(opt.vae + "/vae_decoder", provider=prov)
 
 # TextEnc moved to CPUs
-cputextenc = OnnxRuntimeModel.from_pretrained(opt.mdlpath+"/text_encoder", provider="CPUExecutionProvider")
 
+if opt.inversion is not None:
+    cputextenc = OnnxRuntimeModel.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/text_encoder", provider="CPUExecutionProvider")
+    cliptokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/tokenizer")
+else:
+    cputextenc = OnnxRuntimeModel.from_pretrained(opt.mdlpath + "/text_encoder", provider="CPUExecutionProvider")
+    cliptokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/tokenizer")
 
 if opt.mode == "txt2img":
-    pipe = OnnxStableDiffusionPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, safety_checker=NSFW)
+    pipe = OnnxStableDiffusionPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", text_encoder=cputextenc, tokenizer=cliptokenizer, vae_decoder=cpuvae, safety_checker=NSFW)
 if opt.mode == "img2img":
-    pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, safety_checker=NSFW)
+    pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", text_encoder=cputextenc, tokenizer=cliptokenizer, vae_decoder=cpuvae, safety_checker=NSFW)
 if opt.mode == "inpaint":
-    pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", revision="onnx", text_encoder=cputextenc, vae_decoder=cpuvae, safety_checker=NSFW)
+    pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, provider=prov, custom_pipeline="lpw_stable_diffusion_onnx", text_encoder=cputextenc, tokenizer=cliptokenizer, vae_decoder=cpuvae, safety_checker=NSFW)
 
 if opt.scmode == "EulerAncestralDiscrete":
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)

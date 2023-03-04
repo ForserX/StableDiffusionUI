@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.Win32;
+using SD_FXUI.Utils.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -671,6 +672,50 @@ namespace SD_FXUI
 
             if (lbRatio != null)
                 lbRatio.Content = GetRatio(slW.Value, slH.Value);
+        }
+
+        private void btnApplyTI_Click(object sender, RoutedEventArgs e)
+        {
+            string Path = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
+            string CPath = FS.GetModelDir() + "onnx\\" + cbModel.Text;
+
+            if (!Directory.Exists(Path))
+            {
+                Notification.MsgBox("Error! Need base diffuser model for apply!");
+                return;
+            }
+
+            TIApply HelpWnd = new TIApply();
+            HelpWnd.ShowDialog();
+
+            Directory.CreateDirectory(CPath + "\\textual_inversion_merges\\");
+
+            if (Helper.CurrentTI != null)
+                Task.Run(() => CMD.ApplyTextInv(Path, CPath, Helper.CurrentTI));
+        }
+
+        private void cbModel_Copy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void cbModel_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbTI == null || e.AddedItems.Count == 0)
+                return;
+
+            cbTI.Items.Clear();
+            cbTI.Items.Add("None");
+
+            string ModelPath = FS.GetModelDir() + "onnx/" + e.AddedItems[0] + "/textual_inversion_merges/";
+
+            if (!Directory.Exists(ModelPath))
+                return;
+
+            foreach (string File in Directory.GetDirectories(ModelPath))
+            {
+                cbTI.Items.Add(Path.GetFileNameWithoutExtension(File));
+            }
         }
     }
 }

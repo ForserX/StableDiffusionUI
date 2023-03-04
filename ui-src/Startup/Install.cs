@@ -143,6 +143,7 @@ namespace SD_FXUI
             Directory.CreateDirectory(FS.GetModelDir() + @"\vae");
             Directory.CreateDirectory(FS.GetModelDir() + @"\gfpgan");
             Directory.CreateDirectory(FS.GetModelDir() + @"\lora");
+            Directory.CreateDirectory(FS.GetModelDir() + @"\textual_inversion");
             Directory.CreateDirectory(FS.GetModelDir() + @"\deepdanbooru");
         }
     }

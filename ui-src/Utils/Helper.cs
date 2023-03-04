@@ -66,5 +66,6 @@ namespace SD_FXUI
         public static UpscalerType CurrentUpscalerType = UpscalerType.None;
 
         public static List<string> ImgList = new List<string>();
+        public static string CurrentTI = null;
     }
 }

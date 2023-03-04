@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="655" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="731" Width="951" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -68,7 +68,7 @@
                     </Button>
                     <CheckBox x:Name="cbNSFW" Content="NSFW check" IsChecked="True" Margin="0,2,107,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Height="20"/>
                 </Grid>
-                <Grid x:Name="gridImg" Height="146" Background="#FFEBE4F9" DragDrop.Drop="gridImg_Drop">
+                <Grid x:Name="gridImg" Height="141" Background="#FFEBE4F9" DragDrop.Drop="gridImg_Drop">
                     <Image x:Name="imgLoaded" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="/res/noimg.jpg"/>
                     <Label Content="Denoising Scale" HorizontalAlignment="Left" Margin="116,1,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.332,-0.041" Background="{x:Null}" BorderBrush="{x:Null}" Width="96" Padding="1,6,1,6"/>
                     <Slider  x:Name="slDenoising" Maximum="100" Minimum="5" Value="45" ValueChanged="Slider_Denoising" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="116,31,52,0" Height="25" VerticalAlignment="Top"/>
@@ -131,7 +131,7 @@
                     <Label Content="Size Info" Height="22" Width="52" Foreground="#FF1A1818" Background="#FFF3E9E9" BorderBrush="{x:Null}" Padding="2,1,2,6" HorizontalAlignment="Right" Margin="0,46,2,0" VerticalAlignment="Top"/>
                     <Label x:Name="lbRatio" Content="1:1; 1024" Height="27" Width="52" Foreground="#FF1A1818" Background="#FFF3E9E9" BorderBrush="{x:Null}" Padding="2,6,2,1" HorizontalAlignment="Right" Margin="0,62,2,0" VerticalAlignment="Top" FontSize="9"/>
                 </Grid>
-                <Grid Height="109">
+                <Grid Height="139">
                     <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,71,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbUpscaler" Margin="50,6,132,0" Height="30" VerticalAlignment="Top" SelectionChanged="cbUpscaler_SelectionChanged">
                         <ComboBoxItem Content="Real-ESRGAN: AnimeVideo(v3)"/>
@@ -145,7 +145,7 @@
                     <Label Content="Upscale" Height="30" Width="51" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,6,0,0"/>
                     <Slider  x:Name="slUpscale" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Margin="0,11,10,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"/>
                     <Label x:Name="lbUpscale" Content="x4" Background="#FF611F7E" Height="26" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,7,101,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="cbModel" Height="22" Margin="50,71,75,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbModel" Height="22" Margin="50,71,75,0" VerticalAlignment="Top" SelectionChanged="cbModel_SelectionChanged"/>
                     <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,70,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
@@ -158,6 +158,16 @@
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
                     <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,43,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
                     <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Right" Margin="0,87,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnDownload_Click">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0">
+                                <GradientStop Color="#FF523876"/>
+                                <GradientStop Color="#FF4D12AF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                    <Label Content="Textual Inversion " Width="97" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,105,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbTI" Height="22" Margin="103,105,75,0" VerticalAlignment="Top" SelectionChanged="cbModel_Copy_SelectionChanged"/>
+                    <Button x:Name="btnApplyTI" Content="Apply" Style="{StaticResource ButtonPrimary}" Width="66" Height="16" HorizontalAlignment="Right" Margin="0,112,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnApplyTI_Click">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>

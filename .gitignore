@@ -25,3 +25,4 @@ ui-src/obj/
 *.json
 
 *\temp*
+*.pt

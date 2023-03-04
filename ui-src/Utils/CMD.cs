@@ -6,6 +6,31 @@ namespace SD_FXUI
 {
     internal class CMD
     {
+        public static async Task ApplyTextInv(string BaseModel, string CurrentModel, string TIModel)
+        {
+            string WorkDir = CurrentModel + "\\textual_inversion_merges";
+            Directory.CreateDirectory(WorkDir + TIModel);
+
+            string ModelPath = FS.GetModelDir() + "textual_inversion\\" + TIModel + ".pt";
+            Host ProcessHost = new Host(FS.GetWorkingDir());
+
+            ProcessHost.Start();
+            ProcessHost.Send("\"repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + 
+                "\" \"repo/diffusion_scripts/convert_textual_inversion_to_onnx.py\"" +
+                $" --textinv=\"{ModelPath}\"" +
+                $" --name=\"{TIModel}\"" +
+                $" --model=\"{BaseModel}\"" +
+                $" --dest=\"{WorkDir}\" "
+            );
+
+            ProcessHost.SendExitCommand();
+
+            Host.Print("\n  Extract task is done..... \n");
+
+            Notification.SendNotification("Convertation: ~few second...");
+            Helper.CurrentTI = null;
+        }
+
         public static async Task ProcessConvertCKPT2Diff(string InputFile, bool emaOnly = false)
         {
             string WorkDir = FS.GetModelDir() + "shark\\";

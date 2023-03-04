@@ -16,6 +16,7 @@ namespace SD_FXUI
         public void InvokeClearImages() => Dispatcher.Invoke(() => { InvokeClearImages(); });
         public void InvokeProgressUpdate(int value) => Dispatcher.Invoke(() => { pbGen.Value = value; });
         public void InvokeUpdateModelsList() => Dispatcher.Invoke(() => { UpdateModelsList(); });
+        public void InvokeUpdateModelsTIList() => Dispatcher.Invoke(() => { UpdateModelsTIList(); });
         public void InvokeProgressApply() => Dispatcher.Invoke(() => { pbGen.Value += (40 / (int)(tbTotalCount.Value)); });
         public void UpdateCurrentViewImg() => Dispatcher.Invoke(() =>
         {
@@ -181,6 +182,11 @@ namespace SD_FXUI
                 CmdLine += " --nsfw=True";
             }
 
+            if (cbTI.Text != "None" && cbTI.Text != null)
+            {
+                CmdLine += $" --inversion={cbTI.Text}";
+            }
+
             if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
                 float Denoising = float.Parse(tbDenoising.Text);
@@ -332,6 +338,22 @@ namespace SD_FXUI
             Helper.ImgList.Add(Img);
 
             btnDDB.Visibility = Visibility.Visible;
+        }
+
+        public void UpdateModelsTIList()
+        {
+            cbTI.Items.Clear();
+            cbTI.Items.Add("None");
+
+            string ModelPath = FS.GetModelDir() + "onnx/" + cbModel.Text + "/textual_inversion_merges/";
+
+            if (!Directory.Exists(ModelPath))
+                return;
+
+            foreach (string File in Directory.GetDirectories(ModelPath))
+            {
+                cbTI.Items.Add(Path.GetFileNameWithoutExtension(File));
+            }
         }
 
         public void UpdateModelsList()
