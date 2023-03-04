@@ -182,7 +182,7 @@ namespace SD_FXUI
                 CmdLine += " --nsfw=True";
             }
 
-            if (cbTI.Text != "None" && cbTI.Text != null)
+            if (cbTI.Text != "None" && cbTI.Text.Length > 0)
             {
                 CmdLine += $" --inversion={cbTI.Text}";
             }
@@ -270,7 +270,7 @@ namespace SD_FXUI
                 CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\"";
             }
 
-            if (cbTI.Text != "None" && cbTI.Text != null)
+            if (cbTI.Text != "None" && cbTI.Text.Length > 0)
             {
                 CmdLine += $" --inversion={cbTI.Text}";
             }
