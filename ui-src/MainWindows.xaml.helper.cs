@@ -350,7 +350,11 @@ namespace SD_FXUI
             cbTI.Items.Clear();
             cbTI.Items.Add("None");
 
-            string ModelPath = FS.GetModelDir() + "onnx/" + cbModel.Text + "/textual_inversion_merges/";
+            string Mode = "onnx/";
+            if (Helper.Mode != Helper.ImplementMode.ONNX)
+                Mode = "Diffusers/";
+
+            string ModelPath = FS.GetModelDir() + Mode + cbModel.Text + "/textual_inversion_merges/";
 
             if (!Directory.Exists(ModelPath))
                 return;
