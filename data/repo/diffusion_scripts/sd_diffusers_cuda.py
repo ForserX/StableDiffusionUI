@@ -229,6 +229,7 @@ if opt.mode == "inpaint":
     pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, text_encoder=cputextenc, tokenizer=cliptokenizer, vae=vae, safety_checker=NSFW)
 
 pipe.to(opt.device)
+cputextenc.to(opt.device, fptype)
 
 if opt.scmode == "EulerAncestralDiscrete":
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
@@ -261,7 +262,8 @@ if opt.scmode == "HeunDiscrete":
 # LoRA magic
 if opt.lora:
     model_path = opt.lora_path
-    state_dict = load_file(model_path,opt.device)
+    state_dict = load_file(model_path, opt.device)
+
     
     LORA_PREFIX_UNET = 'lora_unet'
     LORA_PREFIX_TEXT_ENCODER = 'lora_te'
@@ -313,12 +315,12 @@ if opt.lora:
         
         # update weight
         if len(state_dict[pair_keys[0]].shape) == 4:
-            weight_up = state_dict[pair_keys[0]].squeeze(3).squeeze(2).to(torch.float32)
-            weight_down = state_dict[pair_keys[1]].squeeze(3).squeeze(2).to(torch.float32)
+            weight_up = state_dict[pair_keys[0]].squeeze(3).squeeze(2).to(fptype)
+            weight_down = state_dict[pair_keys[1]].squeeze(3).squeeze(2).to(fptype)
             curr_layer.weight.data += alpha * torch.mm(weight_up, weight_down).unsqueeze(2).unsqueeze(3)
         else:
-            weight_up = state_dict[pair_keys[0]].to(torch.float32)
-            weight_down = state_dict[pair_keys[1]].to(torch.float32)
+            weight_up = state_dict[pair_keys[0]].to(fptype)
+            weight_down = state_dict[pair_keys[1]].to(fptype)
             curr_layer.weight.data += alpha * torch.mm(weight_up, weight_down)
             
          # update visited list

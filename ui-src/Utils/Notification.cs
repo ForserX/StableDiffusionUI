@@ -39,7 +39,14 @@ namespace SD_FXUI
                 }
             }
 
-            NotificationToShow.Show();
+            try
+            {
+                NotificationToShow.Show();
+            }
+            catch
+            {
+                Host.Print("Toast show error!");
+            }
 
         }
         public static void SendErrorNotification(string Message = "Generation completed", string Caption = "Stable Diffusion: XUI")

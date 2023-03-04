@@ -28,10 +28,10 @@ def convert_diffusion_textual_inversion(
     embeds = string_to_param[trained_token]
     
     num_tokens = embeds.shape[0]
-    print("generating %s layer tokens", num_tokens)
+    print(f"generating %s layer tokens {num_tokens}")
     token = [f"{name}-{i}" for i in range(num_tokens)]
 
-    print("found embedding for token %s: %s", trained_token, embeds.shape)
+    print(f"found embedding for token {trained_token}, {embeds.shape}")
 
     tokenizer = CLIPTokenizer.from_pretrained(
         base_model,
@@ -53,7 +53,7 @@ def convert_diffusion_textual_inversion(
             f"The tokenizer already contains the token {token}. Please pass a different `token` that is not already in the tokenizer."
         )
 
-    print("added %s tokens", num_added_tokens)
+    print(f"added {num_added_tokens} tokens")
 
     # resize the token embeddings
     text_encoder.resize_token_embeddings(len(tokenizer))
@@ -64,7 +64,7 @@ def convert_diffusion_textual_inversion(
             layer_embeds = embeds[i]
             layer_token = token[i]
             print(
-                "embedding %s vector for layer %s", layer_embeds.shape, layer_token
+                f"embedding {layer_embeds.shape} vector for layer {layer_token}"
             )
             token_id = tokenizer.convert_tokens_to_ids(layer_token)
             text_encoder.get_input_embeddings().weight.data[token_id] = layer_embeds
