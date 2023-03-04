@@ -14,6 +14,19 @@ namespace SD_FXUI
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            Helper.Mode = Helper.ImplementMode.DiffCUDA;
+            this.Close();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Helper.Mode = Helper.ImplementMode.ONNX;
+            this.Close();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            Helper.Mode = Helper.ImplementMode.Shark;
             this.Close();
         }
     }

@@ -25,6 +25,8 @@
             <LineBreak/>
             <Run Text="Warning: This algorithm is under development. There may be problems." FontWeight="Bold" />
         </TextBlock>
-        <Button Content="Okay, close" Margin="0,0,0,10" VerticalAlignment="Bottom" Click="Button_Click"/>
+        <Button Content="Okay, Use CUDA" Margin="96,0,0,10" VerticalAlignment="Bottom" Click="Button_Click" HorizontalAlignment="Left"/>
+        <Button Content="Okay, Use ONNX" Margin="336,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="Button_Click_1"/>
+        <Button Content="Okay, Use Shark" Margin="597,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="Button_Click_2"/>
     </Grid>
 </Window>

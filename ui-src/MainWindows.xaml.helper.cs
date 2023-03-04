@@ -54,15 +54,34 @@ namespace SD_FXUI
             Utils.Settings.UseNotif = Data.Get("notif", "true") == "true";
             Utils.Settings.UseNotifImgs = Data.Get("notifi", "true") == "true";
 
-            switch (Data.Get("back_mode"))
-            {
-                case "2": btnShark_Click(0, new RoutedEventArgs()); break;
-                case "1": btnONNX_Click(0, new RoutedEventArgs()); break;
-                case "3": btnDiffCpu_Click(0, new RoutedEventArgs()); break;
-                case "4": Helper.Mode = Helper.ImplementMode.InvokeAI; break;
-                case "0": btnDiffCuda_Click(0, new RoutedEventArgs()); break;
 
-                default: btnONNX_Click(0, new RoutedEventArgs()); break;
+            bool FirstStart = Data.Get("welcomewnd") != "true";
+            if (FirstStart)
+            {
+                Welcome Hellow = new Welcome();
+                Hellow.ShowDialog();
+
+                switch (Helper.Mode)
+                {
+                    case Helper.ImplementMode.Shark: Helper.Mode = Helper.ImplementMode.IDK; btnShark_Click(0, new RoutedEventArgs()); break;
+                    case Helper.ImplementMode.ONNX: Helper.Mode = Helper.ImplementMode.IDK; btnONNX_Click(0, new RoutedEventArgs()); break;
+                    case Helper.ImplementMode.DiffCUDA: Helper.Mode = Helper.ImplementMode.IDK; btnDiffCuda_Click(0, new RoutedEventArgs()); break;
+
+                    default: btnONNX_Click(0, new RoutedEventArgs()); break;
+                }
+            }
+            else
+            {
+                switch (Data.Get("back_mode"))
+                {
+                    case "2": btnShark_Click(0, new RoutedEventArgs()); break;
+                    case "1": btnONNX_Click(0, new RoutedEventArgs()); break;
+                    case "3": btnDiffCpu_Click(0, new RoutedEventArgs()); break;
+                    case "4": Helper.Mode = Helper.ImplementMode.InvokeAI; break;
+                    case "0": btnDiffCuda_Click(0, new RoutedEventArgs()); break;
+
+                    default: btnONNX_Click(0, new RoutedEventArgs()); break;
+                }
             }
 
             UpdateModelsList();
@@ -81,13 +100,6 @@ namespace SD_FXUI
             {
                 if (item.Length > 0)
                     Helper.PromHistory.Add(item);
-            }
-
-            bool FirstStart = Data.Get("welcomewnd") != "true";
-            if (FirstStart)
-            {
-                Welcome Hellow = new Welcome();
-                Hellow.ShowDialog();
             }
         }
 
