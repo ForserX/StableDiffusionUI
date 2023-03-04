@@ -458,7 +458,7 @@ namespace SD_FXUI
 
             NewPrompt = NewPrompt.Replace("*", string.Empty);
 
-            if (NewPrompt[NewPrompt.Length - 1] != ',')
+            if (NewPrompt.Length > 10 && NewPrompt[NewPrompt.Length - 1] != ',')
                 NewPrompt += ",";
 
             return NewPrompt;

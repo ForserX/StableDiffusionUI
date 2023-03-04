@@ -127,7 +127,7 @@ namespace SD_FXUI.Utils
                 Notification.MsgBox("Incorrect file!");
             }
 
-            if (cbPath.Text.EndsWith("vae-ft-mse-840000-ema-pruned.ckpt"))
+            if (cbPath.Text.EndsWith("vae-ft-mse-840000-ema-pruned.ckpt") || cbPath.Text.EndsWith("kl-f8-anime2.ckpt"))
             {
                 cbTo.SelectedIndex = 1;
                 cbFrom.SelectedIndex = 2;  // this vae .pt file In fact

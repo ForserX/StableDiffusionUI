@@ -18,6 +18,7 @@ onnxruntime-gpu
 onnxruntime_directml
 torch[onnx]
 torchvision
+pytorch_lightning
 tf2onnx
 transformers-onnx
 accelerate

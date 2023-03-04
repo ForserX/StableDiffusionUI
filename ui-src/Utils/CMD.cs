@@ -350,10 +350,14 @@ namespace SD_FXUI
         {
             if (InputFile.EndsWith("pt"))
             {
-                ProcessConvertVaePt2Diff(InputFile);
+                string NewInputFile = System.IO.Path.GetFileNameWithoutExtension(InputFile);
+                NewInputFile = FS.GetModelDir() + "vae\\" + InputFile;
 
-                InputFile = System.IO.Path.GetFileNameWithoutExtension(InputFile);
-                InputFile = FS.GetModelDir() + "vae\\" + InputFile;
+                if (!Directory.Exists(NewInputFile))
+                {
+                    ProcessConvertVaePt2Diff(NewInputFile);
+                }
+                InputFile = NewInputFile;
             }
 
             Notification.SendNotification("Convertation: ~few seconds");
