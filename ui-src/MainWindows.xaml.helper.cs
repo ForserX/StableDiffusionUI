@@ -270,6 +270,11 @@ namespace SD_FXUI
                 CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\"";
             }
 
+            if (cbTI.Text != "None" && cbTI.Text != null)
+            {
+                CmdLine += $" --inversion={cbTI.Text}";
+            }
+
             if (cbNSFW.IsChecked.Value)
             {
                 CmdLine += " --nsfw=True";

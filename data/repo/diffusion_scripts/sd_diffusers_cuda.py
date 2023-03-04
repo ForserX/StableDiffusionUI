@@ -4,6 +4,7 @@ import time
 import torch
 
 from safetensors.torch import load_file
+from transformers import CLIPTokenizer, CLIPTextModel
 
 from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionInpaintPipeline, AutoencoderKL
 from diffusers import EulerAncestralDiscreteScheduler, PNDMScheduler, LMSDiscreteScheduler, DDIMScheduler, DPMSolverMultistepScheduler, EulerDiscreteScheduler, DDPMScheduler, KDPM2DiscreteScheduler, HeunDiscreteScheduler
@@ -178,6 +179,13 @@ parser.add_argument(
     dest='lora_path',
 )
 
+parser.add_argument(
+    "--inversion",
+    help="inversion path",
+    dest='inversion',
+    default=None,
+)
+
 if len(sys.argv)==1:
     parser.print_help()
     parser.exit()
@@ -202,13 +210,20 @@ if opt.vae == "default":
     vae = AutoencoderKL.from_pretrained(opt.mdlpath + "/vae", torch_dtype=fptype)
 else:
     vae = AutoencoderKL.from_pretrained(opt.vae + "/vae", torch_dtype=fptype)
+    
+if opt.inversion is not None:
+    cputextenc = CLIPTextModel.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/text_encoder")
+    cliptokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/tokenizer")
+else:
+    cputextenc = CLIPTextModel.from_pretrained(opt.mdlpath + "/text_encoder")
+    cliptokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/tokenizer")
 
 if opt.mode == "txt2img":
-    pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, vae=vae, safety_checker=NSFW)
+    pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, text_encoder=cputextenc, tokenizer=cliptokenizer, vae=vae, safety_checker=NSFW)
 if opt.mode == "img2img":
-    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, vae=vae, safety_checker=NSFW)
+    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, text_encoder=cputextenc, tokenizer=cliptokenizer, vae=vae, safety_checker=NSFW)
 if opt.mode == "inpaint":
-    pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, vae=vae, safety_checker=NSFW)
+    pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, text_encoder=cputextenc, tokenizer=cliptokenizer, vae=vae, safety_checker=NSFW)
 
 pipe.to(opt.device)
 

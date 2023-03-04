@@ -677,21 +677,41 @@ namespace SD_FXUI
         private void btnApplyTI_Click(object sender, RoutedEventArgs e)
         {
             string Path = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
-            string CPath = FS.GetModelDir() + "onnx\\" + cbModel.Text;
 
-            if (!Directory.Exists(Path))
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
-                Notification.MsgBox("Error! Need base diffuser model for apply!");
-                return;
+                string CPath = FS.GetModelDir() + "onnx\\" + cbModel.Text;
+
+                if (!Directory.Exists(Path))
+                {
+                    Notification.MsgBox("Error! Need base diffuser model for apply!");
+                    return;
+                }
+
+                TIApply HelpWnd = new TIApply();
+                HelpWnd.ShowDialog();
+
+                Directory.CreateDirectory(CPath + "\\textual_inversion_merges\\");
+
+                if (Helper.CurrentTI != null)
+                    Task.Run(() => CMD.ApplyTextInv(Path, CPath, Helper.CurrentTI));
             }
+            else
+            {
+                if (!Directory.Exists(Path))
+                {
+                    Notification.MsgBox("Error! Need base diffuser model for apply!");
+                    return;
+                }
 
-            TIApply HelpWnd = new TIApply();
-            HelpWnd.ShowDialog();
+                TIApply HelpWnd = new TIApply();
+                HelpWnd.ShowDialog();
 
-            Directory.CreateDirectory(CPath + "\\textual_inversion_merges\\");
+                Directory.CreateDirectory(Path + "\\textual_inversion_merges\\");
 
-            if (Helper.CurrentTI != null)
-                Task.Run(() => CMD.ApplyTextInv(Path, CPath, Helper.CurrentTI));
+                if (Helper.CurrentTI != null)
+                    Task.Run(() => CMD.ApplyTextInvDiff(Path, Helper.CurrentTI));
+            }
         }
 
         private void cbModel_Copy_SelectionChanged(object sender, SelectionChangedEventArgs e)

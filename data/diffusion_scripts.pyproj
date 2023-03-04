@@ -22,6 +22,7 @@
     <Compile Include="CLIP.py" />
     <Compile Include="convert_original_stable_diffusion_to_diffusers.py" />
     <Compile Include="convert_stable_diffusion_checkpoint_to_onnx.py" />
+    <Compile Include="convert_textual_inversion_to_diff.py" />
     <Compile Include="convert_textual_inversion_to_onnx.py" />
     <Compile Include="convert_vae_pt_to_diffusers.py" />
     <Compile Include="convert_vae_pt_to_onnx.py" />
