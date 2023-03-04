@@ -214,9 +214,12 @@ else:
 if opt.inversion is not None:
     cputextenc = CLIPTextModel.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/text_encoder")
     cliptokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/tokenizer")
+    
 else:
     cputextenc = CLIPTextModel.from_pretrained(opt.mdlpath + "/text_encoder")
     cliptokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/tokenizer")
+  
+cputextenc.to(opt.device,fptype)
 
 if opt.mode == "txt2img":
     pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, text_encoder=cputextenc, tokenizer=cliptokenizer, vae=vae, safety_checker=NSFW)
@@ -258,7 +261,7 @@ if opt.scmode == "HeunDiscrete":
 # LoRA magic
 if opt.lora:
     model_path = opt.lora_path
-    state_dict = load_file(model_path)
+    state_dict = load_file(model_path,opt.device)
     
     LORA_PREFIX_UNET = 'lora_unet'
     LORA_PREFIX_TEXT_ENCODER = 'lora_te'
