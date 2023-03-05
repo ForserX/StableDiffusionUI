@@ -377,6 +377,10 @@ namespace SD_FXUI
 
         public void UpdateModelsList()
         {
+            string SafeVAE = (string)cbVAE.Text;
+            string SafeModelName = (string)cbModel.Text;
+            string SafeLoRAName = (string)cbLoRA.Text;
+
             cbModel.Items.Clear();
             cbVAE.Items.Clear();
             cbLoRA.Items.Clear();
@@ -418,9 +422,25 @@ namespace SD_FXUI
                 cbVAE.Items.Add("vae\\" + Path.GetFileName(Itm));
             }
 
+            if (SafeModelName.Length > 0)
+            {
+                cbModel.Text = SafeModelName;
+            }
+            else
+            {
+                cbModel.SelectedIndex = cbModel.Items.Count - 1;
+            }
 
-            cbModel.SelectedIndex = cbModel.Items.Count - 1;
-            cbVAE.SelectedIndex = 0;
+            if (SafeVAE.Length > 0)
+            {
+                cbVAE.Text = SafeVAE;
+            }
+            else
+            {
+                cbVAE.SelectedIndex = 0;
+            }
+
+            cbLoRA.Text = SafeLoRAName;
         }
 
         void ClearImages()

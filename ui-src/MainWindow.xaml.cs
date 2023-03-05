@@ -61,6 +61,9 @@ namespace SD_FXUI
             {
                 Notification.ToastBtnClickManager(toastArgs);
             };
+
+            cbTI.IsEnabled = false;
+            btnApplyTI.IsEnabled = false;
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
