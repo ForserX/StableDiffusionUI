@@ -102,6 +102,10 @@ namespace SD_FXUI
                 if (item.Length > 0)
                     Helper.PromHistory.Add(item);
             }
+
+            // Disable button for user
+            btnDiffCuda.IsEnabled = Helper.GPUID.GreenGPU;
+            btnONNX.IsEnabled = Helper.GPUID.RedGPU;
         }
 
         void Save()
