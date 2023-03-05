@@ -272,7 +272,7 @@ namespace SD_FXUI
 
             if (cbTI.Text != "None" && cbTI.Text.Length > 0)
             {
-                CmdLine += $" --inversion={cbTI.Text}";
+                CmdLine += $" --inversion={FS.GetModelDir() + "textual_inversion/" + cbTI.Text + ".pt"}";
             }
 
             if (cbNSFW.IsChecked.Value)
@@ -347,22 +347,32 @@ namespace SD_FXUI
 
         public void UpdateModelsTIList()
         {
+            string SafeName = (string)cbTI.Text.Clone();
             cbTI.Items.Clear();
             cbTI.Items.Add("None");
 
-            string Mode = "onnx/";
             if (Helper.Mode != Helper.ImplementMode.ONNX)
-                Mode = "Diffusers/";
-
-            string ModelPath = FS.GetModelDir() + Mode + cbModel.Text + "/textual_inversion_merges/";
-
-            if (!Directory.Exists(ModelPath))
-                return;
-
-            foreach (string File in Directory.GetDirectories(ModelPath))
             {
-                cbTI.Items.Add(Path.GetFileNameWithoutExtension(File));
+                foreach (string File in Directory.GetFiles(FS.GetModelDir() + "textual_inversion"))
+                {
+                    cbTI.Items.Add(Path.GetFileNameWithoutExtension(File));
+                }
             }
+            else
+            {
+                string Mode = "onnx/";
+                string ModelPath = FS.GetModelDir() + Mode + cbModel.Text + "/textual_inversion_merges/";
+
+                if (!Directory.Exists(ModelPath))
+                    return;
+
+                foreach (string File in Directory.GetDirectories(ModelPath))
+                {
+                    cbTI.Items.Add(Path.GetFileNameWithoutExtension(File));
+                }
+            }
+
+            cbTI.Text = SafeName;
         }
 
         public void UpdateModelsList()

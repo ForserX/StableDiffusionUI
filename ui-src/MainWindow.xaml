@@ -220,5 +220,6 @@
         <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,99,17,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btnZoom_Click"/>
         <Image x:Name="IconRes" Source="res/icon.png" />
         <Image x:Name="btnSettings" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,9,0" VerticalAlignment="Top" Width="41" Source="/res/settings.png" MouseLeftButtonDown="btnSettingsClick"/>
+        <Image x:Name="btnMerge" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,53,0" VerticalAlignment="Top" Width="41" Source="/res/merge.png" MouseLeftButtonDown="btnMerge_Click"/>
     </Grid>
 </hc:BlurWindow>

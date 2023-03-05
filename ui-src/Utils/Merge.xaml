@@ -1,0 +1,20 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SD_FXUI.Utils"
+        xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="SD_FXUI.Utils.Merge"
+        mc:Ignorable="d"
+        Title="Merge" Height="450" Width="800">
+    <Grid>
+        <Label Content="Base model" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="216"/>
+        <Label Content="LoRA" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="83"/>
+        <ComboBox HorizontalAlignment="Left" Margin="105,45,0,0" VerticalAlignment="Top" Width="216"/>
+        <Label Content="Output" HorizontalAlignment="Left" Margin="10,394,0,0" VerticalAlignment="Top" Width="83"/>
+
+        <hc:TextBox HorizontalAlignment="Left" Margin="112,394,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="218"/>
+
+    </Grid>
+</Window>
