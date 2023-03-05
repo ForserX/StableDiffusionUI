@@ -458,12 +458,15 @@ namespace SD_FXUI
 
         private string FixedPrompt(string Text)
         {
+
+            return Text;
+
             if (Text == null)
             {
                 return Text;
             }
-
-            string NewPrompt = Text.Replace(' ', '_');
+            string NewPrompt;
+            NewPrompt = Text.Replace(' ', '_');
 
             NewPrompt = NewPrompt.Replace(")_", ") ");
             NewPrompt = NewPrompt.Replace("(_", "(");
