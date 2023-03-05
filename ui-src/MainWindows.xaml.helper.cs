@@ -458,41 +458,7 @@ namespace SD_FXUI
 
         private string FixedPrompt(string Text)
         {
-            if (Text == null)
-            {
-                return Text;
-            }
-
-            string NewPrompt = Text.Replace(' ', '_');
-
-            NewPrompt = NewPrompt.Replace(")_", ") ");
-            NewPrompt = NewPrompt.Replace("(_", "(");
-
-            NewPrompt = NewPrompt.Replace("_)", ")");
-            NewPrompt = NewPrompt.Replace("_(", " (");
-            
-            NewPrompt = NewPrompt.Replace("_[", "[");
-            NewPrompt = NewPrompt.Replace("_]", " ]");
-
-            NewPrompt = NewPrompt.Replace("]_", "] ");
-            NewPrompt = NewPrompt.Replace("[_", "[");
-
-            NewPrompt = NewPrompt.Replace(",_", ", ");
-            NewPrompt = NewPrompt.Replace("_,", " ,");
-
-            NewPrompt = NewPrompt.Replace(":_", ": ");
-            NewPrompt = NewPrompt.Replace("_:", " :");
-
-            NewPrompt = NewPrompt.Replace("-_", "- ");
-            NewPrompt = NewPrompt.Replace("_-", " -");
-            NewPrompt = NewPrompt.Replace(" _", string.Empty);
-
-            NewPrompt = NewPrompt.Replace("*", string.Empty);
-
-            if (NewPrompt.Length > 10 && NewPrompt[NewPrompt.Length - 1] != ',')
-                NewPrompt += ",";
-
-            return NewPrompt;
+            return Text;
         }
     }
 }

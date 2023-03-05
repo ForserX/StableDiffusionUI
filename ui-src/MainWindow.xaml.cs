@@ -741,5 +741,10 @@ namespace SD_FXUI
                 cbTI.Items.Add(Path.GetFileNameWithoutExtension(File));
             }
         }
+
+        private void btnMerge_Click(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
