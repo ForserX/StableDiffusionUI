@@ -12,6 +12,7 @@
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
     <InterpreterId>Global|VisualStudio|Scripts</InterpreterId>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
@@ -28,6 +29,7 @@
     <Compile Include="danbooru.py" />
     <Compile Include="danbooru_model.py" />
     <Compile Include="inference_gfpgan.py" />
+    <Compile Include="merge_diff_lora.py" />
     <Compile Include="pix2pix.py" />
     <Compile Include="sd_diffusers_cuda.py" />
     <Compile Include="sd_onnx.py" />

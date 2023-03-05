@@ -66,6 +66,12 @@ namespace SD_FXUI
                 Notification.SendNotification("Textual inversion apply: done!");
                 Helper.Form.InvokeUpdateModelsTIList();
             }
+
+            if (Message.Contains("SD: Merge is done!"))
+            {
+                Notification.SendNotification("Models merge: done!");
+                Helper.Form.InvokeUpdateModelsList();
+            }
         }
 
         public static void CheckImageState(string Message)

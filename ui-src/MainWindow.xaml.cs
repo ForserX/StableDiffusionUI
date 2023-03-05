@@ -749,7 +749,8 @@ namespace SD_FXUI
 
         private void btnMerge_Click(object sender, MouseButtonEventArgs e)
         {
-
+            Utils.Merge MergeWnd = new Utils.Merge();
+            MergeWnd.ShowDialog();
         }
     }
 }

@@ -9,12 +9,13 @@
         Title="Merge" Height="450" Width="800">
     <Grid>
         <Label Content="Base model" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="216"/>
+        <ComboBox x:Name="cbBase" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top" Width="216"/>
         <Label Content="LoRA" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="83"/>
-        <ComboBox HorizontalAlignment="Left" Margin="105,45,0,0" VerticalAlignment="Top" Width="216"/>
-        <Label Content="Output" HorizontalAlignment="Left" Margin="10,394,0,0" VerticalAlignment="Top" Width="83"/>
+        <ComboBox x:Name="cbLora" HorizontalAlignment="Left" Margin="105,45,0,0" VerticalAlignment="Top" Width="216"/>
+        <Label Content="Output" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="83"/>
 
-        <hc:TextBox HorizontalAlignment="Left" Margin="112,394,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="218"/>
+        <hc:TextBox x:Name="tbOutpath" HorizontalAlignment="Left" Margin="112,0,0,10" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="218"/>
+        <Button Content="Make" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Click="Button_Click"/>
 
     </Grid>
 </Window>
