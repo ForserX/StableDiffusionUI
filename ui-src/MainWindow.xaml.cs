@@ -216,6 +216,7 @@ namespace SD_FXUI
                 btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
+                UpdateModelsTIList();
 
                 cbDevice.Items.Clear();
 
@@ -257,6 +258,8 @@ namespace SD_FXUI
                 btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
+                UpdateModelsTIList();
+
                 grDevice.Visibility = Visibility.Collapsed;
                 grVAE.Visibility = Visibility.Visible;
                 grLoRA.Visibility = Visibility.Visible;
@@ -306,6 +309,8 @@ namespace SD_FXUI
                 btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
+                UpdateModelsTIList();
+
                 cbDevice.Items.Clear();
                 cbDevice.Items.Add("vulkan");
                 cbDevice.Items.Add("CUDA");
@@ -342,6 +347,8 @@ namespace SD_FXUI
                 btnDiffCuda.Background = Safe;
 
                 UpdateModelsList();
+                UpdateModelsTIList();
+
                 grDevice.Visibility = Visibility.Collapsed;
 
                 btnImg.Visibility = Visibility.Visible;
@@ -721,15 +728,13 @@ namespace SD_FXUI
 
         private void cbModel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cbTI == null || e.AddedItems.Count == 0)
+            if (Helper.Mode != Helper.ImplementMode.ONNX || cbTI == null || e.AddedItems.Count == 0)
                 return;
 
             cbTI.Items.Clear();
             cbTI.Items.Add("None");
 
             string Mode = "onnx/";
-            if (Helper.Mode != Helper.ImplementMode.ONNX)
-                Mode = "Diffusers/";
 
             string ModelPath = FS.GetModelDir() + Mode + e.AddedItems[0] + "/textual_inversion_merges/";
 

@@ -6,6 +6,7 @@ from diffusers import OnnxStableDiffusionPipeline, OnnxStableDiffusionImg2ImgPip
 from diffusers import EulerAncestralDiscreteScheduler, PNDMScheduler, LMSDiscreteScheduler, DDIMScheduler, DPMSolverMultistepScheduler, EulerDiscreteScheduler, DDPMScheduler, KDPM2DiscreteScheduler, HeunDiscreteScheduler
 
 from transformers import CLIPTokenizer
+from pipeline_onnx_stable_diffusion_upscale import OnnxStableDiffusionUpscalePipeline
 
 import argparse
 from PIL import PngImagePlugin, Image

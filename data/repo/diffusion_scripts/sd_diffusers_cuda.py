@@ -211,25 +211,47 @@ if opt.vae == "default":
 else:
     vae = AutoencoderKL.from_pretrained(opt.vae + "/vae", torch_dtype=fptype)
     
-if opt.inversion is not None:
-    cputextenc = CLIPTextModel.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/text_encoder")
-    cliptokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/tokenizer")
-    
-else:
-    cputextenc = CLIPTextModel.from_pretrained(opt.mdlpath + "/text_encoder")
-    cliptokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/tokenizer")
-  
-cputextenc.to(opt.device,fptype)
-
 if opt.mode == "txt2img":
-    pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, text_encoder=cputextenc, tokenizer=cliptokenizer, vae=vae, safety_checker=NSFW)
+    pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, vae=vae, safety_checker=NSFW)
 if opt.mode == "img2img":
-    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, text_encoder=cputextenc, tokenizer=cliptokenizer, vae=vae, safety_checker=NSFW)
+    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, vae=vae, safety_checker=NSFW)
 if opt.mode == "inpaint":
-    pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, text_encoder=cputextenc, tokenizer=cliptokenizer, vae=vae, safety_checker=NSFW)
+    pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, vae=vae, safety_checker=NSFW)
 
 pipe.to(opt.device)
-cputextenc.to(opt.device, fptype)
+
+if opt.inversion is not None:
+    loaded_embeds = torch.load(opt.inversion, opt.device)
+    from pathlib import Path
+
+    trained_token = Path(opt.inversion).stem
+    if len(loaded_embeds) > 2:
+        embeds = loaded_embeds["string_to_param"]["*"][-1, :]
+    else:
+        # separate token and the embeds
+        trained_token = list(loaded_embeds.keys())[0]
+        embeds = loaded_embeds[trained_token]
+
+    token = trained_token
+    num_added_tokens = pipe.tokenizer.add_tokens(token)
+    print(f"Initial token: {trained_token} - {num_added_tokens}")
+    i = 1
+    while num_added_tokens == 0:
+        print(f"The tokenizer already contains the token {token}.")
+        token = f"{token[:-1]}-{i}>"
+        print(f"Attempting to add the token {token}.")
+        num_added_tokens = pipe.tokenizer.add_tokens(token)
+        i += 1
+
+    # resize the token embeddings
+    pipe.text_encoder.resize_token_embeddings(len(pipe.tokenizer))
+
+    # get the id for the token and assign the embeds
+    token_id = pipe.tokenizer.convert_tokens_to_ids(token)
+    pipe.text_encoder.get_input_embeddings().weight.data[token_id] = embeds
+
+    opt.prompt += ", (" + f"{token}" + "),"
+
 
 if opt.scmode == "EulerAncestralDiscrete":
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
@@ -364,6 +386,8 @@ def generate(prompt, prompt_neg, steps, width, height, seed, scale, init_img_pat
     image = None
 
 print("SD: Model loaded")
+print(f"Prompt: {opt.prompt}")
+print(f"Neg rompt: {opt.prompt_neg}")
 
 for i in range(opt.totalcount):
     generate(opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, opt.imgmask)

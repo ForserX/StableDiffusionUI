@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="res\merge.png" />
     <None Remove="res\settings.png" />
   </ItemGroup>
 
@@ -29,6 +30,7 @@
     <Resource Include="res\folder.png" />
     <Resource Include="res\history.png" />
     <Resource Include="res\close.png" />
+    <Resource Include="res\merge.png" />
     <Resource Include="res\noimg.jpg" />
     <Resource Include="res\nomask.jpg" />
     <Resource Include="res\notfavor.png" />
