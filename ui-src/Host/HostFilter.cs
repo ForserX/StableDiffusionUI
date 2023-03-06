@@ -132,6 +132,14 @@ namespace SD_FXUI
                 string PoseImg = Message.Replace("CN: Pose - ", string.Empty);
                 Helper.Form.UpdateViewImg(PoseImg);
             }
+            if (Message.Contains("CN: Model loaded"))
+            {
+                Helper.Form.InvokeProgressUpdate(20);
+            }
+            if (Message.Contains("CN: Image from Pose: done!"))
+            {
+                Helper.Form.InvokeProgressApply();
+            }
         }
         public static void CheckDeepDanBooru(string Message)
         {

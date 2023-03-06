@@ -1,5 +1,5 @@
 from diffusers import UniPCMultistepScheduler, AutoencoderKL
-import torch
+import torch, os, time
 
 from controlnet_aux import OpenposeDetector
 from PIL import Image
@@ -37,7 +37,7 @@ def generateImageFromPose ():
 
     pipe = GetPipeCN(opt.mdlpath, opt.cn_model, opt.nsfw, opt.precision == "fp16")
     
-    pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
+    #pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
     if not opt.vae == "default":
         pipe.vae = AutoencoderKL.from_pretrained(opt.vae + "/vae", torch_dtype=fptype)
@@ -51,6 +51,7 @@ def generateImageFromPose ():
     if opt.lora:
         ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16")
 
+    print("CN: Model loaded")
     generator = torch.Generator(device=opt.device).manual_seed(opt.seed)
         
     output = pipe(
@@ -59,10 +60,10 @@ def generateImageFromPose ():
         negative_prompt = opt.prompt_neg,
         generator = generator,
         num_inference_steps=opt.steps
-    )
+    ).images[0]
     
-    output.save(opt.outfile)
-    print(f"CN: Pose - {opt.outfile}")
+    output.save(os.path.join(opt.outfile, f"{time.time_ns()}.png"), 'PNG')
+    print("CN: Image from Pose: done!")
 
 if opt.mode == "PfI":
     generatePoseFromImage()

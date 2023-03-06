@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="1091" Width="1098" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="760" Width="1098" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -197,7 +197,7 @@
                     <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,7,0,0" VerticalAlignment="Top"/>
                     <ToggleButton x:Name="tsLoRA" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,10,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36"/>
                 </Grid>
-                <Grid x:Name="grLoRA_Copy" Height="136">
+                <Grid x:Name="grCN" Height="136">
                     <Label Content="ControlNet:" Height="30" Width="89" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-10,-6,0,0" VerticalAlignment="Top"/>
                     <Image x:Name="imgPose" Margin="10,24,300,12" Source="/res/noimg.jpg"/>
                     <ComboBox  x:Name="cbPose" Height="22" Text="" Margin="216,0,10,10" VerticalAlignment="Bottom" SelectionChanged="cbPose_SelectionChanged"/>

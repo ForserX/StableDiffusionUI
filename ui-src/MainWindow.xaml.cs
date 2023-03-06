@@ -84,38 +84,39 @@ namespace SD_FXUI
             string cmdline = "";
             bool SafeCPUFlag = CPUUse;
 
-            if (tsCN.IsChecked.Value)
+            switch (Helper.Mode)
             {
-                cmdline += GetCommandLineDiffCuda();
-                cmdline += $" --pose=\"{Helper.CurrentPose}\"";
-                cmdline += $" --mode=\"IfP\" ";
+                case Helper.ImplementMode.Shark:
+                    {
+                        cmdline += GetCommandLineShark();
+                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Size));
+                        break;
+                    }
+                case Helper.ImplementMode.ONNX:
+                    {
+                        cmdline += GetCommandLineOnnx();
+                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
+                        break;
+                    }
+                case Helper.ImplementMode.DiffCPU:
+                case Helper.ImplementMode.DiffCUDA:
+                    {
+                        if (tsCN.IsChecked.Value)
+                        {
+                            cmdline += GetCommandLineDiffCuda();
+                            cmdline += $" --pose=\"{Helper.CurrentPose}\"";
+                            cmdline += $" --mode=\"IfP\" ";
 
-                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Size));
-            }
-            else
-            {
-                switch (Helper.Mode)
-                {
-                    case Helper.ImplementMode.Shark:
-                        {
-                            cmdline += GetCommandLineShark();
-                            Task.Run(() => CMD.ProcessRunnerShark(cmdline, Size));
+                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Size));
                             break;
                         }
-                    case Helper.ImplementMode.ONNX:
-                        {
-                            cmdline += GetCommandLineOnnx();
-                            Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
-                            break;
-                        }
-                    case Helper.ImplementMode.DiffCPU:
-                    case Helper.ImplementMode.DiffCUDA:
+                        else
                         {
                             cmdline += GetCommandLineDiffCuda();
                             Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
                             break;
                         }
-                }
+                    }
             }
 
             if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != TryPrompt.Text)
@@ -242,6 +243,7 @@ namespace SD_FXUI
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
                 grLoRA.Visibility = Visibility.Collapsed;
+                grCN.Visibility = Visibility.Collapsed;
                 grDevice.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
 
@@ -277,6 +279,7 @@ namespace SD_FXUI
                 grDevice.Visibility = Visibility.Collapsed;
                 grVAE.Visibility = Visibility.Visible;
                 grLoRA.Visibility = Visibility.Visible;
+                grCN.Visibility = Visibility.Visible;
 
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
@@ -333,6 +336,7 @@ namespace SD_FXUI
                 cbFf16.Visibility = Visibility.Visible;
                 grDevice.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Collapsed;
+                grCN.Visibility = Visibility.Collapsed;
                 grLoRA.Visibility = Visibility.Collapsed;
 
                 cbSampler.Items.Clear();
@@ -369,6 +373,7 @@ namespace SD_FXUI
                 cbFf16.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
                 grLoRA.Visibility = Visibility.Visible;
+                grCN.Visibility = Visibility.Visible;
                 CPUUse = true;
 
                 cbSampler.Items.Clear();

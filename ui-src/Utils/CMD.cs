@@ -510,6 +510,7 @@ namespace SD_FXUI
             }
 
             cmdline += $" --cn_model=\"{DDBModel}\" ";
+            cmdline += $" --outfile=\"{FS.GetWorkingDir()}\" ";
 
             Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.Mode == Helper.ImplementMode.DiffCPU ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
             Host.Print("\n Startup generation..... \n");

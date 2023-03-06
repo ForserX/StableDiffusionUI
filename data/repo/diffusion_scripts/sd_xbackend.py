@@ -266,7 +266,7 @@ def ApplyArg(parser):
         "--precision", type=str, help="precision type (fp16/fp32)", dest='precision',
     )
     parser.add_argument(
-        "--mode", choices=['txt2img', 'img2img', 'inpaint', 'IfP'], default="txt2img", help="Specify generation mode", dest='mode',
+        "--mode", choices=['txt2img', 'img2img', 'inpaint', 'IfP', 'PfI'], default="txt2img", help="Specify generation mode", dest='mode',
     )
     parser.add_argument(
         "--img", type=str, default="", help="Specify generation mode", dest='img',
