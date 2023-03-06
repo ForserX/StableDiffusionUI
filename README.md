@@ -1,7 +1,7 @@
 # StableDiffusionUI Shark AMD and Nvidia
 ### What is it
 Simple re-implement SD UI for AMD and Nvidia GPU 
-![image](https://user-images.githubusercontent.com/17796364/219934822-4b75e15b-b5d8-44d7-8f0b-bfedd172659f.png)
+![image](https://user-images.githubusercontent.com/13867290/222996644-77cfab99-6a1a-45e1-823e-9a1365e515db.png)
 ![image](https://user-images.githubusercontent.com/13867290/216797870-3f05fd70-41b0-41e5-b9ea-e7f41f294b65.png)
 
 
