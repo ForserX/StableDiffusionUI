@@ -221,6 +221,8 @@ namespace SD_FXUI
         {
             if (Helper.Mode != Helper.ImplementMode.ONNX)
             {
+                tsCN.IsChecked = false;
+
                 Helper.Mode = Helper.ImplementMode.ONNX;
                 Install.CheckAndInstallONNX();
 
@@ -788,6 +790,12 @@ namespace SD_FXUI
 
         private void cbPose_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count == 0)
+            {
+                Helper.CurrentPose = null;
+                return;
+            }
+
             string ImgPath = FS.GetModelDir() + "controlnet/pose/";
             ImgPath += e.AddedItems[0] + ".png";
 
@@ -800,6 +808,7 @@ namespace SD_FXUI
         private void tsCN_Checked(object sender, RoutedEventArgs e)
         {
             cbPose.IsEnabled = tsCN.IsChecked.Value;
+            cbSampler.IsEnabled = !tsCN.IsChecked.Value;
         }
     }
 }
