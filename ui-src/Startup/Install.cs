@@ -184,9 +184,6 @@ namespace SD_FXUI
             Directory.CreateDirectory(FS.GetModelDir() + @"\deepdanbooru");
             Directory.CreateDirectory(FS.GetModelDir() + @"\controlnet");
             Directory.CreateDirectory(FS.GetModelDir() + @"\controlnet\pose");
-
-            // Да кто такие локальные пути...
-            WrapPoserPath();
         }
     }
 }
