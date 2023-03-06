@@ -223,7 +223,7 @@ namespace SD_FXUI
 
                 cbDevice.Items.Clear();
 
-                foreach(var item in Helper.GPUID.GPUs)
+                foreach (var item in Helper.GPUID.GPUs)
                 {
                     cbDevice.Items.Add(item);
                 }
@@ -286,7 +286,7 @@ namespace SD_FXUI
                         cbDevice.Items.Add(item);
                     }
                 }
-                
+
                 if (cbDevice.Items.Count == 0)
                 {
                     cbDevice.Items.Add("None");
@@ -377,7 +377,7 @@ namespace SD_FXUI
             if (Helper.ImgList.Count > 0)
             {
                 currentImage = (Helper.ImgList[lvImages.SelectedIndex]);
-                               
+
                 ViewImg.Source = FS.BitmapFromUri(new Uri(currentImage));
                 string NewCurrentImage = currentImage.Replace("_upscale.", ".");
 
@@ -446,7 +446,7 @@ namespace SD_FXUI
             else if (currentImage != null)
             {
                 Helper.InputImagePath = currentImage;
-                imgLoaded.Source = FS.BitmapFromUri(new Uri(currentImage));               
+                imgLoaded.Source = FS.BitmapFromUri(new Uri(currentImage));
             }
             else
             {
@@ -754,6 +754,14 @@ namespace SD_FXUI
         {
             Utils.Merge MergeWnd = new Utils.Merge();
             MergeWnd.ShowDialog();
+        }
+
+        private void pbGen_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (pbGen.Value == 100 || pbGen.Value == 0)
+                pbGen.Visibility = Visibility.Collapsed;
+            else
+                pbGen.Visibility = Visibility.Visible;
         }
     }
 }
