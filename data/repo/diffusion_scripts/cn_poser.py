@@ -37,7 +37,7 @@ def generateImageFromPose ():
 
     pipe = GetPipeCN(opt.mdlpath, opt.cn_model, opt.nsfw, opt.precision == "fp16")
     
-    #pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
+    pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
     if not opt.vae == "default":
         pipe.vae = AutoencoderKL.from_pretrained(opt.vae + "/vae", torch_dtype=fptype)
