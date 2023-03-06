@@ -33,6 +33,7 @@
     <Compile Include="pix2pix.py" />
     <Compile Include="sd_diffusers_cuda.py" />
     <Compile Include="sd_onnx.py" />
+    <Compile Include="sd_xbackend.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|VisualStudio|Scripts" />

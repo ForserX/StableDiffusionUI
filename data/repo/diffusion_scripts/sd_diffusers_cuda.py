@@ -4,12 +4,14 @@ import time
 import torch
 
 from safetensors.torch import load_file
-from transformers import CLIPTokenizer, CLIPTextModel
 
-from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionInpaintPipeline, AutoencoderKL
-from diffusers import EulerAncestralDiscreteScheduler, PNDMScheduler, LMSDiscreteScheduler, DDIMScheduler, DPMSolverMultistepScheduler, EulerDiscreteScheduler, DDPMScheduler, KDPM2DiscreteScheduler, HeunDiscreteScheduler
+from diffusers import AutoencoderKL
 
-from diffusers.pipelines.stable_diffusion.safety_checker import StableDiffusionSafetyChecker
+from sd_xbackend import (
+    GetPipe,
+    GetSampler,
+    ApplyArg
+)
 
 import argparse
 from PIL import PngImagePlugin, Image
@@ -17,174 +19,7 @@ from PIL import PngImagePlugin, Image
 os.chdir(sys.path[0])
 
 parser = argparse.ArgumentParser()
-
-eta = 0.0
-
-
-parser.add_argument(
-    "--model",
-    type=str,
-    help="Path to model checkpoint file",
-    dest='mdlpath',
-)
-
-parser.add_argument(
-    "--width",
-    type=int,
-    help="Path to model checkpoint file",
-    dest='width',
-)
-
-parser.add_argument(
-    "--guidance_scale",
-    type=float,
-    help="Path to model checkpoint file",
-    dest='guidance_scale',
-)
-
-parser.add_argument(
-    "--height",
-    type=int,
-    help="Path to model checkpoint file",
-    dest='height',
-)
-
-parser.add_argument(
-    "--totalcount",
-    type=int,
-    help="Path to model checkpoint file",
-    dest='totalcount',
-)
-
-parser.add_argument(
-    "--steps",
-    type=int,
-    help="Path to model checkpoint file",
-    dest='steps',
-)
-
-parser.add_argument(
-    "--seed",
-    type=int,
-    help="Path to model checkpoint file",
-    dest='seed',
-)
-
-parser.add_argument(
-    "--imgscale",
-    type=float,
-    default=0.44,
-    help="Path to model checkpoint file",
-    dest='imgscale',
-)
-
-parser.add_argument(
-    "--prompt_neg",
-    type=str,
-    help="Path to model checkpoint file",
-    dest='prompt_neg',
-)
-
-parser.add_argument(
-    "--prompt",
-    type=str,
-    help="Path to model checkpoint file",
-    dest='prompt',
-)
-
-parser.add_argument(
-    "--outpath",
-    type=str,
-    help="Output path",
-    dest='outpath',
-)
-
-parser.add_argument(
-    "--precision",
-    type=str,
-    help="precision type (fp16/fp32)",
-    dest='precision',
-)
-
-parser.add_argument(
-    "--mode",
-    choices=['txt2img', 'img2img', 'inpaint'],
-    default="txt2img",
-    help="Specify generation mode",
-    dest='mode',
-)
-
-parser.add_argument(
-    "--img",
-    type=str,
-    default="",
-    help="Specify generation mode",
-    dest='img',
-)
-
-parser.add_argument(
-    "--imgmask",
-    type=str,
-    default="",
-    help="Specify generation image mask",
-    dest='imgmask',
-)
-
-parser.add_argument(
-    "--device",
-    type=str,
-    default="cuda",
-    help="Specify generation mode device",
-    dest='device',
-)
-
-parser.add_argument(
-    "--scmode",
-    default="eulera",
-    help="Specify generation scmode",
-    dest='scmode',
-)
-
-parser.add_argument(
-    "--vae",
-    help="Specify generation vae path",
-    dest='vae',
-)
-
-parser.add_argument(
-    "--eta",
-    help="Eta",
-    dest='eta',
-    default=1.0,
-)
-
-parser.add_argument(
-    "--nsfw",
-    help="nsfw checker",
-    dest='nsfw',
-    default=False,
-)
-
-parser.add_argument(
-    "--lora",
-    help="lora checker",
-    dest='lora',
-    default=False,
-)
-
-parser.add_argument(
-    "--lora_path",
-    type=str,
-    help="Path to model LoRA file",
-    dest='lora_path',
-)
-
-parser.add_argument(
-    "--inversion",
-    help="inversion path",
-    dest='inversion',
-    default=None,
-)
+ApplyArg(parser)
 
 if len(sys.argv)==1:
     parser.print_help()
@@ -197,28 +32,14 @@ if opt.precision == "fp16":
 else:
     fptype = torch.float32
 
-NSFW = None
 
-if opt.nsfw:
-    safety_model = opt.mdlpath + "/safety_checker/"
-    NSFW = StableDiffusionSafetyChecker.from_pretrained(
-        safety_model,
-        torch_dtype=fptype
-    )
+pipe = GetPipe(opt.mdlpath, opt.mode, False, opt.nsfw, opt.precision == "fp16")
 
-if opt.vae == "default":
-    vae = AutoencoderKL.from_pretrained(opt.mdlpath + "/vae", torch_dtype=fptype)
-else:
-    vae = AutoencoderKL.from_pretrained(opt.vae + "/vae", torch_dtype=fptype)
+if not opt.vae == "default":
+    pipe.vae = AutoencoderKL.from_pretrained(opt.vae + "/vae", torch_dtype=fptype)
     
-if opt.mode == "txt2img":
-    pipe = StableDiffusionPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, vae=vae, safety_checker=NSFW)
-if opt.mode == "img2img":
-    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, vae=vae, safety_checker=NSFW)
-if opt.mode == "inpaint":
-    pipe = StableDiffusionInpaintPipeline.from_pretrained(opt.mdlpath, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, vae=vae, safety_checker=NSFW)
-
 pipe.to(opt.device)
+eta = GetSampler(pipe, opt.scmode, opt.eta)
 
 if opt.inversion is not None:
     loaded_embeds = torch.load(opt.inversion, opt.device)
@@ -249,38 +70,8 @@ if opt.inversion is not None:
     # get the id for the token and assign the embeds
     token_id = pipe.tokenizer.convert_tokens_to_ids(token)
     pipe.text_encoder.get_input_embeddings().weight.data[token_id] = embeds
-
-    opt.prompt += ", (" + f"{token}" + "),"
-
-
-if opt.scmode == "EulerAncestralDiscrete":
-    pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
-    eta = opt.eta
-
-if opt.scmode == "EulerDiscrete":
-    pipe.scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
     
-if opt.scmode == "PNDM":
-    pipe.scheduler = PNDMScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
     
-if opt.scmode == "DDIM":
-    pipe.scheduler = DDIMScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
-    
-if opt.scmode == "DPMSolverMultistep":
-    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
-    
-if opt.scmode == "LMSDiscrete":
-    pipe.scheduler = LMSDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
-    
-if opt.scmode == "DDPM":
-    pipe.scheduler = DDPMScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
-    
-if opt.scmode == "DPMDiscrete":
-    pipe.scheduler = KDPM2DiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
-    
-if opt.scmode == "HeunDiscrete":
-    pipe.scheduler = HeunDiscreteScheduler.from_config(pipe.scheduler.config, torch_dtype=fptype)
-
 # LoRA magic
 if opt.lora:
     model_path = opt.lora_path
