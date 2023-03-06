@@ -21,6 +21,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CLIP.py" />
+    <Compile Include="cn_poser.py" />
     <Compile Include="convert_original_stable_diffusion_to_diffusers.py" />
     <Compile Include="convert_stable_diffusion_checkpoint_to_onnx.py" />
     <Compile Include="convert_textual_inversion_to_onnx.py" />

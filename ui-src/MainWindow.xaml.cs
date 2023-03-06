@@ -763,5 +763,11 @@ namespace SD_FXUI
             else
                 pbGen.Visibility = Visibility.Visible;
         }
+
+        private void btnInImgPose_Click(object sender, RoutedEventArgs e)
+        {
+            string CurrentImg = Helper.InputImagePath;
+            Task.Run(() => CMD.PoserProcess(CurrentImg));
+        }
     }
 }

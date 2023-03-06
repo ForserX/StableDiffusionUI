@@ -66,6 +66,7 @@ namespace SD_FXUI
             HostFilter.CheckTraceBack(Message);
             HostFilter.CheckConvertState(Message);
             HostFilter.CheckImageState(Message);
+            HostFilter.CheckControlNet(Message);
             HostFilter.CheckDeepDanBooru(Message);
             HostFilter.CheckImageSize(Message);
             HostFilter.CheckOutOfMemory(Message);

@@ -46,5 +46,25 @@ namespace SD_FXUI
             Download.Send(WGetFile + "-O \"vae/model.onnx\" https://huggingface.co/ssube/stable-diffusion-x4-upscaler-onnx/resolve/main/vae/model.onnx");
             Download.Send(WGetFile + "https://huggingface.co/ssube/stable-diffusion-x4-upscaler-onnx/raw/main/model_index.json");
         }
+        public static void DownloadCNPoser()
+        {
+            string WorkingDir = FS.GetModelDir() + "controlnet/OpenposeDetector/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+
+            Directory.CreateDirectory(WorkingDir);
+            Directory.CreateDirectory(WorkingDir + "anannotator");
+            Directory.CreateDirectory(WorkingDir + "anannotator\\ckpts");
+
+            string WGetFile = "\"" + FS.GetToolsDir() + "wget.exe\" ";
+            Host Download = new Host(WorkingDir);
+            Download.Start();
+            Download.Send(WGetFile + "-O \"anannotator\\ckpts\\body_pose_model.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/body_pose_model.pth");
+            Download.SendExitCommand();
+            Download.Wait();
+        }
     }
 }

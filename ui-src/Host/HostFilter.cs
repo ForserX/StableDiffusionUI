@@ -125,6 +125,14 @@ namespace SD_FXUI
             return false;
         }
 
+        public static void CheckControlNet(string Message)
+        {
+            if (Message.Contains("CN: Pose - "))
+            {
+                string PoseImg = Message.Replace("CN: Pose - ", string.Empty);
+                Helper.Form.UpdateViewImg(PoseImg);
+            }
+        }
         public static void CheckDeepDanBooru(string Message)
         {
             if (Message.Contains("DeepDanBooru: Finished!"))

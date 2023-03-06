@@ -56,7 +56,7 @@
             <StackPanel>
                 <Grid Height="116">
                     <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1"/>
-                    <TextBox x:Name="TryPrompt" TextWrapping="Wrap" Text="" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Margin="5,27,6,4"/>
+                    <TextBox x:Name="TryPrompt" TextWrapping="Wrap" Text="" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Margin="5,27,6,4" AcceptsReturn="True"/>
                     <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-14,8,0,0"/>
                     <Button x:Name="btnImg" Content="From image" Margin="0,1,6,0" Click="btnImage_Click" HorizontalAlignment="Right" Width="96" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
                         <Button.Background>
@@ -82,7 +82,7 @@
                         </Button.Background>
                     </Button>
                     <Image x:Name="imgToImgMask" HorizontalAlignment="Right" Height="23" Margin="0,2,4,0" VerticalAlignment="Top" Width="26" Source="/res/img2img.png"/>
-                    <Button Content="Get tokens" HorizontalAlignment="Left" Margin="20,115,0,0" VerticalAlignment="Top" Width="80" Click="btnDeepDanbooru_Click"  Foreground="White" Height="23" Padding="10,1,10,1">
+                    <Button Content="Get tokens" HorizontalAlignment="Left" Margin="10,115,0,0" VerticalAlignment="Top" Width="80" Click="btnDeepDanbooru_Click"  Foreground="White" Height="23" Padding="10,1,10,1">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -99,10 +99,18 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
+                    <Button x:Name="btnInImgPose" Content="Get Pose" HorizontalAlignment="Left" Margin="97,115,0,0" VerticalAlignment="Top" Width="80" Foreground="White" Height="23" Padding="10,1,10,1" Click="btnInImgPose_Click">
+                        <Button.Background>
+                            <LinearGradientBrush EndPoint="1,0">
+                                <GradientStop Color="#FF523876"/>
+                                <GradientStop Color="#FF4D12AF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
                 </Grid>
                 <Grid Height="95">
                     <Label Content="Neg prompt" Height="21" Width="95" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
-                    <TextBox x:Name="NegPrompt" TextWrapping="Wrap" Text="" Height="70" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Background="#FFF9FAFA" Margin="4,17,6,3"/>
+                    <TextBox x:Name="NegPrompt" TextWrapping="Wrap" Text="" Height="70" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Background="#FFF9FAFA" Margin="4,17,6,3" AcceptsReturn="True"/>
                 </Grid>
                 <Grid Height="198" Width="355">
                     <Label Content="Weight" Height="30" Width="57" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-6,40,0,0" VerticalAlignment="Top"/>

@@ -122,6 +122,42 @@ namespace SD_FXUI
             }
         }
 
+        public static void WrapPoserPath()
+        {
+            string FileName = FS.GetWorkingDir() + @"\repo\onnx.venv\Lib\site-packages\controlnet_aux\open_pose\__init__.py";
+
+            if (Helper.Mode == Helper.ImplementMode.DiffCUDA)
+            {
+                FileName = FS.GetWorkingDir() + @"\repo\cuda.venv\Lib\site-packages\controlnet_aux\open_pose\__init__.py";
+            }
+
+            if (!File.Exists(FileName))
+            {
+                return;
+            }
+            using (var reader = System.IO.File.OpenText(FileName))
+            {
+                int LineCounter = 0;
+                string? str = reader.ReadLine();
+                while (str != null)
+                {
+                    if (str.Contains("hf_hub_download(pretrained_model_or_path, filename)"))
+                    {
+                        str = "        body_model_path = pretrained_model_or_path #hf_hub_download(pretrained_model_or_path, filename)";
+                        break;
+                    }
+                    str = reader.ReadLine();
+                    LineCounter++;
+                }
+
+                reader.Close();
+
+                string[] Lines = File.ReadAllLines(FileName);
+                Lines[LineCounter] = str;
+                System.IO.File.WriteAllLines(FileName, Lines);
+            }
+        }
+
         internal static void SetupDirs()
         {
             Helper.CachePath = FS.GetModelDir() + @"\shark\";
@@ -146,6 +182,11 @@ namespace SD_FXUI
             Directory.CreateDirectory(FS.GetModelDir() + @"\textual_inversion");
             Directory.CreateDirectory(FS.GetModelDir() + @"\upscaler");
             Directory.CreateDirectory(FS.GetModelDir() + @"\deepdanbooru");
+            Directory.CreateDirectory(FS.GetModelDir() + @"\controlnet");
+            Directory.CreateDirectory(FS.GetModelDir() + @"\controlnet\pose");
+
+            // Да кто такие локальные пути...
+            WrapPoserPath();
         }
     }
 }

@@ -32,3 +32,6 @@ opencv-python
 
 # CPU: LoRA
 safetensors
+
+# ControlNet
+controlnet_aux

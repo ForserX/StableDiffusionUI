@@ -472,10 +472,30 @@ namespace SD_FXUI
             ProcessHost.SendExitCommand();
             ProcessHost.Wait();
 
-
-
             Host.Print("\n Processing DeepDanbooru: Done..... \n");
             Notification.SendNotification("Processing DeepDanbooru: Done!");
+            Helper.Form.InvokeProgressUpdate(100);
+        }
+        public static async Task PoserProcess(string currentImage)
+        {
+            string DDBModel = FS.GetModelDir() + "controlnet/OpenposeDetector/anannotator/ckpts/body_pose_model.pth";
+            if (!File.Exists(DDBModel))
+            {
+                Notification.SendNotification("Starting downloading pose model...");
+                WGetDownloadModels.DownloadCNPoser();
+                Notification.SendNotification("Downloading pose model: done!");
+            }
+
+            string OutFile = FS.GetModelDir() + "controlnet/pose/" + Path.GetFileNameWithoutExtension(currentImage) + ".png";
+            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
+            Host.Print("\n Processing poser.... \n");
+            ProcessHost.Start($"repo/diffusion_scripts/cn_poser.py --img=\"{currentImage}\" --model=\"{DDBModel}\"  --outfile=\"{OutFile}\" ");
+            Helper.Form.InvokeProgressUpdate(10);
+            ProcessHost.SendExitCommand();
+            ProcessHost.Wait();
+
+            Host.Print("\n Processing poser: Done..... \n");
+            Notification.SendNotification("Processing poser: Done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
     }

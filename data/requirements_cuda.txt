@@ -34,3 +34,6 @@ regex
 gfpgan
 realesrgan
 opencv-python
+
+# ControlNet
+controlnet_aux
