@@ -24,7 +24,7 @@ else:
 
 def generatePoseFromImage():
     print("processing generatePoseFromImage()")
-    model = OpenposeDetector.from_pretrained(opt.model)
+    model = OpenposeDetector.from_pretrained(opt.mdlpath)
     in_img = Image.open(opt.img)
     
     img = model(in_img)
@@ -41,8 +41,8 @@ def generateImageFromPose ():
     output = pipe(
         opt.prompt,
         image,
-        opt.width, 
         opt.height,
+        opt.width, 
         negative_prompt = opt.prompt_neg,
         generator = generator,
         num_inference_steps=opt.steps
@@ -55,6 +55,7 @@ if opt.mode == "PfI":
     generatePoseFromImage()
 elif opt.mode == "IfP":
     image = Image.open(opt.pose)
+    image.convert("RGB").resize((opt.width, opt.height))
 
     pipe = GetPipeCN(opt.mdlpath, opt.cn_model, opt.nsfw, opt.precision == "fp16")
     pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
