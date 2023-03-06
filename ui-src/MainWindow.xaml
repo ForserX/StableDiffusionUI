@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="731" Width="1098" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="1091" Width="1098" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -195,7 +195,14 @@
                 <Grid x:Name="grLoRA" Height="47">
                     <ComboBox  x:Name="cbLoRA" Height="22" Text="" Margin="46,6,79,0" VerticalAlignment="Top"/>
                     <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,7,0,0" VerticalAlignment="Top"/>
-                    <ToggleButton x:Name="tsLoRA" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,10,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36"/>
+                    <ToggleButton x:Name="tsLoRA" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,10,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36"/>
+                </Grid>
+                <Grid x:Name="grLoRA_Copy" Height="136">
+                    <Label Content="ControlNet:" Height="30" Width="89" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-10,-6,0,0" VerticalAlignment="Top"/>
+                    <Image x:Name="imgPose" Margin="10,24,300,12" Source="/res/noimg.jpg"/>
+                    <ComboBox  x:Name="cbPose" Height="22" Text="" Margin="216,0,10,10" VerticalAlignment="Bottom" SelectionChanged="cbPose_SelectionChanged"/>
+                    <ToggleButton x:Name="tsCN" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36" Margin="74,-1,0,0" Checked="tsCN_Checked" Unchecked="tsCN_Checked"/>
+                    <Label Content="Pose:" Height="30" Width="43" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="168,96,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </StackPanel>
         </ScrollViewer>

@@ -84,31 +84,40 @@ namespace SD_FXUI
             string cmdline = "";
             bool SafeCPUFlag = CPUUse;
 
-#pragma warning disable CS4014
-            switch (Helper.Mode)
+            if (tsCN.IsChecked.Value)
             {
-                case Helper.ImplementMode.Shark:
-                    {
-                        cmdline += GetCommandLineShark();
-                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Size));
-                        break;
-                    }
-                case Helper.ImplementMode.ONNX:
-                    {
-                        cmdline += GetCommandLineOnnx();
-                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
-                        break;
-                    }
-                case Helper.ImplementMode.DiffCPU:
-                case Helper.ImplementMode.DiffCUDA:
-                    {
-                        cmdline += GetCommandLineDiffCuda();
-                        Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
-                        break;
-                    }
+                cmdline += GetCommandLineDiffCuda();
+                cmdline += $" --pose=\"{Helper.CurrentPose}\"";
+                cmdline += $" --mode=\"IfP\" ";
+
+                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Size));
+            }
+            else
+            {
+                switch (Helper.Mode)
+                {
+                    case Helper.ImplementMode.Shark:
+                        {
+                            cmdline += GetCommandLineShark();
+                            Task.Run(() => CMD.ProcessRunnerShark(cmdline, Size));
+                            break;
+                        }
+                    case Helper.ImplementMode.ONNX:
+                        {
+                            cmdline += GetCommandLineOnnx();
+                            Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
+                            break;
+                        }
+                    case Helper.ImplementMode.DiffCPU:
+                    case Helper.ImplementMode.DiffCUDA:
+                        {
+                            cmdline += GetCommandLineDiffCuda();
+                            Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
+                            break;
+                        }
+                }
             }
 
-#pragma warning restore CS4014
             if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != TryPrompt.Text)
             {
                 Helper.PromHistory.Insert(0, TryPrompt.Text);
@@ -770,6 +779,22 @@ namespace SD_FXUI
         {
             string CurrentImg = Helper.InputImagePath;
             Task.Run(() => CMD.PoserProcess(CurrentImg));
+        }
+
+        private void cbPose_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string ImgPath = FS.GetModelDir() + "controlnet/pose/";
+            ImgPath += e.AddedItems[0] + ".png";
+
+            if (File.Exists(ImgPath))
+                imgPose.Source = FS.BitmapFromUri(new Uri(ImgPath));
+
+            Helper.CurrentPose = ImgPath;
+        }
+
+        private void tsCN_Checked(object sender, RoutedEventArgs e)
+        {
+            cbPose.IsEnabled = tsCN.IsChecked.Value;
         }
     }
 }

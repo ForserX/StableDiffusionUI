@@ -498,5 +498,46 @@ namespace SD_FXUI
             Notification.SendNotification("Processing poser: Done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
+
+        internal static async Task ProcessRunnerDiffCN(string cmdline, int size)
+        {
+            string DDBModel = FS.GetModelDir() + "controlnet/sd-controlnet-openpose/";
+            if (!Directory.Exists(DDBModel))
+            {
+                Notification.SendNotification("Starting downloading pose model...");
+                WGetDownloadModels.DownloadSDCNPoser();
+                Notification.SendNotification("Downloading pose model: done!");
+            }
+
+            cmdline += $" --cn_model=\"{DDBModel}\" ";
+
+            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.Mode == Helper.ImplementMode.DiffCPU ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
+            Host.Print("\n Startup generation..... \n");
+
+            Helper.Form.InvokeProgressUpdate(7);
+            ProcessHost.Start("./repo/diffusion_scripts/cn_poser.py " + cmdline);
+            ProcessHost.SendExitCommand();
+            Helper.Form.InvokeProgressUpdate(10);
+            ProcessHost.Wait();
+
+            //  process.WaitForInputIdle();
+            var Files = FS.GetFilesFrom(FS.GetWorkingDir(), new string[] { "png", "jpg" }, false);
+            foreach (var file in Files)
+            {
+                string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
+                System.IO.File.Move(file, NewFilePath);
+
+                await Task.Run(() => UpscalerRunner(size, NewFilePath));
+                if (size == 0 || Helper.CurrentUpscalerType == Helper.UpscalerType.None)
+                {
+                    Helper.Form.UpdateViewImg(NewFilePath);
+                }
+            }
+
+            Host.Print("\n  Task Done..... \n");
+            Notification.SendNotification("Task: done!", true);
+            Helper.Form.InvokeProgressUpdate(100);
+            Helper.Form.UpdateCurrentViewImg();
+        }
     }
 }

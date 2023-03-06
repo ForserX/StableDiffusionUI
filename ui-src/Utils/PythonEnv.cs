@@ -33,6 +33,12 @@ namespace SD_FXUI
                 }
             }
 
+            string PathForMode = GetPy((Helper.VENV)Helper.Mode);
+            if (System.IO.File.Exists(PathForMode))
+            {
+                return PathForMode;
+            }
+
             string Any = "";
             int CurModeIdx = (int)Helper.Mode;
             if (CurModeIdx < 4)

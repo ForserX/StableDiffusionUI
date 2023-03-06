@@ -198,7 +198,82 @@ namespace SD_FXUI
 
                 string newDenoising = Denoising.ToString().Replace(",", ".");
 
-                if(Helper.ImgMaskPath != string.Empty)
+                if (Helper.ImgMaskPath != string.Empty)
+                {
+                    CmdLine += $" --mode=\"inpaint\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                    CmdLine += $" --imgmask=\"{Helper.ImgMaskPath}\"";
+                }
+                else
+                {
+                    CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                }
+
+                if (!File.Exists(Helper.InputImagePath))
+                {
+                    Notification.MsgBox("Incorrect image path!");
+                    CmdLine = "";
+                }
+            }
+
+            return CmdLine;
+        }
+
+        private string GetCommandLineControlNet()
+        {
+            string Prompt = FixedPrompt(TryPrompt.Text);
+
+            string Model = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
+
+            string VAE = cbVAE.Text.ToLower();
+            if (VAE != "default")
+            {
+                if (VAE.StartsWith("vae\\"))
+                {
+                    VAE = FS.GetModelDir() + cbVAE.Text.ToLower();
+                }
+                else
+                {
+                    VAE = FS.GetModelDir() + "diffusers\\" + cbVAE.Text.ToLower();
+                }
+            }
+
+            float ETA = float.Parse(tbETA.Text);
+            ETA /= 100;
+            string newETA = ETA.ToString().Replace(",", ".");
+            string CmdLine = $""
+                    + $" --prompt=\"{Prompt}\""
+                    + $" --prompt_neg=\"{NegPrompt.Text}\""
+                    + $" --height={tbH.Text}"
+                    + $" --width={tbW.Text}"
+                    + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
+                    + $" --scmode={cbSampler.Text}"
+                    + $" --steps={tbSteps.Text}"
+                    + $" --seed={tbSeed.Text}"
+                    + $" --eta={newETA}"
+                    + $" --totalcount={tbTotalCount.Value.ToString()}"
+                    + $" --model=\"{Model}\""
+                    + $" --vae=\"{VAE}\""
+                    + $" --outpath=\"{FS.GetWorkingDir()}\""
+            ;
+
+            if (cbNSFW.IsChecked.Value)
+            {
+                CmdLine += " --nsfw=True";
+            }
+
+            if (cbTI.Text != "None" && cbTI.Text.Length > 0)
+            {
+                CmdLine += $" --inversion={cbTI.Text}";
+            }
+
+            if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
+            {
+                float Denoising = float.Parse(tbDenoising.Text);
+                Denoising /= 100;
+
+                string newDenoising = Denoising.ToString().Replace(",", ".");
+
+                if (Helper.ImgMaskPath != string.Empty)
                 {
                     CmdLine += $" --mode=\"inpaint\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
                     CmdLine += $" --imgmask=\"{Helper.ImgMaskPath}\"";
@@ -384,8 +459,10 @@ namespace SD_FXUI
             string SafeVAE = (string)cbVAE.Text;
             string SafeModelName = (string)cbModel.Text;
             string SafeLoRAName = (string)cbLoRA.Text;
+            string SafePose = (string)cbPose.Text;
 
             cbModel.Items.Clear();
+            cbPose.Items.Clear();
             cbVAE.Items.Clear();
             cbLoRA.Items.Clear();
 
@@ -397,9 +474,16 @@ namespace SD_FXUI
                 if (!Itm.EndsWith("hgf"))
                     cbVAE.Items.Add(Itm);
             }
+            // CN: Poser
 
-            // Yeah... LoRA...
-            string LoraPath = FS.GetModelDir() + "lora\\";
+            string ImgPath = FS.GetModelDir() + "controlnet/pose";
+            foreach (var Itm in Directory.GetFiles(ImgPath))
+            {
+                cbPose.Items.Add(Path.GetFileNameWithoutExtension(Itm));
+            }
+
+                // Yeah... LoRA...
+                string LoraPath = FS.GetModelDir() + "lora\\";
             foreach (var Itm in Directory.GetFiles(LoraPath))
             {
                 string TryName = Itm.Replace(LoraPath, string.Empty);
@@ -445,6 +529,7 @@ namespace SD_FXUI
             }
 
             cbLoRA.Text = SafeLoRAName;
+            cbPose.Text = SafePose;
         }
 
         void ClearImages()
