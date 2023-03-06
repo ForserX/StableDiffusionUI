@@ -31,12 +31,32 @@ def generatePoseFromImage():
     img.save(opt.outfile)
     print(f"CN: Pose - {opt.outfile}")
 
+pipe = None
+image = None
+
 def generateImageFromPose ():
     print("processing generateImageFromPose()")
+    generator = torch.Generator(device=opt.device).manual_seed(opt.seed)
+        
+    output = pipe(
+        opt.prompt,
+        image,
+        opt.width, 
+        opt.height,
+        negative_prompt = opt.prompt_neg,
+        generator = generator,
+        num_inference_steps=opt.steps
+    ).images[0]
+    
+    output.save(os.path.join(opt.outfile, f"{time.time_ns()}.png"), 'PNG')
+    print("CN: Image from Pose: done!")
+
+if opt.mode == "PfI":
+    generatePoseFromImage()
+elif opt.mode == "IfP":
     image = Image.open(opt.pose)
 
     pipe = GetPipeCN(opt.mdlpath, opt.cn_model, opt.nsfw, opt.precision == "fp16")
-    
     pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
     if not opt.vae == "default":
@@ -52,23 +72,6 @@ def generateImageFromPose ():
         ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16")
 
     print("CN: Model loaded")
-    generator = torch.Generator(device=opt.device).manual_seed(opt.seed)
-        
-    output = pipe(
-        opt.prompt,
-        image,
-        negative_prompt = opt.prompt_neg,
-        generator = generator,
-        num_inference_steps=opt.steps
-    ).images[0]
-    
-    output.save(os.path.join(opt.outfile, f"{time.time_ns()}.png"), 'PNG')
-    print("CN: Image from Pose: done!")
-
-if opt.mode == "PfI":
-    generatePoseFromImage()
-elif opt.mode == "IfP":
-    generateImageFromPose()
-
-
-
+    for i in range(opt.totalcount):
+        generateImageFromPose()
+        opt.seed = opt.seed + 1
