@@ -20,12 +20,13 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 ## Stargazers over time
 [![Stargazers over time](https://starchart.cc/ForserX/StableDiffusionUI.svg)](https://starchart.cc/ForserX/StableDiffusionUI)
 
-# 3rd 
-* [Shark](https://github.com/nod-ai/SHARK)
-* ONNX
-* InvokeAI
-* [HandyControls](https://github.com/HandyOrg/HandyControl)
-* Real-ESRGAN NCNN Vulkan
-* Real-SR NCNN Vulkan
-* Real-SRMD NCNN Vulkan
-* .NET Core 
+# Features
+* Custom VAE (ONNX/CUDA)
+* Lora (CUDA) 
+* ControlNet Pose (CUDA)
+* DeepDanbooru tokens extractor (ONNX/CUDA)
+* Converter for Diffusers/ONNX 
+* Vulkan upscalers (ONNX/CUDA)
+* Text2Image/Image2Image/Inpaint (ONNX/CUDA)
+* Face restoration (ONNX/CUDA)
+* * And other 
