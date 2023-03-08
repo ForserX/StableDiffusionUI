@@ -851,5 +851,25 @@ namespace SD_FXUI
         {
             Helper.TTA = tsTTA.IsChecked.Value;
         }
+
+        private void cbPix2Pix_Checked(object sender, RoutedEventArgs e)
+        {
+            if (cbSampler == null)
+                return;
+
+            if (cbPix2Pix.IsChecked.Value)
+            {
+                imgMask.Visibility = Visibility.Collapsed;
+                cbSampler.Text = "EulerAncestralDiscrete";
+                cbSampler.IsEnabled = false;
+                cbModel.IsEnabled = false;
+            }
+            else
+            {
+                imgMask.Visibility = Visibility.Visible;
+                cbSampler.IsEnabled = true;
+                cbModel.IsEnabled = true;
+            }
+        }
     }
 }

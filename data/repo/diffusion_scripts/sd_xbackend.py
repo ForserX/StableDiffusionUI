@@ -1,6 +1,8 @@
 import torch, time, os
 from PIL import PngImagePlugin, Image
 
+from pipeline_onnx_stable_diffusion_instruct_pix2pix import OnnxStableDiffusionInstructPix2PixPipeline
+
 from safetensors.torch import load_file
 
 from diffusers import ( 
@@ -12,6 +14,7 @@ from diffusers import (
     StableDiffusionImg2ImgPipeline, 
     StableDiffusionInpaintPipeline,
     StableDiffusionControlNetPipeline, 
+    StableDiffusionInstructPix2PixPipeline,
     ControlNetModel
 )
 
@@ -35,32 +38,45 @@ def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
     nsfw_pipe = None
     
     if IsONNX:
-        if NSFW:
-            safety_model = Model + "/safety_checker/"
-            nsfw_pipe = OnnxRuntimeModel.from_pretrained(safety_model, provider=prov)
-            
-        if Mode == "txt2img":
-            pipe = OnnxStableDiffusionPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
-        if Mode == "img2img":
-            pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
-        if Mode == "img2img":
-            pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
+        if Mode == "pix2pix":
+            if NSFW:
+                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov)
+            else:
+                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=None)
+        else:
+            if NSFW:
+                safety_model = Model + "/safety_checker/"
+                nsfw_pipe = OnnxRuntimeModel.from_pretrained(safety_model, provider=prov)
+                
+            if Mode == "txt2img":
+                pipe = OnnxStableDiffusionPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
+            if Mode == "img2img":
+                pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
+            if Mode == "img2img":
+                pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
     else:
         if fp16:
             fptype = torch.float16
         else:
             fptype = torch.float32
 
-        if NSFW:
-            safety_model = Model + "/safety_checker/"
-            nsfw_pipe = StableDiffusionSafetyChecker.from_pretrained( safety_model, torch_dtype=fptype)
-            
-        if Mode == "txt2img":
-            pipe = StableDiffusionPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
-        if Mode == "img2img":
-            pipe = StableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
-        if Mode == "img2img":
-            pipe = StableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
+        if Mode == "pix2pix":
+            if NSFW:
+                pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained("timbrooks/instruct-pix2pix", custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype)
+            else:
+                pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained("timbrooks/instruct-pix2pix", custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=None)
+        else:
+            if NSFW:
+                safety_model = Model + "/safety_checker/"
+                nsfw_pipe = StableDiffusionSafetyChecker.from_pretrained( safety_model, torch_dtype=fptype)
+                
+            if Mode == "txt2img":
+                pipe = StableDiffusionPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
+            if Mode == "img2img":
+                pipe = StableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
+            if Mode == "img2img":
+                pipe = StableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
+
 
     return pipe
 
@@ -197,21 +213,25 @@ def MakeImage(pipe, mode : str, eta, prompt, prompt_neg, steps, width, height, s
     neg_prompt_meta_text = "" if prompt_neg == "" else f' [{prompt_neg}]'
         
     rng = torch.Generator(device="cpu").manual_seed(seed)
+    print(mode, flush=True)
     
     if mode == "txt2img":
-        print("txt2img", flush=True)
         image=pipe(prompt=prompt, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale}')
         
     if mode == "img2img":
-        print("img2img", flush=True)
         # Opt image
         img=Image.open(init_img_path).convert("RGB").resize((width, height))
         
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {init_strength}')
+    if mode == "pix2pix":
+        # Opt image
+        img=Image.open(init_img_path).convert("RGB").resize((width, height))
+        
+        image=pipe(prompt=prompt, image=img, num_inference_steps=steps, image_guidance_scale=1.5, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength, generator=rng).images[0]
+        info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {init_strength}')
     if mode == "inpaint":
-        print("inpaint", flush=True)
 
         img=Image.open(init_img_path).convert("RGB").resize((width, height))
         mask=Image.open(mask_img_path).convert("RGB").resize((width, height))
@@ -266,7 +286,7 @@ def ApplyArg(parser):
         "--precision", type=str, help="precision type (fp16/fp32)", dest='precision',
     )
     parser.add_argument(
-        "--mode", choices=['txt2img', 'img2img', 'inpaint', 'IfP', 'PfI'], default="txt2img", help="Specify generation mode", dest='mode',
+        "--mode", choices=['txt2img', 'img2img', 'inpaint', 'pix2pix', 'IfP', 'PfI'], default="txt2img", help="Specify generation mode", dest='mode',
     )
     parser.add_argument(
         "--img", type=str, default="", help="Specify generation mode", dest='img',

@@ -175,7 +175,7 @@ namespace SD_FXUI
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"
                     + $" --eta={newETA}"
-                    + $" --totalcount={tbTotalCount.Value.ToString()}"
+                    + $" --totalcount={tbTotalCount.Value}"
                     + $" --model=\"{Model}\""
                     + $" --vae=\"{VAE}\""
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
@@ -198,14 +198,21 @@ namespace SD_FXUI
 
                 string newDenoising = Denoising.ToString().Replace(",", ".");
 
-                if (Helper.ImgMaskPath != string.Empty)
+                if (cbPix2Pix.IsChecked.Value)
                 {
-                    CmdLine += $" --mode=\"inpaint\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
-                    CmdLine += $" --imgmask=\"{Helper.ImgMaskPath}\"";
+                    CmdLine += $" --mode=\"pix2pix\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
                 }
                 else
                 {
-                    CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                    if (Helper.ImgMaskPath != string.Empty)
+                    {
+                        CmdLine += $" --mode=\"inpaint\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                        CmdLine += $" --imgmask=\"{Helper.ImgMaskPath}\"";
+                    }
+                    else
+                    {
+                        CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                    }
                 }
 
                 if (!File.Exists(Helper.InputImagePath))
@@ -218,94 +225,16 @@ namespace SD_FXUI
             return CmdLine;
         }
 
-        private string GetCommandLineControlNet()
-        {
-            string Prompt = FixedPrompt(TryPrompt.Text);
-
-            string Model = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
-
-            string VAE = cbVAE.Text.ToLower();
-            if (VAE != "default")
-            {
-                if (VAE.StartsWith("vae\\"))
-                {
-                    VAE = FS.GetModelDir() + cbVAE.Text.ToLower();
-                }
-                else
-                {
-                    VAE = FS.GetModelDir() + "diffusers\\" + cbVAE.Text.ToLower();
-                }
-            }
-
-            float ETA = float.Parse(tbETA.Text);
-            ETA /= 100;
-            string newETA = ETA.ToString().Replace(",", ".");
-            string CmdLine = $""
-                    + $" --prompt=\"{Prompt}\""
-                    + $" --prompt_neg=\"{NegPrompt.Text}\""
-                    + $" --height={tbH.Text}"
-                    + $" --width={tbW.Text}"
-                    + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
-                    + $" --scmode={cbSampler.Text}"
-                    + $" --steps={tbSteps.Text}"
-                    + $" --seed={tbSeed.Text}"
-                    + $" --eta={newETA}"
-                    + $" --totalcount={tbTotalCount.Value.ToString()}"
-                    + $" --model=\"{Model}\""
-                    + $" --vae=\"{VAE}\""
-                    + $" --outpath=\"{FS.GetWorkingDir()}\""
-            ;
-
-            if (cbNSFW.IsChecked.Value)
-            {
-                CmdLine += " --nsfw=True";
-            }
-
-            if (cbTI.Text != "None" && cbTI.Text.Length > 0)
-            {
-                CmdLine += $" --inversion={cbTI.Text}";
-            }
-
-            if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
-            {
-                float Denoising = float.Parse(tbDenoising.Text);
-                Denoising /= 100;
-
-                string newDenoising = Denoising.ToString().Replace(",", ".");
-
-                if (Helper.ImgMaskPath != string.Empty)
-                {
-                    CmdLine += $" --mode=\"inpaint\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
-                    CmdLine += $" --imgmask=\"{Helper.ImgMaskPath}\"";
-                }
-                else
-                {
-                    CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
-                }
-
-                if (!File.Exists(Helper.InputImagePath))
-                {
-                    Notification.MsgBox("Incorrect image path!");
-                    CmdLine = "";
-                }
-            }
-
-            return CmdLine;
-        }
         private string GetCommandLineDiffCuda()
         {
             string Prompt = FixedPrompt(TryPrompt.Text);
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
 
-            string Model = string.Empty;
+            string Model = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
             if (cbModel.Text.EndsWith(".hgf"))
             {
                 Model = cbModel.Text;
                 Model = Model.Replace(".hgf", "");
-            }
-            else
-            {
-                Model = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
             }
 
             string VAE = cbVAE.Text.ToLower();
@@ -337,7 +266,7 @@ namespace SD_FXUI
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"
                     + $" --eta={newETA}"
-                    + $" --totalcount={tbTotalCount.Value.ToString()}"
+                    + $" --totalcount={tbTotalCount.Value}"
                     + $" --model=\"{Model}\""
                     + $" --vae=\"{VAE}\""
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
@@ -371,7 +300,22 @@ namespace SD_FXUI
 
                 string newDenoising = Denoising.ToString().Replace(",", ".");
 
-                CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                if (cbPix2Pix.IsChecked.Value)
+                {
+                    CmdLine += $" --mode=\"pix2pix\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                }
+                else
+                {
+                    if (Helper.ImgMaskPath != string.Empty)
+                    {
+                        CmdLine += $" --mode=\"inpaint\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                        CmdLine += $" --imgmask=\"{Helper.ImgMaskPath}\"";
+                    }
+                    else
+                    {
+                        CmdLine += $" --mode=\"img2img\" --img=\"{Helper.InputImagePath}\" --imgscale={newDenoising}";
+                    }
+                }
 
                 if (!File.Exists(Helper.InputImagePath))
                 {

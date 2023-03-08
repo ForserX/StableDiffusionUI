@@ -70,9 +70,9 @@
                 </Grid>
                 <Grid x:Name="gridImg" Height="141" Background="#FFEBE4F9" DragDrop.Drop="gridImg_Drop">
                     <Image x:Name="imgLoaded" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="/res/noimg.jpg"/>
-                    <Label Content="Denoising Scale" HorizontalAlignment="Left" Margin="116,1,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.332,-0.041" Background="{x:Null}" BorderBrush="{x:Null}" Width="96" Padding="1,6,1,6"/>
-                    <Slider  x:Name="slDenoising" Maximum="100" Minimum="5" Value="45" ValueChanged="Slider_Denoising" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="116,31,52,0" Height="25" VerticalAlignment="Top"/>
-                    <TextBox x:Name="tbDenoising" TextWrapping="Wrap" Text="45" Height="18" Margin="0,26,9,0" HorizontalAlignment="Right" Width="38" VerticalAlignment="Top" TextChanged="tbDenoising_TextChanged"/>
+                    <Label Content="Denoising Scale" HorizontalAlignment="Left" Margin="173,56,0,0" RenderTransformOrigin="-1.332,-0.041" Background="{x:Null}" BorderBrush="{x:Null}" Width="96" Padding="1,6,1,6" VerticalAlignment="Top"/>
+                    <Slider  x:Name="slDenoising" Maximum="100" Minimum="5" Value="45" ValueChanged="Slider_Denoising" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="171,84,44,0" Height="26" VerticalAlignment="Top"/>
+                    <TextBox x:Name="tbDenoising" TextWrapping="Wrap" Text="45" Height="18" Margin="0,80,6,0" HorizontalAlignment="Right" Width="38" VerticalAlignment="Top" TextChanged="tbDenoising_TextChanged"/>
                     <Button x:Name="btnImageClear" Content="Clear" Margin="0,118,2,0" Click="btnImageClear_Click" HorizontalAlignment="Right" Width="69" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
@@ -107,6 +107,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
+                    <ToggleButton x:Name="cbPix2Pix" Content="InstructPix2Pix" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Unchecked="cbPix2Pix_Checked" Height="25" Width="110" Margin="115,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="cbPix2Pix_Checked"/>
                 </Grid>
                 <Grid Height="95">
                     <Label Content="Neg prompt" Height="21" Width="95" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
