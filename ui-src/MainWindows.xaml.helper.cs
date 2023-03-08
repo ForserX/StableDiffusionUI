@@ -105,7 +105,7 @@ namespace SD_FXUI
 
             // Disable button for user
             btnDiffCuda.IsEnabled = Helper.GPUID.GreenGPU;
-            btnONNX.IsEnabled = Helper.GPUID.RedGPU;
+            btnONNX.IsEnabled = Helper.GPUID.RedGPU || Helper.GPUID.NormalBlueGPU;
         }
 
         void Save()

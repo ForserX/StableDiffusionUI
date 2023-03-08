@@ -9,6 +9,7 @@ namespace SD_FXUI
         public bool GreenGPU = false;
         public bool RedGPU = false;
         public bool BlueGPU = false;
+        public bool NormalBlueGPU = false;
 
         public GPUInfo()
         {
@@ -37,6 +38,9 @@ namespace SD_FXUI
                     else if (GPUName.Contains("Intel"))
                     {
                         BlueGPU = true;
+
+                        // Intel ARC... Interesting...
+                        NormalBlueGPU = GPUName.ToLower().Contains("arc");
                     }
                     else
                     {
