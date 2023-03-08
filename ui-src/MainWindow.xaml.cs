@@ -843,6 +843,7 @@ namespace SD_FXUI
         private void tsCN_Checked(object sender, RoutedEventArgs e)
         {
             cbPose.IsEnabled = tsCN.IsChecked.Value;
+            imgPose.IsEnabled = tsCN.IsChecked.Value;
             cbSampler.IsEnabled = !tsCN.IsChecked.Value;
         }
 

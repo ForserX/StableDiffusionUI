@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="760" Width="1098" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="740" Width="1098" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -113,8 +113,8 @@
                     <TextBox x:Name="NegPrompt" TextWrapping="Wrap" Text="" Height="70" SelectionBrush="#FF3C1BC5" Padding="3,3,3,3" Background="#FFF9FAFA" Margin="4,17,6,3" AcceptsReturn="True"/>
                 </Grid>
                 <Grid Height="198" Width="355">
-                    <Label Content="Weight" Height="30" Width="57" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-6,40,0,0" VerticalAlignment="Top"/>
-                    <Label Content="Sampler" Height="30" Width="52" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="3,6,3,6" HorizontalAlignment="Left" Margin="0,4,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Weight" Height="30" Width="57" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-2,40,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Sampler" Height="30" Width="52" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="3,6,3,6" HorizontalAlignment="Left" Margin="3,4,0,0" VerticalAlignment="Top"/>
                     <ToggleButton x:Name="chRandom" Content="Random" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="30" Width="68" Margin="285,99,2,0" VerticalAlignment="Top"/>
                     <Slider  x:Name="slSteps" Maximum="150" Minimum="1" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="76,106,152,68"/>
                     <Label Content="Steps Count" Height="30" Width="72" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" Margin="5,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -131,7 +131,7 @@
                     <Slider  x:Name="slETA" Maximum="100" IsSnapToTickEnabled="True" TickFrequency="1" Value="100" SmallChange="1" Margin="75,169,153,0" Height="24" VerticalAlignment="Top" ValueChanged="slEMA_ValueChanged"/>
                     <TextBox  x:Name="tbETA" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,164,117,0" VerticalAlignment="Top" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
                     <hc:NumericUpDown x:Name="tbTotalCount" HorizontalAlignment="Left" Margin="309,169,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.332,-0.546" Width="46" Height="24" Padding="3,2,3,2" MinHeight="20" Value="1"/>
-                    <Label Content="Height" Height="30" Width="57" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-6,65,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Height" Height="30" Width="57" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-3,65,0,0" VerticalAlignment="Top"/>
                     <Slider x:Name="slW" HorizontalAlignment="Left" Margin="56,46,0,0" VerticalAlignment="Top" Width="188" Minimum="0" Maximum="2048" Value="512" ValueChanged="slW_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="8" SmallChange="8" LargeChange="16" />
                     <Slider x:Name="slH" HorizontalAlignment="Left" Margin="56,71,0,0" VerticalAlignment="Top" Width="188" Minimum="0" Maximum="2048" Value="512" ValueChanged="slH_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="8" SmallChange="8" LargeChange="16" />
                     <TextBox  x:Name="tbH" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="512" Height="18" Margin="244,71,0,0" VerticalAlignment="Top" Padding="10,2,10,2" HorizontalAlignment="Left" Width="55" MinHeight="18" TextChanged="tbH_TextChanged"/>
@@ -165,7 +165,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="334,-190,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
+                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="332,-190,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,72,0,0" VerticalAlignment="Top"/>
                     <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,77,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
                     <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Right" Margin="0,115,5,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnDownload_Click" IsEnabled="False">
