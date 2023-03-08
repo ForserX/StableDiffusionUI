@@ -40,9 +40,9 @@ def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
     if IsONNX:
         if Mode == "pix2pix":
             if NSFW:
-                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov)
+                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained("ForserX/instruct-pix2pix-onnx", custom_pipeline="lpw_stable_diffusion_onnx", provider=prov)
             else:
-                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=None)
+                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained("ForserX/instruct-pix2pix-onnx", custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=None)
         else:
             if NSFW:
                 safety_model = Model + "/safety_checker/"
@@ -218,24 +218,33 @@ def MakeImage(pipe, mode : str, eta, prompt, prompt_neg, steps, width, height, s
     if mode == "txt2img":
         image=pipe(prompt=prompt, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale}')
+    
+    if not init_img_path == None:
+        img=Image.open(init_img_path).convert("RGB")
+        in_width, in_height = img.size
         
+        if (in_width * in_height) < (width * height):
+            resample_type = Image.NEAREST
+        else:
+            resample_type = Image.LANCZOS
+
+        img.resize((width, height), resample=resample_type)
+
+        if not mask_img_path == None:
+            mask=Image.open(mask_img_path).convert("RGB").resize((width, height), resample=resample_type)
+
+
     if mode == "img2img":
         # Opt image
-        img=Image.open(init_img_path).convert("RGB").resize((width, height))
-        
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {init_strength}')
+
     if mode == "pix2pix":
         # Opt image
-        img=Image.open(init_img_path).convert("RGB").resize((width, height))
-        
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, image_guidance_scale=1.5, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {init_strength}')
+
     if mode == "inpaint":
-
-        img=Image.open(init_img_path).convert("RGB").resize((width, height))
-        mask=Image.open(mask_img_path).convert("RGB").resize((width, height))
-
         image=pipe(prompt=prompt, image=img, mask_image = mask, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f 0.0 -M {mask_img_path}')
 
@@ -289,10 +298,10 @@ def ApplyArg(parser):
         "--mode", choices=['txt2img', 'img2img', 'inpaint', 'pix2pix', 'IfP', 'PfI'], default="txt2img", help="Specify generation mode", dest='mode',
     )
     parser.add_argument(
-        "--img", type=str, default="", help="Specify generation mode", dest='img',
+        "--img", type=str, default=None, help="Specify generation mode", dest='img',
     )
     parser.add_argument(
-        "--imgmask", type=str, default="", help="Specify generation image mask", dest='imgmask',
+        "--imgmask", type=str, default=None, help="Specify generation image mask", dest='imgmask',
     )
     parser.add_argument(
         "--device", type=str, default="cuda", help="Specify generation mode device", dest='device',

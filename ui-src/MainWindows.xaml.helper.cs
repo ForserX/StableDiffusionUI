@@ -40,6 +40,7 @@ namespace SD_FXUI
         void Load()
         {
             cbFf16.IsChecked = Data.Get("fp16", "true") == "true";
+            tsTTA.IsChecked = Data.Get("tta", "false") == "true";
             cbGfpgan.IsChecked = Data.Get("cbGfpgan") == "true";
             cbNSFW.IsChecked = Data.Get("cbNSFW") == "true";
             tbH.Text = Data.Get("height", "512");
@@ -111,6 +112,7 @@ namespace SD_FXUI
         void Save()
         {
             Data.Set("fp16", cbFf16.IsChecked == true ? "true" : "false");
+            Data.Set("tta", tsTTA.IsChecked == true ? "true" : "false");
             Data.Set("lora_enable", tsLoRA.IsChecked == true ? "true" : "false");
             Data.Set("cbGfpgan", cbGfpgan.IsChecked == true ? "true" : "false");
             Data.Set("cbNSFW", cbNSFW.IsChecked == true ? "true" : "false");
