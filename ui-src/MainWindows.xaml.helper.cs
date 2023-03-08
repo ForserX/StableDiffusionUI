@@ -264,6 +264,7 @@ namespace SD_FXUI
                     + $" --height={tbH.Text}"
                     + $" --width={tbW.Text}"
                     + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
+                    + $" --image_guidance_scale=\"1.5\""
                     + $" --scmode={cbSampler.Text}"
                     + $" --steps={tbSteps.Text}"
                     + $" --seed={tbSeed.Text}"

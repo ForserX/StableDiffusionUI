@@ -54,5 +54,5 @@ def download_image():
 
 image = download_image(opt.img)
 
-edit = pipe(opt.prompt, negative_prompt=opt.prompt_neg , image=image, num_inference_steps=20, guidance_scale=7.5).images[0]
-edit.save("snowy_mountains.png")
+#edit = pipe(opt.prompt, negative_prompt=opt.prompt_neg , image=image, num_inference_steps=20, guidance_scale=7.5).images[0]
+#edit.save("snowy_mountains.png")
