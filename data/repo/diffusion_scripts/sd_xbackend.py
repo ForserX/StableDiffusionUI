@@ -1,4 +1,4 @@
-import torch, time, os
+import torch, time, os, numpy
 from PIL import PngImagePlugin, Image
 
 from pipeline_onnx_stable_diffusion_instruct_pix2pix import OnnxStableDiffusionInstructPix2PixPipeline
@@ -36,14 +36,16 @@ prov = "DmlExecutionProvider"
 def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
     pipe = None
     nsfw_pipe = None
+    print(f"ONNX: {IsONNX}: mode - {Mode}") 
     
     if IsONNX:
-        print ("IsONNX: ", IsONNX)  
         if Mode == "pix2pix":
             if NSFW:
-                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained("ForserX/instruct-pix2pix-onnx", custom_pipeline="lpw_stable_diffusion_onnx", provider=prov)
+                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained("ForserX/instruct-pix2pix-onnx", provider=prov)
             else:
-                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained("ForserX/instruct-pix2pix-onnx", custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=None)
+                pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained("ForserX/instruct-pix2pix-onnx", provider=prov, safety_checker=None)
+                
+            pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
         else:
             if NSFW:
                 safety_model = Model + "/safety_checker/"
@@ -56,7 +58,6 @@ def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
             if Mode == "inpaint":
                 pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
     else:
-        print ("IsONNX: ", IsONNX) 
         if fp16:
             fptype = torch.float16
         else:
@@ -67,6 +68,7 @@ def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
                 pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained("timbrooks/instruct-pix2pix", torch_dtype=fptype)
             else:
                 pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained("timbrooks/instruct-pix2pix", torch_dtype=fptype, safety_checker=None)
+
         else:
             if NSFW:
                 safety_model = Model + "/safety_checker/"
@@ -213,8 +215,15 @@ def MakeImage(pipe, mode : str, eta, prompt, prompt_neg, steps, width, height, s
     
     info = PngImagePlugin.PngInfo()
     neg_prompt_meta_text = "" if prompt_neg == "" else f' [{prompt_neg}]'
-        
-    rng = torch.Generator(device).manual_seed(seed)
+    
+    if not device == "onnx":
+        rng = torch.Generator(device).manual_seed(seed)
+    else: 
+        if mode == "pix2pix":
+            rng=numpy.random.seed(seed)
+        else:
+            rng = torch.Generator("cpu").manual_seed(seed)
+
     print(mode, flush=True)
     
     if mode == "txt2img":
@@ -228,8 +237,7 @@ def MakeImage(pipe, mode : str, eta, prompt, prompt_neg, steps, width, height, s
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {img_strength}')
 
     if mode == "pix2pix":
-        # Opt image       
-
+        # Opt image
         img=Image.open(init_img_path).convert("RGB").resize((width, height))
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, image_guidance_scale=image_guidance_scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {img_strength}')

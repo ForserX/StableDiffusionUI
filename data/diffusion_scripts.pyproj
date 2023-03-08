@@ -32,7 +32,6 @@
     <Compile Include="inference_gfpgan.py" />
     <Compile Include="merge_diff_lora.py" />
     <Compile Include="pipeline_onnx_stable_diffusion_instruct_pix2pix.py" />
-    <Compile Include="pix2pix.py" />
     <Compile Include="sd_diffusers_cuda.py" />
     <Compile Include="sd_onnx.py" />
     <Compile Include="sd_xbackend.py" />

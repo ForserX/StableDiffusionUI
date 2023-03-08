@@ -312,7 +312,8 @@ class OnnxStableDiffusionInstructPix2PixPipeline(DiffusionPipeline):
             latents = generator.randn(*latents_shape).astype(latents_dtype)
         elif latents.shape != latents_shape:
             raise ValueError(f"Unexpected latents shape, got {latents.shape}, expected {latents_shape}")
-        latents = latents * self.scheduler.init_noise_sigma.numpy()
+
+        latents = latents * np.float64(self.scheduler.init_noise_sigma)
 
         # 7. Check that shapes of latents and image match the UNet channels
         num_channels_image = image_latents.shape[1]
