@@ -158,6 +158,13 @@ namespace SD_FXUI
             if (lbUpscale != null)
                 lbUpscale.Content = "x" + (slUpscale.Value + 1).ToString();
         }
+        private void slDenoise_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (lbDenoise != null)
+                lbDenoise.Content = "x" + (slDenoise.Value).ToString();
+
+            Helper.Denoise = (int)slDenoise.Value;
+        }
 
         private void tbSteps_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -540,6 +547,28 @@ namespace SD_FXUI
         private void cbUpscaler_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Helper.CurrentUpscalerType = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
+
+            // Waifu and SRMD
+            if (cbUpscaler.SelectedIndex > 3 && cbUpscaler.SelectedIndex < 7)
+            {
+                lbDenoiseName.IsEnabled = true;
+                lbDenoise.IsEnabled = true;
+                slDenoise.IsEnabled = true;
+                slDenoise.Maximum = 3;
+            }
+            else if (cbUpscaler.SelectedIndex == 8)
+            {
+                lbDenoiseName.IsEnabled = true;
+                lbDenoise.IsEnabled = true;
+                slDenoise.IsEnabled = true;
+                slDenoise.Maximum = 10;
+            }
+            else
+            {
+                lbDenoiseName.IsEnabled = false;
+                lbDenoise.IsEnabled = false;
+                slDenoise.IsEnabled = false;
+            }
         }
 
         private void cbGfpgan_SelectionChanged(object sender, RoutedEventArgs e)
@@ -687,6 +716,9 @@ namespace SD_FXUI
 
         private void tbW_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (tbW.Text.Length == 0)
+                return;
+
             slW.Value = float.Parse(tbW.Text.Replace('.', ','));
 
             if (lbRatio != null)
@@ -695,6 +727,9 @@ namespace SD_FXUI
 
         private void tbH_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (tbH.Text.Length == 0)
+                return;
+
             float NewValue = float.Parse(tbH.Text);
             slH.Value = NewValue;
 
@@ -809,6 +844,11 @@ namespace SD_FXUI
         {
             cbPose.IsEnabled = tsCN.IsChecked.Value;
             cbSampler.IsEnabled = !tsCN.IsChecked.Value;
+        }
+
+        private void tsTTA_Checked(object sender, RoutedEventArgs e)
+        {
+            Helper.TTA = tsTTA.IsChecked.Value;
         }
     }
 }

@@ -11,6 +11,9 @@ namespace SD_FXUI
             ESRGAN_X4,
             ESRGAN_ANIME,
             ESRGAN_NET,
+            WAIFU_CU,
+            WAIFU_UP_PHOTO,
+            WAIFU_UP_ART,
             SR,
             SRMD,
             None
@@ -68,5 +71,8 @@ namespace SD_FXUI
         public static List<string> ImgList = new List<string>();
         public static string CurrentTI = null;
         public static string CurrentPose = null;
+
+        public static int Denoise = 0;
+        public static bool TTA = false;
     }
 }

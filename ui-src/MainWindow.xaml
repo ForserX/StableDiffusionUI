@@ -52,7 +52,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Column="1" Grid.ColumnSpan="2" Margin="1,0,0,0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="3" Margin="1,0,2,0">
             <StackPanel>
                 <Grid Height="116">
                     <Label Content="Prompt" Height="19" Width="78" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1"/>
@@ -139,22 +139,25 @@
                     <Label Content="Size Info" Height="22" Width="52" Foreground="#FF1A1818" Background="#FFF3E9E9" BorderBrush="{x:Null}" Padding="2,1,2,6" HorizontalAlignment="Right" Margin="0,46,2,0" VerticalAlignment="Top"/>
                     <Label x:Name="lbRatio" Content="1:1; 1024" Height="27" Width="52" Foreground="#FF1A1818" Background="#FFF3E9E9" BorderBrush="{x:Null}" Padding="2,6,2,1" HorizontalAlignment="Right" Margin="0,62,2,0" VerticalAlignment="Top" FontSize="9"/>
                 </Grid>
-                <Grid Height="139">
-                    <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,71,0,0" VerticalAlignment="Top"/>
+                <Grid Height="167">
+                    <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,101,0,0" VerticalAlignment="Top"/>
                     <ComboBox x:Name="cbUpscaler" Margin="50,6,132,0" Height="30" VerticalAlignment="Top" SelectionChanged="cbUpscaler_SelectionChanged">
                         <ComboBoxItem Content="Real-ESRGAN: AnimeVideo(v3)"/>
                         <ComboBoxItem Content="Real-ESRGAN:(x4plus)"/>
                         <ComboBoxItem Content="Real-ESRGAN:(x4plus) Anime"/>
                         <ComboBoxItem Content="Real-ESRNET:(x4plus)"/>
+                        <ComboBoxItem Content="Waifux2-CUNET"/>
+                        <ComboBoxItem Content="Waifux2-UpConv (Anime Art)"/>
+                        <ComboBoxItem Content="Waifux2-UpConv (Photo)"/>
                         <ComboBoxItem Content="Real-SR"/>
-                        <ComboBoxItem Content="Real-SRMD"/>
+                        <ComboBoxItem Content="SRMD"/>
                         <ComboBoxItem Content="None"/>
                     </ComboBox>
                     <Label Content="Upscale" Height="30" Width="51" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,6,0,0"/>
-                    <Slider  x:Name="slUpscale" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Margin="0,11,10,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"/>
-                    <Label x:Name="lbUpscale" Content="x4" Background="#FF611F7E" Height="26" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,7,101,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="cbModel" Height="22" Margin="50,71,75,0" VerticalAlignment="Top" SelectionChanged="cbModel_SelectionChanged"/>
-                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,70,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top">
+                    <Slider  x:Name="slUpscale" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Margin="0,12,10,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"/>
+                    <Label x:Name="lbUpscale" Content="x4" Background="#FF611F7E" Height="26" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,8,101,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbModel" Height="22" Margin="50,101,75,0" VerticalAlignment="Top" SelectionChanged="cbModel_SelectionChanged"/>
+                    <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,99,5,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -162,10 +165,10 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="202,44,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
-                    <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,38,0,0"/>
-                    <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,43,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
-                    <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Right" Margin="0,87,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnDownload_Click">
+                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="334,-190,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
+                    <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,72,0,0" VerticalAlignment="Top"/>
+                    <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,77,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
+                    <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Right" Margin="0,115,5,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnDownload_Click" IsEnabled="False">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -173,9 +176,9 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <Label Content="Textual Inversion " Width="97" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,105,0,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="cbTI" Height="22" Margin="103,105,75,0" VerticalAlignment="Top" SelectionChanged="cbModel_Copy_SelectionChanged"/>
-                    <Button x:Name="btnApplyTI" Content="Apply" Style="{StaticResource ButtonPrimary}" Width="66" Height="16" HorizontalAlignment="Right" Margin="0,112,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnApplyTI_Click">
+                    <Label Content="Textual Inversion " Width="97" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,135,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="cbTI" Height="22" Margin="103,135,75,0" VerticalAlignment="Top" SelectionChanged="cbModel_Copy_SelectionChanged"/>
+                    <Button x:Name="btnApplyTI" Content="Apply" Style="{StaticResource ButtonPrimary}" Width="66" Height="16" HorizontalAlignment="Right" Margin="0,142,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnApplyTI_Click">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -183,6 +186,20 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
+                    <ToggleButton x:Name="tsTTA" Content="    " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Unchecked="tsTTA_Checked" Margin="87,40,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top" Checked="tsTTA_Checked"/>
+                    <Label Content="Enable TTA mode" Height="30" Width="82" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,36,0,0" VerticalAlignment="Top" FontSize="10"/>
+                    <Label x:Name="lbDenoiseName" Content="Denoise level" Height="30" Width="82" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="140,36,0,0" VerticalAlignment="Top" FontSize="10"/>
+                    <Slider  x:Name="slDenoise" IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="slDenoise_ValueChanged" SmallChange="1" Margin="217,42,39,0" Height="18" VerticalAlignment="Top" Minimum="-1" Value="3"/>
+                    <Label x:Name="lbDenoise" Content="x3" Background="#FF611F7E" Height="22" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,40,8,0" VerticalAlignment="Top" FontSize="8" RenderTransformOrigin="0.5,0.5">
+                        <Label.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform AngleX="0.546"/>
+                                <RotateTransform/>
+                                <TranslateTransform X="0.124"/>
+                            </TransformGroup>
+                        </Label.RenderTransform>
+                    </Label>
                 </Grid>
                 <Grid x:Name="grVAE" Height="47">
                     <Label x:Name="lbVae" Content="VAE" Height="30" Width="31" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="7,10,0,0" VerticalAlignment="Top"/>

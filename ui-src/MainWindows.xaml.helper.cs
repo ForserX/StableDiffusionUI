@@ -580,41 +580,6 @@ namespace SD_FXUI
 
             return Text;
 
-            if (Text == null)
-            {
-                return Text;
-            }
-            string NewPrompt;
-            NewPrompt = Text.Replace(' ', '_');
-
-            NewPrompt = NewPrompt.Replace(")_", ") ");
-            NewPrompt = NewPrompt.Replace("(_", "(");
-
-            NewPrompt = NewPrompt.Replace("_)", ")");
-            NewPrompt = NewPrompt.Replace("_(", " (");
-            
-            NewPrompt = NewPrompt.Replace("_[", "[");
-            NewPrompt = NewPrompt.Replace("_]", " ]");
-
-            NewPrompt = NewPrompt.Replace("]_", "] ");
-            NewPrompt = NewPrompt.Replace("[_", "[");
-
-            NewPrompt = NewPrompt.Replace(",_", ", ");
-            NewPrompt = NewPrompt.Replace("_,", " ,");
-
-            NewPrompt = NewPrompt.Replace(":_", ": ");
-            NewPrompt = NewPrompt.Replace("_:", " :");
-
-            NewPrompt = NewPrompt.Replace("-_", "- ");
-            NewPrompt = NewPrompt.Replace("_-", " -");
-            NewPrompt = NewPrompt.Replace(" _", string.Empty);
-
-            NewPrompt = NewPrompt.Replace("*", string.Empty);
-
-            if (NewPrompt.Length > 10 && NewPrompt[NewPrompt.Length - 1] != ',')
-                NewPrompt += ",";
-
-            return NewPrompt;
         }
     }
 }

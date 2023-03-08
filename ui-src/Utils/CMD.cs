@@ -295,6 +295,9 @@ namespace SD_FXUI
             string DopCmd = (Size + 1).ToString();
             DopCmd = " -s " + DopCmd;
 
+            if (Helper.TTA)
+                DopCmd += " -x";
+
             string FileName = FS.GetToolsDir();
 
             switch (Helper.CurrentUpscalerType)
@@ -326,6 +329,24 @@ namespace SD_FXUI
                         DopCmd += " -n realesrgan-x4plus-anime -v ";
                         break;
                     }
+                case Helper.UpscalerType.WAIFU_CU:
+                    {
+                        FileName += @"\waifu2x\waifu2x-ncnn-vulkan.exe";
+                        DopCmd += $" -n {Helper.Denoise} -m \"{FS.GetToolsDir() + "waifu2x\\models-cunet"}\" -v ";
+                        break;
+                    }
+                case Helper.UpscalerType.WAIFU_UP_PHOTO:
+                    {
+                        FileName += @"\waifu2x\waifu2x-ncnn-vulkan.exe";
+                        DopCmd += $" -n {Helper.Denoise} -m \"{FS.GetToolsDir() + "waifu2x\\models-upconv_7_photo"}\" -v ";
+                        break;
+                    }
+                case Helper.UpscalerType.WAIFU_UP_ART:
+                    {
+                        FileName += @"\waifu2x\waifu2x-ncnn-vulkan.exe";
+                        DopCmd += $" -n {Helper.Denoise} -m \"{FS.GetToolsDir() + "waifu2x\\models-upconv_7_anime_style_art_rgb"}\" -v ";
+                        break;
+                    }
                 case Helper.UpscalerType.SR:
                     {
                         FileName += @"\realsr\realsr-ncnn-vulkan.exe";
@@ -334,6 +355,7 @@ namespace SD_FXUI
                 case Helper.UpscalerType.SRMD:
                     {
                         FileName += @"\srmd\srmd-ncnn-vulkan.exe";
+                        DopCmd += $" -n {Helper.Denoise}";
                         break;
                     }
                 default:
