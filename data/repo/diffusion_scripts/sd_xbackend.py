@@ -219,32 +219,21 @@ def MakeImage(pipe, mode : str, eta, prompt, prompt_neg, steps, width, height, s
         image=pipe(prompt=prompt, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale}')
     
-    if not init_img_path == None:
-        img=Image.open(init_img_path).convert("RGB")
-        in_width, in_height = img.size
-        
-        if (in_width * in_height) < (width * height):
-            resample_type = Image.NEAREST
-        else:
-            resample_type = Image.LANCZOS
-
-        img.resize((width, height), resample=resample_type)
-
-        if not mask_img_path == None:
-            mask=Image.open(mask_img_path).convert("RGB").resize((width, height), resample=resample_type)
-
-
     if mode == "img2img":
         # Opt image
+        img=Image.open(init_img_path).convert("RGB").resize((width, height))
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {init_strength}')
 
     if mode == "pix2pix":
         # Opt image
+        img=Image.open(init_img_path).convert("RGB").resize((width, height))
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, image_guidance_scale=1.5, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=init_strength, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {init_strength}')
 
     if mode == "inpaint":
+        img=Image.open(init_img_path).convert("RGB").resize((width, height))
+        mask=Image.open(mask_img_path).convert("RGB").resize((width, height))
         image=pipe(prompt=prompt, image=img, mask_image = mask, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
         info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f 0.0 -M {mask_img_path}')
 
