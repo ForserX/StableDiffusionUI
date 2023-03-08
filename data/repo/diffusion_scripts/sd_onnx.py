@@ -41,7 +41,7 @@ print(f"Prompt: {opt.prompt}")
 print(f"Neg rompt: {opt.prompt_neg}")
 
 for i in range(opt.totalcount):
-    MakeImage(pipe, opt.mode, eta, opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, opt.img , opt.imgscale, opt.imgmask, opt.outpath)
+    MakeImage(pipe, opt.mode, eta, opt.prompt, opt.prompt_neg, opt.steps, opt.width, opt.height, opt.seed, opt.guidance_scale, "onnx", opt.img , opt.imgscale, opt.imgmask, opt.outpath)
     opt.seed = opt.seed + 1
     
 print("SD: Generating done!")
