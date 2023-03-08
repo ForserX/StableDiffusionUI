@@ -20,7 +20,6 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CLIP.py" />
     <Compile Include="cn_poser.py" />
     <Compile Include="convert_original_stable_diffusion_to_diffusers.py" />
     <Compile Include="convert_stable_diffusion_checkpoint_to_onnx.py" />
