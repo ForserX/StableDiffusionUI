@@ -212,9 +212,6 @@ def MakeImage(pipe, mode : str, eta, prompt, prompt_neg, steps, width, height, s
     seed = int(seed)
     print(f"Set seed to {seed}", flush=True)
     
-    info = PngImagePlugin.PngInfo()
-    neg_prompt_meta_text = "" if prompt_neg == "" else f' [{prompt_neg}]'
-    
     if not device == "onnx":
         rng = torch.Generator(device).manual_seed(seed)
     else: 
@@ -227,26 +224,26 @@ def MakeImage(pipe, mode : str, eta, prompt, prompt_neg, steps, width, height, s
     
     if mode == "txt2img":
         image=pipe(prompt=prompt, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
-        info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale}')
     
     if mode == "img2img":
         # Opt image
         img=Image.open(init_img_path).convert("RGB").resize((width, height))
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=img_strength, generator=rng).images[0]
-        info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {img_strength}')
 
     if mode == "pix2pix":
         # Opt image
         img=Image.open(init_img_path).convert("RGB").resize((width, height))
         image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, image_guidance_scale=image_guidance_scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
-        info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f {img_strength}')
 
     if mode == "inpaint":
         img=Image.open(init_img_path).convert("RGB").resize((width, height))
         mask=Image.open(mask_img_path).convert("RGB").resize((width, height))
         image=pipe(prompt=prompt, image=img, mask_image = mask, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
-        info.add_text('Dream',  f'"{prompt}{neg_prompt_meta_text}" -s {steps} -S {seed} -W {width} -H {height} -C {scale} -I {init_img_path} -f 0.0 -M {mask_img_path}')
 
+    # PNG MetaData
+    info = PngImagePlugin.PngInfo()
+    MetaText = "Prompt: {" + f"{prompt}" + "}, NegativePrompt: {" + f"{prompt_neg}" + "} " + f"\nSeed: {seed}, Steps: {steps}, Size: {width}x{height}, Mode: {mode}, CFG Scale: {scale}"
+    info.add_text("XUI Metadata", MetaText)
     image.save(os.path.join(outpath, f"{time.time_ns()}.png"), 'PNG', pnginfo=info)
     
     print(f'Image generated in {(time.time() - start_time):.2f}s')

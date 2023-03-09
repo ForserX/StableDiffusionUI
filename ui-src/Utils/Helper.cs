@@ -51,6 +51,15 @@ namespace SD_FXUI
             Any
         }
 
+        public struct MetaInfo
+        {
+            public string Prompt;
+            public string NegPrompt;
+            public int StartSeed;
+            public int Steps;
+            public float CFG;
+        }
+
         public static List<Host> SecondaryProcessList = new List<Host>();
 
         public static string CachePath = string.Empty;
@@ -74,5 +83,6 @@ namespace SD_FXUI
 
         public static int Denoise = 0;
         public static bool TTA = false;
+        public static MetaInfo MakeInfo = new Helper.MetaInfo();
     }
 }

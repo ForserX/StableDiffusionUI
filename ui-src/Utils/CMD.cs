@@ -109,7 +109,7 @@ namespace SD_FXUI
             }
             else
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile[..^5]);
+                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
             }
 
             Directory.CreateDirectory(OutPath);

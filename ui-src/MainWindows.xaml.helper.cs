@@ -362,7 +362,8 @@ namespace SD_FXUI
             ViewImg.Source = new BitmapImage(new Uri(Img));
             ListViewItemsCollections.Add(new ListViewItemsData()
             {
-                GridViewColumnName_ImageSource = Img
+                GridViewColumnName_ImageSource = Img,
+                GridViewColumnName_LabelContent = "Seed: " + (Helper.MakeInfo.StartSeed + ListViewItemsCollections.Count).ToString()
             });
 
             lvImages.ItemsSource = ListViewItemsCollections;

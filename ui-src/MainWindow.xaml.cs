@@ -23,7 +23,7 @@ namespace SD_FXUI
         public class ListViewItemsData
         {
             public string? GridViewColumnName_ImageSource { get; set; }
-            public string? GridViewColumnName_ID { get; set; }
+            public string? GridViewColumnName_LabelContent { get; set; }
         }
 
         bool CPUUse = false;
@@ -78,6 +78,12 @@ namespace SD_FXUI
                 var rand = new Random();
                 tbSeed.Text = rand.Next().ToString();
             }
+
+            Helper.MakeInfo.Prompt = TryPrompt.Text;
+            Helper.MakeInfo.NegPrompt = NegPrompt.Text;
+            Helper.MakeInfo.StartSeed = int.Parse(tbSeed.Text);
+            Helper.MakeInfo.CFG = float.Parse(tbCFG.Text);
+            Helper.MakeInfo.Steps = (int)slSteps.Value;
 
             int Size = (int)slUpscale.Value;
 
@@ -449,6 +455,8 @@ namespace SD_FXUI
                 gridImg.Visibility = Visibility.Visible;
                 imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
                 Helper.DrawMode = Helper.DrawingMode.Img2Img;
+
+                tbMeta.Text = FS.MetaData(Helper.InputImagePath);
             }
         }
 
@@ -485,6 +493,7 @@ namespace SD_FXUI
                 imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
             }
 
+            tbMeta.Text = FS.MetaData(Helper.InputImagePath);
 
             gridImg.Visibility = Visibility.Visible;
             Helper.DrawMode = Helper.DrawingMode.Img2Img;
