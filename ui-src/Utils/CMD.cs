@@ -84,7 +84,7 @@ namespace SD_FXUI
 
             ProcessHost.Start();
             ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
-                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
+                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" --to_safetensors " +
                                                                             $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
 
             ProcessHost.SendExitCommand();
@@ -109,7 +109,7 @@ namespace SD_FXUI
             }
             else
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile[..^5]);
             }
 
             Directory.CreateDirectory(OutPath);
