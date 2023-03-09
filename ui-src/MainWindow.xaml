@@ -108,7 +108,7 @@
                         </Button.Background>
                     </Button>
                     <ToggleButton x:Name="cbPix2Pix" Content="InstructPix2Pix" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Unchecked="cbPix2Pix_Checked" Height="25" Width="110" Margin="115,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="cbPix2Pix_Checked"/>
-                    <TextBox x:Name="tbMeta" HorizontalAlignment="Center" Margin="0,135,0,0" TextWrapping="Wrap" Text="No meta" Width="408" IsReadOnly="True" FontSize="9.5" FontFamily="Verdana"/>
+                    <TextBox x:Name="tbMeta" Margin="-6,135,-5,0" TextWrapping="Wrap" Text="No meta" IsReadOnly="True" FontSize="9.5" FontFamily="Verdana"/>
                 </Grid>
                 <Grid Height="95">
                     <Label Content="Neg prompt" Height="21" Width="95" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
@@ -167,7 +167,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="332,-190,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="52" Height="20"/>
+                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="332,-190,13,0" VerticalAlignment="Top" Height="20"/>
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left"/>
                     <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,0,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Center"/>
                     <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Right" Margin="0,115,5,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnDownload_Click" IsEnabled="False">
@@ -218,10 +218,10 @@
                 </Grid>
                 <Grid x:Name="grCN" Height="136">
                     <Label Content="ControlNet:" Height="30" Width="89" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-9,0,0,0" VerticalAlignment="Top"/>
-                    <Image x:Name="imgPose" Margin="277,3,4,3" Source="/res/noimg.jpg"/>
-                    <ComboBox  x:Name="cbPose" Height="22" Text="" Margin="43,0,183,1" VerticalAlignment="Bottom" SelectionChanged="cbPose_SelectionChanged"/>
+                    <Image x:Name="imgPose" Margin="0,3,4,3" Source="/res/noimg.jpg" HorizontalAlignment="Right" Width="116"/>
+                    <ComboBox  x:Name="cbPose" Height="22" Text="" Margin="43,0,125,11" VerticalAlignment="Bottom" SelectionChanged="cbPose_SelectionChanged"/>
                     <ToggleButton x:Name="tsCN" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36" Margin="75,5,0,0" Checked="tsCN_Checked" Unchecked="tsCN_Checked"/>
-                    <Label Content="Pose:" Height="30" Width="43" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,106,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Pose:" Height="30" Width="43" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,96,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </StackPanel>
         </ScrollViewer>
