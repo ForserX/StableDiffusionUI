@@ -167,7 +167,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="332,-190,13,0" VerticalAlignment="Top" Height="20"/>
+                    <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="0,-190,13,0" VerticalAlignment="Top" Height="20" HorizontalAlignment="Right" Width="52"/>
                     <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left"/>
                     <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,0,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Center"/>
                     <Button x:Name="btnDownload" Content="Download" Style="{StaticResource ButtonPrimary}" Width="66" Height="15" HorizontalAlignment="Right" Margin="0,115,5,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnDownload_Click" IsEnabled="False">
