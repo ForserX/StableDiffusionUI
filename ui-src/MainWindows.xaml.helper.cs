@@ -41,6 +41,7 @@ namespace SD_FXUI
         {
             cbFf16.IsChecked = Data.Get("fp16", "true") == "true";
             tsTTA.IsChecked = Data.Get("tta", "false") == "true";
+            tsCN.IsChecked = Data.Get("cn", "false") == "true";
             cbGfpgan.IsChecked = Data.Get("cbGfpgan") == "true";
             cbNSFW.IsChecked = Data.Get("cbNSFW") == "true";
             tbH.Text = Data.Get("height", "512");
@@ -115,6 +116,7 @@ namespace SD_FXUI
             Data.Set("tta", tsTTA.IsChecked == true ? "true" : "false");
             Data.Set("lora_enable", tsLoRA.IsChecked == true ? "true" : "false");
             Data.Set("cbGfpgan", cbGfpgan.IsChecked == true ? "true" : "false");
+            Data.Set("cn", tsCN.IsChecked == true ? "true" : "false");
             Data.Set("cbNSFW", cbNSFW.IsChecked == true ? "true" : "false");
             Data.Set("notif", Utils.Settings.UseNotif ? "true" : "false");
             Data.Set("notifi", Utils.Settings.UseNotifImgs ? "true" : "false");
