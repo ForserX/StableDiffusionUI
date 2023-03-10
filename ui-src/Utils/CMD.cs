@@ -567,7 +567,7 @@ namespace SD_FXUI
             if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
                 Notification.SendNotification("For the first launch of ControlNet, you need to prepare a model. The operation may take several minutes!", true);
-                if (!Directory.Exists(Helper.MakeInfo.Model + "_cn"))
+                if (!Directory.Exists(FS.GetModelDir() + "onnx/" + Helper.MakeInfo.Model + "_cn"))
                 {
                     string OrigModel = FS.GetModelDir() + "diffusers/" + Path.GetFileName(Helper.MakeInfo.Model);
 

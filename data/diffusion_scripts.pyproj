@@ -21,14 +21,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="cn_poser.py" />
-    <Compile Include="convert_original_stable_diffusion_to_diffusers.py" />
-    <Compile Include="convert_stable_diffusion_checkpoint_to_onnx.py" />
-    <Compile Include="convert_textual_inversion_to_onnx.py" />
-    <Compile Include="convert_vae_pt_to_diffusers.py" />
-    <Compile Include="convert_vae_pt_to_onnx.py" />
+    <Compile Include="convert\convert_controlnet_to_onnx.py" />
+    <Compile Include="convert\convert_diffsers_cn_to_onnx.py" />
+    <Compile Include="convert\convert_original_stable_diffusion_to_diffusers.py" />
+    <Compile Include="convert\convert_pix2pix_to_onnx.py" />
+    <Compile Include="convert\convert_stable_diffusion_checkpoint_to_onnx.py" />
+    <Compile Include="convert\convert_textual_inversion_to_onnx.py" />
+    <Compile Include="convert\convert_vae_pt_to_diffusers.py" />
+    <Compile Include="convert\convert_vae_pt_to_onnx.py" />
+    <Compile Include="convert\unet_2d_condition_cnet.py" />
     <Compile Include="custom_pipelines\pipeline_onnx_stable_diffusion_controlnet.py" />
     <Compile Include="custom_pipelines\pipeline_onnx_stable_diffusion_instruct_pix2pix.py" />
-    <Compile Include="custom_pipelines\unet_2d_condition_cnet.py" />
     <Compile Include="danbooru.py" />
     <Compile Include="danbooru_model.py" />
     <Compile Include="inference_gfpgan.py" />
@@ -41,6 +44,7 @@
     <InterpreterReference Include="Global|VisualStudio|Scripts" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="convert\" />
     <Folder Include="custom_pipelines\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
