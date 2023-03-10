@@ -121,6 +121,15 @@ namespace SD_FXUI.Utils
             // Assuming you have one file that you care about, pass it off to whatever
             // handling code you have defined.
 
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                cbTo.SelectedIndex = 0;
+            }
+            else
+            {
+                cbTo.SelectedIndex = 1;
+            }
+
             if (!FS.HasExt(cbPath.Text, new string[] { ".pt", ".ckpt", ".safetensors" }) && !FS.IsDirectory(cbPath.Text)) 
             {
                 cbPath.Text = "";
@@ -129,14 +138,12 @@ namespace SD_FXUI.Utils
 
             if (cbPath.Text.EndsWith("vae-ft-mse-840000-ema-pruned.ckpt") || cbPath.Text.EndsWith("kl-f8-anime2.ckpt"))
             {
-                cbTo.SelectedIndex = 1;
                 cbFrom.SelectedIndex = 2;  // this vae .pt file In fact
             }
             else if (cbPath.Text.EndsWith(".ckpt")) cbFrom.SelectedIndex = 0;
             else if (cbPath.Text.EndsWith(".safetensors")) cbFrom.SelectedIndex = 1;
             else if (cbPath.Text.EndsWith(".pt"))
             {
-                cbTo.SelectedIndex = 1;
                 cbFrom.SelectedIndex = 2;
             }
             else cbFrom.SelectedIndex = 3;
