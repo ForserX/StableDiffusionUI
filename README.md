@@ -23,10 +23,11 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 # Features
 * Custom VAE (ONNX/CUDA)
 * Lora (CUDA) 
-* ControlNet Pose (CUDA)
+* ControlNet Pose (CUDA/ONNX)
 * DeepDanbooru tokens extractor (ONNX/CUDA)
 * Converter for Diffusers/ONNX 
 * Vulkan upscalers (ONNX/CUDA)
 * Text2Image/Image2Image/Inpaint (ONNX/CUDA)
 * Face restoration (ONNX/CUDA)
+* Pix2Pix (CUDA/ONNX)
 * * And other 
