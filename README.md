@@ -12,7 +12,7 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 # How to install
 ## Pre-install
 * Install python 3.10 + pip + venv
-* __(SHARK Only)__ Install IREE drivers: https://www.amd.com/en/support/kb/release-notes/rn-rad-win-22-11-1-mlir-iree
+* __(SHARK Only)__ Install IREE drivers (Any driver newer than 23.2.1)
 
 ## Setup
 * Start .exe file and select backend type
