@@ -16,7 +16,7 @@ namespace SD_FXUI
 
             ProcessHost.Start();
             ProcessHost.Send("\"repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + 
-                "\" \"repo/diffusion_scripts/convert_textual_inversion_to_onnx.py\"" +
+                "\" \"repo/diffusion_scripts/convert/convert_textual_inversion_to_onnx.py\"" +
                 $" --textinv=\"{ModelPath}\"" +
                 $" --name=\"{TIModel}\"" +
                 $" --model=\"{BaseModel}\"" +
@@ -40,8 +40,8 @@ namespace SD_FXUI
             Host ProcessHost = new Host(FS.GetWorkingDir());
 
             ProcessHost.Start();
-            ProcessHost.Send("\"repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + 
-                "\" \"repo/diffusion_scripts/convert_textual_inversion_to_diff.py\"" +
+            ProcessHost.Send("\"repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) +
+                "\" \"repo/diffusion_scripts/convert/convert_textual_inversion_to_diff.py\"" +
                 $" --textinv=\"{ModelPath}\"" +
                 $" --name=\"{TIModel}\"" +
                 $" --model=\"{BaseModel}\"" +
@@ -83,7 +83,7 @@ namespace SD_FXUI
             }
 
             ProcessHost.Start();
-            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
+            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
                                                                             $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
 
@@ -120,7 +120,7 @@ namespace SD_FXUI
             }
 
             ProcessHost.Start();
-            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
+            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
                                                                             $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
 
@@ -133,7 +133,7 @@ namespace SD_FXUI
             string OutPathONNX = FS.GetModelDir() + "onnx\\" + Name;
             OutPath = OutPath.Replace("\\", "/");
 
-            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " +
+            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"../../repo/diffusion_scripts/convert/convert_stable_diffusion_checkpoint_to_onnx.py\" " +
                                                                             $"--model_path=\"{OutPath}\" --output_path=\"{OutPathONNX}\"");
 
             ProcessHost.SendExitCommand();
@@ -160,7 +160,7 @@ namespace SD_FXUI
 
             Directory.CreateDirectory(OutPath);
 
-            ProcessHost.Start("\"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
+            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_stable_diffusion_checkpoint_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
                                                                             $" --model_path=\"{InputFile}\"");
 
             ProcessHost.SendExitCommand();
@@ -437,7 +437,7 @@ namespace SD_FXUI
 
             Directory.CreateDirectory(OutPath);
 
-            ProcessHost.Start("\"../../repo/diffusion_scripts/convert_vae_pt_to_diffusers.py\" " + $"--vae_pt_path=\"{InputFile}\"" +
+            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_vae_pt_to_diffusers.py\" " + $"--vae_pt_path=\"{InputFile}\"" +
                                                                             $" --dump_path=\"{OutPath + "/vae"}\"");
 
             ProcessHost.SendExitCommand();
@@ -475,7 +475,7 @@ namespace SD_FXUI
 
             Directory.CreateDirectory(OutPath);
 
-            ProcessHost.Start("\"../../repo/diffusion_scripts/convert_vae_pt_to_onnx.py\" " + $"--model_path=\"{InputFile}\"" +
+            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_vae_pt_to_onnx.py\" " + $"--model_path=\"{InputFile}\"" +
                                                                             $" --output_path=\"{OutPath}\"");
 
             ProcessHost.SendExitCommand();
