@@ -84,7 +84,7 @@ namespace SD_FXUI
 
             ProcessHost.Start();
             ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert_original_stable_diffusion_to_diffusers.py\" " +
-                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" --to_safetensors " +
+                                                                            $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
                                                                             $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
 
             ProcessHost.SendExitCommand();
@@ -148,7 +148,7 @@ namespace SD_FXUI
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
 
-            string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
+            string Name = System.IO.Path.GetFileName(InputFile);
             if (Name.Length == 0)
             {
                 Name = System.IO.Path.GetDirectoryName(InputFile);
@@ -161,6 +161,36 @@ namespace SD_FXUI
             Directory.CreateDirectory(OutPath);
 
             ProcessHost.Start("\"../../repo/diffusion_scripts/convert_stable_diffusion_checkpoint_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
+                                                                            $" --model_path=\"{InputFile}\"");
+
+            ProcessHost.SendExitCommand();
+            ProcessHost.Wait();
+
+            Host.Print("\n  Extract task is done..... \n");
+            Notification.SendNotification("Convertation: done!");
+        }
+        public static async Task ProcessConvertDiff2OnnxCN(string InputFile)
+        {
+            Notification.SendNotification("Prepare onnx model for CN: ~3min!");
+            string WorkDir = FS.GetModelDir() + "onnx\\";
+            Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
+            Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
+
+
+            string Name = System.IO.Path.GetFileName(InputFile);
+            if (Name.Length == 0)
+            {
+                Name = System.IO.Path.GetDirectoryName(InputFile);
+            }
+
+            string OutPath = FS.GetModelDir() + "onnx\\" + Name;
+            OutPath = OutPath.Replace("\\", "/");
+            OutPath += "_cn";
+            InputFile = InputFile.Replace("\\", "/");
+
+            Directory.CreateDirectory(OutPath);
+
+            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_diffsers_cn_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
                                                                             $" --model_path=\"{InputFile}\"");
 
             ProcessHost.SendExitCommand();
@@ -534,7 +564,25 @@ namespace SD_FXUI
             cmdline += $" --cn_model=\"{DDBModel}\" ";
             cmdline += $" --outfile=\"{FS.GetWorkingDir()}\" ";
 
-            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.Mode == Helper.ImplementMode.DiffCPU ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                Notification.SendNotification("For the first launch of ControlNet, you need to prepare a model. The operation may take several minutes!", true);
+                if (!Directory.Exists(Helper.MakeInfo.Model + "_cn"))
+                {
+                    string OrigModel = FS.GetModelDir() + "diffusers/" + Path.GetFileName(Helper.MakeInfo.Model);
+
+                    if (!Directory.Exists(OrigModel))
+                    {
+                        Notification.MsgBox("Error! Need diffuser model for first control net start!");
+                        Helper.Form.InvokeProgressUpdate(100);
+                        return;
+                    }
+
+                    ProcessConvertDiff2OnnxCN(OrigModel);
+                }
+            }
+
+            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.Mode != Helper.ImplementMode.DiffCUDA ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
             Host.Print("\n Startup generation..... \n");
 
             Helper.Form.InvokeProgressUpdate(7);

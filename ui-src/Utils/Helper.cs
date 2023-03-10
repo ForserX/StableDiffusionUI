@@ -58,6 +58,7 @@ namespace SD_FXUI
             public int StartSeed;
             public int Steps;
             public float CFG;
+            public string Model;
         }
 
         public static List<Host> SecondaryProcessList = new List<Host>();

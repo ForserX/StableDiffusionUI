@@ -1,5 +1,5 @@
-from diffusers import UniPCMultistepScheduler, AutoencoderKL
-import torch, os, time
+from diffusers import UniPCMultistepScheduler, AutoencoderKL, OnnxRuntimeModel
+import torch, os, time, numpy
 
 from controlnet_aux import OpenposeDetector
 from PIL import Image
@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser()
 ApplyArg(parser)
 opt = parser.parse_args()
 
+prov = "DmlExecutionProvider"
 
 if opt.precision == "fp16":
     fptype = torch.float16
@@ -36,7 +37,11 @@ image = None
 
 def generateImageFromPose ():
     print("processing generateImageFromPose()")
-    generator = torch.Generator(device=opt.device).manual_seed(opt.seed)
+
+    if opt.mode == "IfPONNX":
+        generator = numpy.random.seed(opt.seed)
+    else:
+        generator = torch.Generator(device=opt.device).manual_seed(opt.seed)
         
     output = pipe(
         opt.prompt,
@@ -53,6 +58,24 @@ def generateImageFromPose ():
 
 if opt.mode == "PfI":
     generatePoseFromImage()
+
+elif opt.mode == "IfPONNX":
+    print("CN: ONNX initial")
+    image = Image.open(opt.pose)
+    image.convert("RGB").resize((opt.width, opt.height))
+
+    pipe = GetPipeCN(opt.mdlpath + "_cn", opt.cn_model, opt.nsfw, opt.precision == "fp16", True)
+
+    pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
+
+    if not opt.vae == "default":
+        pipe.vae_decoder = OnnxRuntimeModel.from_pretrained(opt.vae + "/vae_decoder", provider=prov)
+        
+    print("CN: Model loaded")
+    for i in range(opt.totalcount):
+        generateImageFromPose()
+        opt.seed = opt.seed + 1
+
 elif opt.mode == "IfP":
     image = Image.open(opt.pose)
     image.convert("RGB").resize((opt.width, opt.height))

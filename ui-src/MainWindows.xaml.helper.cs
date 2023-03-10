@@ -92,6 +92,7 @@ namespace SD_FXUI
             cbDevice.Text = Data.Get("device");
             cbVAE.Text = Data.Get("VAE");
             cbLoRA.Text = Data.Get("lora");
+            cbHyper.Text = Data.Get("hypern");
 
             if (cbVAE.Text.Length == 0)
             {
@@ -129,6 +130,7 @@ namespace SD_FXUI
             Data.Set("sampler", cbSampler.Text);
             Data.Set("device", cbDevice.Text);
             Data.Set("lora", cbLoRA.Text);
+            Data.Set("hypern", cbHyper.Text);
             Data.Set("cfg", tbCFG.Text);
 
             Data.Set("model", cbModel.Text);
@@ -283,6 +285,12 @@ namespace SD_FXUI
                 CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\"";
             }
 
+            if (tsHyper.IsChecked.Value)
+            {
+                string HyperModel = FS.GetModelDir() + "hypernetwork\\" + cbHyper.Text;
+                CmdLine += $" --hypernetwork=\"{HyperModel}\"";
+            }
+
             if (cbTI.Text != "None" && cbTI.Text.Length > 0)
             {
                 CmdLine += $" --inversion={FS.GetModelDir() + "textual_inversion/" + cbTI.Text + ".pt"}";
@@ -410,11 +418,13 @@ namespace SD_FXUI
             string SafeModelName = (string)cbModel.Text;
             string SafeLoRAName = (string)cbLoRA.Text;
             string SafePose = (string)cbPose.Text;
+            string SafeHyper = (string)cbHyper.Text;
 
             cbModel.Items.Clear();
             cbPose.Items.Clear();
             cbVAE.Items.Clear();
             cbLoRA.Items.Clear();
+            cbHyper.Items.Clear();
 
             cbVAE.Items.Add("Default");
             foreach (var Itm in FS.GetModels(Helper.Mode))
@@ -432,12 +442,20 @@ namespace SD_FXUI
                 cbPose.Items.Add(Path.GetFileNameWithoutExtension(Itm));
             }
 
-                // Yeah... LoRA...
-                string LoraPath = FS.GetModelDir() + "lora\\";
+            // Yeah... LoRA...
+            string LoraPath = FS.GetModelDir() + "lora\\";
             foreach (var Itm in Directory.GetFiles(LoraPath))
             {
                 string TryName = Itm.Replace(LoraPath, string.Empty);
                 cbLoRA.Items.Add(TryName);
+            }
+
+            // Yeah... Hypernetwork...
+            string HyperPath = FS.GetModelDir() + "hypernetwork\\";
+            foreach (var Itm in Directory.GetFiles(HyperPath))
+            {
+                string TryName = Itm.Replace(HyperPath, string.Empty);
+                cbHyper.Items.Add(TryName);
             }
 
             foreach (var Itm in Directory.GetDirectories(FS.GetModelDir() + "vae\\"))
@@ -480,6 +498,7 @@ namespace SD_FXUI
 
             cbLoRA.Text = SafeLoRAName;
             cbPose.Text = SafePose;
+            cbHyper.Text = SafeHyper;
         }
 
         void ClearImages()

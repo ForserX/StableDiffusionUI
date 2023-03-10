@@ -79,8 +79,10 @@ namespace SD_FXUI
             string WGetFile = "\"" + FS.GetToolsDir() + "wget.exe\" ";
             Host Download = new Host(WorkingDir);
             Download.Start();
+
             Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-openpose/raw/main/config.json");
             Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-openpose/resolve/main/diffusion_pytorch_model.bin");
+            Download.Send(WGetFile + "https://huggingface.co/ForserX/sd-controlnet-openpose-onnx/resolve/main/model.onnx");
             Download.SendExitCommand();
             Download.Wait();
         }

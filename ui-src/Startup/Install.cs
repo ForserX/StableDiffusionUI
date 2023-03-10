@@ -182,6 +182,7 @@ namespace SD_FXUI
             Directory.CreateDirectory(FS.GetModelDir() + @"\textual_inversion");
             Directory.CreateDirectory(FS.GetModelDir() + @"\upscaler");
             Directory.CreateDirectory(FS.GetModelDir() + @"\deepdanbooru");
+            Directory.CreateDirectory(FS.GetModelDir() + @"\hypernetwork");
             Directory.CreateDirectory(FS.GetModelDir() + @"\controlnet");
             Directory.CreateDirectory(FS.GetModelDir() + @"\controlnet\pose");
         }

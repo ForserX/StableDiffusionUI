@@ -3,6 +3,7 @@ import sys
 import torch
 
 from diffusers import AutoencoderKL
+#from hypernetwork import Hypernetwork
 
 from sd_xbackend import (
     GetPipe,
@@ -72,6 +73,11 @@ if opt.inversion is not None:
 # LoRA magic
 if opt.lora:
     ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16")
+
+#if not opt.hypernetwork == None:
+#    hp = Hypernetwork(torch.load(opt.hypernetwork, opt.device))
+#    hp.apply_to_diffusers(pipe.text_encoder, pipe.vae, pipe.unet)
+    
 
 print("SD: Model loaded")
 print(f"Prompt: {opt.prompt}")

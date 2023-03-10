@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="735" Width="1153" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="965" Width="1153" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -211,10 +211,16 @@
                     <ComboBox  x:Name="cbDevice" Height="22" Text="vulkan" SelectionChanged="cbDevice_SelectionChanged" Margin="46,6,79,0" VerticalAlignment="Top"/>
                     <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="3,7,0,0" VerticalAlignment="Top"/>
                 </Grid>
-                <Grid x:Name="grLoRA" Height="47">
-                    <ComboBox  x:Name="cbLoRA" Height="22" Text="" Margin="46,6,79,0" VerticalAlignment="Top"/>
-                    <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,7,0,0" VerticalAlignment="Top"/>
-                    <ToggleButton x:Name="tsLoRA" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,10,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36"/>
+                <Grid x:Name="grLoRA" Height="38">
+                    <ComboBox  x:Name="cbLoRA" Height="22" Text="" Margin="46,4,79,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged">
+                        <ComboBox  x:Name="cbLoRA_Copy" Height="22" Text="" VerticalAlignment="Top" Width="272"/>
+                    </ComboBox>
+                    <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,5,0,0" VerticalAlignment="Top"/>
+                    <ToggleButton x:Name="tsLoRA" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,8,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36"/>
+                    <Label Content="Hypernetwork" Height="30" Width="81" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,37,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
+                    <ComboBox  x:Name="cbHyper" Height="22" Text="" Margin="80,37,79,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged" Visibility="Collapsed">
+                    </ComboBox>
+                    <ToggleButton x:Name="tsHyper" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,41,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36" Visibility="Collapsed"/>
                 </Grid>
                 <Grid x:Name="grCN" Height="136">
                     <Label Content="ControlNet:" Height="30" Width="89" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-9,0,0,0" VerticalAlignment="Top"/>
@@ -254,6 +260,6 @@
         <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,2,6,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btnZoom_Click"/>
         <Image x:Name="IconRes" Source="res/icon.png" />
         <Image x:Name="btnSettings" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,9,0" VerticalAlignment="Top" Width="41" Source="/res/settings.png" MouseLeftButtonDown="btnSettingsClick"/>
-        <Image x:Name="btnMerge" Grid.Column="4" HorizontalAlignment="Center" Height="38" Margin="0,1,0,0" VerticalAlignment="Top" Width="40" Source="/res/merge.png" MouseLeftButtonDown="btnMerge_Click"/>
+        <Image x:Name="btnMerge" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,53,0" VerticalAlignment="Top" Width="40" Source="/res/merge.png" MouseLeftButtonDown="btnMerge_Click"/>
     </Grid>
 </hc:BlurWindow>

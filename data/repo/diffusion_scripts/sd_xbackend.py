@@ -1,7 +1,8 @@
 import torch, time, os, numpy
 from PIL import PngImagePlugin, Image
 
-from pipeline_onnx_stable_diffusion_instruct_pix2pix import OnnxStableDiffusionInstructPix2PixPipeline
+from custom_pipelines.pipeline_onnx_stable_diffusion_instruct_pix2pix import OnnxStableDiffusionInstructPix2PixPipeline
+from custom_pipelines.pipeline_onnx_stable_diffusion_controlnet import OnnxStableDiffusionControlNetPipeline
 
 from safetensors.torch import load_file
 
@@ -83,29 +84,44 @@ def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
                 
     return pipe
 
-def GetPipeCN(Model: str, CNModel: str, NSFW: bool, fp16: bool):
+def GetPipeCN(Model: str, CNModel: str, NSFW: bool, fp16: bool, ONNXMode : bool = False):
     pipe = None
     nsfw_pipe = None
     
-    if fp16:
-        fptype = torch.float16
+    if ONNXMode:
+        if NSFW:
+            safety_model = Model + "/safety_checker/"
+            nsfw_pipe = OnnxRuntimeModel.from_pretrained(safety_model, provider=prov)
+
+        controlnet = OnnxRuntimeModel.from_pretrained(CNModel, provider="DmlExecutionProvider")
+
+        pipe = OnnxStableDiffusionControlNetPipeline.from_pretrained(
+            Model,
+            controlnet=controlnet,
+            provider="DmlExecutionProvider",
+            safety_checker=nsfw_pipe
+        )
+        
     else:
-        fptype = torch.float32
+        if fp16:
+            fptype = torch.float16
+        else:
+            fptype = torch.float32
 
-    controlnet = ControlNetModel.from_pretrained(
-        CNModel, torch_dtype=fptype
-    )
+        controlnet = ControlNetModel.from_pretrained(
+            CNModel, torch_dtype=fptype
+        )
 
-    if NSFW:
-        safety_model = Model + "/safety_checker/"
-        nsfw_pipe = StableDiffusionSafetyChecker.from_pretrained(safety_model, torch_dtype=fptype)
-    
-    pipe = StableDiffusionControlNetPipeline.from_pretrained(
-        Model,
-        controlnet=controlnet,
-        torch_dtype=fptype, 
-        safety_checker=nsfw_pipe
-    )
+        if NSFW:
+            safety_model = Model + "/safety_checker/"
+            nsfw_pipe = StableDiffusionSafetyChecker.from_pretrained(safety_model, torch_dtype=fptype)
+        
+        pipe = StableDiffusionControlNetPipeline.from_pretrained(
+            Model,
+            controlnet=controlnet,
+            torch_dtype=fptype, 
+            safety_checker=nsfw_pipe
+        )
 
     return pipe
 
@@ -291,7 +307,7 @@ def ApplyArg(parser):
         "--precision", type=str, help="precision type (fp16/fp32)", dest='precision',
     )
     parser.add_argument(
-        "--mode", choices=['txt2img', 'img2img', 'inpaint', 'pix2pix', 'IfP', 'PfI'], default="txt2img", help="Specify generation mode", dest='mode',
+        "--mode", choices=['txt2img', 'img2img', 'inpaint', 'pix2pix', 'IfP', 'IfPONNX', 'PfI'], default="txt2img", help="Specify generation mode", dest='mode',
     )
     parser.add_argument(
         "--img", type=str, default=None, help="Specify generation mode", dest='img',
@@ -322,6 +338,9 @@ def ApplyArg(parser):
     )
     parser.add_argument(
         "--inversion", help="inversion path", dest='inversion', default=None,
+    )
+    parser.add_argument(
+        "--hypernetwork", help="hypernetwork path", dest='hypernetwork', default=None,
     )
     parser.add_argument(
         "--cn_model", type=str, help="Path to model checkpoint file", dest='cn_model',

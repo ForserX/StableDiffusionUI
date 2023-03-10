@@ -93,7 +93,16 @@ namespace SD_FXUI
             {
                 foreach (var LocPath in Directory.GetDirectories(WorkingPath))
                 {
-                    Models.Add(Path.GetFileName(LocPath));
+                    if (Mode != Helper.ImplementMode.ONNX)
+                        Models.Add(Path.GetFileName(LocPath));
+                    else
+                    {
+                        if (!LocPath.EndsWith("_cn"))
+                        {
+                            // Skip control net prepared models
+                            Models.Add(Path.GetFileName(LocPath));
+                        }
+                    }
                 }
 
                 if (Mode != Helper.ImplementMode.ONNX)

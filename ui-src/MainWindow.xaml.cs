@@ -84,6 +84,7 @@ namespace SD_FXUI
             Helper.MakeInfo.StartSeed = int.Parse(tbSeed.Text);
             Helper.MakeInfo.CFG = float.Parse(tbCFG.Text);
             Helper.MakeInfo.Steps = (int)slSteps.Value;
+            Helper.MakeInfo.Model = cbModel.Text;
 
             int Size = (int)slUpscale.Value;
 
@@ -100,8 +101,20 @@ namespace SD_FXUI
                     }
                 case Helper.ImplementMode.ONNX:
                     {
-                        cmdline += GetCommandLineOnnx();
-                        Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
+                        if (tsCN.IsChecked.Value)
+                        {
+                            cmdline += GetCommandLineOnnx();
+                            cmdline += $" --pose=\"{Helper.CurrentPose}\"";
+                            cmdline += $" --mode=\"IfPONNX\" ";
+
+                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Size));
+                            break;
+                        }
+                        else
+                        {
+                            cmdline += GetCommandLineOnnx();
+                            Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
+                        }
                         break;
                     }
                 case Helper.ImplementMode.DiffCPU:
@@ -258,7 +271,7 @@ namespace SD_FXUI
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
                 grLoRA.Visibility = Visibility.Collapsed;
-                grCN.Visibility = Visibility.Collapsed;
+                grCN.Visibility = Visibility.Visible;
                 grDevice.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
 
@@ -879,6 +892,11 @@ namespace SD_FXUI
                 cbSampler.IsEnabled = true;
                 cbModel.IsEnabled = true;
             }
+        }
+
+        private void cbLoRA_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
