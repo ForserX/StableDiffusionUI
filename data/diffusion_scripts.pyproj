@@ -32,10 +32,10 @@
     <Compile Include="convert\unet_2d_condition_cnet.py" />
     <Compile Include="custom_pipelines\pipeline_onnx_stable_diffusion_controlnet.py" />
     <Compile Include="custom_pipelines\pipeline_onnx_stable_diffusion_instruct_pix2pix.py" />
-    <Compile Include="danbooru.py" />
-    <Compile Include="danbooru_model.py" />
-    <Compile Include="inference_gfpgan.py" />
     <Compile Include="merge_diff_lora.py" />
+    <Compile Include="modules\danbooru.py" />
+    <Compile Include="modules\danbooru_model.py" />
+    <Compile Include="modules\inference_gfpgan.py" />
     <Compile Include="sd_diffusers_cuda.py" />
     <Compile Include="sd_onnx.py" />
     <Compile Include="sd_xbackend.py" />
@@ -43,6 +43,7 @@
   <ItemGroup>
     <Folder Include="convert\" />
     <Folder Include="custom_pipelines\" />
+    <Folder Include="modules\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="..\onnx.venv\">

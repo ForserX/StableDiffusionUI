@@ -304,7 +304,7 @@ namespace SD_FXUI
                 }
 
                 Host FaceFixProc = new Host(FS.GetModelDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
-                FaceFixProc.Start($"../repo/diffusion_scripts/inference_gfpgan.py -i {File} -o {FS.GetImagesDir()} -v 1.4 -s 1");
+                FaceFixProc.Start($"../repo/diffusion_scripts/modules/inference_gfpgan.py -i {File} -o {FS.GetImagesDir()} -v 1.4 -s 1");
 
                 FaceFixProc.SendExitCommand();
                 FaceFixProc.Wait();
@@ -519,7 +519,7 @@ namespace SD_FXUI
 
             Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print("\n Processing DeepDanbooru.... \n");
-            ProcessHost.Start($"repo/diffusion_scripts/danbooru.py --img=\"{currentImage}\" --model=\"{DDBModel}\"  ");
+            ProcessHost.Start($"repo/diffusion_scripts/modules/danbooru.py --img=\"{currentImage}\" --model=\"{DDBModel}\"  ");
             Helper.Form.InvokeProgressUpdate(10);
             ProcessHost.SendExitCommand();
             ProcessHost.Wait();
