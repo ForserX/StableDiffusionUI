@@ -282,7 +282,15 @@ namespace SD_FXUI
             if (tsLoRA.IsChecked.Value)
             {
                 string LoRAModel = FS.GetModelDir() + "lora\\" + cbLoRA.Text;
-                CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\"";
+
+                if (LoRAModel.EndsWith(".safetensors"))
+                {
+                    CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\"";
+                }
+                else
+                {
+                    CmdLine += $" --dlora=True --lora_path=\"{LoRAModel}\"";
+                }
             }
 
             if (tsHyper.IsChecked.Value)
@@ -458,6 +466,13 @@ namespace SD_FXUI
                 cbHyper.Items.Add(TryName);
             }
 
+            foreach (var Itm in Directory.GetDirectories(HyperPath))
+            {
+                string TryName = Itm.Replace(HyperPath, string.Empty);
+                cbHyper.Items.Add(TryName);
+            }
+
+            // VAE
             foreach (var Itm in Directory.GetDirectories(FS.GetModelDir() + "vae\\"))
             {
                 if (Helper.Mode == Helper.ImplementMode.ONNX)

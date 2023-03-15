@@ -74,6 +74,9 @@ if opt.inversion is not None:
 if opt.lora:
     ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16")
 
+if opt.dlora:
+    pipe.unet.load_attn_procs(opt.lora_path)
+
 #if not opt.hypernetwork == None:
 #    hp = Hypernetwork(torch.load(opt.hypernetwork, opt.device))
 #    hp.apply_to_diffusers(pipe.text_encoder, pipe.vae, pipe.unet)

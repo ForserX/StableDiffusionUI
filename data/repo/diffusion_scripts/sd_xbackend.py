@@ -334,6 +334,9 @@ def ApplyArg(parser):
         "--lora", help="lora checker", dest='lora', default=False,
     )
     parser.add_argument(
+        "--dlora", help="lora checker", dest='dlora', default=False,
+    )
+    parser.add_argument(
         "--lora_path", type=str, help="Path to model LoRA file", dest='lora_path',
     )
     parser.add_argument(
