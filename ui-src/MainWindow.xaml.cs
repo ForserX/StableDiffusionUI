@@ -19,6 +19,7 @@ namespace SD_FXUI
         ImageSource NoImageData = null;
         ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
         string currentImage = null;
+        ModelCMD SafeCMD = null;
 
         public class ListViewItemsData
         {
@@ -26,7 +27,7 @@ namespace SD_FXUI
             public string? GridViewColumnName_LabelContent { get; set; }
         }
 
-        bool CPUUse = false;
+        public bool CPUUse = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -66,6 +67,8 @@ namespace SD_FXUI
 
             cbTI.IsEnabled = false;
             btnApplyTI.IsEnabled = false;
+
+            SafeCMD = new ModelCMD();
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -86,10 +89,57 @@ namespace SD_FXUI
             Helper.MakeInfo.Steps = (int)slSteps.Value;
             Helper.MakeInfo.Model = cbModel.Text;
 
+            if (cbVAE.Text != "default")
+            {
+                if (cbVAE.Text.StartsWith("vae\\"))
+                {
+                    Helper.MakeInfo.VAE = FS.GetModelDir() + cbVAE.Text.ToLower();
+                }
+                else
+                {
+                    Helper.MakeInfo.VAE = FS.GetModelDir() + "onnx\\" + cbVAE.Text.ToLower();
+                }
+            }
+            else
+            {
+                Helper.MakeInfo.VAE = cbVAE.Text;
+            }
+
+            Helper.MakeInfo.Sampler = cbSampler.Text;
+            Helper.MakeInfo.ETA = (int)slETA.Value;
+            Helper.MakeInfo.TotalCount = (int)tbTotalCount.Value;
+            Helper.MakeInfo.Height = (int)slH.Value;
+            Helper.MakeInfo.Width = (int)slW.Value;
+            Helper.MakeInfo.ImgScale = 0;
+            Helper.MakeInfo.WorkingDir = FS.GetWorkingDir();
+
+            if (cbPix2Pix.IsChecked.Value && Helper.DrawMode == Helper.DrawingMode.Img2Img)
+            {
+                Helper.MakeInfo.Mode = "pix2pix";
+            }
+            else if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
+            {
+                Helper.MakeInfo.Mode = "img2img";
+                Helper.MakeInfo.Image = Helper.InputImagePath;
+                Helper.MakeInfo.ImgScale = (float)slDenoise.Value / 100;
+            }
+            else if (Helper.DrawMode == Helper.DrawingMode.Inpaint)
+            { 
+                Helper.MakeInfo.Mode = "inpaint";
+                Helper.MakeInfo.Image = Helper.InputImagePath;
+                Helper.MakeInfo.Mask = Helper.ImgMaskPath;
+                Helper.MakeInfo.ImgScale = (float)slDenoise.Value / 100;
+            }
+            else if (Helper.DrawMode == Helper.DrawingMode.Text2Img)
+                Helper.MakeInfo.Mode = "txt2img";
+
             int Size = (int)slUpscale.Value;
+            Helper.CurrentUpscaleSize = Size;
 
             string cmdline = "";
             bool SafeCPUFlag = CPUUse;
+
+            InvokeProgressUpdate(3);
 
             switch (Helper.Mode)
             {
@@ -112,8 +162,12 @@ namespace SD_FXUI
                         }
                         else
                         {
-                            cmdline += GetCommandLineOnnx();
-                            Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
+                            Helper.MakeInfo.fp16 = false;
+                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
+                            SafeCMD.Start();
+
+                            //cmdline += GetCommandLineOnnx();
+                            //Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
                         }
                         break;
                     }
@@ -131,8 +185,11 @@ namespace SD_FXUI
                         }
                         else
                         {
-                            cmdline += GetCommandLineDiffCuda();
-                            Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
+                            Helper.MakeInfo.fp16 = cbFf16.IsChecked.Value;
+                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text, tsLoRA.IsChecked.Value, true);
+                            SafeCMD.Start();
+                            //cmdline += GetCommandLineDiffCuda();
+                            //Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
                             break;
                         }
                     }
@@ -145,7 +202,6 @@ namespace SD_FXUI
 
             currentImage = null;
             ClearImages();
-            InvokeProgressUpdate(3);
         }
 
         private void Slider_Denoising(object sender, RoutedPropertyChangedEventArgs<double> e)

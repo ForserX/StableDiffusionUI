@@ -36,8 +36,10 @@
     <Compile Include="modules\danbooru.py" />
     <Compile Include="modules\danbooru_model.py" />
     <Compile Include="modules\inference_gfpgan.py" />
+    <Compile Include="sd_cuda_safe.py" />
     <Compile Include="sd_diffusers_cuda.py" />
     <Compile Include="sd_onnx.py" />
+    <Compile Include="sd_onnx_safe.py" />
     <Compile Include="sd_xbackend.py" />
   </ItemGroup>
   <ItemGroup>
