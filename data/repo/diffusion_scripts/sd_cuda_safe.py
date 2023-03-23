@@ -37,7 +37,7 @@ pipe.to(opt.device)
     
 # LoRA magic
 if opt.lora:
-    ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16")
+    ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16", 0.75)
 
 if opt.dlora:
     pipe.unet.load_attn_procs(opt.lora_path)
@@ -56,7 +56,10 @@ while True:
     
     data = json.loads(message)
 
-    if not data['VAE'] == "default":
+    print ("   !!! DEBUG data['VAE'] = ", data['VAE'])
+
+
+    if not data['VAE'] == "Default":
         print("Load custom vae")
         pipe.vae = AutoencoderKL.from_pretrained(data['VAE'] + "/vae", torch_dtype=fptype)
         
@@ -70,7 +73,7 @@ while True:
     
     seed = data['StartSeed']
     for i in range(data['TotalCount']):
-        MakeImage(pipe, data['Mode'], eta, data['Prompt'], data['NegPrompt'], data['Steps'], data['Width'], data['Height'], seed, data['CFG'], data['ImgScale'], "onnx", data['Image'] , data['ImgScale'], data['Mask'], data['WorkingDir'])
+        MakeImage(pipe, data['Mode'], eta, data['Prompt'], data['NegPrompt'], data['Steps'], data['Width'], data['Height'], seed, data['CFG'], data['ImgScale'], data['Device'] ,data['Image'] , data['ImgScale'], data['Mask'], data['WorkingDir'])
         seed = seed + 1
         
     print("SD Pipeline: Generating done!")

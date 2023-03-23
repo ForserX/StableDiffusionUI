@@ -125,7 +125,7 @@ def GetPipeCN(Model: str, CNModel: str, NSFW: bool, fp16: bool, ONNXMode : bool 
 
     return pipe
 
-def ApplyHyperNetwork(pipe, HyperNetworkPath : str, device, strength: float ,fp16: bool):
+def ApplyHyperNetwork(pipe, HyperNetworkPath : str, device, fp16: bool, strength: float):
 
      model_path = HyperNetworkPath
      state_dict = load_file(model_path, device)
@@ -136,7 +136,7 @@ def ApplyHyperNetwork(pipe, HyperNetworkPath : str, device, strength: float ,fp1
         fptype = torch.float32
 
 
-def ApplyLoRA(pipe, LoraPath : str, device, strength: float , fp16: bool):
+def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool, strength: float):
     model_path = LoraPath
     state_dict = load_file(model_path, device)
     

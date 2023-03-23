@@ -70,6 +70,7 @@ namespace SD_FXUI
             public int Width;
             public int Height;
             public string WorkingDir;
+            public string Device;
             public bool fp16;
         }
 
