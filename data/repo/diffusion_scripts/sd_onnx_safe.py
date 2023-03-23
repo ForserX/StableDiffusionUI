@@ -41,7 +41,7 @@ while True:
     
     data = json.loads(message)
 
-    if not data['VAE'] == "default":
+    if not data['VAE'] == "Default":
         print("Load custom vae")
         pipe.vae_decoder = OnnxRuntimeModel.from_pretrained(data['VAE'] + "/vae_decoder", provider=prov)
         
