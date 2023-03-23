@@ -230,6 +230,65 @@ namespace SD_FXUI
 
             return CmdLine;
         }
+        private void MakeCommandObject()
+        {
+            Helper.MakeInfo.Prompt = TryPrompt.Text;
+            Helper.MakeInfo.NegPrompt = NegPrompt.Text;
+            Helper.MakeInfo.StartSeed = int.Parse(tbSeed.Text);
+            Helper.MakeInfo.CFG = float.Parse(tbCFG.Text);
+            Helper.MakeInfo.Steps = (int)slSteps.Value;
+            Helper.MakeInfo.Model = cbModel.Text;
+
+            if (cbVAE.Text != "default")
+            {
+                if (cbVAE.Text.StartsWith("vae\\"))
+                {
+                    Helper.MakeInfo.VAE = FS.GetModelDir() + cbVAE.Text.ToLower();
+                }
+                else
+                {
+                    string Dir = (Helper.Mode == Helper.ImplementMode.ONNX) ? "onnx\\" : "diffusers\\";
+
+                    Helper.MakeInfo.VAE = FS.GetModelDir() + "onnx\\" + cbVAE.Text.ToLower();
+                }
+            }
+            else
+            {
+                Helper.MakeInfo.VAE = cbVAE.Text;
+            }
+
+            Helper.MakeInfo.Sampler = cbSampler.Text;
+            Helper.MakeInfo.ETA = (int)slETA.Value;
+            Helper.MakeInfo.TotalCount = (int)tbTotalCount.Value;
+            Helper.MakeInfo.Height = (int)slH.Value;
+            Helper.MakeInfo.Width = (int)slW.Value;
+            Helper.MakeInfo.ImgScale = 0;
+            Helper.MakeInfo.WorkingDir = FS.GetWorkingDir();
+
+            if (cbPix2Pix.IsChecked.Value && Helper.DrawMode == Helper.DrawingMode.Img2Img)
+            {
+                Helper.MakeInfo.Mode = "pix2pix";
+            }
+            else if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
+            {
+                Helper.MakeInfo.Mode = "img2img";
+                Helper.MakeInfo.Image = Helper.InputImagePath;
+                Helper.MakeInfo.ImgScale = (float)slDenoise.Value / 100;
+            }
+            else if (Helper.DrawMode == Helper.DrawingMode.Inpaint)
+            {
+                Helper.MakeInfo.Mode = "inpaint";
+                Helper.MakeInfo.Image = Helper.InputImagePath;
+                Helper.MakeInfo.Mask = Helper.ImgMaskPath;
+                Helper.MakeInfo.ImgScale = (float)slDenoise.Value / 100;
+            }
+            else if (Helper.DrawMode == Helper.DrawingMode.Text2Img)
+                Helper.MakeInfo.Mode = "txt2img";
+
+            int Size = (int)slUpscale.Value;
+            Helper.CurrentUpscaleSize = Size;
+
+        }
 
         private string GetCommandLineDiffCuda()
         {

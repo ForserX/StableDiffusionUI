@@ -199,67 +199,6 @@ namespace SD_FXUI
             Host.Print("\n  Extract task is done..... \n");
             Notification.SendNotification("Convertation: done!");
         }
-
-        public static async Task ProcessRunnerOnnx(string command, int UpSize)
-        {
-            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
-            Host.Print("\n Startup generation..... \n");
-
-            Helper.Form.InvokeProgressUpdate(7);
-            ProcessHost.Start("./repo/diffusion_scripts/sd_onnx.py " + command);
-            ProcessHost.SendExitCommand();
-            Helper.Form.InvokeProgressUpdate(10);
-            ProcessHost.Wait();
-
-            //  process.WaitForInputIdle();
-            var Files = FS.GetFilesFrom(FS.GetWorkingDir(), new string[] { "png", "jpg" }, false);
-            foreach (var file in Files)
-            {
-                string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
-                System.IO.File.Move(file, NewFilePath);
-
-                await Task.Run(() => UpscalerRunner(UpSize, NewFilePath));
-                if (UpSize == 0 || Helper.CurrentUpscalerType == Helper.UpscalerType.None)
-                {
-                    Helper.Form.UpdateViewImg(NewFilePath);
-                }
-            }
-
-            Host.Print("\n  Task Done..... \n");
-            Notification.SendNotification("Task: done!", true);
-            Helper.Form.InvokeProgressUpdate(100);
-            Helper.Form.UpdateCurrentViewImg();
-        }
-        public static async Task ProcessRunnerDiffCuda(string command, int UpSize, bool IsCPU)
-        {
-            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(IsCPU ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
-            Host.Print("\n Startup generation..... \n");
-
-            Helper.Form.InvokeProgressUpdate(7);
-            ProcessHost.Start("./repo/diffusion_scripts/sd_diffusers_cuda.py " + command);
-            ProcessHost.SendExitCommand();
-            Helper.Form.InvokeProgressUpdate(10);
-            ProcessHost.Wait();
-
-            //  process.WaitForInputIdle();
-            var Files = FS.GetFilesFrom(FS.GetWorkingDir(), new string[] { "png", "jpg" }, false);
-            foreach (var file in Files)
-            {
-                string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
-                System.IO.File.Move(file, NewFilePath);
-
-                await Task.Run(() => UpscalerRunner(UpSize, NewFilePath));
-                if (UpSize == 0 || Helper.CurrentUpscalerType == Helper.UpscalerType.None)
-                {
-                    Helper.Form.UpdateViewImg(NewFilePath);
-                }
-            }
-
-            Host.Print("\n  Task Done..... \n");
-            Notification.SendNotification("Task: done!", true);
-            Helper.Form.InvokeProgressUpdate(100);
-            Helper.Form.UpdateCurrentViewImg();
-        }
         public static async Task ProcessRunnerShark(string command, int UpSize)
         {
             Host ProcessHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/" + PythonEnv.GetPy(Helper.VENV.Shark));
