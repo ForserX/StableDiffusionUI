@@ -239,7 +239,7 @@ namespace SD_FXUI
             Helper.MakeInfo.Steps = (int)slSteps.Value;
             Helper.MakeInfo.Model = cbModel.Text;
 
-            if (cbVAE.Text != "default")
+            if (cbVAE.Text.ToLower() != "default")
             {
                 if (cbVAE.Text.StartsWith("vae\\"))
                 {
@@ -249,7 +249,7 @@ namespace SD_FXUI
                 {
                     string Dir = (Helper.Mode == Helper.ImplementMode.ONNX) ? "onnx\\" : "diffusers\\";
 
-                    Helper.MakeInfo.VAE = FS.GetModelDir() + "onnx\\" + cbVAE.Text.ToLower();
+                    Helper.MakeInfo.VAE = FS.GetModelDir() + Dir + cbVAE.Text.ToLower();
                 }
             }
             else
