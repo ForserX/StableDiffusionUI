@@ -3,7 +3,7 @@ import sys
 import torch
 
 from diffusers import AutoencoderKL
-#from hypernetwork import Hypernetwork
+import Hypernetwork
 
 from sd_xbackend import (
     GetPipe,

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="803" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="1018" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -140,6 +140,7 @@
                     <TextBox  x:Name="tbW" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="512" Height="18" Margin="244,46,0,0" VerticalAlignment="Top" Padding="10,2,10,2" HorizontalAlignment="Left" Width="55" MinHeight="19" TextChanged="tbW_TextChanged" TabIndex="5"/>
                     <Label Content="Size Info" Height="22" Width="52" Foreground="#FF1A1818" Background="#FFF3E9E9" BorderBrush="{x:Null}" Padding="2,1,2,6" HorizontalAlignment="Right" Margin="0,46,2,0" VerticalAlignment="Top"/>
                     <Label x:Name="lbRatio" Content="1:1; 1024" Height="27" Width="52" Foreground="#FF1A1818" Background="#FFF3E9E9" BorderBrush="{x:Null}" Padding="2,6,2,1" HorizontalAlignment="Right" Margin="0,62,2,0" VerticalAlignment="Top" FontSize="9"/>
+
                 </Grid>
                 <Grid Height="129">
                     <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,101,0,0" VerticalAlignment="Top"/>
@@ -158,7 +159,7 @@
                     <Label Content="Upscale" Height="30" Width="51" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,6,0,0"/>
                     <Slider  x:Name="slUpscale" IsSnapToTickEnabled="True" TickFrequency="1" Maximum="3" Value="3" ValueChanged="slUpscale_ValueChanged" SmallChange="1" Margin="0,12,10,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91"/>
                     <Label x:Name="lbUpscale" Content="x4" Background="#FF611F7E" Height="26" Width="29" Padding="1,3,1,3" Foreground="White" HorizontalAlignment="Right" Margin="0,8,101,0" VerticalAlignment="Top"/>
-                    <ComboBox x:Name="cbModel" Height="22" Margin="50,101,75,0" VerticalAlignment="Top" SelectionChanged="cbModel_SelectionChanged"/>
+                    <ComboBox x:Name="cbModel" Height="22" Margin="46,100,79,0" VerticalAlignment="Top" SelectionChanged="cbModel_SelectionChanged"/>
                     <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,99,5,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
@@ -216,11 +217,12 @@
                         <ComboBox  x:Name="cbLoRA_Copy" Height="22" Text="" VerticalAlignment="Top" Width="272"/>
                     </ComboBox>
                     <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,5,0,0" VerticalAlignment="Top"/>
-                    <ToggleButton x:Name="tsLoRA" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,8,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36"/>
+                    <ToggleButton x:Name="tsLoRA" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="377,0,0,0" Height="18" VerticalAlignment="Center" HorizontalAlignment="Left" Width="25"/>
                     <Label Content="Hypernetwork" Height="30" Width="81" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,37,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
                     <ComboBox  x:Name="cbHyper" Height="22" Text="" Margin="80,37,79,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged" Visibility="Collapsed">
                     </ComboBox>
                     <ToggleButton x:Name="tsHyper" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,41,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36" Visibility="Collapsed"/>
+                    <TextBox  x:Name="tbLorastrength" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="338,0,0,0" VerticalAlignment="Center" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Left" Width="34" Padding="4,6,1,6"/>
                 </Grid>
                 <Grid x:Name="grCN" Height="136">
                     <Label Content="ControlNet:" Height="30" Width="89" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-9,0,0,0" VerticalAlignment="Top"/>

@@ -125,7 +125,18 @@ def GetPipeCN(Model: str, CNModel: str, NSFW: bool, fp16: bool, ONNXMode : bool 
 
     return pipe
 
-def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool):
+def ApplyHyperNetwork(pipe, HyperNetworkPath : str, device, strength: float ,fp16: bool):
+
+     model_path = HyperNetworkPath
+     state_dict = load_file(model_path, device)
+
+     if fp16:
+        fptype = torch.float16
+     else:
+        fptype = torch.float32
+
+
+def ApplyLoRA(pipe, LoraPath : str, device, strength: float , fp16: bool):
     model_path = LoraPath
     state_dict = load_file(model_path, device)
     
@@ -137,9 +148,7 @@ def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool):
 
     LORA_PREFIX_UNET = 'lora_unet'
     LORA_PREFIX_TEXT_ENCODER = 'lora_te'
-    
-    alpha = 0.75
-    
+        
     visited = []
     
     # directly update weight in diffusers model
@@ -187,11 +196,11 @@ def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool):
         if len(state_dict[pair_keys[0]].shape) == 4:
             weight_up = state_dict[pair_keys[0]].squeeze(3).squeeze(2).to(fptype)
             weight_down = state_dict[pair_keys[1]].squeeze(3).squeeze(2).to(fptype)
-            curr_layer.weight.data += alpha * torch.mm(weight_up, weight_down).unsqueeze(2).unsqueeze(3)
+            curr_layer.weight.data += strength * torch.mm(weight_up, weight_down).unsqueeze(2).unsqueeze(3)
         else:
             weight_up = state_dict[pair_keys[0]].to(fptype)
             weight_down = state_dict[pair_keys[1]].to(fptype)
-            curr_layer.weight.data += alpha * torch.mm(weight_up, weight_down)
+            curr_layer.weight.data += strength * torch.mm(weight_up, weight_down)
             
          # update visited list
         for item in pair_keys:
