@@ -58,7 +58,19 @@ namespace SD_FXUI
             public int StartSeed;
             public int Steps;
             public float CFG;
+            public float ImgScale;
             public string Model;
+            public string VAE;
+            public string Sampler;
+            public int ETA;
+            public string Mode;
+            public string Image;
+            public string Mask;
+            public int TotalCount;
+            public int Width;
+            public int Height;
+            public string WorkingDir;
+            public bool fp16;
         }
 
         public static List<Host> SecondaryProcessList = new List<Host>();
@@ -75,13 +87,15 @@ namespace SD_FXUI
         public static string InputImagePath = string.Empty;
         public static List<string> PromHistory= new List<string>();
         public static ImageState ActiveImageState = ImageState.Free;
+
         public static bool EnableGFPGAN = false;
         public static UpscalerType CurrentUpscalerType = UpscalerType.None;
+        public static int CurrentUpscaleSize = 0;
 
         public static List<string> ImgList = new List<string>();
         public static string CurrentTI = null;
         public static string CurrentPose = null;
-
+        
         public static int Denoise = 0;
         public static bool TTA = false;
         public static MetaInfo MakeInfo = new Helper.MetaInfo();

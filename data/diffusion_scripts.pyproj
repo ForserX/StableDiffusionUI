@@ -40,8 +40,10 @@
     <Compile Include="modules\textual_inversion\dataset.py" />
     <Compile Include="modules\textual_inversion\learn_schedule.py" />
     <Compile Include="modules\textual_inversion\textual_inversion.py" />
+    <Compile Include="sd_cuda_safe.py" />
     <Compile Include="sd_diffusers_cuda.py" />
     <Compile Include="sd_onnx.py" />
+    <Compile Include="sd_onnx_safe.py" />
     <Compile Include="sd_xbackend.py" />
   </ItemGroup>
   <ItemGroup>

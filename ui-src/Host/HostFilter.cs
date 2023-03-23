@@ -81,9 +81,38 @@ namespace SD_FXUI
                 Helper.Form.InvokeProgressUpdate(20);
             }
 
+            if (Message.Contains("Model preload: done"))
+            {
+                Helper.Form.InvokeProgressUpdate(20);
+            }
+
             if (Message.Contains("SD: Generating done"))
             {
                 Helper.Form.InvokeProgressUpdate(60);
+            }
+
+            if (Message.Contains("SD Pipeline: Generating done!"))
+            {
+                Helper.Form.InvokeProgressUpdate(60);
+
+                int UpSize = Helper.CurrentUpscaleSize;
+                var Files = FS.GetFilesFrom(FS.GetWorkingDir(), new string[] { "png", "jpg" }, false);
+                foreach (var file in Files)
+                {
+                    string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
+                    System.IO.File.Move(file, NewFilePath);
+
+                    Task.Run(() => CMD.UpscalerRunner(UpSize, NewFilePath));
+                    if (UpSize == 0 || Helper.CurrentUpscalerType == Helper.UpscalerType.None)
+                    {
+                        Helper.Form.UpdateViewImg(NewFilePath);
+                    }
+                }
+
+                Host.Print("\n  Task Done..... \n");
+                Notification.SendNotification("Task: done!", true);
+                Helper.Form.InvokeProgressUpdate(100);
+                Helper.Form.UpdateCurrentViewImg();
             }
 
             if (Message.Contains("Image generate"))
