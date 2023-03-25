@@ -1,14 +1,17 @@
-﻿<Window x:Class="SD_FXUI.HostForm"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SD_FXUI"
+        xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="SD_FXUI.HostForm"
         mc:Ignorable="d"
         Title="Host" Height="450" Width="800" Icon="/res/cmd.png" ShowInTaskbar="False" Closing="OnClosing" Loaded="OnActiveted">
     <Grid>
-        <TextBox x:Name="tbHost" TextWrapping="Wrap" Text="Host started..." Background="#FF08090E" FontFamily="Verdana" Foreground="#FF9FA3B8" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalContentAlignment="Top"/>
+        <TextBox x:Name="tbHost" TextWrapping="Wrap" Text="Host started..." Background="#FF08090E" FontFamily="Verdana" Foreground="#FF9FA3B8" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalContentAlignment="Top" Margin="0,0,0,28"/>
         <Image Margin="0,6,14,0" Source="/res/close.png" MouseLeftButtonDown="OnClosing" HorizontalAlignment="Right" Width="44" Height="46" VerticalAlignment="Top"/>
+
+        <hc:TextBox x:Name="tbCmd" Margin="0,0,0,-1" TextWrapping="Wrap" Text="" Padding="8,0,8,0" MinHeight="25" FontSize="10" VerticalContentAlignment="Center" KeyDown="tbCmd_KeyDown" FontFamily="Leelawadee UI" Height="29" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>

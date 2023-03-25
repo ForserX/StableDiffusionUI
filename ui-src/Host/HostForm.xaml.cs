@@ -86,5 +86,14 @@ namespace SD_FXUI
         {
             Hide();
         }
+
+        private void tbCmd_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                HostReader.Filter(tbCmd.Text);
+                tbCmd.Text = "";
+            }
+        }
     }
 }
