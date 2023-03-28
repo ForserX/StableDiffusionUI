@@ -281,13 +281,14 @@ namespace SD_FXUI
                 grDevice.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
 
-                cbSampler.Items.Clear();
+                string SafeSampler = cbSampler.Text;
+
                 foreach (string Name in Schedulers.Diffusers)
                 {
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler");
+                cbSampler.Text = Data.Get("sampler", "DDIM");
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : ONNX venv";
