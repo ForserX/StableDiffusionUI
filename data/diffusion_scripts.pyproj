@@ -5,7 +5,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{92159991-7fdc-4656-8745-1d7fd165109f}</ProjectGuid>
     <ProjectHome>repo\diffusion_scripts\</ProjectHome>
-    <StartupFile>sd_onnx.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -41,8 +42,6 @@
     <Compile Include="modules\textual_inversion\learn_schedule.py" />
     <Compile Include="modules\textual_inversion\textual_inversion.py" />
     <Compile Include="sd_cuda_safe.py" />
-    <Compile Include="sd_diffusers_cuda.py" />
-    <Compile Include="sd_onnx.py" />
     <Compile Include="sd_onnx_safe.py" />
     <Compile Include="sd_xbackend.py" />
   </ItemGroup>
