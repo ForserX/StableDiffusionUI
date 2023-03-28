@@ -119,8 +119,12 @@ namespace SD_FXUI
 
             if (ErrorExit)
             {
-                Process.Kill();
-                Process = null;
+                if (Process != null)
+                {
+                    Process.Kill();
+                    Process = null;
+                }
+
                 return;
             }
 
