@@ -18,6 +18,8 @@ namespace SD_FXUI
         public void InvokeUpdateModelsList() => Dispatcher.Invoke(() => { UpdateModelsList(); });
         public void InvokeUpdateModelsTIList() => Dispatcher.Invoke(() => { UpdateModelsTIList(); });
         public void InvokeProgressApply() => Dispatcher.Invoke(() => { pbGen.Value += (40 / (int)(tbTotalCount.Value)); });
+        public void InvokeDropModel() => Dispatcher.Invoke(() => { SafeCMD.Exit(true); });
+
         public void UpdateCurrentViewImg() => Dispatcher.Invoke(() =>
         {
             if (lvImages.Items.Count > 0)

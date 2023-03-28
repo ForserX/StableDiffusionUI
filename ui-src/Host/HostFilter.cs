@@ -18,6 +18,9 @@ namespace SD_FXUI
                     Helper.UIHost.Show(); 
                 });
 
+                // Drop loaded model
+                Helper.Form.InvokeDropModel();
+
                 Notification.SendErrorNotification("Error! See host for details!");
             }
         }

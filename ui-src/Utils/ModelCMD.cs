@@ -107,8 +107,23 @@ namespace SD_FXUI
             Process.Send(JSONStr);
         }
 
-        public void Exit()
+        public void Exit(bool ErrorExit = false)
         {
+            Mode = null;
+            NSFW = false;
+            CUDA = false;
+            fp16 = false;
+            LoRA = false;
+            Model = null;
+            ModelLoRA = null;
+
+            if (ErrorExit)
+            {
+                Process.Kill();
+                Process = null;
+                return;
+            }
+
             Process.Send("stop");
         }
     }

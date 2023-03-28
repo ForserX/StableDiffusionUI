@@ -216,6 +216,8 @@ namespace SD_FXUI
 
         private void Button_ClickBreak(object sender, RoutedEventArgs e)
         {
+            SafeCMD.Exit(true);
+
             foreach (var Proc in Helper.SecondaryProcessList)
             {
                 Proc.Kill();
