@@ -93,7 +93,7 @@ elif opt.mode == "IfP":
 
     # LoRA magic
     if opt.lora:
-        ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16")
+        ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16", 0.75)
 
     print("CN: Model loaded")
     for i in range(opt.totalcount):

@@ -506,10 +506,16 @@ namespace SD_FXUI
             }
             // CN: Poser
 
-            string ImgPath = FS.GetModelDir() + "controlnet/pose";
+            string ImgPath = FS.GetModelDir() + "controlnet/pose/";
             foreach (var Itm in Directory.GetFiles(ImgPath))
             {
                 cbPose.Items.Add(Path.GetFileNameWithoutExtension(Itm));
+            }
+
+            foreach (var Dir in Directory.GetDirectories(ImgPath))
+            {
+                foreach (var File in Directory.GetFiles(Dir))
+                    cbPose.Items.Add(File.Replace(ImgPath, string.Empty).Replace(".png", string.Empty));
             }
 
             // Yeah... LoRA...
