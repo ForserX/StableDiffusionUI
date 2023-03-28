@@ -22,6 +22,7 @@ from torch.onnx import export
 
 import onnx
 from diffusers import OnnxRuntimeModel, OnnxStableDiffusionPipeline, StableDiffusionPipeline
+from unet_2d_condition_cnet import UNet2DConditionModel_Cnet
 from packaging import version
 from onnxruntime.transformers.float16 import convert_float_to_float16
 
@@ -165,6 +166,94 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
     del pipeline.unet
     
     convert_to_fp16(unet_model_path)
+
+    # UNET CONTROLNET
+    pipe_cnet = UNet2DConditionModel_Cnet.from_pretrained(model_path, subfolder = "unet")
+    
+    cnet_path = output_path / "cnet" / "model.onnx"
+    onnx_export(
+        pipe_cnet,
+        model_args=(
+            torch.randn(2, unet_in_channels, unet_sample_size, unet_sample_size).to(device=device, dtype=dtype),
+            torch.randn(2).to(device=device, dtype=dtype),
+            torch.randn(2, num_tokens, text_hidden_size).to(device=device, dtype=dtype),
+            torch.randn(2, 320, unet_sample_size, unet_sample_size).to(device=device, dtype=dtype),
+            torch.randn(2, 320, unet_sample_size, unet_sample_size).to(device=device, dtype=dtype),
+            torch.randn(2, 320, unet_sample_size, unet_sample_size).to(device=device, dtype=dtype),
+            torch.randn(2, 320, unet_sample_size//2,unet_sample_size//2).to(device=device, dtype=dtype),
+            torch.randn(2, 640, unet_sample_size//2,unet_sample_size//2).to(device=device, dtype=dtype),
+            torch.randn(2, 640, unet_sample_size//2,unet_sample_size//2).to(device=device, dtype=dtype),
+            torch.randn(2, 640, unet_sample_size//4,unet_sample_size//4).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//4,unet_sample_size//4).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//4,unet_sample_size//4).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//8,unet_sample_size//8).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//8,unet_sample_size//8).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//8,unet_sample_size//8).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//8,unet_sample_size//8).to(device=device, dtype=dtype),
+            False,
+        ),
+        output_path=cnet_path,
+        ordered_input_names=["sample", 
+                             "timestep", 
+                             "encoder_hidden_states", 
+                             "down_block_0",
+                             "down_block_1",
+                             "down_block_2",
+                             "down_block_3",
+                             "down_block_4",
+                             "down_block_5",
+                             "down_block_6",
+                             "down_block_7",
+                             "down_block_8",
+                             "down_block_9",
+                             "down_block_10",
+                             "down_block_11",
+                             "mid_block_additional_residual",
+                             "return_dict"
+                             ],
+
+        output_names=["out_sample"],  # has to be different from "sample" for correct tracing
+        dynamic_axes={
+            "sample": {0: "batch", 1: "channels", 2: "height", 3: "width"},
+            "timestep": {0: "batch"},
+            "encoder_hidden_states": {0: "batch", 1: "sequence"},
+            "down_block_0": {0: "batch", 2: "height", 3: "width"},
+            "down_block_1": {0: "batch", 2: "height", 3: "width"},
+            "down_block_2": {0: "batch", 2: "height", 3: "width"},
+            "down_block_3": {0: "batch", 2: "height2", 3: "width2"},
+            "down_block_4": {0: "batch", 2: "height2", 3: "width2"},
+            "down_block_5": {0: "batch", 2: "height2", 3: "width2"},
+            "down_block_6": {0: "batch", 2: "height4", 3: "width4"},
+            "down_block_7": {0: "batch", 2: "height4", 3: "width4"},
+            "down_block_8": {0: "batch", 2: "height4", 3: "width4"},
+            "down_block_9": {0: "batch", 2: "height8", 3: "width8"},
+            "down_block_10": {0: "batch", 2: "height8", 3: "width8"},
+            "down_block_11": {0: "batch", 2: "height8", 3: "width8"},
+            "mid_block_additional_residual": {0: "batch", 2: "height8", 3: "width8"},
+        },
+        opset=opset,
+        use_external_data_format=True,  # UNet is > 2GB, so the weights need to be split
+    )
+    cnet_model_path = str(cnet_path.absolute().as_posix())
+    cnet_dir = os.path.dirname(cnet_model_path)
+    cnet = onnx.load(cnet_model_path)
+
+    # clean up existing tensor files
+    shutil.rmtree(cnet_dir)
+    os.mkdir(cnet_dir)
+
+    # collate external tensor files into one
+    onnx.save_model(
+        cnet,
+        cnet_model_path,
+        save_as_external_data=True,
+        all_tensors_to_one_file=True,
+        location="weights.pb",
+        convert_attribute=False,
+    )
+    del pipe_cnet
+    
+    convert_to_fp16(cnet_model_path)
 
     # VAE ENCODER
     vae_encoder = pipeline.vae
