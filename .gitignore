@@ -4,9 +4,14 @@ data/repo/onnx.venv
 data/repo/shark.venv
 data/repo/cuda.venv
 data/nodai_SHARK.egg-info/
+
 .vs/
+
 ui-src/bin/
 ui-src/obj/
+
+XUI/x64/
+x64/
 
 *.vmfb
 *.csv
