@@ -16,8 +16,8 @@ omegaconf
 onnxruntime
 onnxruntime-gpu
 onnxruntime_directml
-torch[onnx]
-torchvision
+torch==1.13.1
+torchvision==0.14.1
 pytorch_lightning
 tf2onnx
 transformers-onnx
