@@ -47,8 +47,6 @@ if opt.dlora:
     pipe.unet.load_attn_procs(opt.lora_path)
 
 
-ApplyHyperNetwork(pipe, "D:/Drive/NeuralNetworks/StableDiffusionUI-Shark-AMD/data/models/hypernetwork/samdoesartsHyper.pt" ,"cuda", opt.precision == "fp16",0.75)
-
 print("SD: Model preload: done")
 
 while True:
