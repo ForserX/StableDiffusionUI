@@ -82,6 +82,7 @@ namespace SD_FXUI
                 tbSeed.Text = rand.Next().ToString();
             }
 
+            ValidateSize();
             MakeCommandObject();
 
             string cmdline = "";

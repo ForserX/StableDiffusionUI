@@ -294,6 +294,22 @@ namespace SD_FXUI
 
         }
 
+        void ValidateSize()
+        {
+            if (Helper.Mode != Helper.ImplementMode.ONNX) 
+                return;
+
+            if (slH.Value % 128 != 0)
+            {
+                slH.Value = (double)((int)(slH.Value / 128) * 128);
+            }
+
+            if (slW.Value % 128 != 0)
+            {
+                slW.Value = (double)((int)(slW.Value / 128) * 128);
+            }
+        }
+
         private string GetCommandLineDiffCuda()
         {
             string Prompt = FixedPrompt(TryPrompt.Text);
