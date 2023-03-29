@@ -21,12 +21,14 @@ import torch
 from torch.onnx import export
 
 import onnx
+
+from diffusers.models.cross_attention import CrossAttnProcessor
 from diffusers import OnnxRuntimeModel, OnnxStableDiffusionPipeline, StableDiffusionPipeline
 from unet_2d_condition_cnet import UNet2DConditionModel_Cnet
 from packaging import version
 from onnxruntime.transformers.float16 import convert_float_to_float16
 
-is_torch_less_than_1_11 = version.parse(version.parse(torch.__version__).base_version) < version.parse("1.11")
+is_torch_less_2_0 = version.parse(version.parse(torch.__version__).base_version) < version.parse("2.0")
 
 @torch.no_grad()
 def convert_to_fp16(
@@ -54,35 +56,18 @@ def onnx_export(
     output_names,
     dynamic_axes,
     opset,
-    use_external_data_format=False,
 ):
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    # PyTorch deprecated the `enable_onnx_checker` and `use_external_data_format` arguments in v1.11,
-    # so we check the torch version for backwards compatibility
-    if is_torch_less_than_1_11:
-        export(
-            model,
-            model_args,
-            f=output_path.as_posix(),
-            input_names=ordered_input_names,
-            output_names=output_names,
-            dynamic_axes=dynamic_axes,
-            do_constant_folding=True,
-            use_external_data_format=use_external_data_format,
-            enable_onnx_checker=True,
-            opset_version=opset,
-        )
-    else:
-        export(
-            model,
-            model_args,
-            f=output_path.as_posix(),
-            input_names=ordered_input_names,
-            output_names=output_names,
-            dynamic_axes=dynamic_axes,
-            do_constant_folding=True,
-            opset_version=opset,
-        )
+    export(
+        model,
+        model_args,
+        f=output_path.as_posix(),
+        input_names=ordered_input_names,
+        output_names=output_names,
+        dynamic_axes=dynamic_axes,
+        do_constant_folding=True,
+        opset_version=opset,
+    )
 
 
 @torch.no_grad()
@@ -126,6 +111,9 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
     convert_to_fp16(textenc_model_path)
 
     # UNET
+    if is_torch_less_2_0 == False:
+        pipeline.unet.set_attn_processor(CrossAttnProcessor())
+
     unet_in_channels = pipeline.unet.config.in_channels
     unet_sample_size = pipeline.unet.config.sample_size
     unet_path = output_path / "unet" / "model.onnx"
@@ -146,7 +134,6 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
             "encoder_hidden_states": {0: "batch", 1: "sequence"},
         },
         opset=opset,
-        use_external_data_format=True,  # UNet is > 2GB, so the weights need to be split
     )
     unet_model_path = str(unet_path.absolute().as_posix())
     unet_dir = os.path.dirname(unet_model_path)
@@ -170,6 +157,9 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
     # UNET CONTROLNET
     pipe_cnet = UNet2DConditionModel_Cnet.from_pretrained(model_path, subfolder = "unet")
     
+    if is_torch_less_2_0 == False:
+        pipe_cnet.set_attn_processor(CrossAttnProcessor())
+
     cnet_path = output_path / "cnet" / "model.onnx"
     onnx_export(
         pipe_cnet,
@@ -232,7 +222,6 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
             "mid_block_additional_residual": {0: "batch", 2: "height8", 3: "width8"},
         },
         opset=opset,
-        use_external_data_format=True,  # UNet is > 2GB, so the weights need to be split
     )
     cnet_model_path = str(cnet_path.absolute().as_posix())
     cnet_dir = os.path.dirname(cnet_model_path)
