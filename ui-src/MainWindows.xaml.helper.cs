@@ -271,19 +271,20 @@ namespace SD_FXUI
             if (cbPix2Pix.IsChecked.Value && Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
                 Helper.MakeInfo.Mode = "pix2pix";
+                Helper.MakeInfo.Image = Helper.InputImagePath;
             }
             else if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
                 Helper.MakeInfo.Mode = "img2img";
                 Helper.MakeInfo.Image = Helper.InputImagePath;
-                Helper.MakeInfo.ImgScale = (float)slDenoise.Value / 100;
+                Helper.MakeInfo.ImgScale = (float)slDenoising.Value / 100;
             }
             else if (Helper.DrawMode == Helper.DrawingMode.Inpaint)
             {
                 Helper.MakeInfo.Mode = "inpaint";
                 Helper.MakeInfo.Image = Helper.InputImagePath;
                 Helper.MakeInfo.Mask = Helper.ImgMaskPath;
-                Helper.MakeInfo.ImgScale = (float)slDenoise.Value / 100;
+                Helper.MakeInfo.ImgScale = (float)slDenoising.Value / 100;
             }
             else if (Helper.DrawMode == Helper.DrawingMode.Text2Img)
                 Helper.MakeInfo.Mode = "txt2img";
