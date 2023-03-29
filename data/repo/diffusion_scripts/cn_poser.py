@@ -64,7 +64,7 @@ elif opt.mode == "IfPONNX":
     image = Image.open(opt.pose)
     image.convert("RGB").resize((opt.width, opt.height))
 
-    pipe = GetPipeCN(opt.mdlpath + "_cn", opt.cn_model, opt.nsfw, opt.precision == "fp16", True)
+    pipe = GetPipeCN(opt.mdlpath, opt.cn_model, opt.nsfw, opt.precision == "fp16", True)
 
     pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
@@ -93,7 +93,7 @@ elif opt.mode == "IfP":
 
     # LoRA magic
     if opt.lora:
-        ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16")
+        ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16", 0.75)
 
     print("CN: Model loaded")
     for i in range(opt.totalcount):

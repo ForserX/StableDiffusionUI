@@ -21,12 +21,32 @@ import torch
 from torch.onnx import export
 
 import onnx
+
+from diffusers.models.cross_attention import CrossAttnProcessor
 from diffusers import OnnxRuntimeModel, OnnxStableDiffusionPipeline, StableDiffusionPipeline
+from unet_2d_condition_cnet import UNet2DConditionModel_Cnet
 from packaging import version
+from onnxruntime.transformers.float16 import convert_float_to_float16
 
+is_torch_less_2_0 = version.parse(version.parse(torch.__version__).base_version) < version.parse("2.0")
 
-is_torch_less_than_1_11 = version.parse(version.parse(torch.__version__).base_version) < version.parse("1.11")
-
+@torch.no_grad()
+def convert_to_fp16(
+    model_path
+):
+    '''Converts an ONNX model on disk to FP16'''
+    model_dir=os.path.dirname(model_path)
+    # Breaking down in steps due to Windows bug in convert_float_to_float16_model_path
+    onnx.shape_inference.infer_shapes_path(model_path)
+    fp16_model = onnx.load(model_path)
+    fp16_model = convert_float_to_float16(
+        fp16_model, keep_io_types=True, disable_shape_infer=True
+    )
+    # clean up existing tensor files
+    shutil.rmtree(model_dir)
+    os.mkdir(model_dir)
+    # save FP16 model
+    onnx.save(fp16_model, model_path)
 
 def onnx_export(
     model,
@@ -36,35 +56,18 @@ def onnx_export(
     output_names,
     dynamic_axes,
     opset,
-    use_external_data_format=False,
 ):
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    # PyTorch deprecated the `enable_onnx_checker` and `use_external_data_format` arguments in v1.11,
-    # so we check the torch version for backwards compatibility
-    if is_torch_less_than_1_11:
-        export(
-            model,
-            model_args,
-            f=output_path.as_posix(),
-            input_names=ordered_input_names,
-            output_names=output_names,
-            dynamic_axes=dynamic_axes,
-            do_constant_folding=True,
-            use_external_data_format=use_external_data_format,
-            enable_onnx_checker=True,
-            opset_version=opset,
-        )
-    else:
-        export(
-            model,
-            model_args,
-            f=output_path.as_posix(),
-            input_names=ordered_input_names,
-            output_names=output_names,
-            dynamic_axes=dynamic_axes,
-            do_constant_folding=True,
-            opset_version=opset,
-        )
+    export(
+        model,
+        model_args,
+        f=output_path.as_posix(),
+        input_names=ordered_input_names,
+        output_names=output_names,
+        dynamic_axes=dynamic_axes,
+        do_constant_folding=True,
+        opset_version=opset,
+    )
 
 
 @torch.no_grad()
@@ -103,7 +106,14 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
     )
     del pipeline.text_encoder
 
+    textenc_path = output_path / "text_encoder" / "model.onnx"
+    textenc_model_path = str(textenc_path.absolute().as_posix())
+    convert_to_fp16(textenc_model_path)
+
     # UNET
+    if is_torch_less_2_0 == False:
+        pipeline.unet.set_attn_processor(CrossAttnProcessor())
+
     unet_in_channels = pipeline.unet.config.in_channels
     unet_sample_size = pipeline.unet.config.sample_size
     unet_path = output_path / "unet" / "model.onnx"
@@ -124,7 +134,6 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
             "encoder_hidden_states": {0: "batch", 1: "sequence"},
         },
         opset=opset,
-        use_external_data_format=True,  # UNet is > 2GB, so the weights need to be split
     )
     unet_model_path = str(unet_path.absolute().as_posix())
     unet_dir = os.path.dirname(unet_model_path)
@@ -142,6 +151,98 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
         convert_attribute=False,
     )
     del pipeline.unet
+    
+    convert_to_fp16(unet_model_path)
+
+    # UNET CONTROLNET
+    pipe_cnet = UNet2DConditionModel_Cnet.from_pretrained(model_path, subfolder = "unet")
+    
+    if is_torch_less_2_0 == False:
+        pipe_cnet.set_attn_processor(CrossAttnProcessor())
+
+    cnet_path = output_path / "cnet" / "model.onnx"
+    onnx_export(
+        pipe_cnet,
+        model_args=(
+            torch.randn(2, unet_in_channels, unet_sample_size, unet_sample_size).to(device=device, dtype=dtype),
+            torch.randn(2).to(device=device, dtype=dtype),
+            torch.randn(2, num_tokens, text_hidden_size).to(device=device, dtype=dtype),
+            torch.randn(2, 320, unet_sample_size, unet_sample_size).to(device=device, dtype=dtype),
+            torch.randn(2, 320, unet_sample_size, unet_sample_size).to(device=device, dtype=dtype),
+            torch.randn(2, 320, unet_sample_size, unet_sample_size).to(device=device, dtype=dtype),
+            torch.randn(2, 320, unet_sample_size//2,unet_sample_size//2).to(device=device, dtype=dtype),
+            torch.randn(2, 640, unet_sample_size//2,unet_sample_size//2).to(device=device, dtype=dtype),
+            torch.randn(2, 640, unet_sample_size//2,unet_sample_size//2).to(device=device, dtype=dtype),
+            torch.randn(2, 640, unet_sample_size//4,unet_sample_size//4).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//4,unet_sample_size//4).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//4,unet_sample_size//4).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//8,unet_sample_size//8).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//8,unet_sample_size//8).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//8,unet_sample_size//8).to(device=device, dtype=dtype),
+            torch.randn(2, 1280, unet_sample_size//8,unet_sample_size//8).to(device=device, dtype=dtype),
+            False,
+        ),
+        output_path=cnet_path,
+        ordered_input_names=["sample", 
+                             "timestep", 
+                             "encoder_hidden_states", 
+                             "down_block_0",
+                             "down_block_1",
+                             "down_block_2",
+                             "down_block_3",
+                             "down_block_4",
+                             "down_block_5",
+                             "down_block_6",
+                             "down_block_7",
+                             "down_block_8",
+                             "down_block_9",
+                             "down_block_10",
+                             "down_block_11",
+                             "mid_block_additional_residual",
+                             "return_dict"
+                             ],
+
+        output_names=["out_sample"],  # has to be different from "sample" for correct tracing
+        dynamic_axes={
+            "sample": {0: "batch", 1: "channels", 2: "height", 3: "width"},
+            "timestep": {0: "batch"},
+            "encoder_hidden_states": {0: "batch", 1: "sequence"},
+            "down_block_0": {0: "batch", 2: "height", 3: "width"},
+            "down_block_1": {0: "batch", 2: "height", 3: "width"},
+            "down_block_2": {0: "batch", 2: "height", 3: "width"},
+            "down_block_3": {0: "batch", 2: "height2", 3: "width2"},
+            "down_block_4": {0: "batch", 2: "height2", 3: "width2"},
+            "down_block_5": {0: "batch", 2: "height2", 3: "width2"},
+            "down_block_6": {0: "batch", 2: "height4", 3: "width4"},
+            "down_block_7": {0: "batch", 2: "height4", 3: "width4"},
+            "down_block_8": {0: "batch", 2: "height4", 3: "width4"},
+            "down_block_9": {0: "batch", 2: "height8", 3: "width8"},
+            "down_block_10": {0: "batch", 2: "height8", 3: "width8"},
+            "down_block_11": {0: "batch", 2: "height8", 3: "width8"},
+            "mid_block_additional_residual": {0: "batch", 2: "height8", 3: "width8"},
+        },
+        opset=opset,
+    )
+    cnet_model_path = str(cnet_path.absolute().as_posix())
+    cnet_dir = os.path.dirname(cnet_model_path)
+    cnet = onnx.load(cnet_model_path)
+
+    # clean up existing tensor files
+    shutil.rmtree(cnet_dir)
+    os.mkdir(cnet_dir)
+
+    # collate external tensor files into one
+    onnx.save_model(
+        cnet,
+        cnet_model_path,
+        save_as_external_data=True,
+        all_tensors_to_one_file=True,
+        location="weights.pb",
+        convert_attribute=False,
+    )
+    del pipe_cnet
+    
+    convert_to_fp16(cnet_model_path)
 
     # VAE ENCODER
     vae_encoder = pipeline.vae
@@ -163,6 +264,11 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
         },
         opset=opset,
     )
+    
+    #vae_encoder_path = output_path / "vae_encoder/model.onnx"
+    #vae_encoder_path = str(vae_encoder_path.absolute().as_posix())
+    #
+    #convert_to_fp16(vae_encoder_path)
 
     # VAE DECODER
     vae_decoder = pipeline.vae
@@ -185,6 +291,11 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
         opset=opset,
     )
     del pipeline.vae
+    
+    #vae_decoder_path = output_path / "vae_decoder/model.onnx"
+    #vae_decoder_path = str(vae_decoder_path.absolute().as_posix())
+    #
+    #convert_to_fp16(vae_decoder_path)
 
     # SAFETY CHECKER
     if pipeline.safety_checker is not None:
@@ -232,6 +343,8 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
     )
 
     onnx_pipeline.save_pretrained(output_path)
+    
+
     print("ONNX pipeline saved to", output_path)
 
     del pipeline

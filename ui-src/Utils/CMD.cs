@@ -169,36 +169,7 @@ namespace SD_FXUI
             Host.Print("\n  Extract task is done..... \n");
             Notification.SendNotification("Convertation: done!");
         }
-        public static async Task ProcessConvertDiff2OnnxCN(string InputFile)
-        {
-            Notification.SendNotification("Prepare onnx model for CN: ~3min!");
-            string WorkDir = FS.GetModelDir() + "onnx\\";
-            Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
-            Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
-
-            string Name = System.IO.Path.GetFileName(InputFile);
-            if (Name.Length == 0)
-            {
-                Name = System.IO.Path.GetDirectoryName(InputFile);
-            }
-
-            string OutPath = FS.GetModelDir() + "onnx\\" + Name;
-            OutPath = OutPath.Replace("\\", "/");
-            OutPath += "_cn";
-            InputFile = InputFile.Replace("\\", "/");
-
-            Directory.CreateDirectory(OutPath);
-
-            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_diffsers_cn_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
-                                                                            $" --model_path=\"{InputFile}\"");
-
-            ProcessHost.SendExitCommand();
-            ProcessHost.Wait();
-
-            Host.Print("\n  Extract task is done..... \n");
-            Notification.SendNotification("Convertation: done!");
-        }
         public static async Task ProcessRunnerShark(string command, int UpSize)
         {
             Host ProcessHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/" + PythonEnv.GetPy(Helper.VENV.Shark));
@@ -505,19 +476,9 @@ namespace SD_FXUI
 
             if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
-                if (!Directory.Exists(FS.GetModelDir() + "onnx/" + Helper.MakeInfo.Model + "_cn"))
+                if (!Directory.Exists(FS.GetModelDir() + "onnx/" + Helper.MakeInfo.Model + "\\cnet"))
                 {
-                    Notification.SendNotification("For the first launch of ControlNet, you need to prepare a model. The operation may take several minutes!", true);
-                    string OrigModel = FS.GetModelDir() + "diffusers/" + Path.GetFileName(Helper.MakeInfo.Model);
-
-                    if (!Directory.Exists(OrigModel))
-                    {
-                        Notification.MsgBox("Error! Need diffuser model for first control net start!");
-                        Helper.Form.InvokeProgressUpdate(100);
-                        return;
-                    }
-
-                    ProcessConvertDiff2OnnxCN(OrigModel);
+                    Notification.SendNotification("Your model is old. Reconvert again for use ControlNet API!", true);
                 }
             }
 

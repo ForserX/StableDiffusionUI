@@ -95,9 +95,11 @@ def GetPipeCN(Model: str, CNModel: str, NSFW: bool, fp16: bool, ONNXMode : bool 
             nsfw_pipe = OnnxRuntimeModel.from_pretrained(safety_model, provider=prov)
 
         controlnet = OnnxRuntimeModel.from_pretrained(CNModel, provider="DmlExecutionProvider")
-
+        
+        cnet = OnnxRuntimeModel.from_pretrained(Model + "/cnet/", provider=prov)
         pipe = OnnxStableDiffusionControlNetPipeline.from_pretrained(
             Model,
+            unet=cnet,
             controlnet=controlnet,
             provider="DmlExecutionProvider",
             safety_checker=nsfw_pipe

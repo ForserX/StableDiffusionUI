@@ -14,15 +14,15 @@ safetensors
 
 --prefer-binary
 --extra-index-url https://download.pytorch.org/whl/torch_stable.html
---extra-index-url https://download.pytorch.org/whl/cu116
+--extra-index-url https://download.pytorch.org/whl/cu117
 --trusted-host https://download.pytorch.org
 accelerate
 albumentations
 diffusers[torch]
 test-tube
 torch-fidelity
-torch==1.12.0+cu116 ; platform_system == 'Linux' or platform_system == 'Windows'
-torchvision==0.13.0+cu116 ; platform_system == 'Linux' or platform_system == 'Windows'
+torch
+torchvision
 pytorch_lightning
 transformers
 picklescan

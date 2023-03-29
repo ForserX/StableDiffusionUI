@@ -67,7 +67,8 @@ while True:
     if not data['VAE'] == "Default":
         print("Load custom vae")
         pipe.vae = AutoencoderKL.from_pretrained(data['VAE'] + "/vae", torch_dtype=fptype)
-        
+        pipe.to(opt.device)
+
  #   if local_args.inversion is not None:
  #       pipe.text_encoder = OnnxRuntimeModel.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/text_encoder", provider="CPUExecutionProvider")
  #       pipe.tokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/tokenizer")

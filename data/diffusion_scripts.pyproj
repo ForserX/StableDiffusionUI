@@ -5,7 +5,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{92159991-7fdc-4656-8745-1d7fd165109f}</ProjectGuid>
     <ProjectHome>repo\diffusion_scripts\</ProjectHome>
-    <StartupFile>sd_onnx.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -22,7 +23,6 @@
   <ItemGroup>
     <Compile Include="cn_poser.py" />
     <Compile Include="convert\convert_controlnet_to_onnx.py" />
-    <Compile Include="convert\convert_diffsers_cn_to_onnx.py" />
     <Compile Include="convert\convert_original_stable_diffusion_to_diffusers.py" />
     <Compile Include="convert\convert_pix2pix_to_onnx.py" />
     <Compile Include="convert\convert_stable_diffusion_checkpoint_to_onnx.py" />
@@ -41,8 +41,6 @@
     <Compile Include="modules\textual_inversion\learn_schedule.py" />
     <Compile Include="modules\textual_inversion\textual_inversion.py" />
     <Compile Include="sd_cuda_safe.py" />
-    <Compile Include="sd_diffusers_cuda.py" />
-    <Compile Include="sd_onnx.py" />
     <Compile Include="sd_onnx_safe.py" />
     <Compile Include="sd_xbackend.py" />
   </ItemGroup>

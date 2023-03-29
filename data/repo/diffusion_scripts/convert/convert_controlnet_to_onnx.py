@@ -22,7 +22,7 @@ from torch.onnx import export
 
 import onnx
 from onnxruntime.transformers.float16 import convert_float_to_float16
-from diffusers import OnnxStableDiffusionPipeline, StableDiffusionControlNetPipeline, ControlNetModel, OnnxRuntimeModel
+from diffusers import ControlNetModel
 
 from packaging import version
 #from transformers import AutoFeatureExtractor, BertTokenizerFast, CLIPTextModel, CLIPTokenizer

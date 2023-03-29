@@ -18,6 +18,8 @@ namespace SD_FXUI
         public void InvokeUpdateModelsList() => Dispatcher.Invoke(() => { UpdateModelsList(); });
         public void InvokeUpdateModelsTIList() => Dispatcher.Invoke(() => { UpdateModelsTIList(); });
         public void InvokeProgressApply() => Dispatcher.Invoke(() => { pbGen.Value += (40 / (int)(tbTotalCount.Value)); });
+        public void InvokeDropModel() => Dispatcher.Invoke(() => { SafeCMD.Exit(true); });
+
         public void UpdateCurrentViewImg() => Dispatcher.Invoke(() =>
         {
             if (lvImages.Items.Count > 0)
@@ -269,19 +271,20 @@ namespace SD_FXUI
             if (cbPix2Pix.IsChecked.Value && Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
                 Helper.MakeInfo.Mode = "pix2pix";
+                Helper.MakeInfo.Image = Helper.InputImagePath;
             }
             else if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
             {
                 Helper.MakeInfo.Mode = "img2img";
                 Helper.MakeInfo.Image = Helper.InputImagePath;
-                Helper.MakeInfo.ImgScale = (float)slDenoise.Value / 100;
+                Helper.MakeInfo.ImgScale = (float)slDenoising.Value / 100;
             }
             else if (Helper.DrawMode == Helper.DrawingMode.Inpaint)
             {
                 Helper.MakeInfo.Mode = "inpaint";
                 Helper.MakeInfo.Image = Helper.InputImagePath;
                 Helper.MakeInfo.Mask = Helper.ImgMaskPath;
-                Helper.MakeInfo.ImgScale = (float)slDenoise.Value / 100;
+                Helper.MakeInfo.ImgScale = (float)slDenoising.Value / 100;
             }
             else if (Helper.DrawMode == Helper.DrawingMode.Text2Img)
                 Helper.MakeInfo.Mode = "txt2img";
@@ -289,6 +292,22 @@ namespace SD_FXUI
             int Size = (int)slUpscale.Value;
             Helper.CurrentUpscaleSize = Size;
 
+        }
+
+        void ValidateSize()
+        {
+            if (Helper.Mode != Helper.ImplementMode.ONNX) 
+                return;
+
+            if (slH.Value % 128 != 0)
+            {
+                slH.Value = (double)((int)(slH.Value / 128) * 128);
+            }
+
+            if (slW.Value % 128 != 0)
+            {
+                slW.Value = (double)((int)(slW.Value / 128) * 128);
+            }
         }
 
         private string GetCommandLineDiffCuda()
@@ -504,10 +523,16 @@ namespace SD_FXUI
             }
             // CN: Poser
 
-            string ImgPath = FS.GetModelDir() + "controlnet/pose";
+            string ImgPath = FS.GetModelDir() + "controlnet/pose/";
             foreach (var Itm in Directory.GetFiles(ImgPath))
             {
                 cbPose.Items.Add(Path.GetFileNameWithoutExtension(Itm));
+            }
+
+            foreach (var Dir in Directory.GetDirectories(ImgPath))
+            {
+                foreach (var File in Directory.GetFiles(Dir))
+                    cbPose.Items.Add(File.Replace(ImgPath, string.Empty).Replace(".png", string.Empty));
             }
 
             // Yeah... LoRA...
