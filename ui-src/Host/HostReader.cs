@@ -21,6 +21,17 @@ namespace SD_FXUI
             ProcessHost.Start(CommandLine);
         }
 
+        static void PipInstall(string Package)
+        {
+            string WorkDirectory = FS.GetWorkingDir() + "\\repo\\";
+            string GetPyExe = WorkDirectory + PythonEnv.GetPip(Helper.VENV.Any);
+
+            string CommandLine = $"install {Package}";
+
+            Host ProcessHost = new Host(WorkDirectory, GetPyExe);
+            ProcessHost.Start(CommandLine);
+        }
+
         public static void Filter(string Message)
         {
             bool Contain = false;
@@ -29,6 +40,14 @@ namespace SD_FXUI
             if (Message.ToLower().Contains("torch -v"))
             {
                 TorchVersion();
+                Contain = true;
+            }
+
+            if (Message.ToLower().Contains("py -install"))
+            {
+                string Package = Message.Replace("py -install ", string.Empty);
+
+                PipInstall(Package);
                 Contain = true;
             }
 
