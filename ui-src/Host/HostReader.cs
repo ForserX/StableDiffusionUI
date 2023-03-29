@@ -32,6 +32,17 @@ namespace SD_FXUI
             ProcessHost.Start(CommandLine);
         }
 
+        static void PipUninstall(string Package)
+        {
+            string WorkDirectory = FS.GetWorkingDir() + "\\repo\\";
+            string GetPyExe = WorkDirectory + PythonEnv.GetPip(Helper.VENV.Any);
+
+            string CommandLine = $"uninstall {Package}";
+
+            Host ProcessHost = new Host(WorkDirectory, GetPyExe);
+            ProcessHost.Start(CommandLine);
+        }
+
         public static void Filter(string Message)
         {
             bool Contain = false;
@@ -48,6 +59,14 @@ namespace SD_FXUI
                 string Package = Message.Replace("py -install ", string.Empty);
 
                 PipInstall(Package);
+                Contain = true;
+            }
+
+            if (Message.ToLower().Contains("py -uninstall"))
+            {
+                string Package = Message.Replace("py -uninstall ", string.Empty);
+
+                PipUninstall(Package);
                 Contain = true;
             }
 
