@@ -71,6 +71,8 @@ namespace SD_FXUI
             public int Height;
             public string WorkingDir;
             public string Device;
+            public string Hypernetwork;
+            public string Strength;
             public bool fp16;
         }
 

@@ -7,12 +7,16 @@ import torch
 from diffusers import AutoencoderKL
 from transformers import CLIPTokenizer
 
+
+
+
 from sd_xbackend import (
     GetPipe,
     GetSampler,
     ApplyArg,
     MakeImage,
-    ApplyLoRA
+    ApplyLoRA,
+    ApplyHyperNetwork
 )
 
 os.chdir(sys.path[0])
@@ -42,6 +46,9 @@ if opt.lora:
 if opt.dlora:
     pipe.unet.load_attn_procs(opt.lora_path)
 
+
+ApplyHyperNetwork(pipe, "D:/Drive/NeuralNetworks/StableDiffusionUI-Shark-AMD/data/models/hypernetwork/samdoesartsHyper.pt" ,"cuda", opt.precision == "fp16",0.75)
+
 print("SD: Model preload: done")
 
 while True:
@@ -55,9 +62,7 @@ while True:
         break
     
     data = json.loads(message)
-
-    print ("   !!! DEBUG data['VAE'] = ", data['VAE'])
-
+    
 
     if not data['VAE'] == "Default":
         print("Load custom vae")

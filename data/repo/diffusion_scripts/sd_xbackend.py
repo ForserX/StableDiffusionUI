@@ -1,5 +1,6 @@
 import torch, time, os, numpy
 from PIL import PngImagePlugin, Image
+from Hypernetwork import Hypernetwork
 
 from custom_pipelines.pipeline_onnx_stable_diffusion_instruct_pix2pix import OnnxStableDiffusionInstructPix2PixPipeline
 from custom_pipelines.pipeline_onnx_stable_diffusion_controlnet import OnnxStableDiffusionControlNetPipeline
@@ -125,16 +126,18 @@ def GetPipeCN(Model: str, CNModel: str, NSFW: bool, fp16: bool, ONNXMode : bool 
 
     return pipe
 
-def ApplyHyperNetwork(pipe, HyperNetworkPath : str, device, fp16: bool, strength: float):
+def ApplyHyperNetwork(pipe, HyperNetworkPath : str, device : str, fp16: bool, strength: float):
 
      model_path = HyperNetworkPath
-     state_dict = load_file(model_path, device)
+     state_dict = torch.load(model_path)
 
-     if fp16:
-        fptype = torch.float16
-     else:
-        fptype = torch.float32
+     Hyper = Hypernetwork()
+     Hyper.load_from_state_dict(state_dict)
+     Hyper.apply_to_diffusers(pipe.unet)
 
+     
+
+     
 
 def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool, strength: float):
     model_path = LoraPath
