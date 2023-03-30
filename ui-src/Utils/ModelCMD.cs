@@ -22,7 +22,7 @@ namespace SD_FXUI
         {
         }
 
-        public void PreStart(string StartModel, string StartMode, bool StartNSFW, string NameLora = "", bool LoraEnable = false, bool IsCUDA = false, bool Infp16 = false)
+        public void PreStart(string StartModel, string StartMode, bool StartNSFW, string NameLora = "", bool LoraEnable = false, string LoraStrength = "", bool IsCUDA = false, bool Infp16 = false)
         {
             bool LoRACheck = LoRA != LoraEnable;
 
@@ -62,15 +62,21 @@ namespace SD_FXUI
 
                     if (LoraEnable)
                     {
+
+                        float lorastr = float.Parse(LoraStrength);
+                        lorastr /= 100;
+
+                        string newLorastr = lorastr.ToString().Replace(",", ".");
+
                         string LoRAModel = FS.GetModelDir() + "lora\\" + ModelLoRA;
 
                         if (LoRAModel.EndsWith(".safetensors"))
                         {
-                            CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\"";
+                            CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\" --lora_strength=\"{newLorastr}\"";
                         }
                         else
                         {
-                            CmdLine += $" --dlora=True --lora_path=\"{LoRAModel}\"";
+                            CmdLine += $" --dlora=True --lora_path=\"{LoRAModel}\" --lora_strength=\"{newLorastr}\"";
                         }
                     }
 

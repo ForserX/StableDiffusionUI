@@ -144,6 +144,8 @@ def ApplyHyperNetwork(pipe, HyperNetworkPath : str, device : str, fp16: bool, st
 def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool, strength: float):
     model_path = LoraPath
     state_dict = load_file(model_path, device)
+
+    print ("lora strength = ", strength)
     
     if fp16:
         fptype = torch.float16
@@ -352,6 +354,9 @@ def ApplyArg(parser):
     )
     parser.add_argument(
         "--lora_path", type=str, help="Path to model LoRA file", dest='lora_path',
+    )
+    parser.add_argument(
+        "--lora_strength", type=float, help="lora strength (alpha)", dest='lora_strength',
     )
     parser.add_argument(
         "--inversion", help="inversion path", dest='inversion', default=None,

@@ -135,7 +135,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = cbFf16.IsChecked.Value;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text, tsLoRA.IsChecked.Value, true);
+                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text,  tsLoRA.IsChecked.Value, tbLorastrength.Text, true);
                             SafeCMD.Start();
                             //cmdline += GetCommandLineDiffCuda();
                             //Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));

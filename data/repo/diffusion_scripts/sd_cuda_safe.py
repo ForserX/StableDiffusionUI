@@ -41,7 +41,7 @@ pipe.to(opt.device)
     
 # LoRA magic
 if opt.lora:
-    ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16", 0.75)
+    ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16", opt.lora_strength)
 
 if opt.dlora:
     pipe.unet.load_attn_procs(opt.lora_path)
