@@ -72,7 +72,7 @@ namespace SD_FXUI
             public string WorkingDir;
             public string Device;
             public string Hypernetwork;
-            public string Strength;
+            public string Lora_Strength;
             public bool fp16;
         }
 

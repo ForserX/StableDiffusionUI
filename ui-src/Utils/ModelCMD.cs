@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Xps.Serialization;
 
 namespace SD_FXUI
 {
@@ -15,6 +16,7 @@ namespace SD_FXUI
         bool CUDA = false;
         bool fp16 = false;
         bool LoRA = false;
+        string LoRAStr = null;
         string Model = null;
         string ModelLoRA = null;
 
@@ -22,11 +24,11 @@ namespace SD_FXUI
         {
         }
 
-        public void PreStart(string StartModel, string StartMode, bool StartNSFW, string NameLora = "", bool LoraEnable = false, string LoraStrength = "", bool IsCUDA = false, bool Infp16 = false)
+        public void PreStart(string StartModel, string StartMode, bool StartNSFW, string NameLora = null, bool LoraEnable = false, string LoraStrength = null, bool IsCUDA = false, bool Infp16 = false)
         {
             bool LoRACheck = LoRA != LoraEnable;
 
-            if (NSFW != StartNSFW || Model != StartModel || StartMode != Mode || IsCUDA != CUDA || LoRACheck || fp16 != Infp16)
+            if (NSFW != StartNSFW || Model != StartModel || StartMode != Mode || IsCUDA != CUDA || LoRACheck || fp16 != Infp16 || LoraStrength != LoRAStr)
             {
                 if (Process != null)
                 {
@@ -39,6 +41,7 @@ namespace SD_FXUI
                 LoRA = LoraEnable;
                 CUDA = IsCUDA;
                 fp16 = Infp16;
+                LoRAStr = LoraStrength;
 
                 string CmdLine;
 
@@ -121,6 +124,7 @@ namespace SD_FXUI
             fp16 = false;
             LoRA = false;
             Model = null;
+            LoRAStr = null;
             ModelLoRA = null;
 
             if (ErrorExit)

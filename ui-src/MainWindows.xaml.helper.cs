@@ -265,6 +265,7 @@ namespace SD_FXUI
             Helper.MakeInfo.Height = (int)slH.Value;
             Helper.MakeInfo.Width = (int)slW.Value;
             Helper.MakeInfo.Device = (Helper.Mode == Helper.ImplementMode.DiffCUDA) ? "cuda" : "cpu";
+            Helper.MakeInfo.Lora_Strength = tbLorastrength.Text;
             Helper.MakeInfo.ImgScale = 0;
             Helper.MakeInfo.WorkingDir = FS.GetWorkingDir();
 
