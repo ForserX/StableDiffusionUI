@@ -10,6 +10,8 @@ from controlnet_aux import (
 
 import cv2, transformers
 
+from huggingface_hub import snapshot_download
+
 from modules.controlnet.laion_face_common import generate_annotation
 from modules.controlnet.palette import ade_palette
 
@@ -73,7 +75,8 @@ def generateSegFromImage():
     print(f"CN: Pose - {opt.outfile}")
 
 def generateMLSDFromImage():
-    mlsd = MLSDdetector.from_pretrained('lllyasviel/ControlNet')
+
+    mlsd = MLSDdetector.from_pretrained(opt.mdlpath)
     in_img = Image.open(opt.img)
     
     image = mlsd(in_img)
@@ -82,7 +85,7 @@ def generateMLSDFromImage():
     print(f"CN: Pose - {opt.outfile}")
 
 def generateNormalFromImage():
-    depth_estimator = transformers.pipeline("depth-estimation", model = "Intel/dpt-hybrid-midas")
+    depth_estimator = transformers.pipeline("depth-estimation", model = snapshot_download("Intel/dpt-hybrid-midas", allow_patterns=["*.bin", "*.json"], cache_dir=opt.workdir))
     
     in_img = Image.open(opt.img)
     image = depth_estimator(in_img)['predicted_depth'][0]
@@ -114,7 +117,7 @@ def generateNormalFromImage():
 def generateHedFromImage():
     print("processing generateHedFromImage()")
     in_img = Image.open(opt.img)
-    hed = HEDdetector.from_pretrained('lllyasviel/ControlNet')
+    hed = HEDdetector.from_pretrained(opt.mdlpath)
     image = hed(in_img)
 
     image.save(opt.outfile)
@@ -123,7 +126,7 @@ def generateHedFromImage():
 def generateScribbleFromImage():
     print("processing generateScribbleFromImage()")
     in_img = Image.open(opt.img)
-    hed = HEDdetector.from_pretrained('lllyasviel/ControlNet')
+    hed = HEDdetector.from_pretrained(opt.mdlpath)
     image = hed(in_img, scribble=True)
 
     image.save(opt.outfile)

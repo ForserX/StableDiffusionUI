@@ -286,6 +286,9 @@ def ApplyArg(parser):
         "--model", type=str, help="Path to model checkpoint file", dest='mdlpath',
     )
     parser.add_argument(
+        "--workdir", default=None, type=str, help="Path to model checkpoint file", dest='workdir',
+    )
+    parser.add_argument(
         "--width", type=int, help="Path to model checkpoint file", dest='width',
     )
     parser.add_argument(

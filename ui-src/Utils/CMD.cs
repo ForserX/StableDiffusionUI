@@ -445,7 +445,7 @@ namespace SD_FXUI
             string OutFile = FS.GetModelDir() + "controlnet/pose/" + Path.GetFileNameWithoutExtension(currentImage) + ".png";
             Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print("\n Processing poser.... \n");
-            ProcessHost.Start($"repo/diffusion_scripts/controlnet_pipe.py --mode=\"{CN.PreprocessCommandLine()}\" --img=\"{currentImage}\" --model=\"{CN.GetModelPathCN()}\"  --outfile=\"{OutFile}\" ");
+            ProcessHost.Start($"repo/diffusion_scripts/controlnet_pipe.py --mode=\"{CN.PreprocessCommandLine()}\" --workdir={ FS.GetModelDir() + "controlnet\\huggface\\" } --img=\"{currentImage}\" --model=\"{CN.GetModelPathCN()}\"  --outfile=\"{OutFile}\" ");
             Helper.Form.InvokeProgressUpdate(10);
             ProcessHost.SendExitCommand();
             ProcessHost.Wait();
