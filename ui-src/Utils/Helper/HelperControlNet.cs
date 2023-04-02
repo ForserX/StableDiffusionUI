@@ -46,7 +46,7 @@ namespace SD_FXUI
         public ControlNetOpenPose()
         {
             Model = "sd-controlnet-openpose";
-            CNModel = "OpenposeDetector/anannotator/ckpts/body_pose_model.pth";
+            CNModel = "sd-controlnet/anannotator/ckpts/body_pose_model.pth";
         }
 
         public override void CheckSD()
@@ -54,7 +54,7 @@ namespace SD_FXUI
             if (!System.IO.Directory.Exists(GetModelPathSD()))
             {
                 Notification.SendNotification("Starting downloading pose model...");
-                WGetDownloadModels.DownloadCNPoser();
+                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Poser);
                 Notification.SendNotification("Downloading pose model: done!");
             }
         }
@@ -95,7 +95,7 @@ namespace SD_FXUI
         public ControlNetHed()
         {
             Model = "sd-controlnet-hed";
-            CNModel = "OpenposeDetector/anannotator/ckpts/network-bsds500.pth";
+            CNModel = "sd-controlnet/anannotator/ckpts/network-bsds500.pth";
         }
 
         public override void CheckSD()
@@ -113,7 +113,7 @@ namespace SD_FXUI
             if (!System.IO.File.Exists(GetModelPathCN()))
             {
                 Notification.SendNotification("Starting downloading hed model...");
-                WGetDownloadModels.DownloadSDCNPoser();
+                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Hed);
                 Notification.SendNotification("Download hed model: done!");
             }
         }
@@ -345,7 +345,7 @@ namespace SD_FXUI
         public ControlNetMLSD()
         {
             Model = "sd-controlnet-mlsd";
-            CNModel = "OpenposeDetector/annotator/ckpts/mlsd_large_512_fp32.pth";
+            CNModel = "sd-controlnet/annotator/ckpts/mlsd_large_512_fp32.pth";
         }
 
         public override void CheckSD()
@@ -363,7 +363,7 @@ namespace SD_FXUI
             if (!System.IO.File.Exists(GetModelPathCN()))
             {
                 Notification.SendNotification("Starting downloading mlsd model...");
-                WGetDownloadModels.DownloadSDCNPoser();
+                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Mlsd);
                 Notification.SendNotification("Download mlsd model: done!");
             }
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ABI.System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,9 +47,9 @@ namespace SD_FXUI
             Download.Send(WGetFile + "-O \"vae/model.onnx\" https://huggingface.co/ssube/stable-diffusion-x4-upscaler-onnx/resolve/main/vae/model.onnx");
             Download.Send(WGetFile + "https://huggingface.co/ssube/stable-diffusion-x4-upscaler-onnx/raw/main/model_index.json");
         }
-        public static void DownloadCNPoser()
+        public static void DownloadCNPoser(HelperControlNet.ControlTypes Type)
         {
-            string WorkingDir = FS.GetModelDir() + "controlnet/OpenposeDetector/";
+            string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet/";
 
             if (Directory.Exists(WorkingDir))
             {
@@ -62,9 +63,16 @@ namespace SD_FXUI
             string WGetFile = "\"" + FS.GetToolsDir() + "wget.exe\" ";
             Host Download = new Host(WorkingDir);
             Download.Start();
-            Download.Send(WGetFile + "-O \"anannotator\\ckpts\\body_pose_model.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/body_pose_model.pth");
-            Download.Send(WGetFile + "-O \"anannotator\\ckpts\\network-bsds500.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/network-bsds500.pth");
-            Download.Send(WGetFile + "-O \"anannotator\\ckpts\\mlsd_large_512_fp32.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/mlsd_large_512_fp32.pth");
+
+            if (Type == HelperControlNet.ControlTypes.Poser)
+                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\body_pose_model.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/body_pose_model.pth");
+
+            if (Type == HelperControlNet.ControlTypes.Hed)
+                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\network-bsds500.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/network-bsds500.pth");
+
+            if (Type == HelperControlNet.ControlTypes.Mlsd)
+                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\mlsd_large_512_fp32.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/mlsd_large_512_fp32.pth");
+
             Download.SendExitCommand();
             Download.Wait();
         }
