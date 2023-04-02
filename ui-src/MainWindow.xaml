@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="793" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="1020" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#389D9BC9" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -99,7 +99,7 @@
                             </LinearGradientBrush>
                         </Button.Background>
                     </Button>
-                    <Button x:Name="btnInImgPose" Content="Get Pose" HorizontalAlignment="Left" Margin="97,108,0,0" VerticalAlignment="Top" Width="80" Foreground="White" Height="23" Padding="10,1,10,1" Click="btnInImgPose_Click">
+                    <Button x:Name="btnInImgPose" Content="Extract" HorizontalAlignment="Left" Margin="97,108,0,0" VerticalAlignment="Top" Width="80" Foreground="White" Height="23" Padding="10,1,10,1" Click="btnInImgPose_Click">
                         <Button.Background>
                             <LinearGradientBrush EndPoint="1,0">
                                 <GradientStop Color="#FF523876"/>
@@ -109,6 +109,23 @@
                     </Button>
                     <ToggleButton x:Name="cbPix2Pix" Content="InstructPix2Pix" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Unchecked="cbPix2Pix_Checked" Height="25" Width="110" Margin="115,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="cbPix2Pix_Checked"/>
                     <TextBox x:Name="tbMeta" Margin="-6,135,-5,0" TextWrapping="Wrap" Text="No meta" IsReadOnly="True" FontSize="9.5" FontFamily="Verdana"/>
+                    <ComboBox x:Name="cbExtractPoseSelector" HorizontalAlignment="Left" Margin="182,100,0,0" VerticalAlignment="Top" Width="154">
+                        <ComboBoxItem Content="canny"/>
+                        <ComboBoxItem Content="depth"/>
+                        <ComboBoxItem Content="depth_leres"/>
+                        <ComboBoxItem Content="hed"/>
+                        <ComboBoxItem Content="normalmap"/>
+                        <ComboBoxItem Content="openpose"/>
+                        <ComboBoxItem Content="openpose_hand"/>
+                        <ComboBoxItem Content="clip_vision"/>
+                        <ComboBoxItem Content="color"/>
+                        <ComboBoxItem Content="scribble"/>
+                        <ComboBoxItem Content="fake_scribble"/>
+                        <ComboBoxItem Content="pidinet"/>
+                        <ComboBoxItem Content="mlsd"/>
+                        <ComboBoxItem Content="segmentation"/>
+                        <ComboBoxItem Content="binary"/>
+                    </ComboBox>
                 </Grid>
                 <Grid Height="95">
                     <Label Content="Neg prompt" Height="21" Width="95" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
@@ -227,9 +244,10 @@
                 <Grid x:Name="grCN" Height="136">
                     <Label Content="ControlNet:" Height="30" Width="89" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-9,0,0,0" VerticalAlignment="Top"/>
                     <Image x:Name="imgPose" Margin="0,3,4,3" Source="/res/noimg.jpg" HorizontalAlignment="Right" Width="116"/>
-                    <ComboBox  x:Name="cbPose" Height="22" Text="" Margin="43,0,125,11" VerticalAlignment="Bottom" SelectionChanged="cbPose_SelectionChanged"/>
+                    <ComboBox  x:Name="cbPreprocess" Height="22" Text="" Margin="48,0,125,11" VerticalAlignment="Bottom" SelectionChanged="cbPreprocess_SelectionChanged"/>
+                    <ComboBox  x:Name="cbPose" Height="22" Text="" Margin="48,0,125,46" VerticalAlignment="Bottom" SelectionChanged="cbPose_SelectionChanged"/>
                     <ToggleButton x:Name="tsCN" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36" Margin="75,5,0,0" Checked="tsCN_Checked" Unchecked="tsCN_Checked"/>
-                    <Label Content="Pose:" Height="30" Width="43" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,96,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Model:" Height="30" Width="43" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,96,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </StackPanel>
         </ScrollViewer>

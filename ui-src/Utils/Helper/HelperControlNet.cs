@@ -243,11 +243,19 @@ namespace SD_FXUI
             Poser,
             Canny,
             Depth,
-            Normal,
-            Seg,
-            Scribble,
+            Depth_leres,
             Hed,
-            mlsd
+            NormalMap,
+            OpenPose,
+            OpenPose_hand,
+            Clip_vision,
+            Color,
+            Pidinet,
+            Segmentation,
+            Mlsd,
+            Scribble,
+            Fake_Scribble,
+            Binary
         }
     }
 }

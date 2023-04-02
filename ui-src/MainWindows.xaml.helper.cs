@@ -654,8 +654,15 @@ namespace SD_FXUI
 
         ControlNetBase GetCNType()
         {
+            if(cbExtractPoseSelector.Text == "canny")
+            if(cbExtractPoseSelector.Text == "canny")
+            if(cbExtractPoseSelector.Text == "OpenPose") return HelperControlNet.OpenPose;
+            if(cbExtractPoseSelector.Text == "canny")
+            if(cbExtractPoseSelector.Text == "canny")
+            if(cbExtractPoseSelector.Text == "canny")
+
             // #TODO: FX to Borshig
-            return HelperControlNet.OpenPose;
+            
         }
     }
 }
