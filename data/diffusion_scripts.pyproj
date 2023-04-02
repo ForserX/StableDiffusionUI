@@ -51,7 +51,6 @@
     <Folder Include="custom_pipelines\" />
     <Folder Include="modules\" />
     <Folder Include="modules\controlnet\" />
-    <Folder Include="modules\controlnet\__pycache__\" />
     <Folder Include="modules\textual_inversion\" />
   </ItemGroup>
   <ItemGroup>
@@ -82,9 +81,6 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="modules\controlnet\__pycache__\laion_face_common.cpython-310.pyc" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

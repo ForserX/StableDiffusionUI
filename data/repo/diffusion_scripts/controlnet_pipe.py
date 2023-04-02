@@ -4,7 +4,8 @@ import torch, os, time, numpy
 
 from controlnet_aux import (
     OpenposeDetector,
-    HEDdetector
+    HEDdetector,
+    MLSDdetector
 )
 
 import cv2, transformers
@@ -44,10 +45,20 @@ def generateFaceFromImage():
 
 print(opt)
 
+def generateSegFromImage():
+    mlsd = MLSDdetector.from_pretrained('lllyasviel/ControlNet')
+    in_img = Image.open(opt.img)
+    
+    image = mlsd(in_img)
+
+    image.save(opt.outfile)
+    print(f"CN: Pose - {opt.outfile}")
+
 def generateNormalFromImage():
     depth_estimator = transformers.pipeline("depth-estimation", model = "Intel/dpt-hybrid-midas")
-
-    image = depth_estimator(image)['predicted_depth'][0]
+    
+    in_img = Image.open(opt.img)
+    image = depth_estimator(in_img)['predicted_depth'][0]
     
     image = image.numpy()
     
@@ -147,6 +158,9 @@ def generateImageFromPose ():
     output.save(os.path.join(opt.outfile, f"{time.time_ns()}.png"), 'PNG')
     print("CN: Image from Pose: done!")
 
+if opt.mode == "SgfI":
+    generateSegFromImage()
+    
 if opt.mode == "HfI":
     generateHedFromImage()
     

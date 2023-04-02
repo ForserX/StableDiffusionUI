@@ -34,6 +34,11 @@ namespace SD_FXUI
         {
             return "";
         }
+
+        virtual public string PreprocessCommandLine()
+        {
+            return "";
+        }
     }
 
     class ControlNetOpenPose: ControlNetBase
@@ -78,6 +83,11 @@ namespace SD_FXUI
 
             return cmdline;
         }
+
+        override public string PreprocessCommandLine()
+        {
+            return "PfI";
+        }
     }
 
     class ControlNetHed: ControlNetBase
@@ -107,6 +117,7 @@ namespace SD_FXUI
                 Notification.SendNotification("Download hed model: done!");
             }
         }
+       
         override public string CommandLine()
         {
             string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
@@ -121,6 +132,11 @@ namespace SD_FXUI
             }
 
             return cmdline;
+        }
+
+        override public string PreprocessCommandLine()
+        {
+            return "HfI";
         }
     }
 
@@ -157,6 +173,11 @@ namespace SD_FXUI
 
             return cmdline;
         }
+
+        override public string PreprocessCommandLine()
+        {
+            return "CfI";
+        }
     }
 
     class ControlNetDepth: ControlNetBase
@@ -191,6 +212,11 @@ namespace SD_FXUI
             }
 
             return cmdline;
+        }
+
+        override public string PreprocessCommandLine()
+        {
+            return "DfI";
         }
     }
 
@@ -227,6 +253,11 @@ namespace SD_FXUI
 
             return cmdline;
         }
+
+        override public string PreprocessCommandLine()
+        {
+            return "NfI";
+        }
     }
 
     class ControlNetScribble : ControlNetBase
@@ -262,6 +293,11 @@ namespace SD_FXUI
 
             return cmdline;
         }
+
+        override public string PreprocessCommandLine()
+        {
+            return "SfI";
+        }
     }
 
     class ControlNetSeg : ControlNetBase
@@ -296,6 +332,11 @@ namespace SD_FXUI
             }
 
             return cmdline;
+        }
+
+        override public string PreprocessCommandLine()
+        {
+            return "SgfI";
         }
     }
 

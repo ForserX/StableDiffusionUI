@@ -64,6 +64,7 @@ namespace SD_FXUI
             Download.Start();
             Download.Send(WGetFile + "-O \"anannotator\\ckpts\\body_pose_model.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/body_pose_model.pth");
             Download.Send(WGetFile + "-O \"anannotator\\ckpts\\network-bsds500.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/network-bsds500.pth");
+            Download.Send(WGetFile + "-O \"anannotator\\ckpts\\mlsd_large_512_fp32.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/mlsd_large_512_fp32.pth");
             Download.SendExitCommand();
             Download.Wait();
         }
