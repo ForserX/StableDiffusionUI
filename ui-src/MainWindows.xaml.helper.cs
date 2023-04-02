@@ -654,15 +654,22 @@ namespace SD_FXUI
 
         ControlNetBase GetCNType()
         {
-            if(cbExtractPoseSelector.Text == "canny")
-            if(cbExtractPoseSelector.Text == "canny")
-            if(cbExtractPoseSelector.Text == "OpenPose") return HelperControlNet.OpenPose;
-            if(cbExtractPoseSelector.Text == "canny")
-            if(cbExtractPoseSelector.Text == "canny")
-            if(cbExtractPoseSelector.Text == "canny")
+            if (cbExtractPoseSelector.Text == "canny")          return HelperControlNet.Canny;
+            if (cbExtractPoseSelector.Text == "depth")          return HelperControlNet.Depth;
+            if (cbExtractPoseSelector.Text == "depth_leres")    ; // not implemented return canny
+            if (cbExtractPoseSelector.Text == "hed")            return HelperControlNet.Hed;
+            if (cbExtractPoseSelector.Text == "normalmap")      return HelperControlNet.Normal;
+            if (cbExtractPoseSelector.Text == "openpose")       return HelperControlNet.OpenPose;
+            if (cbExtractPoseSelector.Text == "openpose_hand")  ; // not implemented return canny
+            if (cbExtractPoseSelector.Text == "clip_vision")    ; // not implemented return canny
+            if (cbExtractPoseSelector.Text == "scribble")       ; // not implemented return canny
+            if (cbExtractPoseSelector.Text == "fake_scribble")  ; // not implemented return canny
+            if (cbExtractPoseSelector.Text == "pidinet")        ; // not implemented return canny
+            if (cbExtractPoseSelector.Text == "segmentation")   ; // not implemented return canny
+            if (cbExtractPoseSelector.Text == "binary")         ; // not implemented return canny
 
-            // #TODO: FX to Borshig
-            
+            return HelperControlNet.Canny;                      // temp Bypass error;
+
         }
     }
 }

@@ -244,10 +244,11 @@
                 <Grid x:Name="grCN" Height="136">
                     <Label Content="ControlNet:" Height="30" Width="89" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-9,0,0,0" VerticalAlignment="Top"/>
                     <Image x:Name="imgPose" Margin="0,3,4,3" Source="/res/noimg.jpg" HorizontalAlignment="Right" Width="116"/>
-                    <ComboBox  x:Name="cbPreprocess" Height="22" Text="" Margin="48,0,125,11" VerticalAlignment="Bottom" SelectionChanged="cbPreprocess_SelectionChanged"/>
-                    <ComboBox  x:Name="cbPose" Height="22" Text="" Margin="48,0,125,46" VerticalAlignment="Bottom" SelectionChanged="cbPose_SelectionChanged"/>
+                    <ComboBox  x:Name="cbPreprocess" Height="22" Text="" Margin="75,0,125,11" VerticalAlignment="Bottom" SelectionChanged="cbPreprocess_SelectionChanged"/>
+                    <ComboBox  x:Name="cbPose" Height="22" Text="" Margin="75,0,125,46" VerticalAlignment="Bottom" SelectionChanged="cbPose_SelectionChanged"/>
                     <ToggleButton x:Name="tsCN" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36" Margin="75,5,0,0" Checked="tsCN_Checked" Unchecked="tsCN_Checked"/>
-                    <Label Content="Model:" Height="30" Width="43" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="0,96,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Model" Height="30" Width="43" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="30,95,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.21,0.335"/>
+                    <Label Content="Prep. Picture" Height="30" Width="80" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" Margin="-4,60,0,0" Padding="1,6,1,6" VerticalAlignment="Top" />
                 </Grid>
             </StackPanel>
         </ScrollViewer>
