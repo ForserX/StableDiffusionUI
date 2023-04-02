@@ -79,6 +79,51 @@ namespace SD_FXUI
             return cmdline;
         }
     }
+
+    class ControlNetHed: ControlNetBase
+    {
+        public ControlNetHed()
+        {
+            Model = "sd-controlnet-hed";
+            CNModel = "OpenposeDetector/anannotator/ckpts/network-bsds500.pth";
+        }
+
+        public override void CheckSD()
+        {
+            if (!System.IO.Directory.Exists(GetModelPathSD()))
+            {
+                Notification.SendNotification("Starting downloading pose model...");
+                WGetDownloadModels.DownloadSDCNHed();
+                Notification.SendNotification("Downloading pose model: done!");
+            }
+        }
+
+        public override void CheckCN()
+        {
+            if (!System.IO.File.Exists(GetModelPathCN()))
+            {
+                Notification.SendNotification("Starting downloading hed model...");
+                WGetDownloadModels.DownloadSDCNPoser();
+                Notification.SendNotification("Download hed model: done!");
+            }
+        }
+        override public string CommandLine()
+        {
+            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
+
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                cmdline += $" --mode=\"IfPONNX\"";
+            }
+            else
+            {
+                cmdline += $" --mode=\"IfP\"";
+            }
+
+            return cmdline;
+        }
+    }
+
     class ControlNetCanny : ControlNetBase
     {
         public ControlNetCanny()
@@ -91,15 +136,85 @@ namespace SD_FXUI
         {
             if (!System.IO.Directory.Exists(GetModelPathSD()))
             {
-                Notification.SendNotification("Starting downloading pose model...");
+                Notification.SendNotification("Starting downloading canny model...");
                 WGetDownloadModels.DownloadSDCNCanny();
-                Notification.SendNotification("Downloading pose model: done!");
+                Notification.SendNotification("Downloading canny model: done!");
             }
         }
 
         override public string CommandLine()
         {
-            string cmdline = $" --pose=\"{Helper.ImgPath}\"";
+            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
+
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                cmdline += $" --mode=\"IfPONNX\" ";
+            }
+            else
+            {
+                cmdline += $" --mode=\"IfP\" ";
+            }
+
+            return cmdline;
+        }
+    }
+
+    class ControlNetDepth: ControlNetBase
+    {
+        public ControlNetDepth()
+        {
+            Model = "sd-controlnet-depth";
+            CNModel = "";
+        }
+
+        public override void CheckSD()
+        {
+            if (!System.IO.Directory.Exists(GetModelPathSD()))
+            {
+                Notification.SendNotification("Starting downloading depth model...");
+                WGetDownloadModels.DownloadSDCNDepth();
+                Notification.SendNotification("Downloading depth model: done!");
+            }
+        }
+
+        override public string CommandLine()
+        {
+            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
+
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                cmdline += $" --mode=\"IfPONNX\" ";
+            }
+            else
+            {
+                cmdline += $" --mode=\"IfP\" ";
+            }
+
+            return cmdline;
+        }
+    }
+
+    class ControlNetNormal : ControlNetBase
+    {
+        public ControlNetNormal()
+        {
+            Model = "sd-controlnet-normal";
+            CNModel = "";
+        }
+
+        public override void CheckSD()
+        {
+            if (!System.IO.Directory.Exists(GetModelPathSD()))
+            {
+                Notification.SendNotification("Starting downloading normal model...");
+                WGetDownloadModels.DownloadSDCNNormal();
+                Notification.SendNotification("Downloading pose normal: done!");
+            }
+        }
+
+        override public string CommandLine()
+        {
+            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
 
             if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
@@ -119,11 +234,14 @@ namespace SD_FXUI
     {
         public static ControlNetOpenPose OpenPose = new ControlNetOpenPose();
         public static ControlNetCanny Canny = new ControlNetCanny();
+        public static ControlNetDepth Depth = new ControlNetDepth();
+        public static ControlNetHed Hed = new ControlNetHed();
+        public static ControlNetNormal Normal = new ControlNetNormal();
 
         public enum ControlTypes
         {
             Poser,
-            Cany,
+            Canny,
             Depth,
             Normal,
             Seg,

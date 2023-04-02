@@ -37,3 +37,4 @@ opencv-python
 
 # ControlNet
 controlnet_aux
+mediapipe

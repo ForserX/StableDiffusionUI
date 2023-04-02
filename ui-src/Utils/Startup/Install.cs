@@ -157,6 +157,41 @@ namespace SD_FXUI
                 System.IO.File.WriteAllLines(FileName, Lines);
             }
         }
+        public static void WrapHedPath()
+        {
+            string FileName = FS.GetWorkingDir() + @"\repo\onnx.venv\Lib\site-packages\controlnet_aux\hed\__init__.py";
+
+            if (Helper.Mode == Helper.ImplementMode.DiffCUDA)
+            {
+                FileName = FS.GetWorkingDir() + @"\repo\cuda.venv\Lib\site-packages\controlnet_aux\hed\__init__.py";
+            }
+
+            if (!File.Exists(FileName))
+            {
+                return;
+            }
+            using (var reader = System.IO.File.OpenText(FileName))
+            {
+                int LineCounter = 0;
+                string? str = reader.ReadLine();
+                while (str != null)
+                {
+                    if (str.Contains("hf_hub_download(pretrained_model_or_path, filename)"))
+                    {
+                        str = "        model_path = pretrained_model_or_path #hf_hub_download(pretrained_model_or_path, filename)";
+                        break;
+                    }
+                    str = reader.ReadLine();
+                    LineCounter++;
+                }
+
+                reader.Close();
+
+                string[] Lines = File.ReadAllLines(FileName);
+                Lines[LineCounter] = str;
+                System.IO.File.WriteAllLines(FileName, Lines);
+            }
+        }
 
         internal static void SetupDirs()
         {

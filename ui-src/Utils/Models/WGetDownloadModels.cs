@@ -63,6 +63,7 @@ namespace SD_FXUI
             Host Download = new Host(WorkingDir);
             Download.Start();
             Download.Send(WGetFile + "-O \"anannotator\\ckpts\\body_pose_model.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/body_pose_model.pth");
+            Download.Send(WGetFile + "-O \"anannotator\\ckpts\\network-bsds500.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/network-bsds500.pth");
             Download.SendExitCommand();
             Download.Wait();
         }
@@ -104,6 +105,69 @@ namespace SD_FXUI
             Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-canny/raw/main/config.json");
             Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-canny/resolve/main/diffusion_pytorch_model.bin");
             Download.Send(WGetFile + "https://huggingface.co/ForserX/sd-controlnet-canny-onnx/resolve/main/model.onnx");
+            Download.SendExitCommand();
+            Download.Wait();
+        }
+
+        public static void DownloadSDCNDepth()
+        {
+            string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet-depth/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+            Directory.CreateDirectory(WorkingDir);
+
+            string WGetFile = "\"" + FS.GetToolsDir() + "wget.exe\" ";
+            Host Download = new Host(WorkingDir);
+            Download.Start();
+
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-depth/raw/main/config.json");
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-depth/resolve/main/diffusion_pytorch_model.bin");
+            Download.Send(WGetFile + "https://huggingface.co/ForserX/sd-controlnet-depth-onnx/resolve/main/model.onnx");
+            Download.SendExitCommand();
+            Download.Wait();
+        }
+
+        public static void DownloadSDCNHed()
+        {
+            string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet-hed/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+            Directory.CreateDirectory(WorkingDir);
+
+            string WGetFile = "\"" + FS.GetToolsDir() + "wget.exe\" ";
+            Host Download = new Host(WorkingDir);
+            Download.Start();
+
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-hed/raw/main/config.json");
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-hed/resolve/main/diffusion_pytorch_model.bin");
+            Download.Send(WGetFile + "https://huggingface.co/ForserX/sd-controlnet-hed-onnx/resolve/main/model.onnx");
+            Download.SendExitCommand();
+            Download.Wait();
+        }
+
+        public static void DownloadSDCNNormal()
+        {
+            string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet-normal/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+            Directory.CreateDirectory(WorkingDir);
+
+            string WGetFile = "\"" + FS.GetToolsDir() + "wget.exe\" ";
+            Host Download = new Host(WorkingDir);
+            Download.Start();
+
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-normal/raw/main/config.json");
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-normal/resolve/main/diffusion_pytorch_model.bin");
+            Download.Send(WGetFile + "https://huggingface.co/ForserX/sd-controlnet-normal-onnx/resolve/main/model.onnx");
             Download.SendExitCommand();
             Download.Wait();
         }
