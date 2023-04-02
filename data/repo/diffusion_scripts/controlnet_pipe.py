@@ -46,6 +46,33 @@ def generateFaceFromImage():
 print(opt)
 
 def generateSegFromImage():
+    image_processor = transformers.AutoImageProcessor.from_pretrained("openmmlab/upernet-convnext-small")
+    image_segmentor = transformers.UperNetForSemanticSegmentation.from_pretrained("openmmlab/upernet-convnext-small")
+    
+    in_img = Image.open(opt.img).convert('RGB')
+    
+    pixel_values = image_processor(in_img, return_tensors="pt").pixel_values
+    
+    with torch.no_grad():
+      outputs = image_segmentor(pixel_values)
+    
+    seg = image_processor.post_process_semantic_segmentation(outputs, target_sizes=[in_img.size[::-1]])[0]
+    
+    color_seg = numpy.zeros((seg.shape[0], seg.shape[1], 3), dtype=numpy.uint8) # height, width, 3
+    
+    palette = numpy.array(ade_palette())
+    
+    for label, color in enumerate(palette):
+        color_seg[seg == label, :] = color
+    
+    color_seg = color_seg.astype(numpy.uint8)
+    
+    image = Image.fromarray(color_seg)
+
+    image.save(opt.outfile)
+    print(f"CN: Pose - {opt.outfile}")
+
+def generateMLSDFromImage():
     mlsd = MLSDdetector.from_pretrained('lllyasviel/ControlNet')
     in_img = Image.open(opt.img)
     
@@ -158,6 +185,9 @@ def generateImageFromPose ():
     output.save(os.path.join(opt.outfile, f"{time.time_ns()}.png"), 'PNG')
     print("CN: Image from Pose: done!")
 
+if opt.mode == "MfI":
+    generateMLSDFromImage()
+    
 if opt.mode == "SgfI":
     generateSegFromImage()
     

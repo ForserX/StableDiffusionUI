@@ -340,6 +340,56 @@ namespace SD_FXUI
         }
     }
 
+    class ControlNetMLSD : ControlNetBase
+    {
+        public ControlNetMLSD()
+        {
+            Model = "sd-controlnet-mlsd";
+            CNModel = "OpenposeDetector/annotator/ckpts/mlsd_large_512_fp32.pth";
+        }
+
+        public override void CheckSD()
+        {
+            if (!System.IO.Directory.Exists(GetModelPathSD()))
+            {
+                Notification.SendNotification("Starting downloading mlsd model...");
+                WGetDownloadModels.DownloadSDCNMLSD();
+                Notification.SendNotification("Downloading mlsd model: done!");
+            }
+        }
+
+        public override void CheckCN()
+        {
+            if (!System.IO.File.Exists(GetModelPathCN()))
+            {
+                Notification.SendNotification("Starting downloading mlsd model...");
+                WGetDownloadModels.DownloadSDCNPoser();
+                Notification.SendNotification("Download mlsd model: done!");
+            }
+        }
+
+        override public string CommandLine()
+        {
+            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
+
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                cmdline += $" --mode=\"IfPONNX\" ";
+            }
+            else
+            {
+                cmdline += $" --mode=\"IfP\" ";
+            }
+
+            return cmdline;
+        }
+
+        override public string PreprocessCommandLine()
+        {
+            return "MfI";
+        }
+    }
+
     // Global Functions
     internal class HelperControlNet
     {
@@ -350,6 +400,7 @@ namespace SD_FXUI
         public static ControlNetNormal Normal = new ControlNetNormal();
         public static ControlNetScribble Scribble = new ControlNetScribble();
         public static ControlNetSeg Seg = new ControlNetSeg();
+        public static ControlNetMLSD MLSD = new ControlNetMLSD();
 
         public enum ControlTypes
         {
