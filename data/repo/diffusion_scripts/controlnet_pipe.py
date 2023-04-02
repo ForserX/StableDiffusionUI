@@ -9,7 +9,8 @@ from controlnet_aux import (
 
 import cv2, transformers
 
-from modules.cn_face.laion_face_common import generate_annotation
+from modules.controlnet.laion_face_common import generate_annotation
+from modules.controlnet.palette import ade_palette
 
 from PIL import Image
 import argparse
@@ -80,6 +81,15 @@ def generateHedFromImage():
 
     image.save(opt.outfile)
     print(f"CN: Pose - {opt.outfile}")
+    
+def generateScribbleFromImage():
+    print("processing generateScribbleFromImage()")
+    in_img = Image.open(opt.img)
+    hed = HEDdetector.from_pretrained('lllyasviel/ControlNet')
+    image = hed(in_img, scribble=True)
+
+    image.save(opt.outfile)
+    print(f"CN: Pose - {opt.outfile}")
 
 def generateDepthFromImage():
     print("processing generateDepthFromImage()")
@@ -95,7 +105,7 @@ def generateDepthFromImage():
     image.save(opt.outfile)
     print(f"CN: Pose - {opt.outfile}")
 
-def generateCanyFromImage():
+def generateCannyFromImage():
     print("processing generateCanyFromImage()")
     in_img = Image.open(opt.img)
     
@@ -137,6 +147,15 @@ def generateImageFromPose ():
     output.save(os.path.join(opt.outfile, f"{time.time_ns()}.png"), 'PNG')
     print("CN: Image from Pose: done!")
 
+if opt.mode == "HfI":
+    generateHedFromImage()
+    
+if opt.mode == "SfI":
+    generateScribbleFromImage()
+
+if opt.mode == "NfI":
+    generateNormalFromImage()
+
 if opt.mode == "DfI":
     generateDepthFromImage()
 
@@ -144,7 +163,7 @@ if opt.mode == "FfI":
     generateFaceFromImage()
     
 if opt.mode == "CfI":
-    generateCanyFromImage()
+    generateCannyFromImage()
 
 if opt.mode == "PfI":
     generatePoseFromImage()

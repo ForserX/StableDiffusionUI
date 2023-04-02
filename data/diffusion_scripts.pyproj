@@ -34,7 +34,8 @@
     <Compile Include="custom_pipelines\pipeline_onnx_stable_diffusion_instruct_pix2pix.py" />
     <Compile Include="Hypernetwork.py" />
     <Compile Include="merge_diff_lora.py" />
-    <Compile Include="modules\cn_face\laion_face_common.py" />
+    <Compile Include="modules\controlnet\laion_face_common.py" />
+    <Compile Include="modules\controlnet\palette.py" />
     <Compile Include="modules\danbooru.py" />
     <Compile Include="modules\danbooru_model.py" />
     <Compile Include="modules\inference_gfpgan.py" />
@@ -49,7 +50,8 @@
     <Folder Include="convert\" />
     <Folder Include="custom_pipelines\" />
     <Folder Include="modules\" />
-    <Folder Include="modules\cn_face\" />
+    <Folder Include="modules\controlnet\" />
+    <Folder Include="modules\controlnet\__pycache__\" />
     <Folder Include="modules\textual_inversion\" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +82,9 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="modules\controlnet\__pycache__\laion_face_common.cpython-310.pyc" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
 </Project>

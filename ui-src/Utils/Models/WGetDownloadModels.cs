@@ -171,5 +171,45 @@ namespace SD_FXUI
             Download.SendExitCommand();
             Download.Wait();
         }
+        public static void DownloadSDCNScribble()
+        {
+            string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet-scribble/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+            Directory.CreateDirectory(WorkingDir);
+
+            string WGetFile = "\"" + FS.GetToolsDir() + "wget.exe\" ";
+            Host Download = new Host(WorkingDir);
+            Download.Start();
+
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-scribble/raw/main/config.json");
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-scribble/resolve/main/diffusion_pytorch_model.bin");
+            Download.Send(WGetFile + "https://huggingface.co/ForserX/sd-controlnet-scribble-onnx/resolve/main/model.onnx");
+            Download.SendExitCommand();
+            Download.Wait();
+        }
+        public static void DownloadSDCNSeg()
+        {
+            string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet-seg/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+            Directory.CreateDirectory(WorkingDir);
+
+            string WGetFile = "\"" + FS.GetToolsDir() + "wget.exe\" ";
+            Host Download = new Host(WorkingDir);
+            Download.Start();
+
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-seg/raw/main/config.json");
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-seg/resolve/main/diffusion_pytorch_model.bin");
+            Download.Send(WGetFile + "https://huggingface.co/ForserX/sd-controlnet-seg-onnx/resolve/main/model.onnx");
+            Download.SendExitCommand();
+            Download.Wait();
+        }
     }
 }

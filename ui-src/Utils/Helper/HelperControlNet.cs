@@ -229,6 +229,76 @@ namespace SD_FXUI
         }
     }
 
+    class ControlNetScribble : ControlNetBase
+    {
+        public ControlNetScribble()
+        {
+            Model = "sd-controlnet-scribble";
+            CNModel = "";
+        }
+
+        public override void CheckSD()
+        {
+            if (!System.IO.Directory.Exists(GetModelPathSD()))
+            {
+                Notification.SendNotification("Starting downloading scribble model...");
+                WGetDownloadModels.DownloadSDCNScribble();
+                Notification.SendNotification("Downloading pose scribble: done!");
+            }
+        }
+
+        override public string CommandLine()
+        {
+            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
+
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                cmdline += $" --mode=\"IfPONNX\" ";
+            }
+            else
+            {
+                cmdline += $" --mode=\"IfP\" ";
+            }
+
+            return cmdline;
+        }
+    }
+
+    class ControlNetSeg : ControlNetBase
+    {
+        public ControlNetSeg()
+        {
+            Model = "sd-controlnet-seg";
+            CNModel = "";
+        }
+
+        public override void CheckSD()
+        {
+            if (!System.IO.Directory.Exists(GetModelPathSD()))
+            {
+                Notification.SendNotification("Starting downloading seg model...");
+                WGetDownloadModels.DownloadSDCNSeg();
+                Notification.SendNotification("Downloading seg model: done!");
+            }
+        }
+
+        override public string CommandLine()
+        {
+            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
+
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                cmdline += $" --mode=\"IfPONNX\" ";
+            }
+            else
+            {
+                cmdline += $" --mode=\"IfP\" ";
+            }
+
+            return cmdline;
+        }
+    }
+
     // Global Functions
     internal class HelperControlNet
     {
@@ -237,6 +307,8 @@ namespace SD_FXUI
         public static ControlNetDepth Depth = new ControlNetDepth();
         public static ControlNetHed Hed = new ControlNetHed();
         public static ControlNetNormal Normal = new ControlNetNormal();
+        public static ControlNetScribble Scribble = new ControlNetScribble();
+        public static ControlNetSeg Seg = new ControlNetSeg();
 
         public enum ControlTypes
         {
