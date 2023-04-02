@@ -55,6 +55,7 @@ namespace SD_FXUI
 
             Install.WrapPoserPath();
             Install.WrapHedPath();
+            Install.WrapMlsdPath();
 
             gridImg.Visibility = Visibility.Collapsed;
             btnDDB.Visibility = Visibility.Collapsed;
