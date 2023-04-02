@@ -146,12 +146,13 @@ def generateDepthFromImage():
 def generateCannyFromImage():
     print("processing generateCanyFromImage()")
     in_img = Image.open(opt.img)
-    
+    image = numpy.array(in_img)
+
     low_threshold = 100
     high_threshold = 200
     
-    image = cv2.Canny(in_img, low_threshold, high_threshold)
-    image.save(opt.outfile)
+    image = cv2.Canny(image, low_threshold, high_threshold)
+    Image.fromarray(image).save(opt.outfile)
 
     print(f"CN: Pose - {opt.outfile}")
     
