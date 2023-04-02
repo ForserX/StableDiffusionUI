@@ -373,7 +373,7 @@ namespace SD_FXUI
                 }
             }
 
-            if (tsHyper.IsChecked.Value)
+            if (false)
             {
                 string HyperModel = FS.GetModelDir() + "hypernetwork\\" + cbHyper.Text;
                 CmdLine += $" --hypernetwork=\"{HyperModel}\"";

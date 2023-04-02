@@ -866,7 +866,10 @@ namespace SD_FXUI
             }
 
             string ImgPath = FS.GetModelDir() + "controlnet/pose/";
-            ImgPath += e.AddedItems[0] + ".png";
+            ImgPath += e.AddedItems[0];
+            
+            if (!ImgPath.EndsWith(".jpg"))
+                ImgPath += ".png";
 
             if (File.Exists(ImgPath))
                 imgPose.Source = FS.BitmapFromUri(new Uri(ImgPath));

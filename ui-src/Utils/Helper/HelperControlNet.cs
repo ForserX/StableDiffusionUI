@@ -69,11 +69,11 @@ namespace SD_FXUI
 
             if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
-                cmdline += $" --mode=\"CfPONNX\" ";
+                cmdline += $" --mode=\"IfPONNX\"";
             }
             else
             {
-                cmdline += $" --mode=\"CfP\" ";
+                cmdline += $" --mode=\"IfP\"";
             }
 
             return cmdline;

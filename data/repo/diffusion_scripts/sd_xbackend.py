@@ -323,7 +323,7 @@ def ApplyArg(parser):
         "--precision", type=str, help="precision type (fp16/fp32)", dest='precision',
     )
     parser.add_argument(
-        "--mode", default="txt2img", help="Specify generation mode", dest='mode',
+        "--mode", type=str, help="Specify generation mode", dest='mode',
     )
     parser.add_argument(
         "--img", type=str, default=None, help="Specify generation mode", dest='img',
@@ -362,7 +362,7 @@ def ApplyArg(parser):
         "--inversion", help="inversion path", dest='inversion', default=None,
     )
     parser.add_argument(
-        "--hypernetwork", help="hypernetwork path", dest='hypernetwork', default=None,
+        "--hypernetwork", type=str, help="hypernetwork path", dest='hypernetwork', default=None,
     )
     parser.add_argument(
         "--cn_model", type=str, help="Path to model checkpoint file", dest='cn_model',
