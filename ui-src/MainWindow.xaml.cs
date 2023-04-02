@@ -856,6 +856,9 @@ namespace SD_FXUI
 
             ControlNetBase CN = GetCNType();
             Task.Run(() => CMD.PoserProcess(CurrentImg, CN));
+
+
+
         }
 
         private void cbPose_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -911,6 +914,11 @@ namespace SD_FXUI
         }
 
         private void cbLoRA_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void cbPreprocess_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
