@@ -25,10 +25,9 @@ from onnxruntime.transformers.float16 import convert_float_to_float16
 from diffusers import ControlNetModel
 
 from packaging import version
-#from transformers import AutoFeatureExtractor, BertTokenizerFast, CLIPTextModel, CLIPTokenizer
+from diffusers.models.cross_attention import CrossAttnProcessor
 
-
-is_torch_less_than_1_11 = version.parse(version.parse(torch.__version__).base_version) < version.parse("1.11")
+is_torch_less_2_0 = version.parse(version.parse(torch.__version__).base_version) < version.parse("2.0")
 
 def convert_to_fp16(
     model_path
@@ -54,45 +53,32 @@ def onnx_export(
     ordered_input_names,
     output_names,
     dynamic_axes,
-    opset,
-    use_external_data_format=False,
+    opset
 ):
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    # PyTorch deprecated the `enable_onnx_checker` and `use_external_data_format` arguments in v1.11,
-    # so we check the torch version for backwards compatibility
-    if is_torch_less_than_1_11:
-        export(
-            model,
-            model_args,
-            f=output_path.as_posix(),
-            input_names=ordered_input_names,
-            output_names=output_names,
-            dynamic_axes=dynamic_axes,
-            do_constant_folding=True,
-            use_external_data_format=use_external_data_format,
-            enable_onnx_checker=True,
-            opset_version=opset,
-        )
-    else:
-        export(
-            model,
-            model_args,
-            f=output_path.as_posix(),
-            input_names=ordered_input_names,
-            output_names=output_names,
-            dynamic_axes=dynamic_axes,
-            do_constant_folding=True,
-            opset_version=opset,
-        )
+    export(
+        model,
+        model_args,
+        f=output_path.as_posix(),
+        input_names=ordered_input_names,
+        output_names=output_names,
+        dynamic_axes=dynamic_axes,
+        do_constant_folding=True,
+        opset_version=opset,
+    )
 
 
 @torch.no_grad()
-def convert_models(model_path: str, output_path: str, opset: int, fp16: bool, attention_slicing: str):
+def convert_models(model_path: str, output_path: str, opset: int, attention_slicing: str):
     controlnet = ControlNetModel.from_pretrained(model_path)
     output_path = Path(output_path)
     if attention_slicing is not None:
         print("Attention slicing: " + attention_slicing)
         controlnet.set_attention_slice(attention_slicing)
+        
+    # UNET
+    if is_torch_less_2_0 == False:
+        controlnet.set_attn_processor(CrossAttnProcessor())
 
     dtype=torch.float32
     device = "cpu"
@@ -105,7 +91,6 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool, at
             torch.randn(2).to(device=device, dtype=dtype),
             torch.randn(2, 77, 768).to(device=device, dtype=dtype),
             torch.randn(2, 3, 512,512).to(device=device, dtype=dtype),
-            False,
         ),
         output_path=cnet_path,
         ordered_input_names=["sample", "timestep", "encoder_hidden_states", "controlnet_cond","return_dict"],
@@ -119,9 +104,8 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool, at
         opset=opset,
     )
     
-    if fp16:
-        cnet_path_model_path = str(cnet_path.absolute().as_posix())
-        convert_to_fp16(cnet_path_model_path)
+    cnet_path_model_path = str(cnet_path.absolute().as_posix())
+    convert_to_fp16(cnet_path_model_path)
     
     
     print("ONNX controlnet saved to ", output_path)
@@ -146,12 +130,6 @@ if __name__ == "__main__":
     )
     
     parser.add_argument(
-        "--fp16",
-        action="store_true",
-        help="Export Controlnet in mixed `float16` mode"
-    )
-    
-    parser.add_argument(
         "--attention-slicing",
         choices={"auto","max"},
         type=str,
@@ -160,4 +138,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    convert_models(args.model_path, args.output_path, args.opset, args.fp16 ,args.attention_slicing)
+    convert_models(args.model_path, args.output_path, args.opset, args.attention_slicing)
