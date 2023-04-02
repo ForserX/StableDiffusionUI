@@ -86,5 +86,26 @@ namespace SD_FXUI
             Download.SendExitCommand();
             Download.Wait();
         }
+
+        public static void DownloadSDCNCanny()
+        {
+            string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet-canny/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+            Directory.CreateDirectory(WorkingDir);
+
+            string WGetFile = "\"" + FS.GetToolsDir() + "wget.exe\" ";
+            Host Download = new Host(WorkingDir);
+            Download.Start();
+
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-canny/raw/main/config.json");
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/sd-controlnet-canny/resolve/main/diffusion_pytorch_model.bin");
+            Download.Send(WGetFile + "https://huggingface.co/ForserX/sd-controlnet-canny-onnx/resolve/main/model.onnx");
+            Download.SendExitCommand();
+            Download.Wait();
+        }
     }
 }

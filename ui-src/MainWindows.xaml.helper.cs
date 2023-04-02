@@ -651,5 +651,11 @@ namespace SD_FXUI
             return Text;
 
         }
+
+        ControlNetBase GetCNType()
+        {
+            // #TODO: FX to Borshig
+            return HelperControlNet.OpenPose;
+        }
     }
 }

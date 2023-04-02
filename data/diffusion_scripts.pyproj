@@ -21,7 +21,7 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="cn_poser.py" />
+    <Compile Include="controlnet_pipe.py" />
     <Compile Include="convert\convert_controlnet_to_onnx.py" />
     <Compile Include="convert\convert_original_stable_diffusion_to_diffusers.py" />
     <Compile Include="convert\convert_pix2pix_to_onnx.py" />

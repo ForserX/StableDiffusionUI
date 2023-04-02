@@ -2,6 +2,8 @@ from diffusers import UniPCMultistepScheduler, AutoencoderKL, OnnxRuntimeModel
 import torch, os, time, numpy
 
 from controlnet_aux import OpenposeDetector
+import cv2
+
 from PIL import Image
 import argparse
 
@@ -16,6 +18,8 @@ ApplyArg(parser)
 opt = parser.parse_args()
 
 prov = "DmlExecutionProvider"
+pipe = None
+image = None
 
 if opt.precision == "fp16":
     fptype = torch.float16
@@ -23,6 +27,18 @@ else:
     fptype = torch.float32
 
 
+def generateCanyFromImage():
+    print("processing generateCanyFromImage()")
+    in_img = Image.open(opt.img)
+    
+    low_threshold = 100
+    high_threshold = 200
+    
+    image = cv2.Canny(in_img, low_threshold, high_threshold)
+    image.save(opt.outfile)
+
+    print(f"CN: Cany - {opt.outfile}")
+    
 def generatePoseFromImage():
     print("processing generatePoseFromImage()")
     model = OpenposeDetector.from_pretrained(opt.mdlpath)
@@ -31,9 +47,6 @@ def generatePoseFromImage():
     img = model(in_img)
     img.save(opt.outfile)
     print(f"CN: Pose - {opt.outfile}")
-
-pipe = None
-image = None
 
 def generateImageFromPose ():
     print("processing generateImageFromPose()")
@@ -55,6 +68,9 @@ def generateImageFromPose ():
     
     output.save(os.path.join(opt.outfile, f"{time.time_ns()}.png"), 'PNG')
     print("CN: Image from Pose: done!")
+
+if opt.mode == "CfI":
+    generateCanyFromImage()
 
 if opt.mode == "PfI":
     generatePoseFromImage()

@@ -102,11 +102,12 @@ namespace SD_FXUI
                     {
                         if (tsCN.IsChecked.Value)
                         {
-                            cmdline += GetCommandLineOnnx();
-                            cmdline += $" --pose=\"{Helper.CurrentPose}\"";
-                            cmdline += $" --mode=\"IfPONNX\" ";
+                            ControlNetBase CurrentCN = GetCNType();
 
-                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize));
+                            cmdline += GetCommandLineOnnx();
+                            cmdline += CurrentCN.CommandLine();
+
+                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, CurrentCN));
                             break;
                         }
                         else
@@ -125,11 +126,12 @@ namespace SD_FXUI
                     {
                         if (tsCN.IsChecked.Value)
                         {
-                            cmdline += GetCommandLineDiffCuda();
-                            cmdline += $" --pose=\"{Helper.CurrentPose}\"";
-                            cmdline += $" --mode=\"IfP\" ";
+                            ControlNetBase CurrentCN = GetCNType();
 
-                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize));
+                            cmdline += GetCommandLineDiffCuda();
+                            cmdline += CurrentCN.CommandLine();
+
+                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, CurrentCN));
                             break;
                         }
                         else
@@ -850,7 +852,9 @@ namespace SD_FXUI
         private void btnInImgPose_Click(object sender, RoutedEventArgs e)
         {
             string CurrentImg = Helper.InputImagePath;
-            Task.Run(() => CMD.PoserProcess(CurrentImg));
+
+            ControlNetBase CN = GetCNType();
+            Task.Run(() => CMD.PoserProcess(CurrentImg, CN));
         }
 
         private void cbPose_SelectionChanged(object sender, SelectionChangedEventArgs e)

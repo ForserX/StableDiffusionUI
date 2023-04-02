@@ -438,20 +438,14 @@ namespace SD_FXUI
             Notification.SendNotification("Processing DeepDanbooru: Done!");
             Helper.Form.InvokeProgressUpdate(100);
         }
-        public static async Task PoserProcess(string currentImage)
+        public static async Task PoserProcess(string currentImage, ControlNetBase CN)
         {
-            string DDBModel = FS.GetModelDir() + "controlnet/OpenposeDetector/anannotator/ckpts/body_pose_model.pth";
-            if (!File.Exists(DDBModel))
-            {
-                Notification.SendNotification("Starting downloading pose model...");
-                WGetDownloadModels.DownloadCNPoser();
-                Notification.SendNotification("Downloading pose model: done!");
-            }
+            CN.CheckCN();
 
             string OutFile = FS.GetModelDir() + "controlnet/pose/" + Path.GetFileNameWithoutExtension(currentImage) + ".png";
             Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print("\n Processing poser.... \n");
-            ProcessHost.Start($"repo/diffusion_scripts/cn_poser.py --mode=\"PfI\" --img=\"{currentImage}\" --model=\"{DDBModel}\"  --outfile=\"{OutFile}\" ");
+            ProcessHost.Start($"repo/diffusion_scripts/controlnet_pipe.py --mode=\"PfI\" --img=\"{currentImage}\" --model=\"{CN.GetModelPathCN()}\"  --outfile=\"{OutFile}\" ");
             Helper.Form.InvokeProgressUpdate(10);
             ProcessHost.SendExitCommand();
             ProcessHost.Wait();
@@ -461,17 +455,11 @@ namespace SD_FXUI
             Helper.Form.InvokeProgressUpdate(100);
         }
 
-        internal static async Task ProcessRunnerDiffCN(string cmdline, int size)
+        internal static async Task ProcessRunnerDiffCN(string cmdline, int size, ControlNetBase CN)
         {
-            string DDBModel = FS.GetModelDir() + "controlnet/sd-controlnet-openpose/";
-            if (!Directory.Exists(DDBModel))
-            {
-                Notification.SendNotification("Starting downloading pose model...");
-                WGetDownloadModels.DownloadSDCNPoser();
-                Notification.SendNotification("Downloading pose model: done!");
-            }
+            CN.CheckSD();
 
-            cmdline += $" --cn_model=\"{DDBModel}\" ";
+            cmdline += $" --cn_model=\"{CN.GetModelPathSD()}\" ";
             cmdline += $" --outfile=\"{FS.GetWorkingDir()}\" ";
 
             if (Helper.Mode == Helper.ImplementMode.ONNX)
@@ -486,7 +474,7 @@ namespace SD_FXUI
             Host.Print("\n Startup generation..... \n");
 
             Helper.Form.InvokeProgressUpdate(7);
-            ProcessHost.Start("./repo/diffusion_scripts/cn_poser.py " + cmdline);
+            ProcessHost.Start("./repo/diffusion_scripts/controlnet_pipe.py " + cmdline);
             ProcessHost.SendExitCommand();
             Helper.Form.InvokeProgressUpdate(10);
             ProcessHost.Wait();
