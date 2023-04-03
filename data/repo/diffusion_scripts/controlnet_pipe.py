@@ -44,6 +44,7 @@ def generateFaceFromImage():
     img = cv2.imread(opt.img)
     out = apply_mediapipe_face(img)
     Image.fromarray(out).save(opt.outfile)
+    print(f"CN: Pose - {opt.outfile}")
 
 
 def generateSegFromImage():

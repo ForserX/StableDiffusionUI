@@ -107,6 +107,53 @@ namespace SD_FXUI
         }
     }
 
+    class ControlNetFace: ControlNetBase
+    {
+        public ControlNetFace()
+        {
+            Model = "sd-controlnet-facegen";
+            CNModel = "";
+
+            System.IO.Directory.CreateDirectory(Outdir());
+        }
+
+        public override void CheckSD()
+        {
+            if (!System.IO.Directory.Exists(GetModelPathSD()))
+            {
+                Notification.SendNotification("Starting downloading pose model...");
+                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Poser);
+                Notification.SendNotification("Downloading pose model: done!");
+            }
+        }
+
+        override public string CommandLine()
+        {
+            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
+
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                cmdline += $" --mode=\"IfPONNX\"";
+            }
+            else
+            {
+                cmdline += $" --mode=\"IfP\"";
+            }
+
+            return cmdline;
+        }
+
+        override public string PreprocessCommandLine()
+        {
+            return "FfI";
+        }
+
+        override public string Outdir()
+        {
+            return FS.GetModelDir() + "OpenFaces/";
+        }
+    }
+
     class ControlNetHed: ControlNetBase
     {
         public ControlNetHed()
@@ -461,6 +508,7 @@ namespace SD_FXUI
         public static ControlNetScribble Scribble = new ControlNetScribble();
         public static ControlNetSeg Seg = new ControlNetSeg();
         public static ControlNetMLSD MLSD = new ControlNetMLSD();
+        public static ControlNetFace Face = new ControlNetFace();
 
         public static ControlNetBase Current = null;
         public enum ControlTypes

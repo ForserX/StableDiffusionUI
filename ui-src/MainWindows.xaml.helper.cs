@@ -662,6 +662,7 @@ namespace SD_FXUI
             if (LoverName == "pidinet")        ; // not implemented return canny
             if (LoverName == "segmentation") return HelperControlNet.Seg;
             if (LoverName == "mlsd") return HelperControlNet.MLSD;
+            if (LoverName == "facegen") return HelperControlNet.Face;
             if (LoverName == "binary")         ; // not implemented return canny
 
             return HelperControlNet.Canny;                      // temp Bypass error;

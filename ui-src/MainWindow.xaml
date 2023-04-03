@@ -16,7 +16,7 @@
             <ColumnDefinition Width="606*"/>
             <ColumnDefinition Width="147*"/>
         </Grid.ColumnDefinitions>
-        <Button Content="Make!" Margin="102,0,0,0" Click="Button_Click" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="82" Grid.Column="3" Foreground="White">
+        <Button x:Name="btnMake" Content="Make!" Margin="102,0,0,0" Click="Button_Click" Height="36" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="82" Grid.Column="3" Foreground="White">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
                     <GradientStop Color="#FF523876"/>
@@ -116,6 +116,7 @@
                         <ComboBoxItem Content="Hed"/>
                         <ComboBoxItem Content="NormalMap"/>
                         <ComboBoxItem Content="OpenposeDetector"/>
+                        <ComboBoxItem Content="Facegen"/>
                         <!-- ComboBoxItem Content="openpose_hand"/ -->
                         <!-- ComboBoxItem Content="clip_vision"/ -->
                         <!-- ComboBoxItem Content="color"/ -->
@@ -260,6 +261,7 @@
                         <ComboBoxItem Content="Hed"/>
                         <ComboBoxItem Content="NormalMap"/>
                         <ComboBoxItem Content="OpenposeDetector"/>
+                        <ComboBoxItem Content="Facegen"/>
                         <!-- ComboBoxItem Content="color"/ -->
                         <ComboBoxItem Content="Scribble"/>
                         <!-- ComboBoxItem Content="pidinet"/ -->

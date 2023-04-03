@@ -940,6 +940,8 @@ namespace SD_FXUI
 
             UpdateModelsListControlNet();
             cbPose.IsEnabled = true;
+
+            btnMake.IsEnabled = (NewMode != "Facegen");
         }
     }
 }
