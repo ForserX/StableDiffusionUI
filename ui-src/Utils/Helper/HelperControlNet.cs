@@ -76,7 +76,7 @@ namespace SD_FXUI
             if (!System.IO.File.Exists(GetModelPathCN()))
             {
                 Notification.SendNotification("Starting downloading pose model...");
-                WGetDownloadModels.DownloadSDCNPoser();
+                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Poser);
                 Notification.SendNotification("Download pose model: done!");
             }
         }
