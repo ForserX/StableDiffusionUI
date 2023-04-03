@@ -345,7 +345,7 @@ namespace SD_FXUI
         public ControlNetMLSD()
         {
             Model = "sd-controlnet-mlsd";
-            CNModel = "sd-controlnet/annotator/ckpts/mlsd_large_512_fp32.pth";
+            CNModel = "sd-controlnet\\anannotator\\ckpts\\mlsd_large_512_fp32.pth";
         }
 
         public override void CheckSD()

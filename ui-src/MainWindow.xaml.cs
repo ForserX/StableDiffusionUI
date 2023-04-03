@@ -71,6 +71,7 @@ namespace SD_FXUI
             btnApplyTI.IsEnabled = false;
 
             SafeCMD = new ModelCMD();
+            cbExtractPoseSelector.SelectedIndex = 4;
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)

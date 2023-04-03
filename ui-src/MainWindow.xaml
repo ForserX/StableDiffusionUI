@@ -110,21 +110,21 @@
                     <ToggleButton x:Name="cbPix2Pix" Content="InstructPix2Pix" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Unchecked="cbPix2Pix_Checked" Height="25" Width="110" Margin="115,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="cbPix2Pix_Checked"/>
                     <TextBox x:Name="tbMeta" Margin="-6,135,-5,0" TextWrapping="Wrap" Text="No meta" IsReadOnly="True" FontSize="9.5" FontFamily="Verdana"/>
                     <ComboBox x:Name="cbExtractPoseSelector" HorizontalAlignment="Left" Margin="182,100,0,0" VerticalAlignment="Top" Width="154">
-                        <ComboBoxItem Content="canny"/>
-                        <ComboBoxItem Content="depth"/>
-                        <ComboBoxItem Content="depth_leres"/>
-                        <ComboBoxItem Content="hed"/>
-                        <ComboBoxItem Content="normalmap"/>
-                        <ComboBoxItem Content="openpose"/>
-                        <ComboBoxItem Content="openpose_hand"/>
-                        <ComboBoxItem Content="clip_vision"/>
-                        <ComboBoxItem Content="color"/>
-                        <ComboBoxItem Content="scribble"/>
-                        <ComboBoxItem Content="fake_scribble"/>
-                        <ComboBoxItem Content="pidinet"/>
-                        <ComboBoxItem Content="mlsd"/>
-                        <ComboBoxItem Content="segmentation"/>
-                        <ComboBoxItem Content="binary"/>
+                        <ComboBoxItem Content="Canny"/>
+                        <ComboBoxItem Content="Depth"/>
+                        <!-- ComboBoxItem Content="depth_leres"/ -->
+                        <ComboBoxItem Content="Hed"/>
+                        <ComboBoxItem Content="NormalMap"/>
+                        <ComboBoxItem Content="OpenposeDetector"/>
+                        <!-- ComboBoxItem Content="openpose_hand"/ -->
+                        <!-- ComboBoxItem Content="clip_vision"/ -->
+                        <!-- ComboBoxItem Content="color"/ -->
+                        <ComboBoxItem Content="Scribble"/>
+                        <!-- ComboBoxItem Content="fake_scribble"/ -->
+                        <!-- ComboBoxItem Content="pidinet"/ -->
+                        <ComboBoxItem Content="MLSD"/>
+                        <ComboBoxItem Content="Segmentation"/>
+                        <!-- ComboBoxItem Content="binary"/ -->
                     </ComboBox>
                 </Grid>
                 <Grid Height="95">

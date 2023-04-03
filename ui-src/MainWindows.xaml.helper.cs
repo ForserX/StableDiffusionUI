@@ -654,19 +654,22 @@ namespace SD_FXUI
 
         ControlNetBase GetCNType()
         {
-            if (cbExtractPoseSelector.Text == "canny")          return HelperControlNet.Canny;
-            if (cbExtractPoseSelector.Text == "depth")          return HelperControlNet.Depth;
-            if (cbExtractPoseSelector.Text == "depth_leres")    ; // not implemented return canny
-            if (cbExtractPoseSelector.Text == "hed")            return HelperControlNet.Hed;
-            if (cbExtractPoseSelector.Text == "normalmap")      return HelperControlNet.Normal;
-            if (cbExtractPoseSelector.Text == "openpose")       return HelperControlNet.OpenPose;
-            if (cbExtractPoseSelector.Text == "openpose_hand")  ; // not implemented return canny
-            if (cbExtractPoseSelector.Text == "clip_vision")    ; // not implemented return canny
-            if (cbExtractPoseSelector.Text == "scribble")       ; // not implemented return canny
-            if (cbExtractPoseSelector.Text == "fake_scribble")  ; // not implemented return canny
-            if (cbExtractPoseSelector.Text == "pidinet")        ; // not implemented return canny
-            if (cbExtractPoseSelector.Text == "segmentation")   ; // not implemented return canny
-            if (cbExtractPoseSelector.Text == "binary")         ; // not implemented return canny
+            string LoverName = cbExtractPoseSelector.Text.ToLower();
+
+            if (LoverName == "canny")          return HelperControlNet.Canny;
+            if (LoverName == "depth")          return HelperControlNet.Depth;
+            if (LoverName == "depth_leres")    ; // not implemented return canny
+            if (LoverName == "hed")            return HelperControlNet.Hed;
+            if (LoverName == "normalmap")      return HelperControlNet.Normal;
+            if (LoverName == "openposedetector")       return HelperControlNet.OpenPose;
+            if (LoverName == "openpose_hand")  ; // not implemented return canny
+            if (LoverName == "clip_vision")    ; // not implemented return canny
+            if (LoverName == "scribble") return HelperControlNet.Scribble;
+            if (LoverName == "fake_scribble")  ; // not implemented return canny
+            if (LoverName == "pidinet")        ; // not implemented return canny
+            if (LoverName == "segmentation") return HelperControlNet.Seg;
+            if (LoverName == "mlsd") return HelperControlNet.MLSD;
+            if (LoverName == "binary")         ; // not implemented return canny
 
             return HelperControlNet.Canny;                      // temp Bypass error;
 

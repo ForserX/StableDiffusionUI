@@ -51,11 +51,6 @@ namespace SD_FXUI
         {
             string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet/";
 
-            if (Directory.Exists(WorkingDir))
-            {
-                return;
-            }
-
             Directory.CreateDirectory(WorkingDir);
             Directory.CreateDirectory(WorkingDir + "anannotator");
             Directory.CreateDirectory(WorkingDir + "anannotator\\ckpts");
