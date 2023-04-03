@@ -859,6 +859,7 @@ namespace SD_FXUI
 
             cbControlNetMode.SelectedIndex = cbExtractPoseSelector.SelectedIndex;
 
+            UpdateModelsListControlNet();
         }
 
         private void cbPose_SelectionChanged(object sender, SelectionChangedEventArgs e)

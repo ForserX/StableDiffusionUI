@@ -46,6 +46,11 @@ namespace SD_FXUI
         {
             return BaseOutPath;
         }
+
+        public string GetModelName()
+        {
+            return Model;
+        }
     }
 
     class ControlNetOpenPose: ControlNetBase
@@ -297,12 +302,12 @@ namespace SD_FXUI
         }
     }
 
-    class ControlNetScribble : ControlNetBase
+    class ControlNetScribble : ControlNetHed
     {
         public ControlNetScribble()
         {
             Model = "sd-controlnet-scribble";
-            CNModel = "";
+            CNModel = "sd-controlnet/anannotator/ckpts/network-bsds500.pth";
 
             System.IO.Directory.CreateDirectory(Outdir());
         }

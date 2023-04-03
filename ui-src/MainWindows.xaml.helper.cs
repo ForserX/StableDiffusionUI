@@ -473,6 +473,9 @@ namespace SD_FXUI
             {
                 imgPose.Source = FS.BitmapFromUri(new Uri(Img));
                 Helper.CurrentPose = Img;
+
+                UpdateModelsListControlNet();
+                cbPose.SelectedIndex = cbPose.Items.Count - 1;
             }
         }
 
@@ -667,7 +670,8 @@ namespace SD_FXUI
         public void UpdateModelsListControlNet()
         {
             cbPose.Items.Clear();
-
+            cbPreprocess.Items.Clear();
+            
             if (HelperControlNet.Current == null)
                 return;
 
@@ -684,7 +688,17 @@ namespace SD_FXUI
                     cbPose.Items.Add(File.Replace(ImgPath, string.Empty).Replace(".png", string.Empty));
             }
 
-            cbPose.SelectedIndex = 0;
+            if (cbPose.Items.Count > 0)
+            {
+                cbPose.SelectedIndex = 0;
+            }
+            else
+            {
+                imgPose.Source = NoImageData;
+            }
+
+            cbPreprocess.Items.Add(HelperControlNet.Current.GetModelName());
+            cbPreprocess.SelectedIndex = 0;
         }
 
     }

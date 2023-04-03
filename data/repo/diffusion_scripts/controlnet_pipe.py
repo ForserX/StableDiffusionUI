@@ -47,8 +47,10 @@ def generateFaceFromImage():
 
 
 def generateSegFromImage():
-    image_processor = transformers.AutoImageProcessor.from_pretrained("openmmlab/upernet-convnext-small")
-    image_segmentor = transformers.UperNetForSemanticSegmentation.from_pretrained("openmmlab/upernet-convnext-small")
+    openmm_model = snapshot_download("openmmlab/upernet-convnext-small", allow_patterns=["*.bin", "*.json"], cache_dir=opt.workdir)
+
+    image_processor = transformers.AutoImageProcessor.from_pretrained(openmm_model)
+    image_segmentor = transformers.UperNetForSemanticSegmentation.from_pretrained(openmm_model)
     
     in_img = Image.open(opt.img).convert('RGB')
     
