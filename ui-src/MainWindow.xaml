@@ -249,6 +249,23 @@
                     <ToggleButton x:Name="tsCN" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="36" Margin="75,5,0,0" Checked="tsCN_Checked" Unchecked="tsCN_Checked"/>
                     <Label Content="Model" Height="30" Width="43" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="30,95,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.21,0.335"/>
                     <Label Content="Prep. Picture" Height="30" Width="80" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" Margin="-4,60,0,0" Padding="1,6,1,6" VerticalAlignment="Top" />
+                    <ComboBox x:Name="cbControlNetMode" HorizontalAlignment="Left" Margin="118,3,0,0" VerticalAlignment="Top" Width="154" SelectionChanged="cbControlNetMode_SelectionChanged">
+                        <!-- ComboBoxItem Content="openpose_hand"/ -->
+                        <!-- ComboBoxItem Content="clip_vision"/ -->
+                        <!-- ComboBoxItem Content="fake_scribble"/ -->
+                        <!-- ComboBoxItem Content="binary"/ -->
+                        <ComboBoxItem Content="Canny"/>
+                        <ComboBoxItem Content="Depth"/>
+                        <!-- ComboBoxItem Content="depth_leres"/ -->
+                        <ComboBoxItem Content="Hed"/>
+                        <ComboBoxItem Content="NormalMap"/>
+                        <ComboBoxItem Content="OpenposeDetector"/>
+                        <!-- ComboBoxItem Content="color"/ -->
+                        <ComboBoxItem Content="Scribble"/>
+                        <!-- ComboBoxItem Content="pidinet"/ -->
+                        <ComboBoxItem Content="MLSD"/>
+                        <ComboBoxItem Content="Segmentation"/>
+                    </ComboBox>
                 </Grid>
             </StackPanel>
         </ScrollViewer>

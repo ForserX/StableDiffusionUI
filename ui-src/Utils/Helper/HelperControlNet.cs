@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MetadataExtractor;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -11,6 +12,7 @@ namespace SD_FXUI
     {
         protected string Model;
         protected string CNModel;
+        protected string BaseOutPath = FS.GetModelDir() + "controlnet/gen/";
 
         public string GetModelPathSD()
         {   
@@ -38,6 +40,11 @@ namespace SD_FXUI
         virtual public string PreprocessCommandLine()
         {
             return "";
+        }
+
+        virtual public string Outdir()
+        {
+            return BaseOutPath;
         }
     }
 
@@ -88,6 +95,11 @@ namespace SD_FXUI
         {
             return "PfI";
         }
+
+        override public string Outdir()
+        {
+            return FS.GetModelDir() + "OpenPose/";
+        }
     }
 
     class ControlNetHed: ControlNetBase
@@ -96,6 +108,8 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-hed";
             CNModel = "sd-controlnet/anannotator/ckpts/network-bsds500.pth";
+
+            System.IO.Directory.CreateDirectory(Outdir());
         }
 
         public override void CheckSD()
@@ -138,6 +152,10 @@ namespace SD_FXUI
         {
             return "HfI";
         }
+        override public string Outdir()
+        {
+            return BaseOutPath + "Hed/";
+        }
     }
 
     class ControlNetCanny : ControlNetBase
@@ -146,6 +164,8 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-canny";
             CNModel = "";
+
+            System.IO.Directory.CreateDirectory(Outdir());
         }
 
         public override void CheckSD()
@@ -178,6 +198,10 @@ namespace SD_FXUI
         {
             return "CfI";
         }
+        override public string Outdir()
+        {
+            return BaseOutPath + "Canny/";
+        }
     }
 
     class ControlNetDepth: ControlNetBase
@@ -186,6 +210,8 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-depth";
             CNModel = "";
+
+            System.IO.Directory.CreateDirectory(Outdir());
         }
 
         public override void CheckSD()
@@ -218,6 +244,11 @@ namespace SD_FXUI
         {
             return "DfI";
         }
+
+        override public string Outdir()
+        {
+            return BaseOutPath + "Depth/";
+        }
     }
 
     class ControlNetNormal : ControlNetBase
@@ -226,6 +257,8 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-normal";
             CNModel = "";
+
+            System.IO.Directory.CreateDirectory(Outdir());
         }
 
         public override void CheckSD()
@@ -258,6 +291,10 @@ namespace SD_FXUI
         {
             return "NfI";
         }
+        override public string Outdir()
+        {
+            return BaseOutPath + "Normal/";
+        }
     }
 
     class ControlNetScribble : ControlNetBase
@@ -266,6 +303,8 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-scribble";
             CNModel = "";
+
+            System.IO.Directory.CreateDirectory(Outdir());
         }
 
         public override void CheckSD()
@@ -298,6 +337,10 @@ namespace SD_FXUI
         {
             return "SfI";
         }
+        override public string Outdir()
+        {
+            return BaseOutPath + "Scribble/";
+        }
     }
 
     class ControlNetSeg : ControlNetBase
@@ -306,6 +349,8 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-seg";
             CNModel = "";
+
+            System.IO.Directory.CreateDirectory(Outdir());
         }
 
         public override void CheckSD()
@@ -338,6 +383,10 @@ namespace SD_FXUI
         {
             return "SgfI";
         }
+        override public string Outdir()
+        {
+            return BaseOutPath + "Seg/";
+        }
     }
 
     class ControlNetMLSD : ControlNetBase
@@ -346,6 +395,8 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-mlsd";
             CNModel = "sd-controlnet\\anannotator\\ckpts\\mlsd_large_512_fp32.pth";
+
+            System.IO.Directory.CreateDirectory(Outdir());
         }
 
         public override void CheckSD()
@@ -388,6 +439,10 @@ namespace SD_FXUI
         {
             return "MfI";
         }
+        override public string Outdir()
+        {
+            return BaseOutPath + "mlsd/";
+        }
     }
 
     // Global Functions
@@ -402,6 +457,7 @@ namespace SD_FXUI
         public static ControlNetSeg Seg = new ControlNetSeg();
         public static ControlNetMLSD MLSD = new ControlNetMLSD();
 
+        public static ControlNetBase Current = null;
         public enum ControlTypes
         {
             Poser,

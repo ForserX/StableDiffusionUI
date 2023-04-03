@@ -105,12 +105,10 @@ namespace SD_FXUI
                     {
                         if (tsCN.IsChecked.Value)
                         {
-                            ControlNetBase CurrentCN = GetCNType();
-
                             cmdline += GetCommandLineOnnx();
-                            cmdline += CurrentCN.CommandLine();
+                            cmdline += HelperControlNet.Current.CommandLine();
 
-                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, CurrentCN));
+                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, HelperControlNet.Current));
                             break;
                         }
                         else
@@ -129,7 +127,7 @@ namespace SD_FXUI
                     {
                         if (tsCN.IsChecked.Value)
                         {
-                            ControlNetBase CurrentCN = GetCNType();
+                            ControlNetBase CurrentCN = HelperControlNet.Current;
 
                             cmdline += GetCommandLineDiffCuda();
                             cmdline += CurrentCN.CommandLine();
@@ -856,22 +854,25 @@ namespace SD_FXUI
         {
             string CurrentImg = Helper.InputImagePath;
 
-            ControlNetBase CN = GetCNType();
+            ControlNetBase CN = GetCNType(cbExtractPoseSelector.Text);
             Task.Run(() => CMD.PoserProcess(CurrentImg, CN));
 
-
+            cbControlNetMode.SelectedIndex = cbExtractPoseSelector.SelectedIndex;
 
         }
 
         private void cbPose_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (HelperControlNet.Current == null)
+                return;
+
             if (e.AddedItems.Count == 0)
             {
                 Helper.CurrentPose = null;
                 return;
             }
 
-            string ImgPath = FS.GetModelDir() + "controlnet/pose/";
+            string ImgPath = HelperControlNet.Current.Outdir();
             ImgPath += e.AddedItems[0];
             
             if (!ImgPath.EndsWith(".jpg"))
@@ -923,6 +924,21 @@ namespace SD_FXUI
         private void cbPreprocess_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void cbControlNetMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0)
+            {
+                return;
+            }
+
+            string NewMode = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
+
+            HelperControlNet.Current = GetCNType(NewMode);
+
+            UpdateModelsListControlNet();
+            cbPose.IsEnabled = true;
         }
     }
 }

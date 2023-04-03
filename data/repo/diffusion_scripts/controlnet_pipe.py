@@ -45,7 +45,6 @@ def generateFaceFromImage():
     out = apply_mediapipe_face(img)
     Image.fromarray(out).save(opt.outfile)
 
-print(opt)
 
 def generateSegFromImage():
     image_processor = transformers.AutoImageProcessor.from_pretrained("openmmlab/upernet-convnext-small")

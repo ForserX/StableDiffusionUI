@@ -256,7 +256,7 @@ namespace SD_FXUI
             Directory.CreateDirectory(FS.GetModelDir() + @"\deepdanbooru");
             Directory.CreateDirectory(FS.GetModelDir() + @"\hypernetwork");
             Directory.CreateDirectory(FS.GetModelDir() + @"\controlnet");
-            Directory.CreateDirectory(FS.GetModelDir() + @"\controlnet\pose");
+            Directory.CreateDirectory(FS.GetModelDir() + @"\OpenPose");
         }
     }
 }

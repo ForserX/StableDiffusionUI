@@ -12,7 +12,7 @@ namespace SD_FXUI
     {
         public void SetPrompt(string Prompt) => TryPrompt.Text = Prompt;
         public void InvokeSetPrompt(string Prompt) => Dispatcher.Invoke(() => SetPrompt(Prompt));
-        public void UpdateViewImg(string Img) => Dispatcher.Invoke(() => SetImg(Img));
+        public void UpdateViewImg(string Img, bool CN = false) => Dispatcher.Invoke(() => SetImg(Img, CN));
         public void InvokeClearImages() => Dispatcher.Invoke(() => { InvokeClearImages(); });
         public void InvokeProgressUpdate(int value) => Dispatcher.Invoke(() => { pbGen.Value = value; });
         public void InvokeUpdateModelsList() => Dispatcher.Invoke(() => { UpdateModelsList(); });
@@ -455,9 +455,9 @@ namespace SD_FXUI
             return CmdLine;
         }
 
-        void SetImg(string Img)
+        void SetImg(string Img, bool CN = false)
         {
-            ViewImg.Source = new BitmapImage(new Uri(Img));
+            ViewImg.Source = FS.BitmapFromUri(new Uri(Img));
             ListViewItemsCollections.Add(new ListViewItemsData()
             {
                 GridViewColumnName_ImageSource = Img,
@@ -468,6 +468,12 @@ namespace SD_FXUI
             Helper.ImgList.Add(Img);
 
             btnDDB.Visibility = Visibility.Visible;
+
+            if (CN)
+            {
+                imgPose.Source = FS.BitmapFromUri(new Uri(Img));
+                Helper.CurrentPose = Img;
+            }
         }
 
         public void UpdateModelsTIList()
@@ -505,11 +511,9 @@ namespace SD_FXUI
             string SafeVAE = (string)cbVAE.Text;
             string SafeModelName = (string)cbModel.Text;
             string SafeLoRAName = (string)cbLoRA.Text;
-            string SafePose = (string)cbPose.Text;
             string SafeHyper = (string)cbHyper.Text;
 
             cbModel.Items.Clear();
-            cbPose.Items.Clear();
             cbVAE.Items.Clear();
             cbLoRA.Items.Clear();
             cbHyper.Items.Clear();
@@ -521,19 +525,6 @@ namespace SD_FXUI
 
                 if (!Itm.EndsWith("hgf"))
                     cbVAE.Items.Add(Itm);
-            }
-            // CN: Poser
-
-            string ImgPath = FS.GetModelDir() + "controlnet/pose/";
-            foreach (var Itm in Directory.GetFiles(ImgPath))
-            {
-                cbPose.Items.Add(Path.GetFileNameWithoutExtension(Itm));
-            }
-
-            foreach (var Dir in Directory.GetDirectories(ImgPath))
-            {
-                foreach (var File in Directory.GetFiles(Dir))
-                    cbPose.Items.Add(File.Replace(ImgPath, string.Empty).Replace(".png", string.Empty));
             }
 
             // Yeah... LoRA...
@@ -598,7 +589,6 @@ namespace SD_FXUI
             }
 
             cbLoRA.Text = SafeLoRAName;
-            cbPose.Text = SafePose;
             cbHyper.Text = SafeHyper;
         }
 
@@ -652,9 +642,9 @@ namespace SD_FXUI
 
         }
 
-        ControlNetBase GetCNType()
+        ControlNetBase GetCNType(string ComboBox)
         {
-            string LoverName = cbExtractPoseSelector.Text.ToLower();
+            string LoverName = ComboBox.ToLower();
 
             if (LoverName == "canny")          return HelperControlNet.Canny;
             if (LoverName == "depth")          return HelperControlNet.Depth;
@@ -674,5 +664,28 @@ namespace SD_FXUI
             return HelperControlNet.Canny;                      // temp Bypass error;
 
         }
+        public void UpdateModelsListControlNet()
+        {
+            cbPose.Items.Clear();
+
+            if (HelperControlNet.Current == null)
+                return;
+
+            string ImgPath = HelperControlNet.Current.Outdir();
+
+            foreach (var Itm in Directory.GetFiles(ImgPath))
+            {
+                cbPose.Items.Add(Path.GetFileNameWithoutExtension(Itm));
+            }
+
+            foreach (var Dir in Directory.GetDirectories(ImgPath))
+            {
+                foreach (var File in Directory.GetFiles(Dir))
+                    cbPose.Items.Add(File.Replace(ImgPath, string.Empty).Replace(".png", string.Empty));
+            }
+
+            cbPose.SelectedIndex = 0;
+        }
+
     }
 }

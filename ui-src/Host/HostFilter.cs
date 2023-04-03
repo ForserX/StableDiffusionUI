@@ -162,13 +162,15 @@ namespace SD_FXUI
             if (Message.Contains("CN: Pose - "))
             {
                 string PoseImg = Message.Replace("CN: Pose - ", string.Empty);
-                Helper.Form.UpdateViewImg(PoseImg);
+                Helper.Form.UpdateViewImg(PoseImg, true);
                 Helper.Form.InvokeUpdateModelsList();
             }
+
             if (Message.Contains("CN: Model loaded"))
             {
                 Helper.Form.InvokeProgressUpdate(20);
             }
+
             if (Message.Contains("CN: Image from Pose: done!"))
             {
                 Helper.Form.InvokeProgressApply();
