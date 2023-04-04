@@ -355,20 +355,24 @@ namespace SD_FXUI
 
             Host.Print("\n  Convert task is done..... \n");
             Notification.SendNotification("Convertation: done!");
+            Helper.Form.InvokeUpdateModelsList();
         }
 
         internal static void ProcessConvertVaePt2ONNX(string InputFile)
         {
+            bool NeedNameFix = true;
+
             if (InputFile.EndsWith("pt"))
             {
                 string NewInputFile = System.IO.Path.GetFileNameWithoutExtension(InputFile);
-                NewInputFile = FS.GetModelDir() + "vae\\" + InputFile;
+                NewInputFile = FS.GetModelDir() + "vae\\" + NewInputFile;
 
                 if (!Directory.Exists(NewInputFile))
                 {
-                    ProcessConvertVaePt2Diff(NewInputFile);
+                    ProcessConvertVaePt2Diff(InputFile);
                 }
                 InputFile = NewInputFile;
+                NeedNameFix = false;
             }
 
             Notification.SendNotification("Convertation: ~few seconds");
@@ -376,10 +380,19 @@ namespace SD_FXUI
             Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print($"\n Startup convert vae ({InputFile})..... \n");
 
+            string OutPath = "";
 
-            string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
+            if (NeedNameFix)
+            {
+                string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
 
-            string OutPath = WorkDir + Name;
+                OutPath = WorkDir + Name;
+            }
+            else
+            {
+                OutPath = InputFile;
+            }
+
             OutPath = OutPath.Replace("\\", "/");
             InputFile = InputFile.Replace("\\", "/");
 
@@ -393,6 +406,8 @@ namespace SD_FXUI
 
             Host.Print("\n  Convert task is done..... \n");
             Notification.SendNotification("Convertation: done!");
+
+            Helper.Form.InvokeUpdateModelsList();
         }
 
         /*
