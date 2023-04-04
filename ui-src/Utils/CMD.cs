@@ -133,7 +133,7 @@ namespace SD_FXUI
             string OutPathONNX = FS.GetModelDir() + "onnx\\" + Name;
             OutPath = OutPath.Replace("\\", "/");
 
-            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"../../repo/diffusion_scripts/convert/convert_stable_diffusion_checkpoint_to_onnx.py\" " +
+            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"../../repo/diffusion_scripts/convert/convert_diffusers_to_onnx.py\" " +
                                                                             $"--model_path=\"{OutPath}\" --output_path=\"{OutPathONNX}\"");
 
             ProcessHost.SendExitCommand();
@@ -160,7 +160,7 @@ namespace SD_FXUI
 
             Directory.CreateDirectory(OutPath);
 
-            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_stable_diffusion_checkpoint_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
+            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_diffusers_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
                                                                             $" --model_path=\"{InputFile}\"");
 
             ProcessHost.SendExitCommand();
