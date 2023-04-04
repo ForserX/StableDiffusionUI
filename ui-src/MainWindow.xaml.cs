@@ -817,6 +817,20 @@ namespace SD_FXUI
 
         private void cbModel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count == 0)
+                return;
+
+            string PickPath = FS.GetModelDir() + (Helper.Mode != Helper.ImplementMode.ONNX ? "Diffusers\\" : "onnx\\") + e.AddedItems[0] + "\\logo.png";
+
+            if (System.IO.File.Exists(PickPath))
+            {
+                imgModelPrivew.Source = FS.BitmapFromUri(new Uri(PickPath));
+            }
+            else
+            {
+                imgModelPrivew.Source = NoImageData;
+            }
+
             if (Helper.Mode != Helper.ImplementMode.ONNX || cbTI == null || e.AddedItems.Count == 0)
                 return;
 
@@ -942,6 +956,11 @@ namespace SD_FXUI
             cbPose.IsEnabled = true;
 
             btnMake.IsEnabled = (NewMode != "Facegen");
+        }
+
+        private void btnMore(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
