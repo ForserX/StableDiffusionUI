@@ -10,7 +10,7 @@ namespace SD_FXUI
 {
     public partial class MainWindow
     {
-        public void SetPrompt(string Prompt) => TryPrompt.Text = Prompt;
+        public void SetPrompt(string Prompt) => CodeUtils.SetRichText(tbPrompt, Prompt);
         public void InvokeSetPrompt(string Prompt) => Dispatcher.Invoke(() => SetPrompt(Prompt));
         public void UpdateViewImg(string Img, bool CN = false) => Dispatcher.Invoke(() => SetImg(Img, CN));
         public void InvokeClearImages() => Dispatcher.Invoke(() => { InvokeClearImages(); });
@@ -48,7 +48,7 @@ namespace SD_FXUI
             cbNSFW.IsChecked = Data.Get("cbNSFW") == "true";
             tbH.Text = Data.Get("height", "512");
             tbW.Text = Data.Get("width", "512");
-            NegPrompt.Text = Data.Get("neg");
+            CodeUtils.SetRichText(tbNegPrompt, Data.Get("neg"));
             tbSteps.Text = Data.Get("steps", "20");
             tbCFG.Text = Data.Get("cfg", "7");
             cbUpscaler.Text = Data.Get("upscaler", "None");
@@ -58,6 +58,7 @@ namespace SD_FXUI
 
             Utils.Settings.UseNotif = Data.Get("notif", "true") == "true";
             Utils.Settings.UseNotifImgs = Data.Get("notifi", "true") == "true";
+            Utils.Settings.UseInternalVAE = Data.Get("in_vae", "false") == "true";
 
 
             bool FirstStart = Data.Get("welcomewnd") != "true";
@@ -123,9 +124,10 @@ namespace SD_FXUI
             Data.Set("cbNSFW", cbNSFW.IsChecked == true ? "true" : "false");
             Data.Set("notif", Utils.Settings.UseNotif ? "true" : "false");
             Data.Set("notifi", Utils.Settings.UseNotifImgs ? "true" : "false");
+            Data.Set("in_vae", Utils.Settings.UseInternalVAE ? "true" : "false");
             Data.Set("height", tbH.Text);
             Data.Set("width", tbW.Text);
-            Data.Set("neg", NegPrompt.Text);
+            Data.Set("neg", CodeUtils.GetRichText(tbNegPrompt));
             Data.Set("steps", tbSteps.Text);
             Data.Set("upscaler", cbUpscaler.Text);
             Data.Set("up_value", slUpscale.Value.ToString());
@@ -153,7 +155,7 @@ namespace SD_FXUI
 
         private string GetCommandLineOnnx()
         {
-            string Prompt = FixedPrompt(TryPrompt.Text);
+            string Prompt = CodeUtils.GetRichText(tbPrompt);
 
             string Model = FS.GetModelDir() + "onnx\\" + cbModel.Text;
 
@@ -175,7 +177,7 @@ namespace SD_FXUI
             string newETA = ETA.ToString().Replace(",", ".");
             string CmdLine = $""
                     + $" --prompt=\"{Prompt}\""
-                    + $" --prompt_neg=\"{NegPrompt.Text}\""
+                    + $" --prompt_neg=\"{CodeUtils.GetRichText(tbNegPrompt)}\""
                     + $" --height={tbH.Text}"
                     + $" --width={tbW.Text}"
                     + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
@@ -234,8 +236,8 @@ namespace SD_FXUI
         }
         private void MakeCommandObject()
         {
-            Helper.MakeInfo.Prompt = TryPrompt.Text;
-            Helper.MakeInfo.NegPrompt = NegPrompt.Text;
+            Helper.MakeInfo.Prompt = CodeUtils.GetRichText(tbPrompt);
+            Helper.MakeInfo.NegPrompt = CodeUtils.GetRichText(tbNegPrompt);
             Helper.MakeInfo.StartSeed = int.Parse(tbSeed.Text);
             Helper.MakeInfo.CFG = float.Parse(tbCFG.Text);
             Helper.MakeInfo.Steps = (int)slSteps.Value;
@@ -313,7 +315,7 @@ namespace SD_FXUI
 
         private string GetCommandLineDiffCuda()
         {
-            string Prompt = FixedPrompt(TryPrompt.Text);
+            string Prompt = CodeUtils.GetRichText(tbPrompt);
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
 
             string Model = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
@@ -344,7 +346,7 @@ namespace SD_FXUI
             string CmdLine = $""
                     + $" --precision={FpMode}"
                     + $" --prompt=\"{Prompt}\""
-                    + $" --prompt_neg=\"{NegPrompt.Text}\""
+                    + $" --prompt_neg=\"{CodeUtils.GetRichText(tbNegPrompt)}\""
                     + $" --height={tbH.Text}"
                     + $" --width={tbW.Text}"
                     + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
@@ -429,14 +431,14 @@ namespace SD_FXUI
         }
         private string GetCommandLineShark()
         {
-            string Prompt = FixedPrompt(TryPrompt.Text);
+            string Prompt = CodeUtils.GetRichText(tbPrompt);
 
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
             string Model = cbModel.Text.EndsWith(".hgf") ? cbModel.Text.Replace(".hgf", "") : FS.GetModelDir() + "diffusers\\" + cbModel.Text;
             string CmdLine = $" --precision={FpMode}"
                     + $" --device=\"{cbDevice.Text}\""
                     + $" --prompt=\"{Prompt}\""
-                    + $" --negative-prompts=\"{NegPrompt.Text}\""
+                    + $" --negative-prompts=\"{CodeUtils.GetRichText(tbNegPrompt)}\""
                     + $" --height={tbH.Text}"
                     + $" --width={tbW.Text}"
                     + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
@@ -457,7 +459,7 @@ namespace SD_FXUI
 
         void SetImg(string Img, bool CN = false)
         {
-            ViewImg.Source = FS.BitmapFromUri(new Uri(Img));
+            ViewImg.Source = CodeUtils.BitmapFromUri(new Uri(Img));
             ListViewItemsCollections.Add(new ListViewItemsData()
             {
                 GridViewColumnName_ImageSource = Img,
@@ -471,7 +473,7 @@ namespace SD_FXUI
 
             if (CN)
             {
-                imgPose.Source = FS.BitmapFromUri(new Uri(Img));
+                imgPose.Source = CodeUtils.BitmapFromUri(new Uri(Img));
                 Helper.CurrentPose = Img;
 
                 UpdateModelsListControlNet();
@@ -526,7 +528,7 @@ namespace SD_FXUI
             {
                 cbModel.Items.Add(Itm);
 
-                if (!Itm.EndsWith("hgf"))
+                if (!Itm.EndsWith("hgf") && Utils.Settings.UseInternalVAE)
                     cbVAE.Items.Add(Itm);
             }
 

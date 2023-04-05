@@ -8,8 +8,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Windows.Devices.Usb;
 
 namespace SD_FXUI
 {
@@ -58,6 +60,7 @@ namespace SD_FXUI
             Install.WrapMlsdPath();
 
             gridImg.Visibility = Visibility.Collapsed;
+            brImgPane.Visibility = Visibility.Collapsed;
             btnDDB.Visibility = Visibility.Collapsed;
             NoImageData = ViewImg.Source;
             Helper.SafeMaskFreeImg = imgMask.Source;
@@ -147,9 +150,10 @@ namespace SD_FXUI
                     }
             }
 
-            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != TryPrompt.Text)
+            string richText = new TextRange(tbPrompt.Document.ContentStart, tbPrompt.Document.ContentEnd).Text;
+            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != richText)
             {
-                Helper.PromHistory.Insert(0, TryPrompt.Text);
+                Helper.PromHistory.Insert(0, richText);
             }
 
             currentImage = null;
@@ -280,9 +284,15 @@ namespace SD_FXUI
 
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
+
                 grLoRA.Visibility = Visibility.Collapsed;
+                brLoRA.Visibility = Visibility.Collapsed;
+
                 grCN.Visibility = Visibility.Visible;
+
                 grDevice.Visibility = Visibility.Visible;
+                brDevice.Visibility = Visibility.Visible;
+
                 grVAE.Visibility = Visibility.Visible;
 
                 string SafeSampler = cbSampler.Text;
@@ -292,7 +302,7 @@ namespace SD_FXUI
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler", "DDIM");
+                cbSampler.Text = Data.Get("sampler", "UniPCMultistep");
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : ONNX venv";
@@ -316,8 +326,13 @@ namespace SD_FXUI
                 UpdateModelsTIList();
 
                 grDevice.Visibility = Visibility.Collapsed;
+                brDevice.Visibility = Visibility.Collapsed;
+
                 grVAE.Visibility = Visibility.Visible;
+
                 grLoRA.Visibility = Visibility.Visible;
+                brLoRA.Visibility = Visibility.Visible;
+
                 grCN.Visibility = Visibility.Visible;
 
                 btnImg.Visibility = Visibility.Visible;
@@ -330,7 +345,7 @@ namespace SD_FXUI
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler", "DDIM");
+                cbSampler.Text = Data.Get("sampler", "UniPCMultistep");
 
                 foreach (var item in Helper.GPUID.GPUs)
                 {
@@ -346,6 +361,9 @@ namespace SD_FXUI
                 }
 
                 cbDevice.Text = Data.Get("device");
+
+                if (cbDevice.Text.Length == 0)
+                    cbDevice.SelectedItem = 0;
 
                 Title = "Stable Diffusion XUI : CUDA venv";
             }
@@ -373,10 +391,15 @@ namespace SD_FXUI
 
                 btnImg.Visibility = Visibility.Hidden;
                 cbFf16.Visibility = Visibility.Visible;
+
                 grDevice.Visibility = Visibility.Visible;
+                brDevice.Visibility = Visibility.Visible;
+
                 grVAE.Visibility = Visibility.Collapsed;
                 grCN.Visibility = Visibility.Collapsed;
+
                 grLoRA.Visibility = Visibility.Collapsed;
+                brLoRA.Visibility = Visibility.Collapsed;
 
                 cbSampler.Items.Clear();
                 foreach (string Name in Schedulers.Shark)
@@ -407,11 +430,15 @@ namespace SD_FXUI
                 UpdateModelsTIList();
 
                 grDevice.Visibility = Visibility.Collapsed;
+                brDevice.Visibility = Visibility.Collapsed;
 
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
+
                 grLoRA.Visibility = Visibility.Visible;
+                brLoRA.Visibility = Visibility.Visible;
+
                 grCN.Visibility = Visibility.Visible;
                 CPUUse = true;
 
@@ -421,7 +448,7 @@ namespace SD_FXUI
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler", "DDIM");
+                cbSampler.Text = Data.Get("sampler", "UniPCMultistep");
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : CPU venv";
@@ -433,7 +460,7 @@ namespace SD_FXUI
             {
                 currentImage = (Helper.ImgList[lvImages.SelectedIndex]);
 
-                ViewImg.Source = FS.BitmapFromUri(new Uri(currentImage));
+                ViewImg.Source = CodeUtils.BitmapFromUri(new Uri(currentImage));
                 string NewCurrentImage = currentImage.Replace("_upscale.", ".");
 
                 if (File.Exists(NewCurrentImage))
@@ -477,7 +504,8 @@ namespace SD_FXUI
             {
                 Helper.InputImagePath = OpenDlg.FileName;
                 gridImg.Visibility = Visibility.Visible;
-                imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
+                brImgPane.Visibility = Visibility.Visible;
+                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(Helper.InputImagePath));
                 Helper.DrawMode = Helper.DrawingMode.Img2Img;
 
                 tbMeta.Text = FS.MetaData(Helper.InputImagePath);
@@ -503,7 +531,7 @@ namespace SD_FXUI
             else if (currentImage != null)
             {
                 Helper.InputImagePath = currentImage;
-                imgLoaded.Source = FS.BitmapFromUri(new Uri(currentImage));
+                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(currentImage));
             }
             else
             {
@@ -514,12 +542,13 @@ namespace SD_FXUI
                 }
 
                 Helper.InputImagePath = Helper.ImgList[Idx];
-                imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
+                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(Helper.InputImagePath));
             }
 
             tbMeta.Text = FS.MetaData(Helper.InputImagePath);
 
             gridImg.Visibility = Visibility.Visible;
+            brImgPane.Visibility = Visibility.Visible;
             Helper.DrawMode = Helper.DrawingMode.Img2Img;
         }
 
@@ -531,6 +560,7 @@ namespace SD_FXUI
         private void btnImageClear_Click(object sender, RoutedEventArgs e)
         {
             gridImg.Visibility = Visibility.Collapsed;
+            brImgPane.Visibility = Visibility.Collapsed;
 
             Helper.DrawMode = Helper.DrawingMode.Text2Img;
             imgLoaded.Source = NoImageData;
@@ -638,7 +668,7 @@ namespace SD_FXUI
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
                 currentImage = dropedFile;
-                ViewImg.Source = FS.BitmapFromUri(new Uri(dropedFile));
+                ViewImg.Source = CodeUtils.BitmapFromUri(new Uri(dropedFile));
                 btnDDB.Visibility = Visibility.Visible;
             }
         }
@@ -720,7 +750,7 @@ namespace SD_FXUI
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
                 Helper.ImgMaskPath = dropedFile;
-                imgMask.Source = FS.BitmapFromUri(new Uri(dropedFile));
+                imgMask.Source = CodeUtils.BitmapFromUri(new Uri(dropedFile));
                 btnImageClearMask.Visibility = Visibility.Visible;
             }
         }
@@ -820,11 +850,15 @@ namespace SD_FXUI
             if (e.AddedItems.Count == 0)
                 return;
 
-            string PickPath = FS.GetModelDir() + (Helper.Mode != Helper.ImplementMode.ONNX ? "Diffusers\\" : "onnx\\") + e.AddedItems[0] + "\\logo.png";
+            string PickPathName = FS.GetModelDir() + (Helper.Mode != Helper.ImplementMode.ONNX ? "Diffusers\\" : "onnx\\") + e.AddedItems[0] + "\\logo.";
 
-            if (System.IO.File.Exists(PickPath))
+            if (System.IO.File.Exists(PickPathName + "png"))
             {
-                imgModelPrivew.Source = FS.BitmapFromUri(new Uri(PickPath));
+                imgModelPrivew.Source = CodeUtils.BitmapFromUri(new Uri(PickPathName + "png"));
+            }
+            else if (System.IO.File.Exists(PickPathName + "jpg"))
+            {
+                imgModelPrivew.Source = CodeUtils.BitmapFromUri(new Uri(PickPathName + "jpg"));
             }
             else
             {
@@ -894,7 +928,7 @@ namespace SD_FXUI
                 ImgPath += ".png";
 
             if (File.Exists(ImgPath))
-                imgPose.Source = FS.BitmapFromUri(new Uri(ImgPath));
+                imgPose.Source = CodeUtils.BitmapFromUri(new Uri(ImgPath));
 
             Helper.CurrentPose = ImgPath;
         }
@@ -904,6 +938,11 @@ namespace SD_FXUI
             cbPose.IsEnabled = tsCN.IsChecked.Value;
             imgPose.IsEnabled = tsCN.IsChecked.Value;
             cbSampler.IsEnabled = !tsCN.IsChecked.Value;
+
+            if (tsCN.IsChecked.Value)
+            {
+                cbSampler.Text = "UniPCMultistep";
+            }
         }
 
         private void tsTTA_Checked(object sender, RoutedEventArgs e)

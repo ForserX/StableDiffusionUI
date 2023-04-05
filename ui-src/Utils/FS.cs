@@ -139,16 +139,6 @@ namespace SD_FXUI
             return (attr.HasFlag(FileAttributes.Directory));
         }
 
-        public static ImageSource BitmapFromUri(System.Uri source)
-        {
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = source;
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            return bitmap;
-        }
-
         public static string MetaData(string File)
         {
             string MetaText = "No meta";

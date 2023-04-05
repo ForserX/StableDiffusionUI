@@ -16,12 +16,12 @@ namespace SD_FXUI.Utils
 
         public void SetImage(string Path)
         {
-            imgView.Source = FS.BitmapFromUri(new Uri(Path));
+            imgView.Source = CodeUtils.BitmapFromUri(new Uri(Path));
             //this.Height = imgView.Source.Height;
             //this.Width = imgView.Source.Width;
         }
 
-        private void KeyDownEvent(object sender, System.Windows.Input.KeyEventArgs e)
+        private void LocalKeyDownEvent(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {

@@ -30,7 +30,8 @@ from diffusers import (
     EulerDiscreteScheduler, 
     DDPMScheduler, 
     KDPM2DiscreteScheduler, 
-    HeunDiscreteScheduler
+    HeunDiscreteScheduler,
+    UniPCMultistepScheduler
 )
 
 prov = "DmlExecutionProvider"
@@ -235,6 +236,8 @@ def GetSampler(Pipe, SamplerName: str, ETA):
         Pipe.scheduler = KDPM2DiscreteScheduler.from_config(Pipe.scheduler.config)
     if SamplerName == "HeunDiscrete":
         Pipe.scheduler = HeunDiscreteScheduler.from_config(Pipe.scheduler.config)
+    if SamplerName == "UniPCMultistep":
+        Pipe.scheduler = UniPCMultistepScheduler.from_config(Pipe.scheduler.config)
 
     return eta
 

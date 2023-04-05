@@ -208,7 +208,7 @@ namespace SD_FXUI
             {
                 string ModelDir = FS.GetModelDir();
 
-                if (!Directory.Exists(ModelDir + "\\weights"))
+                if (!Directory.Exists(ModelDir + "gfpgan\\weights"))
                 {
                     Notification.SendNotification("Starting downloading face restoration...");
                 }
@@ -316,14 +316,16 @@ namespace SD_FXUI
             ProcessHost.Start("-i " + File + " -o " + OutFile + DopCmd);
             ProcessHost.Wait();
 
-            Helper.Form.UpdateViewImg(OutFile);
-
             if (Helper.EnableGFPGAN)
             {
                 Host ProcesHostTwo = new Host(FS.GetModelDir(), FileName);
                 OutFile = NewFile.Substring(0, NewFile.Length - 4) + "_upscale.png";
                 ProcesHostTwo.Start("-i " + NewFile + " -o " + OutFile + DopCmd);
                 ProcesHostTwo.Wait();
+                Helper.Form.UpdateViewImg(OutFile);
+            }
+            else
+            {
                 Helper.Form.UpdateViewImg(OutFile);
             }
 

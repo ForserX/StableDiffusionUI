@@ -21,6 +21,7 @@ namespace SD_FXUI.Utils
     {
         static public bool UseNotif = false;
         static public bool UseNotifImgs = false;
+        static public bool UseInternalVAE = false;
 
         bool IsLoadedWnd = false;
         public Settings()
@@ -28,6 +29,7 @@ namespace SD_FXUI.Utils
             InitializeComponent();
             chNotification.IsChecked = UseNotif;
             chNotification_1.IsChecked = UseNotifImgs;
+            tsVAE.IsChecked = UseInternalVAE;
 
             IsLoadedWnd = true;
         }
@@ -46,6 +48,16 @@ namespace SD_FXUI.Utils
             {
                 UseNotifImgs = chNotification_1.IsChecked.Value;
             }
+        }
+
+        private void chVAE_Checked(object sender, RoutedEventArgs e)
+        {
+            if (IsLoadedWnd)
+            {
+                UseInternalVAE = tsVAE.IsChecked.Value;
+            }
+
+            Helper.Form.InvokeUpdateModelsList();
         }
     }
 }
