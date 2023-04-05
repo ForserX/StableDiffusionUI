@@ -117,7 +117,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = false;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
+                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text, tsLoRA.IsChecked.Value, tbLorastrength.Text);
                             SafeCMD.Start();
 
                             //cmdline += GetCommandLineOnnx();
@@ -285,8 +285,8 @@ namespace SD_FXUI
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
 
-                grLoRA.Visibility = Visibility.Collapsed;
-                brLoRA.Visibility = Visibility.Collapsed;
+                grLoRA.Visibility = Visibility.Visible;
+                brLoRA.Visibility = Visibility.Visible;
 
                 grCN.Visibility = Visibility.Visible;
 

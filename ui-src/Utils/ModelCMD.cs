@@ -99,7 +99,32 @@ namespace SD_FXUI
                         CmdLine += " --nsfw=True ";
                     }
 
-                    Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
+                    if (!LoraEnable)
+                    {
+                        ModelLoRA = "";
+                    }
+                    else
+                    {
+                        ModelLoRA = NameLora;
+                    }
+
+                    if (LoraEnable)
+                    {
+
+                        float lorastr = float.Parse(LoraStrength);
+                        lorastr /= 100;
+
+                        string newLorastr = lorastr.ToString().Replace(",", ".");
+
+                        string LoRAModel = FS.GetModelDir() + "lora\\" + ModelLoRA;
+
+                        if (LoRAModel.EndsWith(".safetensors"))
+                        {
+                            CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\" --lora_strength=\"{newLorastr}\"";
+                        }
+                    }
+
+                        Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
                     Process.Start("./repo/diffusion_scripts/sd_onnx_safe.py " + CmdLine);
                 }
             }
