@@ -52,6 +52,20 @@ namespace SD_FXUI.Utils
             }
         }
 
+        public static void ApplyPrompt(string Message)
+        {
+            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != Message)
+            {
+                if (Helper.PromHistory.Contains(Message))
+                {
+                    Helper.PromHistory.Remove(Message);
+                }
+
+                Helper.PromHistory.Insert(0, Message);
+            }
+
+        }
+
         private new void KeyDown(object sender, KeyEventArgs e)
         {
             if (lbHistory == null)

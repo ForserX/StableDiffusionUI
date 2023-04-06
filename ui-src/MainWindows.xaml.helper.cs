@@ -537,7 +537,9 @@ namespace SD_FXUI
             foreach (var Itm in Directory.GetFiles(LoraPath))
             {
                 string TryName = Itm.Replace(LoraPath, string.Empty);
-                cbLoRA.Items.Add(TryName);
+
+                if (!TryName.EndsWith("txt"))
+                    cbLoRA.Items.Add(TryName);
             }
 
             // Yeah... Hypernetwork...

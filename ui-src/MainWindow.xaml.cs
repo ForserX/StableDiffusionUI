@@ -141,7 +141,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = cbFf16.IsChecked.Value;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text,  tsLoRA.IsChecked.Value, tbLorastrength.Text, true);
+                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text, tsLoRA.IsChecked.Value, tbLorastrength.Text, true);
                             SafeCMD.Start();
                             //cmdline += GetCommandLineDiffCuda();
                             //Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
@@ -151,10 +151,7 @@ namespace SD_FXUI
             }
 
             string richText = new TextRange(tbPrompt.Document.ContentStart, tbPrompt.Document.ContentEnd).Text;
-            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != richText)
-            {
-                Helper.PromHistory.Insert(0, richText);
-            }
+            Utils.HistoryList.ApplyPrompt(richText);
 
             currentImage = null;
             ClearImages();
@@ -584,14 +581,16 @@ namespace SD_FXUI
 
         private void btnFavorClick(object sender, MouseButtonEventArgs e)
         {
-            if (lvImages.Items.Count == 0 || lvImages.SelectedItem == null)
+            if (lvImages.Items.Count == 0)
             {
                 return;
             }
 
+            int CurrentSel = lvImages.SelectedItem != null ? lvImages.SelectedIndex : 0;
+
             if (Helper.ImageState.Favor == Helper.ActiveImageState)
             {
-                string Name = Path.GetFileName(Helper.ImgList[lvImages.SelectedIndex]);
+                string Name = Path.GetFileName(Helper.ImgList[CurrentSel]);
                 File.Delete(FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Free;
 
@@ -599,8 +598,8 @@ namespace SD_FXUI
             }
             else
             {
-                string Name = Path.GetFileName(Helper.ImgList[lvImages.SelectedIndex]);
-                File.Copy(Helper.ImgList[lvImages.SelectedIndex], FS.GetImagesDir() + "best\\" + Name);
+                string Name = Path.GetFileName(Helper.ImgList[CurrentSel]);
+                File.Copy(Helper.ImgList[CurrentSel], FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Favor;
 
                 btnFavor.Source = imgFavor.Source;
@@ -923,7 +922,7 @@ namespace SD_FXUI
 
             string ImgPath = HelperControlNet.Current.Outdir();
             ImgPath += e.AddedItems[0];
-            
+
             if (!ImgPath.EndsWith(".jpg"))
                 ImgPath += ".png";
 

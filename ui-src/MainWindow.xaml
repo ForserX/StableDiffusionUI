@@ -304,7 +304,7 @@
         <Image Source="/res/folder.png" MouseLeftButtonDown="btFolder_ValueChanged" Margin="45,0,0,31" Grid.Column="3" Height="50" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50"/>
         <Image x:Name="btCmd" Source="/res/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Margin="3,0,0,34" HorizontalAlignment="Left" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="48" VerticalAlignment="Bottom"/>
         <Image x:Name="btHistory" Source="/res/history.png" MouseLeftButtonDown="btnHistory_Click" Margin="0,0,0,53" HorizontalAlignment="Right" Width="44" Grid.Column="4" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
-        <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,1,67,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btnFavorClick"/>
+        <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,1,67,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btnFavorClick" RenderTransformOrigin="0.615,0.5"/>
         <Image x:Name="imgFavor" Source="/res/favor.png" />
         <Image x:Name="imgNotFavor" Source="/res/notfavor.png" />
         <ProgressBar x:Name="pbGen" Grid.Column="3" Margin="10,0,9,78" ValueChanged="pbGen_ValueChanged" Height="20" VerticalAlignment="Bottom"/>

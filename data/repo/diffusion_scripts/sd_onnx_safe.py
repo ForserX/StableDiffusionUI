@@ -3,20 +3,16 @@ import sys, time
 import argparse
 import json
 
-from onnxruntime import SessionOptions
-
 from diffusers import OnnxRuntimeModel
-from transformers import CLIPTokenizer
 
 from sd_xbackend import (
     GetPipe,
+    GetPipeOL,
+    ApplyLoraONNX,
     GetSampler,
     ApplyArg,
     MakeImage
 )
-
-from modules.onnx.lora import blend_loras, buffer_external_data_tensors
-ONNX_MODEL = "model.onnx"
 
 os.chdir(sys.path[0])
 
@@ -29,28 +25,13 @@ if len(sys.argv)==1:
 
 opt = parser.parse_args()
 prov = "DmlExecutionProvider"
-
-pipe = GetPipe(opt.mdlpath, opt.mode, True, opt.nsfw, False)
-
-def ApplyLora():
-    blended_unet = blend_loras(opt.mdlpath + "/unet/" + ONNX_MODEL, opt.lora_path, "unet", opt.lora_strength)
-    (unet_model, unet_data) = buffer_external_data_tensors(blended_unet)
-    unet_names, unet_values = zip(*unet_data)
-    sess = SessionOptions()
-    sess.add_external_initializers(list(unet_names), list(unet_values))
-    
-    blended_te = blend_loras(opt.mdlpath + "/text_encoder/" + ONNX_MODEL, opt.lora_path, "text_encoder", opt.lora_strength)
-    (te_model, te_data) = buffer_external_data_tensors(blended_te)
-    te_names, te_values = zip(*te_data)
-    sess_te = SessionOptions()
-    sess_te.add_external_initializers(list(te_names), list(te_values))
-    
-    pipe.unet = OnnxRuntimeModel(OnnxRuntimeModel.load_model(unet_model.SerializeToString(), provider=prov, sess_options=sess))
-    pipe.text_encoder = OnnxRuntimeModel(OnnxRuntimeModel.load_model(te_model.SerializeToString(), provider=prov, sess_options=sess_te))
-
+pipe = None
 
 if opt.lora:
-    ApplyLora()
+    pipe = GetPipeOL(opt.mdlpath, opt.mode, opt.nsfw)
+    ApplyLoraONNX(opt, pipe)
+else:
+    pipe = GetPipe(opt.mdlpath, opt.mode, True, opt.nsfw, False)
 
 print("SD: Model preload: done")
 
