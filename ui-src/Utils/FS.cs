@@ -65,38 +65,6 @@ namespace SD_FXUI
         {
             return System.IO.Directory.GetCurrentDirectory() + "\\tools\\";
         }
-        public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive)
-        {
-            // Get information about the source directory
-            var dir = new DirectoryInfo(sourceDir);
-
-            // Check if the source directory exists
-            if (!dir.Exists)
-                throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
-
-            // Cache directories before we start copying
-            DirectoryInfo[] dirs = dir.GetDirectories();
-
-            // Create the destination directory
-            Directory.CreateDirectory(destinationDir);
-
-            // Get the files in the source directory and copy to the destination directory
-            foreach (FileInfo file in dir.GetFiles())
-            {
-                string targetFilePath = Path.Combine(destinationDir, file.Name);
-                file.CopyTo(targetFilePath);
-            }
-
-            // If recursive and copying subdirectories, recursively call this method
-            if (recursive)
-            {
-                foreach (DirectoryInfo subDir in dirs)
-                {
-                    string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
-                    CopyDirectory(subDir.FullName, newDestinationDir, true);
-                }
-            }
-        }
 
         public static List<string> GetModels(Helper.ImplementMode Mode)
         {
@@ -124,19 +92,10 @@ namespace SD_FXUI
             {
                 foreach (var LocPath in Directory.GetDirectories(WorkingPath))
                 {
-                    if (!File.Exists(WorkingPath + "/model_index.json"))
+                    if (!File.Exists(LocPath + "/model_index.json"))
                         continue;
 
-                    if (Mode != Helper.ImplementMode.ONNX)
                         Models.Add(Path.GetFileName(LocPath));
-                    else
-                    {
-                        if (!LocPath.EndsWith("_cn"))
-                        {
-                            // Skip control net prepared models
-                            Models.Add(Path.GetFileName(LocPath));
-                        }
-                    }
                 }
 
                 if (Mode != Helper.ImplementMode.ONNX)
@@ -173,19 +132,6 @@ namespace SD_FXUI
             return (attr.HasFlag(FileAttributes.Directory));
         }
 
-        public static string MetaData(string File)
-        {
-            string MetaText = "No meta";
-            var Data = MetadataExtractor.ImageMetadataReader.ReadMetadata(File);
-            if (Data[1].Tags[0].Description != null)
-            {
-                MetaText = Data[1].Tags[0].Description;
-                MetaText = MetaText.Replace("XUI Metadata: ", string.Empty);
-            }
-
-            return MetaText;
-        }
-
         internal class Dir
         {
             static public void Delete(string Name, bool Recursive)
@@ -202,6 +148,43 @@ namespace SD_FXUI
                     }
                 }
             }
+
+            public static void Copy(string sourceDir, string destinationDir, bool recursive)
+            {
+                // Get information about the source directory
+                var dir = new DirectoryInfo(sourceDir);
+
+                // Check if the source directory exists
+                if (!dir.Exists)
+                {
+                    Host.Print($"Source directory not found: {dir.FullName}");
+                    return;
+                }
+
+                // Cache directories before we start copying
+                DirectoryInfo[] dirs = dir.GetDirectories();
+
+                // Create the destination directory
+                Directory.CreateDirectory(destinationDir);
+
+                // Get the files in the source directory and copy to the destination directory
+                foreach (FileInfo file in dir.GetFiles())
+                {
+                    string targetFilePath = Path.Combine(destinationDir, file.Name);
+                    file.CopyTo(targetFilePath);
+                }
+
+                // If recursive and copying subdirectories, recursively call this method
+                if (recursive)
+                {
+                    foreach (DirectoryInfo subDir in dirs)
+                    {
+                        string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                        Copy(subDir.FullName, newDestinationDir, true);
+                    }
+                }
+            }
+
         }
     }
 }

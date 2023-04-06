@@ -32,6 +32,17 @@ namespace SD_FXUI
             bitmap.EndInit();
             return bitmap;
         }
+        public static string MetaData(string File)
+        {
+            string MetaText = "No meta";
+            var Data = MetadataExtractor.ImageMetadataReader.ReadMetadata(File);
+            if (Data[1].Tags[0].Description != null)
+            {
+                MetaText = Data[1].Tags[0].Description;
+                MetaText = MetaText.Replace("XUI Metadata: ", string.Empty);
+            }
 
+            return MetaText;
+        }
     }
 }

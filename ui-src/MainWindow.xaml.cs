@@ -505,7 +505,7 @@ namespace SD_FXUI
                 imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(Helper.InputImagePath));
                 Helper.DrawMode = Helper.DrawingMode.Img2Img;
 
-                tbMeta.Text = FS.MetaData(Helper.InputImagePath);
+                tbMeta.Text = CodeUtils.MetaData(Helper.InputImagePath);
             }
         }
 
@@ -542,7 +542,7 @@ namespace SD_FXUI
                 imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(Helper.InputImagePath));
             }
 
-            tbMeta.Text = FS.MetaData(Helper.InputImagePath);
+            tbMeta.Text = CodeUtils.MetaData(Helper.InputImagePath);
 
             gridImg.Visibility = Visibility.Visible;
             brImgPane.Visibility = Visibility.Visible;
