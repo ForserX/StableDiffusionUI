@@ -237,7 +237,7 @@ namespace SD_FXUI
             Helper.ImgPath.Replace('\\', '/');
 
             string OldDiffDirectoryName = FS.GetModelDir() + "diff";
-            string NewDiffDirectoryName = FS.GetModelDir() + "diffusers";
+            string NewDiffDirectoryName = FS.GetModelDir(FS.ModelDirs.Diffusers);
             if (Directory.Exists(OldDiffDirectoryName))
             {
                 Directory.Move(OldDiffDirectoryName, NewDiffDirectoryName);

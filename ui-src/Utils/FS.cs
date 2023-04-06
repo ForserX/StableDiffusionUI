@@ -7,6 +7,16 @@ namespace SD_FXUI
 {
     internal class FS
     {
+        public enum ModelDirs
+        {
+            Diffusers,
+            ONNX,
+            LoRA,
+            OpenPose,
+
+            General = -1
+        }
+
         public static string[] GetFilesFrom(string searchFolder, string[] filters, bool isRecursive)
         {
             List<string> filesFound = new List<string>();
@@ -26,9 +36,30 @@ namespace SD_FXUI
         {
             return System.IO.Directory.GetCurrentDirectory() + "\\images\\";
         }
-        public static string GetModelDir()
+        public static string GetModelDir(ModelDirs SubDir = ModelDirs.General)
         {
-            return System.IO.Directory.GetCurrentDirectory() + "\\models\\";
+            string GeneralPath = Directory.GetCurrentDirectory() + "\\models\\";
+
+            switch(SubDir)
+            {
+                case ModelDirs.ONNX:
+                    GeneralPath += "onnx/";
+                    break;
+
+                case ModelDirs.Diffusers:
+                    GeneralPath += "diffusers/";
+                    break;
+
+                case ModelDirs.LoRA:
+                    GeneralPath += "lora/";
+                    break;
+
+                case ModelDirs.OpenPose:
+                    GeneralPath += "OpenPose/";
+                    break;
+            }
+
+            return GeneralPath;
         }
         public static string GetToolsDir()
         {
@@ -93,6 +124,9 @@ namespace SD_FXUI
             {
                 foreach (var LocPath in Directory.GetDirectories(WorkingPath))
                 {
+                    if (!File.Exists(WorkingPath + "/model_index.json"))
+                        continue;
+
                     if (Mode != Helper.ImplementMode.ONNX)
                         Models.Add(Path.GetFileName(LocPath));
                     else

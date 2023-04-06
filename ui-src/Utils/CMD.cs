@@ -67,12 +67,12 @@ namespace SD_FXUI
 
             if (InputFile.EndsWith(".safetensors"))
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
+                OutPath = FS.GetModelDir(FS.ModelDirs.Diffusers) + Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
                 AddCmd = " --from_safetensors";
             }
             else
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+                OutPath = FS.GetModelDir(FS.ModelDirs.Diffusers) + Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
             }
 
             Directory.CreateDirectory(OutPath);
@@ -104,12 +104,12 @@ namespace SD_FXUI
 
             if (InputFile.EndsWith(".safetensors"))
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
+                OutPath = FS.GetModelDir(FS.ModelDirs.Diffusers) + Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
                 AddCmd = " --from_safetensors";
             }
             else
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+                OutPath = FS.GetModelDir(FS.ModelDirs.Diffusers) + Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
             }
 
             Directory.CreateDirectory(OutPath);
@@ -130,7 +130,7 @@ namespace SD_FXUI
                 Name = System.IO.Path.GetDirectoryName(InputFile);
             }
 
-            string OutPathONNX = FS.GetModelDir() + "onnx\\" + Name;
+            string OutPathONNX = FS.GetModelDir(FS.ModelDirs.ONNX) + Name;
             OutPath = OutPath.Replace("\\", "/");
 
             ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"../../repo/diffusion_scripts/convert/convert_diffusers_to_onnx.py\" " +
@@ -143,7 +143,8 @@ namespace SD_FXUI
         public static async Task ProcessConvertDiff2Onnx(string InputFile)
         {
             Notification.SendNotification("Convertation: ~3min!");
-            string WorkDir = FS.GetModelDir() + "onnx\\";
+            string WorkDir = FS.GetModelDir(FS.ModelDirs.ONNX);
+
             Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
@@ -154,7 +155,7 @@ namespace SD_FXUI
                 Name = System.IO.Path.GetDirectoryName(InputFile);
             }
 
-            string OutPath = FS.GetModelDir() + "onnx\\" + Name;
+            string OutPath = WorkDir + Name;
             OutPath = OutPath.Replace("\\", "/");
             InputFile = InputFile.Replace("\\", "/");
 
@@ -481,7 +482,7 @@ namespace SD_FXUI
 
             if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
-                if (!Directory.Exists(FS.GetModelDir() + "onnx/" + Helper.MakeInfo.Model + "\\cnet"))
+                if (!Directory.Exists(FS.GetModelDir(FS.ModelDirs.ONNX) + Helper.MakeInfo.Model + "\\cnet"))
                 {
                     Notification.SendNotification("Your model is old. Reconvert again for use ControlNet API!", true);
                 }

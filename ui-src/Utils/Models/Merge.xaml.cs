@@ -32,9 +32,9 @@ namespace SD_FXUI.Utils
                 return;
             }
 
-            string InModel = $"\"{FS.GetModelDir() + "diffusers/" + cbBase.Text}\"";
-            string AppendModel = $"\"{FS.GetModelDir() + "lora/" + cbLora.Text + ".safetensors"}\"";
-            string OutDir = "\"" +FS.GetModelDir() + "diffusers/" + tbOutpath.Text + "\"";
+            string InModel = $"\"{FS.GetModelDir(FS.ModelDirs.Diffusers) + cbBase.Text}\"";
+            string AppendModel = $"\"{FS.GetModelDir(FS.ModelDirs.LoRA) + cbLora.Text + ".safetensors"}\"";
+            string OutDir = "\"" +FS.GetModelDir(FS.ModelDirs.Diffusers) + tbOutpath.Text + "\"";
 
             Host MergeCall = new Host(FS.GetWorkingDir());
             MergeCall.Start();

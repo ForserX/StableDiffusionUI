@@ -801,11 +801,11 @@ namespace SD_FXUI
 
         private void btnApplyTI_Click(object sender, RoutedEventArgs e)
         {
-            string Path = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
+            string Path = FS.GetModelDir(FS.ModelDirs.Diffusers) + cbModel.Text;
 
             if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
-                string CPath = FS.GetModelDir() + "onnx\\" + cbModel.Text;
+                string CPath = FS.GetModelDir(FS.ModelDirs.ONNX) + cbModel.Text;
 
                 if (!Directory.Exists(Path))
                 {

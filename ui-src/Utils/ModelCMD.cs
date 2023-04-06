@@ -47,7 +47,7 @@ namespace SD_FXUI
 
                 if (IsCUDA)
                 {
-                    CmdLine = $"--model=\"{FS.GetModelDir() + "diffusers/" + Model}\" --mode=\"{Mode}\"";
+                    CmdLine = $"--model=\"{FS.GetModelDir(FS.ModelDirs.Diffusers) + Model}\" --mode=\"{Mode}\"";
                     CmdLine += $" --precision={(fp16 ? "fp16" : "fp32")}";
                     if (NSFW)
                     {
@@ -71,7 +71,7 @@ namespace SD_FXUI
 
                         string newLorastr = lorastr.ToString().Replace(",", ".");
 
-                        string LoRAModel = FS.GetModelDir() + "lora\\" + ModelLoRA;
+                        string LoRAModel = FS.GetModelDir(FS.ModelDirs.LoRA) + ModelLoRA;
 
                         if (LoRAModel.EndsWith(".safetensors"))
                         {
@@ -93,7 +93,7 @@ namespace SD_FXUI
                 }
                 else
                 {
-                    CmdLine = $"--model=\"{FS.GetModelDir() + "onnx/" + Model}\" --mode=\"{Mode}\"";
+                    CmdLine = $"--model=\"{FS.GetModelDir(FS.ModelDirs.ONNX) + Model}\" --mode=\"{Mode}\"";
                     if (NSFW)
                     {
                         CmdLine += " --nsfw=True ";
@@ -116,7 +116,7 @@ namespace SD_FXUI
 
                         string newLorastr = lorastr.ToString().Replace(",", ".");
 
-                        string LoRAModel = FS.GetModelDir() + "lora\\" + ModelLoRA;
+                        string LoRAModel = FS.GetModelDir(FS.ModelDirs.LoRA) + ModelLoRA;
 
                         if (LoRAModel.EndsWith(".safetensors"))
                         {

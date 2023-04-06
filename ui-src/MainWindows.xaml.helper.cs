@@ -157,7 +157,7 @@ namespace SD_FXUI
         {
             string Prompt = CodeUtils.GetRichText(tbPrompt);
 
-            string Model = FS.GetModelDir() + "onnx\\" + cbModel.Text;
+            string Model = FS.GetModelDir(FS.ModelDirs.ONNX) + cbModel.Text;
 
             string VAE = cbVAE.Text.ToLower();
             if (VAE != "default")
@@ -168,7 +168,7 @@ namespace SD_FXUI
                 }
                 else
                 {
-                    VAE = FS.GetModelDir() + "onnx\\" + cbVAE.Text.ToLower();
+                    VAE = FS.GetModelDir(FS.ModelDirs.ONNX) + cbVAE.Text.ToLower();
                 }
             }
 
@@ -318,7 +318,7 @@ namespace SD_FXUI
             string Prompt = CodeUtils.GetRichText(tbPrompt);
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
 
-            string Model = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
+            string Model = FS.GetModelDir(FS.ModelDirs.Diffusers) + cbModel.Text;
             if (cbModel.Text.EndsWith(".hgf"))
             {
                 Model = cbModel.Text;
@@ -334,7 +334,7 @@ namespace SD_FXUI
                 }
                 else
                 {
-                    VAE = FS.GetModelDir() + "diffusers\\" + cbVAE.Text.ToLower();
+                    VAE = FS.GetModelDir(FS.ModelDirs.Diffusers) + cbVAE.Text.ToLower();
                 }
             }
 
@@ -363,7 +363,7 @@ namespace SD_FXUI
 
             if (tsLoRA.IsChecked.Value)
             {
-                string LoRAModel = FS.GetModelDir() + "lora\\" + cbLoRA.Text;
+                string LoRAModel = FS.GetModelDir(FS.ModelDirs.LoRA) + cbLoRA.Text;
 
                 if (LoRAModel.EndsWith(".safetensors"))
                 {
@@ -434,7 +434,7 @@ namespace SD_FXUI
             string Prompt = CodeUtils.GetRichText(tbPrompt);
 
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
-            string Model = cbModel.Text.EndsWith(".hgf") ? cbModel.Text.Replace(".hgf", "") : FS.GetModelDir() + "diffusers\\" + cbModel.Text;
+            string Model = cbModel.Text.EndsWith(".hgf") ? cbModel.Text.Replace(".hgf", "") : FS.GetModelDir(FS.ModelDirs.Diffusers) + cbModel.Text;
             string CmdLine = $" --precision={FpMode}"
                     + $" --device=\"{cbDevice.Text}\""
                     + $" --prompt=\"{Prompt}\""
@@ -533,7 +533,7 @@ namespace SD_FXUI
             }
 
             // Yeah... LoRA...
-            string LoraPath = FS.GetModelDir() + "lora\\";
+            string LoraPath = FS.GetModelDir(FS.ModelDirs.LoRA);
             foreach (var Itm in Directory.GetFiles(LoraPath))
             {
                 string TryName = Itm.Replace(LoraPath, string.Empty);

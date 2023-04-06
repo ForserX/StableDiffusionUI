@@ -103,7 +103,7 @@ namespace SD_FXUI
 
         override public string Outdir()
         {
-            return FS.GetModelDir() + "OpenPose/";
+            return FS.GetModelDir(FS.ModelDirs.OpenPose);
         }
     }
 
