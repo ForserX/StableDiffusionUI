@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using SD_FXUI.Utils;
 using SD_FXUI.Utils.Models;
@@ -9,8 +10,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Windows.Devices.Usb;
 
 namespace SD_FXUI
 {
@@ -59,6 +62,7 @@ namespace SD_FXUI
             Install.WrapMlsdPath();
 
             gridImg.Visibility = Visibility.Collapsed;
+            brImgPane.Visibility = Visibility.Collapsed;
             btnDDB.Visibility = Visibility.Collapsed;
             NoImageData = ViewImg.Source;
             Helper.SafeMaskFreeImg = imgMask.Source;
@@ -115,7 +119,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = false;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
+                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text, tsLoRA.IsChecked.Value, tbLorastrength.Text);
                             SafeCMD.Start();
 
                             //cmdline += GetCommandLineOnnx();
@@ -139,7 +143,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = cbFf16.IsChecked.Value;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text,  tsLoRA.IsChecked.Value, tbLorastrength.Text, true);
+                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text, tsLoRA.IsChecked.Value, tbLorastrength.Text, true);
                             SafeCMD.Start();
                             //cmdline += GetCommandLineDiffCuda();
                             //Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
@@ -148,10 +152,8 @@ namespace SD_FXUI
                     }
             }
 
-            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != TryPrompt.Text)
-            {
-                Helper.PromHistory.Insert(0, TryPrompt.Text);
-            }
+            string richText = new TextRange(tbPrompt.Document.ContentStart, tbPrompt.Document.ContentEnd).Text;
+            Utils.HistoryList.ApplyPrompt(richText);
 
             currentImage = null;
             ClearImages();
@@ -281,9 +283,15 @@ namespace SD_FXUI
 
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
-                grLoRA.Visibility = Visibility.Collapsed;
+
+                grLoRA.Visibility = Visibility.Visible;
+                brLoRA.Visibility = Visibility.Visible;
+
                 grCN.Visibility = Visibility.Visible;
+
                 grDevice.Visibility = Visibility.Visible;
+                brDevice.Visibility = Visibility.Visible;
+
                 grVAE.Visibility = Visibility.Visible;
 
                 string SafeSampler = cbSampler.Text;
@@ -293,7 +301,7 @@ namespace SD_FXUI
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler", "DDIM");
+                cbSampler.Text = Data.Get("sampler", "UniPCMultistep");
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : ONNX venv";
@@ -317,8 +325,13 @@ namespace SD_FXUI
                 UpdateModelsTIList();
 
                 grDevice.Visibility = Visibility.Collapsed;
+                brDevice.Visibility = Visibility.Collapsed;
+
                 grVAE.Visibility = Visibility.Visible;
+
                 grLoRA.Visibility = Visibility.Visible;
+                brLoRA.Visibility = Visibility.Visible;
+
                 grCN.Visibility = Visibility.Visible;
 
                 btnImg.Visibility = Visibility.Visible;
@@ -331,7 +344,7 @@ namespace SD_FXUI
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler", "DDIM");
+                cbSampler.Text = Data.Get("sampler", "UniPCMultistep");
 
                 foreach (var item in Helper.GPUID.GPUs)
                 {
@@ -347,6 +360,9 @@ namespace SD_FXUI
                 }
 
                 cbDevice.Text = Data.Get("device");
+
+                if (cbDevice.Text.Length == 0)
+                    cbDevice.SelectedItem = 0;
 
                 Title = "Stable Diffusion XUI : CUDA venv";
             }
@@ -374,10 +390,15 @@ namespace SD_FXUI
 
                 btnImg.Visibility = Visibility.Hidden;
                 cbFf16.Visibility = Visibility.Visible;
+
                 grDevice.Visibility = Visibility.Visible;
+                brDevice.Visibility = Visibility.Visible;
+
                 grVAE.Visibility = Visibility.Collapsed;
                 grCN.Visibility = Visibility.Collapsed;
+
                 grLoRA.Visibility = Visibility.Collapsed;
+                brLoRA.Visibility = Visibility.Collapsed;
 
                 cbSampler.Items.Clear();
                 foreach (string Name in Schedulers.Shark)
@@ -408,11 +429,15 @@ namespace SD_FXUI
                 UpdateModelsTIList();
 
                 grDevice.Visibility = Visibility.Collapsed;
+                brDevice.Visibility = Visibility.Collapsed;
 
                 btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
                 grVAE.Visibility = Visibility.Visible;
+
                 grLoRA.Visibility = Visibility.Visible;
+                brLoRA.Visibility = Visibility.Visible;
+
                 grCN.Visibility = Visibility.Visible;
                 CPUUse = true;
 
@@ -422,7 +447,7 @@ namespace SD_FXUI
                     cbSampler.Items.Add(Name);
                 }
 
-                cbSampler.Text = Data.Get("sampler", "DDIM");
+                cbSampler.Text = Data.Get("sampler", "UniPCMultistep");
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : CPU venv";
@@ -434,7 +459,7 @@ namespace SD_FXUI
             {
                 currentImage = (Helper.ImgList[lvImages.SelectedIndex]);
 
-                ViewImg.Source = FS.BitmapFromUri(new Uri(currentImage));
+                ViewImg.Source = CodeUtils.BitmapFromUri(new Uri(currentImage));
                 string NewCurrentImage = currentImage.Replace("_upscale.", ".");
 
                 if (File.Exists(NewCurrentImage))
@@ -478,10 +503,11 @@ namespace SD_FXUI
             {
                 Helper.InputImagePath = OpenDlg.FileName;
                 gridImg.Visibility = Visibility.Visible;
-                imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
+                brImgPane.Visibility = Visibility.Visible;
+                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(Helper.InputImagePath));
                 Helper.DrawMode = Helper.DrawingMode.Img2Img;
 
-                tbMeta.Text = FS.MetaData(Helper.InputImagePath);
+                tbMeta.Text = CodeUtils.MetaData(Helper.InputImagePath);
             }
         }
 
@@ -504,7 +530,7 @@ namespace SD_FXUI
             else if (currentImage != null)
             {
                 Helper.InputImagePath = currentImage;
-                imgLoaded.Source = FS.BitmapFromUri(new Uri(currentImage));
+                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(currentImage));
             }
             else
             {
@@ -515,12 +541,13 @@ namespace SD_FXUI
                 }
 
                 Helper.InputImagePath = Helper.ImgList[Idx];
-                imgLoaded.Source = FS.BitmapFromUri(new Uri(Helper.InputImagePath));
+                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(Helper.InputImagePath));
             }
 
-            tbMeta.Text = FS.MetaData(Helper.InputImagePath);
+            tbMeta.Text = CodeUtils.MetaData(Helper.InputImagePath);
 
             gridImg.Visibility = Visibility.Visible;
+            brImgPane.Visibility = Visibility.Visible;
             Helper.DrawMode = Helper.DrawingMode.Img2Img;
         }
 
@@ -532,6 +559,7 @@ namespace SD_FXUI
         private void btnImageClear_Click(object sender, RoutedEventArgs e)
         {
             gridImg.Visibility = Visibility.Collapsed;
+            brImgPane.Visibility = Visibility.Collapsed;
 
             Helper.DrawMode = Helper.DrawingMode.Text2Img;
             imgLoaded.Source = NoImageData;
@@ -555,14 +583,16 @@ namespace SD_FXUI
 
         private void btnFavorClick(object sender, MouseButtonEventArgs e)
         {
-            if (lvImages.Items.Count == 0 || lvImages.SelectedItem == null)
+            if (lvImages.Items.Count == 0)
             {
                 return;
             }
 
+            int CurrentSel = lvImages.SelectedItem != null ? lvImages.SelectedIndex : 0;
+
             if (Helper.ImageState.Favor == Helper.ActiveImageState)
             {
-                string Name = Path.GetFileName(Helper.ImgList[lvImages.SelectedIndex]);
+                string Name = Path.GetFileName(Helper.ImgList[CurrentSel]);
                 File.Delete(FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Free;
 
@@ -570,8 +600,8 @@ namespace SD_FXUI
             }
             else
             {
-                string Name = Path.GetFileName(Helper.ImgList[lvImages.SelectedIndex]);
-                File.Copy(Helper.ImgList[lvImages.SelectedIndex], FS.GetImagesDir() + "best\\" + Name);
+                string Name = Path.GetFileName(Helper.ImgList[CurrentSel]);
+                File.Copy(Helper.ImgList[CurrentSel], FS.GetImagesDir() + "best\\" + Name);
                 Helper.ActiveImageState = Helper.ImageState.Favor;
 
                 btnFavor.Source = imgFavor.Source;
@@ -639,7 +669,7 @@ namespace SD_FXUI
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
                 currentImage = dropedFile;
-                ViewImg.Source = FS.BitmapFromUri(new Uri(dropedFile));
+                ViewImg.Source = CodeUtils.BitmapFromUri(new Uri(dropedFile));
                 btnDDB.Visibility = Visibility.Visible;
             }
         }
@@ -721,7 +751,7 @@ namespace SD_FXUI
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
                 Helper.ImgMaskPath = dropedFile;
-                imgMask.Source = FS.BitmapFromUri(new Uri(dropedFile));
+                imgMask.Source = CodeUtils.BitmapFromUri(new Uri(dropedFile));
                 btnImageClearMask.Visibility = Visibility.Visible;
             }
         }
@@ -773,11 +803,11 @@ namespace SD_FXUI
 
         private void btnApplyTI_Click(object sender, RoutedEventArgs e)
         {
-            string Path = FS.GetModelDir() + "diffusers\\" + cbModel.Text;
+            string Path = FS.GetModelDir(FS.ModelDirs.Diffusers) + cbModel.Text;
 
             if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
-                string CPath = FS.GetModelDir() + "onnx\\" + cbModel.Text;
+                string CPath = FS.GetModelDir(FS.ModelDirs.ONNX) + cbModel.Text;
 
                 if (!Directory.Exists(Path))
                 {
@@ -818,6 +848,24 @@ namespace SD_FXUI
 
         private void cbModel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count == 0)
+                return;
+
+            string PickPathName = FS.GetModelDir() + (Helper.Mode != Helper.ImplementMode.ONNX ? "Diffusers\\" : "onnx\\") + e.AddedItems[0] + "\\logo.";
+
+            if (System.IO.File.Exists(PickPathName + "png"))
+            {
+                imgModelPrivew.Source = CodeUtils.BitmapFromUri(new Uri(PickPathName + "png"));
+            }
+            else if (System.IO.File.Exists(PickPathName + "jpg"))
+            {
+                imgModelPrivew.Source = CodeUtils.BitmapFromUri(new Uri(PickPathName + "jpg"));
+            }
+            else
+            {
+                imgModelPrivew.Source = NoImageData;
+            }
+
             if (Helper.Mode != Helper.ImplementMode.ONNX || cbTI == null || e.AddedItems.Count == 0)
                 return;
 
@@ -876,12 +924,12 @@ namespace SD_FXUI
 
             string ImgPath = HelperControlNet.Current.Outdir();
             ImgPath += e.AddedItems[0];
-            
+
             if (!ImgPath.EndsWith(".jpg"))
                 ImgPath += ".png";
 
             if (File.Exists(ImgPath))
-                imgPose.Source = FS.BitmapFromUri(new Uri(ImgPath));
+                imgPose.Source = CodeUtils.BitmapFromUri(new Uri(ImgPath));
 
             Helper.CurrentPose = ImgPath;
         }
@@ -891,6 +939,25 @@ namespace SD_FXUI
             cbPose.IsEnabled = tsCN.IsChecked.Value;
             imgPose.IsEnabled = tsCN.IsChecked.Value;
             cbSampler.IsEnabled = !tsCN.IsChecked.Value;
+
+            if (tsCN.IsChecked.Value)
+            {
+                cbSampler.Text = "UniPCMultistep";
+            }
+
+            if (Helper.Mode != Helper.ImplementMode.ONNX)
+                return;
+
+            if (tsCN.IsChecked == true)
+            {
+                brLoRA.Visibility = Visibility.Collapsed;
+                grLoRA.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                brLoRA.Visibility = Visibility.Visible;
+                grLoRA.Visibility = Visibility.Visible;
+            }
         }
 
         private void tsTTA_Checked(object sender, RoutedEventArgs e)
@@ -920,7 +987,24 @@ namespace SD_FXUI
 
         private void cbLoRA_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count == 0)
+                return;
 
+            string LoRAName = e.AddedItems[0].ToString();
+            LoRAName = LoRAName.Replace(".safetensors", string.Empty);
+
+            string TokenFilePath = FS.GetModelDir(FS.ModelDirs.LoRA) + LoRAName + ".txt";
+            if (File.Exists(TokenFilePath))
+            {
+                string Contents = File.ReadAllText(TokenFilePath);
+                tbLoRAUserTokens.Text = Contents;
+                tbLoRAUserTokens.IsEnabled = true;
+            }
+            else
+            {
+                tbLoRAUserTokens.IsEnabled = false;
+                tbLoRAUserTokens.Text = "";
+            }
         }
 
         private void cbPreprocess_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -931,9 +1015,7 @@ namespace SD_FXUI
         private void cbControlNetMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0)
-            {
                 return;
-            }
 
             string NewMode = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
 
@@ -941,8 +1023,28 @@ namespace SD_FXUI
 
             UpdateModelsListControlNet();
             cbPose.IsEnabled = true;
+        }
 
-            btnMake.IsEnabled = (NewMode != "Facegen");
+        private void btnMore(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void tsLoRA_Checked(object sender, RoutedEventArgs e)
+        {
+            if (Helper.Mode != Helper.ImplementMode.ONNX)
+                return;
+
+            if (tsLoRA.IsChecked == true)
+            {
+                brCN.Visibility = Visibility.Collapsed;
+                grCN.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                brCN.Visibility = Visibility.Visible;
+                grCN.Visibility = Visibility.Visible;
+            }
         }
 
         private void Button_ClickTest(object sender, RoutedEventArgs e)

@@ -15,6 +15,7 @@
 
         public static string[] Diffusers =
         {
+            "UniPCMultistep",
             "DDIM",
             "EulerDiscrete",
             "EulerAncestralDiscrete",

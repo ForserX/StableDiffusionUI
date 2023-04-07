@@ -4,10 +4,11 @@ import argparse
 import json
 
 from diffusers import OnnxRuntimeModel
-from transformers import CLIPTokenizer
 
 from sd_xbackend import (
     GetPipe,
+    GetPipeOL,
+    ApplyLoraONNX,
     GetSampler,
     ApplyArg,
     MakeImage
@@ -24,9 +25,14 @@ if len(sys.argv)==1:
 
 opt = parser.parse_args()
 prov = "DmlExecutionProvider"
+pipe = None
 
-pipe = GetPipe(opt.mdlpath, opt.mode, True, opt.nsfw, False)
-    
+if opt.lora:
+    pipe = GetPipeOL(opt.mdlpath, opt.mode, opt.nsfw)
+    ApplyLoraONNX(opt, pipe)
+else:
+    pipe = GetPipe(opt.mdlpath, opt.mode, True, opt.nsfw, False)
+
 print("SD: Model preload: done")
 
 while True:

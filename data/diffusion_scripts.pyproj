@@ -39,6 +39,7 @@
     <Compile Include="modules\danbooru.py" />
     <Compile Include="modules\danbooru_model.py" />
     <Compile Include="modules\inference_gfpgan.py" />
+    <Compile Include="modules\onnx\lora.py" />
     <Compile Include="modules\textual_inversion\dataset.py" />
     <Compile Include="modules\textual_inversion\learn_schedule.py" />
     <Compile Include="modules\textual_inversion\textual_inversion.py" />
@@ -51,6 +52,7 @@
     <Folder Include="custom_pipelines\" />
     <Folder Include="modules\" />
     <Folder Include="modules\controlnet\" />
+    <Folder Include="modules\onnx\" />
     <Folder Include="modules\textual_inversion\" />
   </ItemGroup>
   <ItemGroup>

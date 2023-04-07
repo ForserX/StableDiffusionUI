@@ -1,4 +1,4 @@
-# StableDiffusionUI Shark AMD and Nvidia
+# Stable Diffusion XUI
 ### What is it
 Simple re-implement SD UI for AMD and Nvidia GPU 
 ![image](https://user-images.githubusercontent.com/13867290/222996644-77cfab99-6a1a-45e1-823e-9a1365e515db.png)
@@ -23,7 +23,7 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 # Features
 * Custom VAE (ONNX/CUDA)
 * Lora (CUDA) 
-* ControlNet Pose (CUDA/ONNX)
+* ControlNet (CUDA/ONNX)
 * DeepDanbooru tokens extractor (ONNX/CUDA)
 * Converter for Diffusers/ONNX 
 * Vulkan upscalers (ONNX/CUDA)

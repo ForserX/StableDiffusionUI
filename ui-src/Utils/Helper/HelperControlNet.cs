@@ -34,7 +34,18 @@ namespace SD_FXUI
 
         virtual public string CommandLine()
         {
-            return "";
+            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
+
+            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            {
+                cmdline += $" --mode=\"IfPONNX\"";
+            }
+            else
+            {
+                cmdline += $" --mode=\"IfP\"";
+            }
+
+            return cmdline;
         }
 
         virtual public string PreprocessCommandLine()
@@ -66,7 +77,7 @@ namespace SD_FXUI
             if (!System.IO.Directory.Exists(GetModelPathSD()))
             {
                 Notification.SendNotification("Starting downloading pose model...");
-                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Poser);
+                WGetDownloadModels.DownloadSDPoser();
                 Notification.SendNotification("Downloading pose model: done!");
             }
         }
@@ -80,21 +91,6 @@ namespace SD_FXUI
                 Notification.SendNotification("Download pose model: done!");
             }
         }
-        override public string CommandLine()
-        {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                cmdline += $" --mode=\"IfPONNX\"";
-            }
-            else
-            {
-                cmdline += $" --mode=\"IfP\"";
-            }
-
-            return cmdline;
-        }
 
         override public string PreprocessCommandLine()
         {
@@ -103,7 +99,7 @@ namespace SD_FXUI
 
         override public string Outdir()
         {
-            return FS.GetModelDir() + "OpenPose/";
+            return FS.GetModelDir(FS.ModelDirs.OpenPose);
         }
     }
 
@@ -122,25 +118,9 @@ namespace SD_FXUI
             if (!System.IO.Directory.Exists(GetModelPathSD()))
             {
                 Notification.SendNotification("Starting downloading pose model...");
-                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Poser);
+                WGetDownloadModels.DownloadSDFacegen();
                 Notification.SendNotification("Downloading pose model: done!");
             }
-        }
-
-        override public string CommandLine()
-        {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                cmdline += $" --mode=\"IfPONNX\"";
-            }
-            else
-            {
-                cmdline += $" --mode=\"IfP\"";
-            }
-
-            return cmdline;
         }
 
         override public string PreprocessCommandLine()
@@ -184,22 +164,6 @@ namespace SD_FXUI
             }
         }
        
-        override public string CommandLine()
-        {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                cmdline += $" --mode=\"IfPONNX\"";
-            }
-            else
-            {
-                cmdline += $" --mode=\"IfP\"";
-            }
-
-            return cmdline;
-        }
-
         override public string PreprocessCommandLine()
         {
             return "HfI";
@@ -230,22 +194,6 @@ namespace SD_FXUI
             }
         }
 
-        override public string CommandLine()
-        {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                cmdline += $" --mode=\"IfPONNX\" ";
-            }
-            else
-            {
-                cmdline += $" --mode=\"IfP\" ";
-            }
-
-            return cmdline;
-        }
-
         override public string PreprocessCommandLine()
         {
             return "CfI";
@@ -274,22 +222,6 @@ namespace SD_FXUI
                 WGetDownloadModels.DownloadSDCNDepth();
                 Notification.SendNotification("Downloading depth model: done!");
             }
-        }
-
-        override public string CommandLine()
-        {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                cmdline += $" --mode=\"IfPONNX\" ";
-            }
-            else
-            {
-                cmdline += $" --mode=\"IfP\" ";
-            }
-
-            return cmdline;
         }
 
         override public string PreprocessCommandLine()
@@ -323,22 +255,6 @@ namespace SD_FXUI
             }
         }
 
-        override public string CommandLine()
-        {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                cmdline += $" --mode=\"IfPONNX\" ";
-            }
-            else
-            {
-                cmdline += $" --mode=\"IfP\" ";
-            }
-
-            return cmdline;
-        }
-
         override public string PreprocessCommandLine()
         {
             return "NfI";
@@ -369,22 +285,6 @@ namespace SD_FXUI
             }
         }
 
-        override public string CommandLine()
-        {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                cmdline += $" --mode=\"IfPONNX\" ";
-            }
-            else
-            {
-                cmdline += $" --mode=\"IfP\" ";
-            }
-
-            return cmdline;
-        }
-
         override public string PreprocessCommandLine()
         {
             return "SfI";
@@ -413,22 +313,6 @@ namespace SD_FXUI
                 WGetDownloadModels.DownloadSDCNSeg();
                 Notification.SendNotification("Downloading seg model: done!");
             }
-        }
-
-        override public string CommandLine()
-        {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                cmdline += $" --mode=\"IfPONNX\" ";
-            }
-            else
-            {
-                cmdline += $" --mode=\"IfP\" ";
-            }
-
-            return cmdline;
         }
 
         override public string PreprocessCommandLine()
@@ -469,22 +353,6 @@ namespace SD_FXUI
                 WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Mlsd);
                 Notification.SendNotification("Download mlsd model: done!");
             }
-        }
-
-        override public string CommandLine()
-        {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                cmdline += $" --mode=\"IfPONNX\" ";
-            }
-            else
-            {
-                cmdline += $" --mode=\"IfP\" ";
-            }
-
-            return cmdline;
         }
 
         override public string PreprocessCommandLine()

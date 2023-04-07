@@ -5,6 +5,10 @@ from Hypernetwork import Hypernetwork
 from custom_pipelines.pipeline_onnx_stable_diffusion_instruct_pix2pix import OnnxStableDiffusionInstructPix2PixPipeline
 from custom_pipelines.pipeline_onnx_stable_diffusion_controlnet import OnnxStableDiffusionControlNetPipeline
 
+from onnxruntime import SessionOptions
+from modules.onnx.lora import blend_loras, buffer_external_data_tensors
+ONNX_MODEL = "model.onnx"
+
 from safetensors.torch import load_file
 
 from diffusers import ( 
@@ -30,7 +34,8 @@ from diffusers import (
     EulerDiscreteScheduler, 
     DDPMScheduler, 
     KDPM2DiscreteScheduler, 
-    HeunDiscreteScheduler
+    HeunDiscreteScheduler,
+    UniPCMultistepScheduler
 )
 
 prov = "DmlExecutionProvider"
@@ -82,6 +87,23 @@ def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
                 pipe = StableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
             if Mode == "inpaint":
                 pipe = StableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
+                
+    return pipe
+
+def GetPipeOL(Model: str, Mode: str, NSFW: bool):
+    pipe = None
+    nsfw_pipe = None
+    
+    if NSFW:
+        safety_model = Model + "/safety_checker/"
+        nsfw_pipe = OnnxRuntimeModel.from_pretrained(safety_model, provider=prov)
+
+    if Mode == "txt2img":
+        pipe = OnnxStableDiffusionPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe, text_encoder=None, unet=None)
+    if Mode == "img2img":
+        pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe, text_encoder=None, unet=None)
+    if Mode == "inpaint":
+        pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe, text_encoder=None, unet=None)
                 
     return pipe
 
@@ -137,9 +159,21 @@ def ApplyHyperNetwork(pipe, HyperNetworkPath : str, device : str, fp16: bool, st
      Hyper.load_from_state_dict(state_dict)
      Hyper.apply_to_diffusers(pipe.unet)
 
-     
-
-     
+def ApplyLoraONNX(opt, pipe):
+    blended_unet = blend_loras(opt.mdlpath + "/unet/" + ONNX_MODEL, opt.lora_path, "unet", opt.lora_strength)
+    (unet_model, unet_data) = buffer_external_data_tensors(blended_unet)
+    unet_names, unet_values = zip(*unet_data)
+    sess = SessionOptions()
+    sess.add_external_initializers(list(unet_names), list(unet_values))
+    
+    blended_te = blend_loras(opt.mdlpath + "/text_encoder/" + ONNX_MODEL, opt.lora_path, "text_encoder", opt.lora_strength)
+    (te_model, te_data) = buffer_external_data_tensors(blended_te)
+    te_names, te_values = zip(*te_data)
+    sess_te = SessionOptions()
+    sess_te.add_external_initializers(list(te_names), list(te_values))
+    
+    pipe.unet = OnnxRuntimeModel(OnnxRuntimeModel.load_model(unet_model.SerializeToString(), provider=prov, sess_options=sess))
+    pipe.text_encoder = OnnxRuntimeModel(OnnxRuntimeModel.load_model(te_model.SerializeToString(), provider=prov, sess_options=sess_te))
 
 def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool, strength: float):
     model_path = LoraPath
@@ -235,6 +269,8 @@ def GetSampler(Pipe, SamplerName: str, ETA):
         Pipe.scheduler = KDPM2DiscreteScheduler.from_config(Pipe.scheduler.config)
     if SamplerName == "HeunDiscrete":
         Pipe.scheduler = HeunDiscreteScheduler.from_config(Pipe.scheduler.config)
+    if SamplerName == "UniPCMultistep":
+        Pipe.scheduler = UniPCMultistepScheduler.from_config(Pipe.scheduler.config)
 
     return eta
 

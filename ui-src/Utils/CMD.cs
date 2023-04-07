@@ -67,12 +67,12 @@ namespace SD_FXUI
 
             if (InputFile.EndsWith(".safetensors"))
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
+                OutPath = FS.GetModelDir(FS.ModelDirs.Diffusers) + Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
                 AddCmd = " --from_safetensors";
             }
             else
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+                OutPath = FS.GetModelDir(FS.ModelDirs.Diffusers) + Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
             }
 
             Directory.CreateDirectory(OutPath);
@@ -104,12 +104,12 @@ namespace SD_FXUI
 
             if (InputFile.EndsWith(".safetensors"))
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
+                OutPath = FS.GetModelDir(FS.ModelDirs.Diffusers) + Path.GetFileName(InputFile.Substring(0, InputFile.Length - 12));
                 AddCmd = " --from_safetensors";
             }
             else
             {
-                OutPath = FS.GetModelDir() + "diffusers\\" + System.IO.Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
+                OutPath = FS.GetModelDir(FS.ModelDirs.Diffusers) + Path.GetFileName(InputFile.Substring(0, InputFile.Length - 5));
             }
 
             Directory.CreateDirectory(OutPath);
@@ -130,10 +130,10 @@ namespace SD_FXUI
                 Name = System.IO.Path.GetDirectoryName(InputFile);
             }
 
-            string OutPathONNX = FS.GetModelDir() + "onnx\\" + Name;
+            string OutPathONNX = FS.GetModelDir(FS.ModelDirs.ONNX) + Name;
             OutPath = OutPath.Replace("\\", "/");
 
-            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"../../repo/diffusion_scripts/convert/convert_stable_diffusion_checkpoint_to_onnx.py\" " +
+            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"../../repo/diffusion_scripts/convert/convert_diffusers_to_onnx.py\" " +
                                                                             $"--model_path=\"{OutPath}\" --output_path=\"{OutPathONNX}\"");
 
             ProcessHost.SendExitCommand();
@@ -143,7 +143,8 @@ namespace SD_FXUI
         public static async Task ProcessConvertDiff2Onnx(string InputFile)
         {
             Notification.SendNotification("Convertation: ~3min!");
-            string WorkDir = FS.GetModelDir() + "onnx\\";
+            string WorkDir = FS.GetModelDir(FS.ModelDirs.ONNX);
+
             Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
@@ -154,13 +155,13 @@ namespace SD_FXUI
                 Name = System.IO.Path.GetDirectoryName(InputFile);
             }
 
-            string OutPath = FS.GetModelDir() + "onnx\\" + Name;
+            string OutPath = WorkDir + Name;
             OutPath = OutPath.Replace("\\", "/");
             InputFile = InputFile.Replace("\\", "/");
 
             Directory.CreateDirectory(OutPath);
 
-            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_stable_diffusion_checkpoint_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
+            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_diffusers_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
                                                                             $" --model_path=\"{InputFile}\"");
 
             ProcessHost.SendExitCommand();
@@ -208,7 +209,7 @@ namespace SD_FXUI
             {
                 string ModelDir = FS.GetModelDir();
 
-                if (!Directory.Exists(ModelDir + "\\weights"))
+                if (!Directory.Exists(ModelDir + "gfpgan\\weights"))
                 {
                     Notification.SendNotification("Starting downloading face restoration...");
                 }
@@ -316,14 +317,16 @@ namespace SD_FXUI
             ProcessHost.Start("-i " + File + " -o " + OutFile + DopCmd);
             ProcessHost.Wait();
 
-            Helper.Form.UpdateViewImg(OutFile);
-
             if (Helper.EnableGFPGAN)
             {
                 Host ProcesHostTwo = new Host(FS.GetModelDir(), FileName);
                 OutFile = NewFile.Substring(0, NewFile.Length - 4) + "_upscale.png";
                 ProcesHostTwo.Start("-i " + NewFile + " -o " + OutFile + DopCmd);
                 ProcesHostTwo.Wait();
+                Helper.Form.UpdateViewImg(OutFile);
+            }
+            else
+            {
                 Helper.Form.UpdateViewImg(OutFile);
             }
 
@@ -355,20 +358,24 @@ namespace SD_FXUI
 
             Host.Print("\n  Convert task is done..... \n");
             Notification.SendNotification("Convertation: done!");
+            Helper.Form.InvokeUpdateModelsList();
         }
 
         internal static void ProcessConvertVaePt2ONNX(string InputFile)
         {
+            bool NeedNameFix = true;
+
             if (InputFile.EndsWith("pt"))
             {
                 string NewInputFile = System.IO.Path.GetFileNameWithoutExtension(InputFile);
-                NewInputFile = FS.GetModelDir() + "vae\\" + InputFile;
+                NewInputFile = FS.GetModelDir() + "vae\\" + NewInputFile;
 
                 if (!Directory.Exists(NewInputFile))
                 {
-                    ProcessConvertVaePt2Diff(NewInputFile);
+                    ProcessConvertVaePt2Diff(InputFile);
                 }
                 InputFile = NewInputFile;
+                NeedNameFix = false;
             }
 
             Notification.SendNotification("Convertation: ~few seconds");
@@ -376,10 +383,19 @@ namespace SD_FXUI
             Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print($"\n Startup convert vae ({InputFile})..... \n");
 
+            string OutPath = "";
 
-            string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
+            if (NeedNameFix)
+            {
+                string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
 
-            string OutPath = WorkDir + Name;
+                OutPath = WorkDir + Name;
+            }
+            else
+            {
+                OutPath = InputFile;
+            }
+
             OutPath = OutPath.Replace("\\", "/");
             InputFile = InputFile.Replace("\\", "/");
 
@@ -393,6 +409,8 @@ namespace SD_FXUI
 
             Host.Print("\n  Convert task is done..... \n");
             Notification.SendNotification("Convertation: done!");
+
+            Helper.Form.InvokeUpdateModelsList();
         }
 
         /*
@@ -464,7 +482,7 @@ namespace SD_FXUI
 
             if (Helper.Mode == Helper.ImplementMode.ONNX)
             {
-                if (!Directory.Exists(FS.GetModelDir() + "onnx/" + Helper.MakeInfo.Model + "\\cnet"))
+                if (!Directory.Exists(FS.GetModelDir(FS.ModelDirs.ONNX) + Helper.MakeInfo.Model + "\\cnet"))
                 {
                     Notification.SendNotification("Your model is old. Reconvert again for use ControlNet API!", true);
                 }

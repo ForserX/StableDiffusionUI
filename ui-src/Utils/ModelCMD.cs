@@ -28,7 +28,7 @@ namespace SD_FXUI
         {
             bool LoRACheck = LoRA != LoraEnable;
 
-            if (NSFW != StartNSFW || Model != StartModel || StartMode != Mode || IsCUDA != CUDA || LoRACheck || fp16 != Infp16 || LoraStrength != LoRAStr)
+            if (NSFW != StartNSFW || Model != StartModel || StartMode != Mode || IsCUDA != CUDA || LoRACheck || NameLora != ModelLoRA|| fp16 != Infp16 || LoraStrength != LoRAStr)
             {
                 if (Process != null)
                 {
@@ -47,7 +47,7 @@ namespace SD_FXUI
 
                 if (IsCUDA)
                 {
-                    CmdLine = $"--model=\"{FS.GetModelDir() + "diffusers/" + Model}\" --mode=\"{Mode}\"";
+                    CmdLine = $"--model=\"{FS.GetModelDir(FS.ModelDirs.Diffusers) + Model}\" --mode=\"{Mode}\"";
                     CmdLine += $" --precision={(fp16 ? "fp16" : "fp32")}";
                     if (NSFW)
                     {
@@ -71,7 +71,7 @@ namespace SD_FXUI
 
                         string newLorastr = lorastr.ToString().Replace(",", ".");
 
-                        string LoRAModel = FS.GetModelDir() + "lora\\" + ModelLoRA;
+                        string LoRAModel = FS.GetModelDir(FS.ModelDirs.LoRA) + ModelLoRA;
 
                         if (LoRAModel.EndsWith(".safetensors"))
                         {
@@ -93,13 +93,38 @@ namespace SD_FXUI
                 }
                 else
                 {
-                    CmdLine = $"--model=\"{FS.GetModelDir() + "onnx/" + Model}\" --mode=\"{Mode}\"";
+                    CmdLine = $"--model=\"{FS.GetModelDir(FS.ModelDirs.ONNX) + Model}\" --mode=\"{Mode}\"";
                     if (NSFW)
                     {
                         CmdLine += " --nsfw=True ";
                     }
 
-                    Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
+                    if (!LoraEnable)
+                    {
+                        ModelLoRA = "";
+                    }
+                    else
+                    {
+                        ModelLoRA = NameLora;
+                    }
+
+                    if (LoraEnable)
+                    {
+
+                        float lorastr = float.Parse(LoraStrength);
+                        lorastr /= 100;
+
+                        string newLorastr = lorastr.ToString().Replace(",", ".");
+
+                        string LoRAModel = FS.GetModelDir(FS.ModelDirs.LoRA) + ModelLoRA;
+
+                        if (LoRAModel.EndsWith(".safetensors"))
+                        {
+                            CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\" --lora_strength=\"{newLorastr}\"";
+                        }
+                    }
+
+                        Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
                     Process.Start("./repo/diffusion_scripts/sd_onnx_safe.py " + CmdLine);
                 }
             }
