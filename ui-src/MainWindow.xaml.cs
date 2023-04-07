@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.Win32;
+using SD_FXUI.Utils;
 using SD_FXUI.Utils.Models;
 using System;
 using System.Collections.ObjectModel;
@@ -942,6 +943,57 @@ namespace SD_FXUI
             cbPose.IsEnabled = true;
 
             btnMake.IsEnabled = (NewMode != "Facegen");
+        }
+
+        private void Button_ClickTest(object sender, RoutedEventArgs e)
+        {
+            ViewImg.Visibility = Visibility.Hidden;
+
+            ImageGrid.Children.Clear();
+
+            
+
+            for (int i = 0; i < 26; i++)
+            {
+                Image newImage = new Image();
+                //newCheckBox.Content = tokensAllInMemory[i];
+                newImage.Name = "Image" + i;
+                newImage.Height = 128;
+                newImage.Width = 128;
+                newImage.HorizontalAlignment = HorizontalAlignment.Left;
+                newImage.VerticalAlignment = VerticalAlignment.Top;
+                newImage.Source = ViewImg.Source;
+
+                int offset = 100;
+
+                var kx = (ImageGrid.ActualWidth / newImage.Width);
+                var ky = ((ImageGrid.ActualHeight-offset) / newImage.Height);
+
+                var kWidth  = ((int)kx * newImage.Width);
+                var kHeight = ((int)ky * newImage.Height);
+
+
+                var aboba = ((ImageGrid.ActualHeight - offset) - kHeight) / 2; // begin draw
+                var bboba = (ImageGrid.ActualHeight - offset); //end draw;
+
+
+
+                double y = (newImage.Height * i);
+                int j = (int)(  (y / (ImageGrid.ActualHeight - offset - newImage.Height)));
+                int k = (int)(      (ImageGrid.ActualHeight - offset) / newImage.Height);
+                int x = i % k;
+                y = ((newImage.Height * x)) + aboba;
+
+                newImage.Margin = new Thickness(newImage.Width * j, y, 0.0, 0.0);
+                               
+                ImageGrid.Children.Add(newImage);
+
+            }
+
+            CheckBox chb = new CheckBox();
+
+
+
         }
     }
 }
