@@ -1,4 +1,5 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using SD_FXUI.Utils.Models;
 using System;
@@ -942,6 +943,20 @@ namespace SD_FXUI
             {
                 cbSampler.Text = "UniPCMultistep";
             }
+
+            if (Helper.Mode != Helper.ImplementMode.ONNX)
+                return;
+
+            if (tsCN.IsChecked == true)
+            {
+                brLoRA.Visibility = Visibility.Collapsed;
+                grLoRA.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                brLoRA.Visibility = Visibility.Visible;
+                grLoRA.Visibility = Visibility.Visible;
+            }
         }
 
         private void tsTTA_Checked(object sender, RoutedEventArgs e)
@@ -971,7 +986,24 @@ namespace SD_FXUI
 
         private void cbLoRA_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems.Count == 0)
+                return;
 
+            string LoRAName = e.AddedItems[0].ToString();
+            LoRAName = LoRAName.Replace(".safetensors", string.Empty);
+
+            string TokenFilePath = FS.GetModelDir(FS.ModelDirs.LoRA) + LoRAName + ".txt";
+            if (File.Exists(TokenFilePath))
+            {
+                string Contents = File.ReadAllText(TokenFilePath);
+                tbLoRAUserTokens.Text = Contents;
+                tbLoRAUserTokens.IsEnabled = true;
+            }
+            else
+            {
+                tbLoRAUserTokens.IsEnabled = false;
+                tbLoRAUserTokens.Text = "";
+            }
         }
 
         private void cbPreprocess_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -982,9 +1014,7 @@ namespace SD_FXUI
         private void cbControlNetMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count == 0)
-            {
                 return;
-            }
 
             string NewMode = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
 
@@ -992,13 +1022,28 @@ namespace SD_FXUI
 
             UpdateModelsListControlNet();
             cbPose.IsEnabled = true;
-
-            btnMake.IsEnabled = (NewMode != "Facegen");
         }
 
         private void btnMore(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void tsLoRA_Checked(object sender, RoutedEventArgs e)
+        {
+            if (Helper.Mode != Helper.ImplementMode.ONNX)
+                return;
+
+            if (tsLoRA.IsChecked == true)
+            {
+                brCN.Visibility = Visibility.Collapsed;
+                grCN.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                brCN.Visibility = Visibility.Visible;
+                grCN.Visibility = Visibility.Visible;
+            }
         }
     }
 }

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using System.Text.RegularExpressions;
 
 namespace SD_FXUI
 {
@@ -20,7 +17,10 @@ namespace SD_FXUI
 
         public static string GetRichText(RichTextBox Tb)
         {
-            return new TextRange(Tb.Document.ContentStart, Tb.Document.ContentEnd).Text;
+            string ResultString = new TextRange(Tb.Document.ContentStart, Tb.Document.ContentEnd).Text;
+            ResultString = Regex.Replace(ResultString, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
+
+            return ResultString;
         }
         
         public static ImageSource BitmapFromUri(System.Uri source)
@@ -32,6 +32,7 @@ namespace SD_FXUI
             bitmap.EndInit();
             return bitmap;
         }
+
         public static string MetaData(string File)
         {
             string MetaText = "No meta";

@@ -36,3 +36,4 @@ safetensors
 # ControlNet
 controlnet_aux
 mediapipe
+protobuf==3.20.*

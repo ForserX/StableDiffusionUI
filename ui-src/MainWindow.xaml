@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="763" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="1095" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#38928FD4" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -250,18 +250,19 @@
                         <Image x:Name="imgModelPrivew" Margin="0,3,3,3" Source="/res/nomodelimg.jpg" HorizontalAlignment="Right" Width="65" Stretch="Fill"/>
                     </Grid>
                 </Border>
-                <Border x:Name="brLoRA" BorderBrush="#FFD0C0E9" BorderThickness="0.5">
-                    <Grid x:Name="grLoRA" Height="38">
+                <Border x:Name="brLoRA" BorderBrush="#FFD0C0E9" BorderThickness="0.5" Height="66">
+                    <Grid x:Name="grLoRA" Height="74">
                         <ComboBox  x:Name="cbLoRA" Height="22" Text="" Margin="46,4,79,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged">
                             <ComboBox  x:Name="cbLoRA_Copy" Height="22" Text="" VerticalAlignment="Top" Width="272"/>
                         </ComboBox>
-                        <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,5,0,0" VerticalAlignment="Top"/>
-                        <ToggleButton x:Name="tsLoRA" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="377,0,0,0" Height="18" VerticalAlignment="Center" HorizontalAlignment="Left" Width="25"/>
+                        <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left"/>
+                        <ToggleButton x:Name="tsLoRA" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,10,9,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="25" Checked="tsLoRA_Checked" Unchecked="tsLoRA_Checked"/>
                         <Label Content="Hypernetwork" Height="30" Width="81" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,37,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
                         <ComboBox  x:Name="cbHyper" Height="22" Text="" Margin="80,37,79,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged" Visibility="Collapsed">
                         </ComboBox>
                         <ToggleButton x:Name="tsHyper" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,41,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36" Visibility="Collapsed"/>
-                        <TextBox  x:Name="tbLorastrength" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="338,0,0,0" VerticalAlignment="Center" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Left" Width="34" Padding="4,6,1,6"/>
+                        <TextBox  x:Name="tbLorastrength" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,4,39,0" VerticalAlignment="Top" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
+                        <TextBox x:Name="tbLoRAUserTokens" Margin="47,37,78,12" TextWrapping="Wrap" IsReadOnly="True" FontSize="8.5" FontFamily="Verdana" MinHeight="20" Padding="8,2,8,1"/>
                     </Grid>
                 </Border>
                 <Border x:Name="brDevice" BorderBrush="#FFD0C0E9" BorderThickness="0.5">
@@ -270,7 +271,7 @@
                         <Label x:Name="lbDevice" Content="Device" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="3,7,0,0" VerticalAlignment="Top"/>
                     </Grid>
                 </Border>
-                <Border BorderBrush="#FFD0C0E9" BorderThickness="0.5">
+                <Border x:Name="brCN" BorderBrush="#FFD0C0E9" BorderThickness="0.5">
                     <Grid x:Name="grCN" Height="136">
                         <Label Content="ControlNet:" Height="30" Width="89" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-9,0,0,0" VerticalAlignment="Top"/>
                         <Image x:Name="imgPose" Margin="0,3,4,3" Source="/res/noimg.jpg" HorizontalAlignment="Right" Width="116"/>

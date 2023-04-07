@@ -28,7 +28,7 @@ namespace SD_FXUI
         {
             bool LoRACheck = LoRA != LoraEnable;
 
-            if (NSFW != StartNSFW || Model != StartModel || StartMode != Mode || IsCUDA != CUDA || LoRACheck || fp16 != Infp16 || LoraStrength != LoRAStr)
+            if (NSFW != StartNSFW || Model != StartModel || StartMode != Mode || IsCUDA != CUDA || LoRACheck || NameLora != ModelLoRA|| fp16 != Infp16 || LoraStrength != LoRAStr)
             {
                 if (Process != null)
                 {
