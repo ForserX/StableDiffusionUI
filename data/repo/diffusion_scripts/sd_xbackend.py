@@ -95,23 +95,6 @@ def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
                 
     return pipe
 
-def GetPipeOL(Model: str, Mode: str, NSFW: bool):
-    pipe = None
-    nsfw_pipe = None
-    
-    if NSFW:
-        safety_model = Model + "/safety_checker/"
-        nsfw_pipe = OnnxRuntimeModel.from_pretrained(safety_model, provider=prov)
-
-    if Mode == "txt2img":
-        pipe = OnnxStableDiffusionPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe, text_encoder=None, unet=None)
-    if Mode == "img2img":
-        pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe, text_encoder=None, unet=None)
-    if Mode == "inpaint":
-        pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe, text_encoder=None, unet=None)
-                
-    return pipe
-
 def GetPipeCN(Model: str, CNModel: str, NSFW: bool, fp16: bool, ONNXMode : bool = False):
     pipe = None
     nsfw_pipe = None
@@ -164,14 +147,14 @@ def ApplyHyperNetwork(pipe, HyperNetworkPath : str, device : str, fp16: bool, st
      Hyper.load_from_state_dict(state_dict)
      Hyper.apply_to_diffusers(pipe.unet)
 
-def ApplyLoraONNX(opt, pipe):
-    blended_unet = blend_loras(opt.mdlpath + "/unet/" + ONNX_MODEL, opt.lora_path, "unet", opt.lora_strength)
+def ApplyLoraONNX(opt, lora, alpha, pipe):
+    blended_unet = blend_loras(opt.mdlpath + "/unet/" + ONNX_MODEL, lora, "unet", alpha)
     (unet_model, unet_data) = buffer_external_data_tensors(blended_unet)
     unet_names, unet_values = zip(*unet_data)
     sess = SessionOptions()
     sess.add_external_initializers(list(unet_names), list(unet_values))
     
-    blended_te = blend_loras(opt.mdlpath + "/text_encoder/" + ONNX_MODEL, opt.lora_path, "text_encoder", opt.lora_strength)
+    blended_te = blend_loras(opt.mdlpath + "/text_encoder/" + ONNX_MODEL, lora, "text_encoder", alpha)
     (te_model, te_data) = buffer_external_data_tensors(blended_te)
     te_names, te_values = zip(*te_data)
     sess_te = SessionOptions()

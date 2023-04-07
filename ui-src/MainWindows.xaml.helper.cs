@@ -55,7 +55,6 @@ namespace SD_FXUI
             cbUpscaler.Text = Data.Get("upscaler", "None");
             slUpscale.Value = int.Parse(Data.Get("up_value", "4"));
             cbSampler.Text = Data.Get("sampler", "DDIM");
-            tsLoRA.IsChecked = Data.Get("lora_enable", "false") == "true";
 
             Utils.Settings.UseNotif = Data.Get("notif", "true") == "true";
             Utils.Settings.UseNotifImgs = Data.Get("notifi", "true") == "true";
@@ -119,7 +118,6 @@ namespace SD_FXUI
         {
             Data.Set("fp16", cbFf16.IsChecked == true ? "true" : "false");
             Data.Set("tta", tsTTA.IsChecked == true ? "true" : "false");
-            Data.Set("lora_enable", tsLoRA.IsChecked == true ? "true" : "false");
             Data.Set("cbGfpgan", cbGfpgan.IsChecked == true ? "true" : "false");
             Data.Set("cn", tsCN.IsChecked == true ? "true" : "false");
             Data.Set("cbNSFW", cbNSFW.IsChecked == true ? "true" : "false");
@@ -237,7 +235,37 @@ namespace SD_FXUI
         }
         private void MakeCommandObject()
         {
-            Helper.MakeInfo.Prompt = CodeUtils.GetRichText(tbPrompt);
+            Helper.MakeInfo.LoRA.Clear();
+
+            string SourcePrompt = CodeUtils.GetRichText(tbPrompt).Replace("\r\n", string.Empty);
+
+            while (SourcePrompt.Contains("<", 0))
+            {
+                int StartIdx = SourcePrompt.IndexOf("<", 0);
+                int EndIdx = SourcePrompt.IndexOf(">", 0) + 1;
+
+                string LoraDataStr = SourcePrompt.Substring(StartIdx, EndIdx - StartIdx);
+                SourcePrompt = SourcePrompt.Replace(LoraDataStr, string.Empty);
+
+                LoraDataStr = LoraDataStr.Replace("<", string.Empty).Replace(">", string.Empty);
+                if (!LoraDataStr.Contains(":", 0))
+                    continue;
+
+                int DelimerIdx = LoraDataStr.IndexOf(":", 0);
+
+                Helper.LoRAData LoRAData = new Helper.LoRAData();
+                LoRAData.Name = FS.GetModelDir(FS.ModelDirs.LoRA) + LoraDataStr.Substring(0, DelimerIdx);
+                LoRAData.Value = (float)int.Parse(LoraDataStr.Substring(DelimerIdx + 1)) / 100.0f;
+
+                Helper.MakeInfo.LoRA.Add(LoRAData);
+            }
+
+            while(SourcePrompt.StartsWith(",") || SourcePrompt.StartsWith(" "))
+            {
+                SourcePrompt = SourcePrompt.Substring(1);
+            }
+
+            Helper.MakeInfo.Prompt = SourcePrompt;
             Helper.MakeInfo.NegPrompt = CodeUtils.GetRichText(tbNegPrompt);
             Helper.MakeInfo.StartSeed = int.Parse(tbSeed.Text);
             Helper.MakeInfo.CFG = float.Parse(tbCFG.Text);
@@ -268,7 +296,6 @@ namespace SD_FXUI
             Helper.MakeInfo.Height = (int)slH.Value;
             Helper.MakeInfo.Width = (int)slW.Value;
             Helper.MakeInfo.Device = (Helper.Mode == Helper.ImplementMode.DiffCUDA) ? "cuda" : "cpu";
-            Helper.MakeInfo.Lora_Strength = tbLorastrength.Text;
             Helper.MakeInfo.ImgScale = 0;
             Helper.MakeInfo.WorkingDir = FS.GetWorkingDir();
 
@@ -361,20 +388,6 @@ namespace SD_FXUI
                     + $" --vae=\"{VAE}\""
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
             ;
-
-            if (tsLoRA.IsChecked.Value)
-            {
-                string LoRAModel = FS.GetModelDir(FS.ModelDirs.LoRA) + cbLoRA.Text;
-
-                if (LoRAModel.EndsWith(".safetensors"))
-                {
-                    CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\"";
-                }
-                else
-                {
-                    CmdLine += $" --dlora=True --lora_path=\"{LoRAModel}\"";
-                }
-            }
 
             if (false)
             {

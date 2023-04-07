@@ -25,9 +25,6 @@
             </Button.Background>
         </Button>
         <Image x:Name="ViewImg" Margin="5,0,4,100" Grid.Column="3" Source="/res/noimg.jpg" DragDrop.Drop="gridDrop"/>
-        <Grid x:Name="ImageGrid" Grid.Column="3">
-            
-        </Grid>
         <Button Content="Test!" Margin="480,0,0,1" Click="Button_ClickTest" HorizontalAlignment="Left" RenderTransformOrigin="0.484,1.102" Height="36" VerticalAlignment="Bottom" Grid.Column="3" Foreground="White" Width="82">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">
@@ -242,7 +239,7 @@
                         <ComboBox x:Name="cbVAE" Height="22" Margin="47,0,78,20" VerticalAlignment="Bottom"/>
                         <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,4,0,0" VerticalAlignment="Top"/>
                         <ComboBox x:Name="cbModel" Height="22" Margin="47,3,77,0" VerticalAlignment="Top" SelectionChanged="cbModel_SelectionChanged"/>
-                        <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,69,147,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top">
+                        <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,0,147,2" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="1,0">
                                     <GradientStop Color="#FF523876"/>
@@ -250,7 +247,7 @@
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
-                        <Button Content="Selector" Style="{StaticResource ButtonPrimary}" Width="66" Click="btnMore" Height="15" HorizontalAlignment="Right" Margin="0,69,79,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top">
+                        <Button Content="Selector" Style="{StaticResource ButtonPrimary}" Width="66" Click="btnMore" Height="15" HorizontalAlignment="Right" Margin="0,0,79,2" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="1,0">
                                     <GradientStop Color="#FF523876"/>
@@ -267,13 +264,20 @@
                             <ComboBox  x:Name="cbLoRA_Copy" Height="22" Text="" VerticalAlignment="Top" Width="272"/>
                         </ComboBox>
                         <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left"/>
-                        <ToggleButton x:Name="tsLoRA" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,10,9,0" Height="18" VerticalAlignment="Top" HorizontalAlignment="Right" Width="25" Checked="tsLoRA_Checked" Unchecked="tsLoRA_Checked"/>
                         <Label Content="Hypernetwork" Height="30" Width="81" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,37,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
                         <ComboBox  x:Name="cbHyper" Height="22" Text="" Margin="80,37,79,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged" Visibility="Collapsed">
                         </ComboBox>
                         <ToggleButton x:Name="tsHyper" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,41,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36" Visibility="Collapsed"/>
                         <TextBox  x:Name="tbLorastrength" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,4,39,0" VerticalAlignment="Top" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
                         <TextBox x:Name="tbLoRAUserTokens" Margin="47,37,78,12" TextWrapping="Wrap" IsReadOnly="True" FontSize="8.5" FontFamily="Verdana" MinHeight="20" Padding="8,2,8,1"/>
+                        <Button Content="Apply" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_1" Height="18" HorizontalAlignment="Right" Margin="0,0,7,15" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="1,0">
+                                    <GradientStop Color="#FF523876"/>
+                                    <GradientStop Color="#FF4D12AF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
                     </Grid>
                 </Border>
                 <Border x:Name="brDevice" BorderBrush="#FFD0C0E9" BorderThickness="0.5">
@@ -343,6 +347,6 @@
         <Image x:Name="IconRes" Source="res/icon.png" />
         <Image x:Name="btnSettings" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,9,0" VerticalAlignment="Top" Width="41" Source="/res/settings.png" MouseLeftButtonDown="btnSettingsClick"/>
         <Image x:Name="btnMerge" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,53,0" VerticalAlignment="Top" Width="40" Source="/res/merge.png" MouseLeftButtonDown="btnMerge_Click"/>
-        
+
     </Grid>
 </hc:BlurWindow>

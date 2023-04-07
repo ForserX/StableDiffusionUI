@@ -51,6 +51,12 @@ namespace SD_FXUI
             Any
         }
 
+        public struct LoRAData
+        {
+            public string Name;
+            public float Value;
+        }
+
         public struct MetaInfo
         {
             public string Prompt;
@@ -72,8 +78,9 @@ namespace SD_FXUI
             public string WorkingDir;
             public string Device;
             public string Hypernetwork;
-            public string Lora_Strength;
             public bool fp16;
+
+            public List<LoRAData> LoRA;
         }
 
         public static List<Host> SecondaryProcessList = new List<Host>();

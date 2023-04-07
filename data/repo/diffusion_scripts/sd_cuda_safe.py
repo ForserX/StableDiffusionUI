@@ -38,11 +38,8 @@ else:
 
 pipe = GetPipe(opt.mdlpath, opt.mode, False, opt.nsfw, opt.precision == "fp16")
 pipe.to(opt.device)
+safe_unet = pipe.unet
     
-# LoRA magic
-if opt.lora:
-    ApplyLoRA(pipe, opt.lora_path, opt.device, opt.precision == "fp16", opt.lora_strength)
-
 if opt.dlora:
     pipe.unet.load_attn_procs(opt.lora_path)
 
@@ -61,16 +58,24 @@ while True:
     
     data = json.loads(message)
     
+    if data['LoRA'] != old_lora_json:
+        # Setup default unet
+        pipe.unet = safe_unet
+
+        for item in data['LoRA']:
+            l_name = item['Name']
+            l_alpha = item['Value']
+
+            print(f"Apply {l_alpha} lora:{l_name}")
+            ApplyLoRA(pipe, l_name, opt.device, opt.precision == "fp16", l_alpha)
+            old_lora_json = data['LoRA']
+
 
     if not data['VAE'] == "Default":
         print("Load custom vae")
         pipe.vae = AutoencoderKL.from_pretrained(data['VAE'] + "/vae", torch_dtype=fptype)
         pipe.to(opt.device)
-
- #   if local_args.inversion is not None:
- #       pipe.text_encoder = OnnxRuntimeModel.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/text_encoder", provider="CPUExecutionProvider")
- #       pipe.tokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/textual_inversion_merges/" + opt.inversion + "/tokenizer")
-    
+        
     eta = GetSampler(pipe, data['Sampler'], data['ETA'])
     print(f"Prompt: {data['Prompt']}")
     print(f"Neg rompt: {data['NegPrompt']}")

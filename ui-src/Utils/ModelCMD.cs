@@ -15,20 +15,15 @@ namespace SD_FXUI
         bool NSFW = false;
         bool CUDA = false;
         bool fp16 = false;
-        bool LoRA = false;
-        string LoRAStr = null;
         string Model = null;
-        string ModelLoRA = null;
 
         public ModelCMD() 
         {
         }
 
-        public void PreStart(string StartModel, string StartMode, bool StartNSFW, string NameLora = null, bool LoraEnable = false, string LoraStrength = null, bool IsCUDA = false, bool Infp16 = false)
+        public void PreStart(string StartModel, string StartMode, bool StartNSFW, bool IsCUDA = false, bool Infp16 = false)
         {
-            bool LoRACheck = LoRA != LoraEnable;
-
-            if (NSFW != StartNSFW || Model != StartModel || StartMode != Mode || IsCUDA != CUDA || LoRACheck || NameLora != ModelLoRA|| fp16 != Infp16 || LoraStrength != LoRAStr)
+            if (NSFW != StartNSFW || Model != StartModel || StartMode != Mode || IsCUDA != CUDA || fp16 != Infp16)
             {
                 if (Process != null)
                 {
@@ -38,10 +33,8 @@ namespace SD_FXUI
                 Mode = StartMode;
                 Model = StartModel;
                 NSFW = StartNSFW;
-                LoRA = LoraEnable;
                 CUDA = IsCUDA;
                 fp16 = Infp16;
-                LoRAStr = LoraStrength;
 
                 string CmdLine;
 
@@ -52,35 +45,6 @@ namespace SD_FXUI
                     if (NSFW)
                     {
                         CmdLine += " --nsfw=True ";
-                    }
-
-                    if (!LoraEnable)
-                    {
-                        ModelLoRA = "";
-                    }
-                    else
-                    {
-                        ModelLoRA = NameLora;
-                    }
-
-                    if (LoraEnable)
-                    {
-
-                        float lorastr = float.Parse(LoraStrength);
-                        lorastr /= 100;
-
-                        string newLorastr = lorastr.ToString().Replace(",", ".");
-
-                        string LoRAModel = FS.GetModelDir(FS.ModelDirs.LoRA) + ModelLoRA;
-
-                        if (LoRAModel.EndsWith(".safetensors"))
-                        {
-                            CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\" --lora_strength=\"{newLorastr}\"";
-                        }
-                        else
-                        {
-                            CmdLine += $" --dlora=True --lora_path=\"{LoRAModel}\" --lora_strength=\"{newLorastr}\"";
-                        }
                     }
 
                     if (Helper.Form.CPUUse)
@@ -99,32 +63,7 @@ namespace SD_FXUI
                         CmdLine += " --nsfw=True ";
                     }
 
-                    if (!LoraEnable)
-                    {
-                        ModelLoRA = "";
-                    }
-                    else
-                    {
-                        ModelLoRA = NameLora;
-                    }
-
-                    if (LoraEnable)
-                    {
-
-                        float lorastr = float.Parse(LoraStrength);
-                        lorastr /= 100;
-
-                        string newLorastr = lorastr.ToString().Replace(",", ".");
-
-                        string LoRAModel = FS.GetModelDir(FS.ModelDirs.LoRA) + ModelLoRA;
-
-                        if (LoRAModel.EndsWith(".safetensors"))
-                        {
-                            CmdLine += $" --lora=True --lora_path=\"{LoRAModel}\" --lora_strength=\"{newLorastr}\"";
-                        }
-                    }
-
-                        Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
+                    Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
                     Process.Start("./repo/diffusion_scripts/sd_onnx_safe.py " + CmdLine);
                 }
             }
@@ -147,10 +86,7 @@ namespace SD_FXUI
             NSFW = false;
             CUDA = false;
             fp16 = false;
-            LoRA = false;
             Model = null;
-            LoRAStr = null;
-            ModelLoRA = null;
 
             if (ErrorExit)
             {

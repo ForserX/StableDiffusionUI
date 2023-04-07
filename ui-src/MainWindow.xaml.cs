@@ -76,6 +76,8 @@ namespace SD_FXUI
 
             SafeCMD = new ModelCMD();
             cbExtractPoseSelector.SelectedIndex = 4;
+
+            Helper.MakeInfo.LoRA = new System.Collections.Generic.List<Helper.LoRAData>();
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -118,7 +120,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = false;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text, tsLoRA.IsChecked.Value, tbLorastrength.Text);
+                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
                             SafeCMD.Start();
 
                             //cmdline += GetCommandLineOnnx();
@@ -142,7 +144,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = cbFf16.IsChecked.Value;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, cbLoRA.Text, tsLoRA.IsChecked.Value, tbLorastrength.Text, true);
+                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
                             SafeCMD.Start();
                             //cmdline += GetCommandLineDiffCuda();
                             //Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
@@ -1031,26 +1033,20 @@ namespace SD_FXUI
 
         }
 
-        private void tsLoRA_Checked(object sender, RoutedEventArgs e)
-        {
-            if (Helper.Mode != Helper.ImplementMode.ONNX)
-                return;
-
-            if (tsLoRA.IsChecked == true)
-            {
-                brCN.Visibility = Visibility.Collapsed;
-                grCN.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                brCN.Visibility = Visibility.Visible;
-                grCN.Visibility = Visibility.Visible;
-            }
-        }
-
         private void Button_ClickTest(object sender, RoutedEventArgs e)
         {
          
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (cbLoRA.Text.Length == 0)
+                return;
+
+            string Temporary = $"<{cbLoRA.Text}:{tbLorastrength.Text}>, ";
+            Temporary += CodeUtils.GetRichText(tbPrompt);
+
+            CodeUtils.SetRichText(tbPrompt, Temporary);
         }
     }
 }
