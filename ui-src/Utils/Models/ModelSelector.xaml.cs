@@ -29,27 +29,47 @@ namespace SD_FXUI.Utils.Models
             imgView.Children.Clear();
 
             int imageWidth = 64;
-            int imageHeight = 64;
-            int offset = 0;
+            int imageHeight = 95;
+            int offset = 4;
 
             int kW = (int)(imgView.ActualWidth / imageWidth);
             int kH = (int)((imgView.ActualHeight - offset) / imageHeight);
+
+            var Models = FS.GetModels(Helper.Mode);
+
+            int ModelCounter = 0;
 
             for (int i = 0; i < kW; i++)
             {
                 for(int j = 0; j < kH; j++)
                 {
+                    if (ModelCounter >= Models.Count)
+                        return;
+
                     Image newImage = new Image();
                     //newCheckBox.Content = tokensAllInMemory[i];
-                    newImage.Name = "Image" + i;
+                    newImage.Name = $"Logo_{i}_{j}";
+
                     newImage.Height = imageHeight;
                     newImage.Width = imageWidth;
                     newImage.HorizontalAlignment = HorizontalAlignment.Left;
                     newImage.VerticalAlignment = VerticalAlignment.Top;
-                    newImage.Source = Helper.getImageSourceUndefined();             
+                    newImage.Stretch = Stretch.Fill;
 
-                    newImage.Margin = new Thickness(imageWidth * i, imageHeight * j, 0.0, 0.0);
+                    string LogoPath = FS.GetModelLogoPath(Models[ModelCounter]);
+                    if (LogoPath != string.Empty)
+                    {
+                        newImage.Source = CodeUtils.BitmapFromUri(new Uri(LogoPath));
+                    }
+                    else
+                    {
+                        newImage.Source = Helper.getImageSourceUndefined();
+                    }
+
+                    newImage.Margin = new Thickness((offset + imageWidth) * i, (offset + imageHeight) * j, 0.0, 0.0);
                     imgView.Children.Add(newImage);
+
+                    ModelCounter++;
                 }
                 
 

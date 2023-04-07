@@ -66,6 +66,28 @@ namespace SD_FXUI
             return System.IO.Directory.GetCurrentDirectory() + "\\tools\\";
         }
 
+        public static string GetModelLogoPath(string Model)
+        {
+            string FirstPath = FS.GetModelDir(ModelDirs.ONNX);
+
+            if (Helper.Mode != Helper.ImplementMode.ONNX)
+                FirstPath = FS.GetModelDir(ModelDirs.Diffusers);
+
+            string TryModelPath = FirstPath + Model;
+
+            if (File.Exists(TryModelPath + "/logo.png"))
+            {
+                return TryModelPath + "/logo.png";
+            }
+
+            if (File.Exists(TryModelPath + "/logo.jpg"))
+            {
+                return TryModelPath + "/logo.jpg";
+            }
+
+            return string.Empty;
+        }
+
         public static List<string> GetModels(Helper.ImplementMode Mode)
         {
             string WorkingPath = GetModelDir();
