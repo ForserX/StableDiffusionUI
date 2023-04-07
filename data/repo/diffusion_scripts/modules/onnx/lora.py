@@ -81,10 +81,13 @@ def blend_loras(
             alpha = lora_model.get(alpha_key, dim).to(dtype).numpy()
 
             try:
-                if len(up_weight.size()) == 2:
+                if len(down_weight.size()) == 2:
                     weights = up_weight @ down_weight
                     np_weights = weights.numpy() * (alpha / dim)
-                elif len(up_weight.size()) == 4 and up_weight.shape[-2:] == (1, 1):
+                elif len(down_weight.size()) == 4 and down_weight.shape[-2:] == (
+                        1,
+                        1,
+                    ):
                     weights = (
                         (
                             up_weight.squeeze(3).squeeze(2)
@@ -94,7 +97,10 @@ def blend_loras(
                         .unsqueeze(3)
                     )
                     np_weights = weights.numpy() * (alpha / dim)
-                elif len(up_weight.size()) == 4 and up_weight.shape[-2:] == (3, 3):
+                elif len(down_weight.size()) == 4 and down_weight.shape[-2:] == (
+                        3,
+                        3,
+                    ):
                     # blend for nn.Conv2d 3x3
                     weights = torch.nn.functional.conv2d(
                         down_weight.permute(1, 0, 2, 3), up_weight
@@ -150,8 +156,11 @@ def blend_loras(
             # blending
             base_weights = numpy_helper.to_array(weight_node)
 
-            blended = base_weights.squeeze((3, 2)) + weights.squeeze((3, 2))
-            blended = np.expand_dims(blended, (2, 3))
+            if base_weights.shape[-2:] == (1, 1):
+                blended = base_weights.squeeze((3, 2)) + weights.squeeze((3, 2))
+                blended = np.expand_dims(blended, (2, 3))
+            else:
+                blended = base_weights + weights
 
             # replace the original initializer
             updated_node = numpy_helper.from_array(
