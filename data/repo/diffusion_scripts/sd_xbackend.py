@@ -5,9 +5,14 @@ from Hypernetwork import Hypernetwork
 from custom_pipelines.pipeline_onnx_stable_diffusion_instruct_pix2pix import OnnxStableDiffusionInstructPix2PixPipeline
 from custom_pipelines.pipeline_onnx_stable_diffusion_controlnet import OnnxStableDiffusionControlNetPipeline
 
-from onnxruntime import SessionOptions
-from modules.onnx.lora import blend_loras, buffer_external_data_tensors
-ONNX_MODEL = "model.onnx"
+
+try:
+    from onnxruntime import SessionOptions
+    from modules.onnx.lora import blend_loras, buffer_external_data_tensors
+    ONNX_MODEL = "model.onnx"
+except :
+    pass
+
 
 from safetensors.torch import load_file
 

@@ -28,16 +28,16 @@ namespace SD_FXUI.Utils.Models
         {
             imgView.Children.Clear();
 
-            int imageWidth = 128;
-            int imageHeight = 128;
-            int offset = 25;
+            int imageWidth = 64;
+            int imageHeight = 64;
+            int offset = 0;
 
             int kW = (int)(imgView.ActualWidth / imageWidth);
             int kH = (int)((imgView.ActualHeight - offset) / imageHeight);
 
-            for (int i = 0; i < kH; i++)
+            for (int i = 0; i < kW; i++)
             {
-                for(int j = 0; j < kW; j++)
+                for(int j = 0; j < kH; j++)
                 {
                     Image newImage = new Image();
                     //newCheckBox.Content = tokensAllInMemory[i];
