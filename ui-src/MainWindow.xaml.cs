@@ -20,7 +20,6 @@ namespace SD_FXUI
     public partial class MainWindow : HandyControl.Controls.BlurWindow
     {
         Config Data = null;
-        ImageSource NoImageData = null;
         ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
         string currentImage = null;
         ModelCMD SafeCMD = null;
@@ -64,7 +63,7 @@ namespace SD_FXUI
             gridImg.Visibility = Visibility.Collapsed;
             brImgPane.Visibility = Visibility.Collapsed;
             btnDDB.Visibility = Visibility.Collapsed;
-            NoImageData = ViewImg.Source;
+            Helper.NoImageData = ViewImg.Source;
             Helper.SafeMaskFreeImg = imgMask.Source;
 
             ToastNotificationManagerCompat.OnActivated += toastArgs =>
@@ -562,7 +561,7 @@ namespace SD_FXUI
             brImgPane.Visibility = Visibility.Collapsed;
 
             Helper.DrawMode = Helper.DrawingMode.Text2Img;
-            imgLoaded.Source = NoImageData;
+            imgLoaded.Source = Helper.NoImageData;
 
             // Mask clear
             imgMask.Source = Helper.SafeMaskFreeImg;
@@ -863,7 +862,7 @@ namespace SD_FXUI
             }
             else
             {
-                imgModelPrivew.Source = NoImageData;
+                imgModelPrivew.Source = Helper.NoImageData;
             }
 
             if (Helper.Mode != Helper.ImplementMode.ONNX || cbTI == null || e.AddedItems.Count == 0)
@@ -1027,6 +1026,8 @@ namespace SD_FXUI
 
         private void btnMore(object sender, RoutedEventArgs e)
         {
+            ModelSelector form  = new ModelSelector();
+            form.ShowDialog();
 
         }
 
@@ -1049,53 +1050,7 @@ namespace SD_FXUI
 
         private void Button_ClickTest(object sender, RoutedEventArgs e)
         {
-            ViewImg.Visibility = Visibility.Hidden;
-
-            ImageGrid.Children.Clear();
-
-            
-
-            for (int i = 0; i < 26; i++)
-            {
-                Image newImage = new Image();
-                //newCheckBox.Content = tokensAllInMemory[i];
-                newImage.Name = "Image" + i;
-                newImage.Height = 128;
-                newImage.Width = 128;
-                newImage.HorizontalAlignment = HorizontalAlignment.Left;
-                newImage.VerticalAlignment = VerticalAlignment.Top;
-                newImage.Source = ViewImg.Source;
-
-                int offset = 100;
-
-                var kx = (ImageGrid.ActualWidth / newImage.Width);
-                var ky = ((ImageGrid.ActualHeight-offset) / newImage.Height);
-
-                var kWidth  = ((int)kx * newImage.Width);
-                var kHeight = ((int)ky * newImage.Height);
-
-
-                var aboba = ((ImageGrid.ActualHeight - offset) - kHeight) / 2; // begin draw
-                var bboba = (ImageGrid.ActualHeight - offset); //end draw;
-
-
-
-                double y = (newImage.Height * i);
-                int j = (int)(  (y / (ImageGrid.ActualHeight - offset - newImage.Height)));
-                int k = (int)(      (ImageGrid.ActualHeight - offset) / newImage.Height);
-                int x = i % k;
-                y = ((newImage.Height * x)) + aboba;
-
-                newImage.Margin = new Thickness(newImage.Width * j, y, 0.0, 0.0);
-                               
-                ImageGrid.Children.Add(newImage);
-
-            }
-
-            CheckBox chb = new CheckBox();
-
-
-
+         
         }
     }
 }

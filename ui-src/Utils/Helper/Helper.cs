@@ -102,5 +102,8 @@ namespace SD_FXUI
         public static int Denoise = 0;
         public static bool TTA = false;
         public static MetaInfo MakeInfo = new Helper.MetaInfo();
+
+        public static ImageSource NoImageData = null;
+        public static ImageSource getImageSourceUndefined() {return NoImageData;}
     }
 }

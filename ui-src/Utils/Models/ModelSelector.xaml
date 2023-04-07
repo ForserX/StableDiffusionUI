@@ -7,6 +7,18 @@
         mc:Ignorable="d"
         Title="ModelSelector" Height="450" Width="800">
     <Grid>
-        
+        <Grid x:Name="imgView">
+
+        </Grid>
+        <Button Content="Update" Margin="680,0,0,10" Click="Button_ClickUpdate" Padding="1,1,1,1" HorizontalAlignment="Left" RenderTransformOrigin="0.484,1.102" Height="27" VerticalAlignment="Bottom" Foreground="White" Width="55">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="1,0">
+                    <GradientStop Color="#FF523876"/>
+                    <GradientStop Color="#FF4D12AF" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
     </Grid>
+
+   
 </Window>

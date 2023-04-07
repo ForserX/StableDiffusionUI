@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace SD_FXUI
@@ -602,7 +603,7 @@ namespace SD_FXUI
         void ClearImages()
         {
             Helper.ImgList.Clear();
-            ViewImg.Source = NoImageData;
+            ViewImg.Source = Helper.NoImageData;
 
             lvImages.UnselectAll();
             ListViewItemsCollections.Clear();
@@ -699,12 +700,14 @@ namespace SD_FXUI
             }
             else
             {
-                imgPose.Source = NoImageData;
+                imgPose.Source = Helper.NoImageData;
             }
 
             cbPreprocess.Items.Add(HelperControlNet.Current.GetModelName());
             cbPreprocess.SelectedIndex = 0;
         }
+
+        
 
     }
 }
