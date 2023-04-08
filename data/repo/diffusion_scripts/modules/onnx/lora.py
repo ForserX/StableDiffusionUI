@@ -196,8 +196,8 @@ def blend_loras(
             else:
                 if base_weights.shape != weights.shape:
                     blended = base_weights + weights.reshape(base_weights.shape)
-
-                blended = base_weights + weights
+                else:
+                    blended = base_weights + weights
 
             # replace the original initializer
             updated_node = numpy_helper.from_array(
