@@ -25,7 +25,7 @@ def buffer_external_data_tensors(
             set_external_data(tensor, location="foo.bin")
             tensor.name = name
             tensor.ClearField("raw_data")
-            
+
     print("externalizing tensor: done!")
 
     return (model, external_data)
@@ -86,7 +86,7 @@ def blend_loras(
             alpha = lora_model.get(alpha_key, dim).to(dtype).numpy()
 
             try:
-                weights = (w1a_weight @ w2a_weight) * (w2a_weight @ w2b_weight)
+                weights = (w1a_weight @ w1b_weight) * (w2a_weight @ w2b_weight)
                 np_weights = weights.numpy() * (alpha / dim)
 
                 np_weights *= lora_weight
@@ -94,10 +94,10 @@ def blend_loras(
                     blended[base_key] += np_weights
                 else:
                     blended[base_key] = np_weights
-                    
+
             except Exception as e:
                 print("error blending weights for LoHA key %s: %s", base_key, e)
-                
+
         elif ".lora_down" in key and lora_prefix in key:
             base_key = key[: key.index(".lora_down")].replace(lora_prefix, "")
 
@@ -171,7 +171,7 @@ def blend_loras(
     for base_key, weights in blended.items():
         conv_key = base_key + "_Conv"
         matmul_key = base_key + "_MatMul"
-        
+
         if conv_key in fixed_node_names:
             conv_idx = fixed_node_names.index(conv_key)
             conv_node = base_model.graph.node[conv_idx]
@@ -187,9 +187,16 @@ def blend_loras(
             base_weights = numpy_helper.to_array(weight_node)
 
             if base_weights.shape[-2:] == (1, 1):
-                blended = base_weights.squeeze((3, 2)) + weights.squeeze((3, 2))
+                if weights.shape[-2:] == (1, 1):
+                    blended = base_weights.squeeze((3, 2)) + weights.squeeze((3, 2))
+                else:
+                    blended = base_weights.squeeze((3, 2)) + weights
+
                 blended = np.expand_dims(blended, (2, 3))
             else:
+                if base_weights.shape != weights.shape:
+                    blended = base_weights + weights.reshape(base_weights.shape)
+
                 blended = base_weights + weights
 
             # replace the original initializer
@@ -219,5 +226,5 @@ def blend_loras(
             )
             del base_model.graph.initializer[matmul_idx]
             base_model.graph.initializer.insert(matmul_idx, updated_node)
-            
+
     return base_model
