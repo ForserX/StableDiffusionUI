@@ -68,7 +68,8 @@ while True:
 
             print(f"Apply {l_alpha} lora:{l_name}")
             ApplyLoRA(pipe, l_name, opt.device, opt.precision == "fp16", l_alpha)
-            old_lora_json = data['LoRA']
+
+        old_lora_json = data['LoRA']
 
 
     if not data['VAE'] == "Default":

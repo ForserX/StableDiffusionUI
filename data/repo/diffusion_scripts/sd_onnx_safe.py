@@ -55,7 +55,8 @@ while True:
 
             print(f"Apply {l_alpha} lora:{l_name}")
             ApplyLoraONNX(opt, l_name, l_alpha, pipe)
-            old_lora_json = data['LoRA']
+        
+        old_lora_json = data['LoRA']
 
     if not data['VAE'] == "Default":
         print("Load custom vae")

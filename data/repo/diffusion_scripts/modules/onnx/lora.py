@@ -82,7 +82,7 @@ def blend_loras(
             w2a_weight = lora_model[w2a_key].to(dtype=dtype)
             w2b_weight = lora_model[w2b_key].to(dtype=dtype)
 
-            dim = w1a_weight.size()[0]
+            dim = w1b_weight.size()[0]
             alpha = lora_model.get(alpha_key, dim).to(dtype).numpy()
 
             try:
@@ -203,6 +203,7 @@ def blend_loras(
             else:
                 if base_weights.shape != weights.shape:
                     blended = base_weights + weights.reshape(base_weights.shape)
+                    #print(f"LoHA node name: {weight_node.name} at : {base_key}")
                 else:
                     blended = base_weights + weights
 
