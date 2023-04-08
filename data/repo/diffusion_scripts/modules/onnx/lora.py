@@ -108,7 +108,14 @@ def blend_loras(
             up_weight = lora_model[up_key].to(dtype=dtype)
 
             dim = down_weight.size()[0]
-            alpha = lora_model.get(alpha_key, dim).to(dtype).numpy()
+            alpha = None
+
+            alpha_key_value = lora_model.get(alpha_key, dim)
+
+            if isinstance(alpha_key_value, int):
+                alpha = alpha_key_value
+            else:
+                alpha = alpha_key_value.to(dtype).numpy()
 
             try:
                 if len(down_weight.size()) == 2:
