@@ -68,7 +68,37 @@ def blend_loras(
     print("blending LoRA from %s with weight of %s", lora_name, lora_weight)
 
     for key in lora_model.keys():
-        if ".lora_down" in key and lora_prefix in key:
+        if ".hada_w1_a" in key and lora_prefix in key:
+            # LoHA
+            base_key = key[: key.index(".hada_w1_a")].replace(lora_prefix, "")
+
+            w1b_key = key.replace("hada_w1_a", "hada_w1_b")
+            w2a_key = key.replace("hada_w1_a", "hada_w2_a")
+            w2b_key = key.replace("hada_w1_a", "hada_w2_b")
+            alpha_key = key[: key.index("hada_w1_a")] + "alpha"
+
+            w1a_weight = lora_model[key].to(dtype=dtype)
+            w1b_weight = lora_model[w1b_key].to(dtype=dtype)
+            w2a_weight = lora_model[w2a_key].to(dtype=dtype)
+            w2b_weight = lora_model[w2b_key].to(dtype=dtype)
+
+            dim = w1a_weight.size()[0]
+            alpha = lora_model.get(alpha_key, dim).to(dtype).numpy()
+
+            try:
+                weights = (w1a_weight @ w2a_weight) * (w2a_weight @ w2b_weight)
+                np_weights = weights.numpy() * (alpha / dim)
+
+                np_weights *= lora_weight
+                if base_key in blended:
+                    blended[base_key] += np_weights
+                else:
+                    blended[base_key] = np_weights
+                    
+            except Exception as e:
+                print("error blending weights for LoHA key %s: %s", base_key, e)
+                
+        elif ".lora_down" in key and lora_prefix in key:
             base_key = key[: key.index(".lora_down")].replace(lora_prefix, "")
 
             up_key = key.replace("lora_down", "lora_up")
@@ -120,8 +150,8 @@ def blend_loras(
                 else:
                     blended[base_key] = np_weights
 
-            except Exception:
-                print("error blending weights for key %s", base_key)
+            except Exception as e:
+                print("error blending weights for LoRA key %s: %s", base_key, e)
 
     print(
         "updating %s of %s initializers: %s",
