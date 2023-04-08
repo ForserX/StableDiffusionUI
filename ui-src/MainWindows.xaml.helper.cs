@@ -525,6 +525,19 @@ namespace SD_FXUI
             cbTI.Text = SafeName;
         }
 
+        void UpdateLoRAModels(string LoraPath)
+        {
+
+            foreach (var Itm in Directory.GetFiles(LoraPath))
+            {
+                string TryName = Itm.Replace(FS.GetModelDir(FS.ModelDirs.LoRA), string.Empty);
+
+                if (!TryName.EndsWith("txt"))
+                    cbLoRA.Items.Add(TryName);
+            }
+
+        }
+
         public void UpdateModelsList()
         {
             string SafeVAE = (string)cbVAE.Text;
@@ -548,14 +561,13 @@ namespace SD_FXUI
 
             // Yeah... LoRA...
             string LoraPath = FS.GetModelDir(FS.ModelDirs.LoRA);
-            foreach (var Itm in Directory.GetFiles(LoraPath))
-            {
-                string TryName = Itm.Replace(LoraPath, string.Empty);
 
-                if (!TryName.EndsWith("txt"))
-                    cbLoRA.Items.Add(TryName);
+            foreach (string Dir in Directory.GetDirectories(LoraPath))
+            {
+                UpdateLoRAModels(Dir);
             }
 
+            UpdateLoRAModels(LoraPath);
             // Yeah... Hypernetwork...
             string HyperPath = FS.GetModelDir() + "hypernetwork\\";
             foreach (var Itm in Directory.GetFiles(HyperPath))
@@ -669,19 +681,22 @@ namespace SD_FXUI
 
             if (LoverName == "canny")          return HelperControlNet.Canny;
             if (LoverName == "depth")          return HelperControlNet.Depth;
-            if (LoverName == "depth_leres")    ; // not implemented return canny
             if (LoverName == "hed")            return HelperControlNet.Hed;
             if (LoverName == "normalmap")      return HelperControlNet.Normal;
             if (LoverName == "openposedetector")       return HelperControlNet.OpenPose;
-            if (LoverName == "openpose_hand")  ; // not implemented return canny
-            if (LoverName == "clip_vision")    ; // not implemented return canny
             if (LoverName == "scribble") return HelperControlNet.Scribble;
-            if (LoverName == "fake_scribble")  ; // not implemented return canny
-            if (LoverName == "pidinet")        ; // not implemented return canny
             if (LoverName == "segmentation") return HelperControlNet.Seg;
             if (LoverName == "mlsd") return HelperControlNet.MLSD;
             if (LoverName == "facegen") return HelperControlNet.Face;
+
+            /*
+            if (LoverName == "depth_leres") ; // not implemented return canny
+            if (LoverName == "openpose_hand") ; // not implemented return canny
+            if (LoverName == "clip_vision") ; // not implemented return canny
+            if (LoverName == "fake_scribble") ; // not implemented return canny
+            if (LoverName == "pidinet") ; // not implemented return canny
             if (LoverName == "binary")         ; // not implemented return canny
+            */
 
             return HelperControlNet.Canny;                      // temp Bypass error;
 
