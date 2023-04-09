@@ -45,6 +45,7 @@ if opt.dlora:
 
 
 print("SD: Model preload: done")
+old_lora_json = None
 
 while True:
     message = input()

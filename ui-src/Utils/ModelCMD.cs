@@ -51,6 +51,10 @@ namespace SD_FXUI
                     {
                         CmdLine += " --device=\"cpu\"";
                     }
+                    else
+                    {
+                        CmdLine += " --device=\"cuda\"";
+                    }
 
                     Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.Form.CPUUse ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
                     Process.Start("./repo/diffusion_scripts/sd_cuda_safe.py " + CmdLine);
