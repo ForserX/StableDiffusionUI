@@ -16,6 +16,9 @@ omegaconf
 onnxruntime
 onnxruntime-gpu
 onnxruntime_directml
+--extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/
+ort-nightly-directml==1.15.0.dev20230408001
+
 torch
 torchvision
 pytorch_lightning
