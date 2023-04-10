@@ -71,6 +71,9 @@ def blend_loras(
         if ".hada_w1_a" in key and lora_prefix in key:
             # LoHA
             base_key = key[: key.index(".hada_w1_a")].replace(lora_prefix, "")
+            
+            t1_key = key.replace("hada_w1_a", "hada_t1")
+            t2_key = key.replace("hada_w1_a", "hada_t2")
 
             w1b_key = key.replace("hada_w1_a", "hada_w1_b")
             w2a_key = key.replace("hada_w1_a", "hada_w2_a")
@@ -81,84 +84,118 @@ def blend_loras(
             w1b_weight = lora_model[w1b_key].to(dtype=dtype)
             w2a_weight = lora_model[w2a_key].to(dtype=dtype)
             w2b_weight = lora_model[w2b_key].to(dtype=dtype)
+            
+            t1_weight = lora_model.get(t1_key, None)
+            t2_weight = lora_model.get(t2_key, None)
 
             dim = w1b_weight.size()[0]
             alpha = lora_model.get(alpha_key, dim).to(dtype).numpy()
-
-            try:
+            
+            if t1_weight is not None and t2_weight is not None:
+                t1_weight = t1_weight.to(dtype=dtype)
+                t2_weight = t2_weight.to(dtype=dtype)
+                
+                weights_1 = torch.einsum(
+                    "i j k l, j r, i p -> p r k l",
+                    t1_weight,
+                    w1b_weight,
+                    w1a_weight,
+                )
+                weights_2 = torch.einsum(
+                    "i j k l, j r, i p -> p r k l",
+                    t2_weight,
+                    w2b_weight,
+                    w2a_weight,
+                )
+                weights = weights_1 * weights_2
+                np_weights = weights.numpy() * (alpha / dim)
+            else:
                 weights = (w1a_weight @ w1b_weight) * (w2a_weight @ w2b_weight)
                 np_weights = weights.numpy() * (alpha / dim)
 
-                np_weights *= lora_weight
-                if base_key in blended:
-                    blended[base_key] += np_weights
-                else:
-                    blended[base_key] = np_weights
-
-            except Exception as e:
-                print("error blending weights for LoHA key %s: %s", base_key, e)
+            np_weights *= lora_weight
+            if base_key in blended:
+                blended[base_key] += np_weights
+            else:
+                blended[base_key] = np_weights
 
         elif ".lora_down" in key and lora_prefix in key:
             base_key = key[: key.index(".lora_down")].replace(lora_prefix, "")
 
+            mid_key = key.replace("lora_down", "lora_mid")
             up_key = key.replace("lora_down", "lora_up")
             alpha_key = key[: key.index("lora_down")] + "alpha"
 
             down_weight = lora_model[key].to(dtype=dtype)
             up_weight = lora_model[up_key].to(dtype=dtype)
 
+            mid_weight = None
+            if mid_key in lora_model:
+                mid_weight = lora_model[mid_key].to(dtype=dtype)
+
             dim = down_weight.size()[0]
-            alpha = None
+            alpha = lora_model.get(alpha_key, dim)
 
-            alpha_key_value = lora_model.get(alpha_key, dim)
+            if not isinstance(alpha, int):
+                alpha = alpha.to(dtype).numpy()
+            kernel = down_weight.shape[-2:]
+                
+            if mid_weight is not None:
+                    kernel = mid_weight.shape[-2:]
 
-            if isinstance(alpha_key_value, int):
-                alpha = alpha_key_value
-            else:
-                alpha = alpha_key_value.to(dtype).numpy()
+            if len(down_weight.size()) == 2:
+                # blend for nn.Linear
 
-            try:
-                if len(down_weight.size()) == 2:
-                    weights = up_weight @ down_weight
-                    np_weights = weights.numpy() * (alpha / dim)
-                elif len(down_weight.size()) == 4 and down_weight.shape[-2:] == (
-                        1,
-                        1,
-                    ):
-                    weights = (
-                        (
-                            up_weight.squeeze(3).squeeze(2)
-                            @ down_weight.squeeze(3).squeeze(2)
-                        )
-                        .unsqueeze(2)
-                        .unsqueeze(3)
+                weights = up_weight @ down_weight
+                np_weights = weights.numpy() * (alpha / dim)
+            elif len(down_weight.size()) == 4 and kernel == (
+                1,
+                1,
+            ):
+                # blend for nn.Conv2d 1x1
+                weights = (
+                    (
+                        up_weight.squeeze(3).squeeze(2)
+                        @ down_weight.squeeze(3).squeeze(2)
                     )
+                    .unsqueeze(2)
+                    .unsqueeze(3)
+                )
+                np_weights = weights.numpy() * (alpha / dim)
+            elif len(down_weight.size()) == 4 and kernel == (
+                3,
+                3,
+            ):
+                if mid_weight is not None:
+                    # blend for nn.Conv2d 3x3 with CP decomp
+
+                    weights = torch.zeros(
+                        (up_weight.shape[0], down_weight.shape[1], *kernel)
+                    )
+                    for w in range(kernel[0]):
+                        for h in range(kernel[1]):
+                            weights[:, :, w, h] = (
+                                up_weight.squeeze(3).squeeze(2)
+                                @ mid_weight[:, :, w, h]
+                            ) @ down_weight.squeeze(3).squeeze(2)
+
                     np_weights = weights.numpy() * (alpha / dim)
-                elif len(down_weight.size()) == 4 and down_weight.shape[-2:] == (
-                        3,
-                        3,
-                    ):
+                else:
                     # blend for nn.Conv2d 3x3
+                    # TODO: I don't think this one is right
                     weights = torch.nn.functional.conv2d(
                         down_weight.permute(1, 0, 2, 3), up_weight
                     ).permute(1, 0, 2, 3)
                     np_weights = weights.numpy() * (alpha / dim)
-                else:
-                    print(
-                        "unknown LoRA node type at %s: %s",
-                        base_key,
-                        up_weight.shape[-2:],
-                    )
-                    continue
+            else:
+                print(f"unknown LoRA node type at {base_key}: {up_weight.shape[-2:]}")
+                continue
 
-                np_weights *= lora_weight
-                if base_key in blended:
-                    blended[base_key] += np_weights
-                else:
-                    blended[base_key] = np_weights
-
-            except Exception as e:
-                print("error blending weights for LoRA key %s: %s", base_key, e)
+            np_weights *= lora_weight
+            if base_key in blended:
+                blended[base_key] += np_weights
+            else:
+                blended[base_key] = np_weights
 
     print(
         "updating %s of %s initializers: %s",
@@ -177,11 +214,16 @@ def blend_loras(
 
     for base_key, weights in blended.items():
         conv_key = base_key + "_Conv"
+        gemm_key = base_key + "_Gemm"
         matmul_key = base_key + "_MatMul"
 
-        if conv_key in fixed_node_names:
-            conv_idx = fixed_node_names.index(conv_key)
-            conv_node = base_model.graph.node[conv_idx]
+        if conv_key in fixed_node_names or gemm_key in fixed_node_names:
+            if conv_key in fixed_node_names:
+                conv_idx = fixed_node_names.index(conv_key)
+                conv_node = base_model.graph.node[conv_idx]
+            else:
+                conv_idx = fixed_node_names.index(gemm_key)
+                conv_node = base_model.graph.node[conv_idx]
 
             # find weight initializer
             weight_name = [n for n in conv_node.input if ".weight" in n][0]
