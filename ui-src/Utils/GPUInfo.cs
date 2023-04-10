@@ -31,7 +31,7 @@ namespace SD_FXUI
 
                     GPUs.Add(GPUName);
 
-                    if (GPUName.Contains("AMD"))
+                    if (GPUName.Contains("AMD") || GPUName.Contains("Radeon") || GPUName.Contains("ATI"))
                     {
                         RedGPU = true;
                     }
