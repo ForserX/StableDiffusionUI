@@ -19,33 +19,38 @@ namespace SD_FXUI
             //Task.Run(() => InstallGFPGAN());
         }
 
-        public static void CheckAndInstallCUDA()
+        public static void CheckAndInstallCUDA(string PyCommand = "py -3.10", bool Silent = false)
         {
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/cuda.venv");
-            if (!bDirCheck && Notification.MsgBox("Need install packages for use CUDA"))
+            if (!bDirCheck && (Silent || Notification.MsgBox("Need install packages for use CUDA")))
             {
                 Helper.UIHost.Show();
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
 
                 Host.Print("Install CUDA runtimes... Please wait");
                 Cmd.Start();
-                Cmd.Send("py -3.10 -m venv .\\repo\\cuda.venv\\");                
+                Cmd.Send(PyCommand + " -m venv .\\repo\\cuda.venv\\");                
                 Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA)+"\"" + " install -r requirements_cuda.txt ");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
+
+                if (!Silent)
+                {
+                    CheckAndInstallCUDA("python", true);
+                }
             }
 
         }
-        public static void CheckAndInstallShark()
+        public static void CheckAndInstallShark(string PyCommand = "py -3.10", bool Silent = false)
         {
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/shark.venv");
-            if (!bDirCheck && Notification.MsgBox("Need install packages for use Shark"))
+            if (!bDirCheck && (Silent || Notification.MsgBox("Need install packages for use Shark")))
             {
                 Helper.UIHost.Show();
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Host.Print("Install python venv... Please wait");
                 Cmd.Start();
-                Cmd.Send("py -3.10 -m venv repo\\shark.venv\\");
+                Cmd.Send(PyCommand + " -m venv repo\\shark.venv\\");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
 
@@ -60,14 +65,18 @@ namespace SD_FXUI
                 Cmd.SendExitCommand();
                 Cmd.Wait();
 
+                if (!Silent)
+                {
+                    CheckAndInstallShark("python", true);
+                }
             }
 
         }
 
-        public static void CheckAndInstallONNX()
+        public static void CheckAndInstallONNX(string PyCommand = "py -3.10", bool Silent = false)
         {
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
-            if (!bDirCheck && Notification.MsgBox("Need install packages for use ONNX"))
+            if (!bDirCheck && (Silent || Notification.MsgBox("Need install packages for use ONNX")))
             {
                 Helper.UIHost.Show();
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
@@ -75,10 +84,15 @@ namespace SD_FXUI
                 Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Host.Print("Install ONNX runtimes... Please wait");
                 Cmd.Start();
-                Cmd.Send("py -3.10 -m venv .\\repo\\onnx.venv\\");
+                Cmd.Send(PyCommand + " -m venv .\\repo\\onnx.venv\\");
                 Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install -r requirements_onnx.txt");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
+
+                if (!Silent)
+                {
+                    CheckAndInstallONNX("python", true);
+                }
             }
 
         }
