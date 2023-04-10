@@ -1033,11 +1033,6 @@ namespace SD_FXUI
 
         }
 
-        private void Button_ClickTest(object sender, RoutedEventArgs e)
-        {
-         
-        }
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             if (cbLoRA.Text.Length == 0)
