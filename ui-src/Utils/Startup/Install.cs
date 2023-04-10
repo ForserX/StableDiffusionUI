@@ -29,7 +29,7 @@ namespace SD_FXUI
 
                 Host.Print("Install CUDA runtimes... Please wait");
                 Cmd.Start();
-                Cmd.Send("python -m venv .\\repo\\cuda.venv\\");                
+                Cmd.Send("py -3.10 -m venv .\\repo\\cuda.venv\\");                
                 Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA)+"\"" + " install -r requirements_cuda.txt ");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
@@ -45,7 +45,7 @@ namespace SD_FXUI
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Host.Print("Install python venv... Please wait");
                 Cmd.Start();
-                Cmd.Send("python -m venv repo\\shark.venv\\");
+                Cmd.Send("py -3.10 -m venv repo\\shark.venv\\");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
 
@@ -75,7 +75,7 @@ namespace SD_FXUI
                 Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Host.Print("Install ONNX runtimes... Please wait");
                 Cmd.Start();
-                Cmd.Send("python -m venv .\\repo\\onnx.venv\\");
+                Cmd.Send("py -3.10 -m venv .\\repo\\onnx.venv\\");
                 Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install -r requirements_onnx.txt");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
