@@ -305,6 +305,9 @@ namespace SD_FXUI
                 cbSampler.Text = Data.Get("sampler", "UniPCMultistep");
                 cbDevice.Text = Data.Get("device");
 
+                if (cbDevice.Text.Length == 0)
+                    cbDevice.SelectedItem = cbDevice.Items[cbDevice.Items.Count - 1];
+
                 Title = "Stable Diffusion XUI : ONNX venv";
             }
         }

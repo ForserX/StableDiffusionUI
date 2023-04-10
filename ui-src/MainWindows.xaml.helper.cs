@@ -60,6 +60,7 @@ namespace SD_FXUI
             Utils.Settings.UseNotifImgs = Data.Get("notifi", "true") == "true";
             Utils.Settings.UseInternalVAE = Data.Get("in_vae", "false") == "true";
 
+            cbDevice.Text = Data.Get("device");
 
             bool FirstStart = Data.Get("welcomewnd") != "true";
             if (FirstStart)
@@ -92,7 +93,6 @@ namespace SD_FXUI
 
             UpdateModelsList();
             cbModel.Text = Data.Get("model");
-            cbDevice.Text = Data.Get("device");
             cbVAE.Text = Data.Get("VAE");
             cbLoRA.Text = Data.Get("lora");
             cbHyper.Text = Data.Get("hypern");

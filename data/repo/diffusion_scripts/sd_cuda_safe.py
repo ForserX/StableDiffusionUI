@@ -7,9 +7,6 @@ import torch
 from diffusers import AutoencoderKL
 from transformers import CLIPTokenizer
 
-
-
-
 from sd_xbackend import (
     GetPipe,
     GetSampler,
@@ -29,7 +26,6 @@ if len(sys.argv)==1:
     parser.exit()
 
 opt = parser.parse_args()
-prov = "DmlExecutionProvider"
 
 if opt.precision == "fp16":
     fptype = torch.float16
