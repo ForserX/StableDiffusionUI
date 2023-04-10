@@ -18,7 +18,7 @@ namespace SD_FXUI
         public static string GetRichText(RichTextBox Tb)
         {
             string ResultString = new TextRange(Tb.Document.ContentStart, Tb.Document.ContentEnd).Text;
-            ResultString = Regex.Replace(ResultString, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
+            ResultString = ResultString.Replace("\r\n", string.Empty);
 
             return ResultString;
         }
