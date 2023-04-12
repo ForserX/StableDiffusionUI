@@ -80,12 +80,11 @@ namespace SD_FXUI
             {
                 Helper.UIHost.Show();
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
-
-                Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Host.Print("Install ONNX runtimes... Please wait");
                 Cmd.Start();
                 Cmd.Send(PyCommand + " -m venv .\\repo\\onnx.venv\\");
                 Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install -r requirements_onnx.txt");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install ort-nightly-directml==1.15.0.dev20230408001 --force --extra-index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/");
                 Cmd.SendExitCommand();
                 Cmd.Wait();
 
