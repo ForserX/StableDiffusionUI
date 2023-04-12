@@ -43,6 +43,16 @@ from diffusers import (
     UniPCMultistepScheduler
 )
 
+def LPW_Path(ONNX: bool):
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    if ONNX:
+        dir_path = dir_path + "/modules/onnx/lpw_stable_diffusion_onnx.py"
+    else:
+        dir_path = dir_path + "/modules/diffusers/lpw_stable_diffusion.py"
+
+    return dir_path
+
+
 prov = "DmlExecutionProvider"
 
 def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
@@ -64,11 +74,11 @@ def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
                 nsfw_pipe = OnnxRuntimeModel.from_pretrained(safety_model, provider=prov)
             print (Mode)    
             if Mode == "txt2img":
-                pipe = OnnxStableDiffusionPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
+                pipe = OnnxStableDiffusionPipeline.from_pretrained(Model, custom_pipeline=LPW_Path(True), provider=prov, safety_checker=nsfw_pipe)
             if Mode == "img2img":
-                pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
+                pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline=LPW_Path(True), provider=prov, safety_checker=nsfw_pipe)
             if Mode == "inpaint":
-                pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion_onnx", provider=prov, safety_checker=nsfw_pipe)
+                pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline=LPW_Path(True), provider=prov, safety_checker=nsfw_pipe)
     else:
         if fp16:
             fptype = torch.float16
@@ -87,11 +97,11 @@ def GetPipe(Model: str, Mode: str, IsONNX: bool, NSFW: bool, fp16: bool):
                 nsfw_pipe = StableDiffusionSafetyChecker.from_pretrained( safety_model, torch_dtype=fptype)
             print (Mode)      
             if Mode == "txt2img":
-                pipe = StableDiffusionPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
+                pipe = StableDiffusionPipeline.from_pretrained(Model, custom_pipeline=LPW_Path(False), torch_dtype=fptype, safety_checker=nsfw_pipe)
             if Mode == "img2img":
-                pipe = StableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
+                pipe = StableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline=LPW_Path(False), torch_dtype=fptype, safety_checker=nsfw_pipe)
             if Mode == "inpaint":
-                pipe = StableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline="lpw_stable_diffusion", torch_dtype=fptype, safety_checker=nsfw_pipe)
+                pipe = StableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline=LPW_Path(False), torch_dtype=fptype, safety_checker=nsfw_pipe)
                 
     return pipe
 
