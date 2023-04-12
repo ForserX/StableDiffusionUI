@@ -155,9 +155,9 @@ namespace SD_FXUI
                 string? str = reader.ReadLine();
                 while (str != null)
                 {
-                    if (str.Contains("hf_hub_download(pretrained_model_or_path, filename)"))
+                    if (str.Contains("hf_hub_download(pretrained_model_or_path, filename, cache_dir=cache_dir)"))
                     {
-                        str = "        body_model_path = pretrained_model_or_path #hf_hub_download(pretrained_model_or_path, filename)";
+                        str = "        body_model_path = pretrained_model_or_path #hf_hub_download(pretrained_model_or_path, filename, cache_dir=cache_dir)";
                         break;
                     }
                     str = reader.ReadLine();
@@ -165,6 +165,9 @@ namespace SD_FXUI
                 }
 
                 reader.Close();
+
+                if (str == null)
+                    return;
 
                 string[] Lines = File.ReadAllLines(FileName);
                 Lines[LineCounter] = str;
@@ -190,9 +193,9 @@ namespace SD_FXUI
                 string? str = reader.ReadLine();
                 while (str != null)
                 {
-                    if (str.Contains("hf_hub_download(pretrained_model_or_path, filename)"))
+                    if (str.Contains("hf_hub_download(pretrained_model_or_path, filename, cache_dir=cache_dir)"))
                     {
-                        str = "        model_path = pretrained_model_or_path #hf_hub_download(pretrained_model_or_path, filename)";
+                        str = "        model_path = pretrained_model_or_path #hf_hub_download(pretrained_model_or_path, filename, cache_dir=cache_dir)";
                         break;
                     }
                     str = reader.ReadLine();
@@ -200,6 +203,9 @@ namespace SD_FXUI
                 }
 
                 reader.Close();
+
+                if (str == null)
+                    return;
 
                 string[] Lines = File.ReadAllLines(FileName);
                 Lines[LineCounter] = str;
@@ -227,9 +233,9 @@ namespace SD_FXUI
                 string? str = reader.ReadLine();
                 while (str != null)
                 {
-                    if (str.Contains("hf_hub_download(pretrained_model_or_path, filename)"))
+                    if (str.Contains("hf_hub_download(pretrained_model_or_path, filename, cache_dir=cache_dir)"))
                     {
-                        str = "        model_path = pretrained_model_or_path #hf_hub_download(pretrained_model_or_path, filename)";
+                        str = "        model_path = pretrained_model_or_path #hf_hub_download(pretrained_model_or_path, filename, cache_dir=cache_dir)";
                         break;
                     }
                     str = reader.ReadLine();
@@ -237,6 +243,9 @@ namespace SD_FXUI
                 }
 
                 reader.Close();
+
+                if (str == null)
+                    return;
 
                 string[] Lines = File.ReadAllLines(FileName);
                 Lines[LineCounter] = str;
