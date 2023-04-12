@@ -38,11 +38,10 @@
     <Compile Include="modules\controlnet\palette.py" />
     <Compile Include="modules\danbooru.py" />
     <Compile Include="modules\danbooru_model.py" />
+    <Compile Include="modules\diffusers\lpw_stable_diffusion.py" />
     <Compile Include="modules\inference_gfpgan.py" />
     <Compile Include="modules\onnx\lora.py" />
-    <Compile Include="modules\textual_inversion\dataset.py" />
-    <Compile Include="modules\textual_inversion\learn_schedule.py" />
-    <Compile Include="modules\textual_inversion\textual_inversion.py" />
+    <Compile Include="modules\onnx\lpw_stable_diffusion_onnx.py" />
     <Compile Include="sd_cuda_safe.py" />
     <Compile Include="sd_onnx_safe.py" />
     <Compile Include="sd_xbackend.py" />
@@ -52,8 +51,8 @@
     <Folder Include="custom_pipelines\" />
     <Folder Include="modules\" />
     <Folder Include="modules\controlnet\" />
+    <Folder Include="modules\diffusers\" />
     <Folder Include="modules\onnx\" />
-    <Folder Include="modules\textual_inversion\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="..\onnx.venv\">
