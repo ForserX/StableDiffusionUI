@@ -154,7 +154,7 @@ namespace SD_FXUI
 
         private string GetCommandLineOnnx()
         {
-            string Prompt = CodeUtils.GetRichText(tbPrompt);
+            string Prompt = Helper.MakeInfo.Prompt;
 
             string Model = FS.GetModelDir(FS.ModelDirs.ONNX) + cbModel.Text;
 
@@ -343,7 +343,7 @@ namespace SD_FXUI
 
         private string GetCommandLineDiffCuda()
         {
-            string Prompt = CodeUtils.GetRichText(tbPrompt);
+            string Prompt = Helper.MakeInfo.Prompt;
             string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
 
             string Model = FS.GetModelDir(FS.ModelDirs.Diffusers) + cbModel.Text;
