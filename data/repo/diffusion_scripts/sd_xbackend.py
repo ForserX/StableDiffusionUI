@@ -1,3 +1,4 @@
+from pickle import NONE
 import torch, time, os, numpy
 from PIL import PngImagePlugin, Image
 from Hypernetwork import Hypernetwork
@@ -173,7 +174,7 @@ def ApplyLoraONNX(opt, lora, alpha, pipe):
     pipe.unet = OnnxRuntimeModel(OnnxRuntimeModel.load_model(unet_model.SerializeToString(), provider=prov, sess_options=sess))
     pipe.text_encoder = OnnxRuntimeModel(OnnxRuntimeModel.load_model(te_model.SerializeToString(), provider=prov, sess_options=sess_te))
 
-def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool, strength: float):
+def ApplyLoRA(unet, te, LoraPath : str, device, fp16: bool, strength: float):
     model_path = LoraPath
     state_dict = load_file(model_path, device)
 
@@ -199,13 +200,17 @@ def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool, strength: float):
         # as we have set the alpha beforehand, so just skip
         if '.alpha' in key or key in visited:
             continue
-            
+        
+        LORA_PREFIX = None
+
         if 'text' in key:
+            LORA_PREFIX = LORA_PREFIX_TEXT_ENCODER
             layer_infos = key.split('.')[0].split(LORA_PREFIX_TEXT_ENCODER+'_')[-1].split('_')
-            curr_layer = pipe.text_encoder
+            curr_layer = te
         else:
+            LORA_PREFIX = LORA_PREFIX_UNET
             layer_infos = key.split('.')[0].split(LORA_PREFIX_UNET+'_')[-1].split('_')
-            curr_layer = pipe.unet
+            curr_layer = unet
     
         # find the target layer
         temp_name = layer_infos.pop(0)
@@ -224,26 +229,88 @@ def ApplyLoRA(pipe, LoraPath : str, device, fp16: bool, strength: float):
         
         # org_forward(x) + lora_up(lora_down(x)) * multiplier
         pair_keys = []
-        if 'lora_down' in key:
-            pair_keys.append(key.replace('lora_down', 'lora_up'))
-            pair_keys.append(key)
+
+        if ".hada_w1_a" in key and LORA_PREFIX in key:
+            # LoHA
+                       
+            t1_key = key.replace("hada_w1_a", "hada_t1")
+            t2_key = key.replace("hada_w1_a", "hada_t2")
+
+            w1b_key = key.replace("hada_w1_a", "hada_w1_b")
+            w2a_key = key.replace("hada_w1_a", "hada_w2_a")
+            w2b_key = key.replace("hada_w1_a", "hada_w2_b")
+            alpha_key = key[: key.index("hada_w1_a")] + "alpha"
+
+            w1a_weight = state_dict[key].to(device,fptype)
+            w1b_weight = state_dict[w1b_key].to(device, fptype)
+            w2a_weight = state_dict[w2a_key].to(device, fptype)
+            w2b_weight = state_dict[w2b_key].to(device, fptype)
+            
+            t1_weight = state_dict.get(t1_key, None)
+            t2_weight = state_dict.get(t2_key, None)
+
+            dim = w1b_weight.shape[0]
+            alpha = state_dict.get(alpha_key, dim).to(device, fptype)
+            
+            if t1_weight is not None and t2_weight is not None:
+                t1_weight = t1_weight.to(device, fptype)
+                t2_weight = t2_weight.to(device, fptype)
+                
+                weights_1 = torch.einsum(
+                    "i j k l, j r, i p -> p r k l",
+                    t1_weight,
+                    w1b_weight,
+                    w1a_weight,
+                )
+                weights_2 = torch.einsum(
+                    "i j k l, j r, i p -> p r k l",
+                    t2_weight,
+                    w2b_weight,
+                    w2a_weight,
+                )
+                weights = weights_1 * weights_2
+                np_weights = weights * (alpha / dim)
+            else:
+                weights = (w1a_weight @ w1b_weight) * (w2a_weight @ w2b_weight)
+                np_weights = weights * (alpha / dim)
+
+            np_weights *= strength
+          
+            
+
+            curr_layer.weight.data += np_weights.reshape(curr_layer.weight.data.shape)
         else:
-            pair_keys.append(key)
-            pair_keys.append(key.replace('lora_up', 'lora_down'))
-        
-        # update weight
-        if len(state_dict[pair_keys[0]].shape) == 4:
-            weight_up = state_dict[pair_keys[0]].squeeze(3).squeeze(2).to(fptype)
-            weight_down = state_dict[pair_keys[1]].squeeze(3).squeeze(2).to(fptype)
-            curr_layer.weight.data += strength * torch.mm(weight_up, weight_down).unsqueeze(2).unsqueeze(3)
-        else:
-            weight_up = state_dict[pair_keys[0]].to(fptype)
-            weight_down = state_dict[pair_keys[1]].to(fptype)
-            curr_layer.weight.data += strength * torch.mm(weight_up, weight_down)
+                     
+            if 'lora_down' in key:
+                pair_keys.append(key.replace('lora_down', 'lora_up'))
+                pair_keys.append(key)
+            elif 'lora_up' in key:
+                pair_keys.append(key)
+                pair_keys.append(key.replace('lora_up', 'lora_down'))
+            
+            # update weight
+            if len(pair_keys) == 0:
+                continue
+
+            print("!!!DEBUG pair_keys:", pair_keys)
+
+            if len(state_dict[pair_keys[0]].shape) == 4:
+
+                weight_up = state_dict[pair_keys[0]].squeeze(3).squeeze(2).to(device, fptype)
+                weight_down = state_dict[pair_keys[1]].squeeze(3).squeeze(2).to(device, fptype)
+                
+                curr_layer.weight.data += strength * torch.mm(weight_up, weight_down).unsqueeze(2).unsqueeze(3)
+            else:
+                weight_up = state_dict[pair_keys[0]].to(device, fptype)
+                weight_down = state_dict[pair_keys[1]].to(device, fptype)
+              
+                curr_layer.weight.data += strength * torch.mm(weight_up, weight_down)
             
          # update visited list
         for item in pair_keys:
             visited.append(item)
+
+
 
 
 def GetSampler(Pipe, SamplerName: str, ETA):

@@ -3,6 +3,7 @@ import sys, time
 import argparse
 import json
 import torch
+import copy
 
 from diffusers import AutoencoderKL
 from transformers import CLIPTokenizer
@@ -35,6 +36,7 @@ else:
 pipe = GetPipe(opt.mdlpath, opt.mode, False, opt.nsfw, opt.precision == "fp16")
 pipe.to(opt.device)
 safe_unet = pipe.unet
+safe_text_encoder = pipe.text_encoder
     
 if opt.dlora:
     pipe.unet.load_attn_procs(opt.lora_path)
@@ -57,14 +59,16 @@ while True:
     
     if data['LoRA'] != old_lora_json:
         # Setup default unet
+          
         pipe.unet = safe_unet
+        pipe.text_encoder = safe_text_encoder
 
         for item in data['LoRA']:
             l_name = item['Name']
-            l_alpha = item['Value']
+            l_alpha = item['Value']            
 
             print(f"Apply {l_alpha} lora:{l_name}")
-            ApplyLoRA(pipe, l_name, opt.device, opt.precision == "fp16", l_alpha)
+            ApplyLoRA(pipe.unet, pipe.text_encoder, l_name, opt.device, opt.precision == "fp16", l_alpha)
 
         old_lora_json = data['LoRA']
 
