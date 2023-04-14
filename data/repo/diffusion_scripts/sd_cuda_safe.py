@@ -35,8 +35,6 @@ else:
 
 pipe = GetPipe(opt.mdlpath, opt.mode, False, opt.nsfw, opt.precision == "fp16")
 pipe.to(opt.device)
-safe_unet = pipe.unet
-safe_text_encoder = pipe.text_encoder
     
 if opt.dlora:
     pipe.unet.load_attn_procs(opt.lora_path)
@@ -57,11 +55,13 @@ while True:
     
     data = json.loads(message)
     
+    
+
     if data['LoRA'] != old_lora_json:
         # Setup default unet
-          
-        pipe.unet = safe_unet
-        pipe.text_encoder = safe_text_encoder
+        pipe.unet = pipe.unet.from_pretrained(opt.mdlpath+"/unet")
+        pipe.text_encoder = pipe.text_encoder.from_pretrained(opt.mdlpath+"/text_encoder")
+        pipe.to(opt.device, fptype)
 
         for item in data['LoRA']:
             l_name = item['Name']

@@ -230,6 +230,8 @@ def ApplyLoRA(unet, te, LoraPath : str, device, fp16: bool, strength: float):
         # org_forward(x) + lora_up(lora_down(x)) * multiplier
         pair_keys = []
 
+        
+
         if ".hada_w1_a" in key and LORA_PREFIX in key:
             # LoHA
                        
@@ -279,8 +281,8 @@ def ApplyLoRA(unet, te, LoraPath : str, device, fp16: bool, strength: float):
             
 
             curr_layer.weight.data += np_weights.reshape(curr_layer.weight.data.shape)
-        else:
-                     
+        else:            
+
             if 'lora_down' in key:
                 pair_keys.append(key.replace('lora_down', 'lora_up'))
                 pair_keys.append(key)
@@ -291,20 +293,38 @@ def ApplyLoRA(unet, te, LoraPath : str, device, fp16: bool, strength: float):
             # update weight
             if len(pair_keys) == 0:
                 continue
+            
+           
 
-            print("!!!DEBUG pair_keys:", pair_keys)
 
-            if len(state_dict[pair_keys[0]].shape) == 4:
-
-                weight_up = state_dict[pair_keys[0]].squeeze(3).squeeze(2).to(device, fptype)
-                weight_down = state_dict[pair_keys[1]].squeeze(3).squeeze(2).to(device, fptype)
-                
-                curr_layer.weight.data += strength * torch.mm(weight_up, weight_down).unsqueeze(2).unsqueeze(3)
+            if len(state_dict[pair_keys[1]].shape) == 4:
+               
+                if weight_down.shape[-2:] == (1, 1):
+                    
+                    weight_up = state_dict[pair_keys[0]].squeeze(3).squeeze(2).to(device, fptype)
+                    weight_down = state_dict[pair_keys[1]].squeeze(3).squeeze(2).to(device, fptype)
+                    alpha_key = key[: key.index("lora_down")] + "alpha"
+                    dim = weight_down.size()[0]
+                    alpha = state_dict.get(alpha_key, dim)                   
+                    k_weight = strength * (alpha / dim) 
+                    curr_layer.weight.data += k_weight * torch.mm(weight_up, weight_down).unsqueeze(2).unsqueeze(3)
+                else:
+                    
+                    weight_up = state_dict[pair_keys[0]].to(device, fptype)                   
+                    weight_down = state_dict[pair_keys[1]].permute(1, 0, 2, 3).to(device, fptype)
+                    alpha_key = key[: key.index("lora_down")] + "alpha"   
+                    dim = weight_down.size()[0]
+                    alpha = state_dict.get(alpha_key, dim)                    
+                    k_weight = strength * (alpha / dim)
+                    curr_layer.weight.data += k_weight * torch.nn.functional.conv2d(weight_down, weight_up).permute(1, 0, 2, 3)
             else:
                 weight_up = state_dict[pair_keys[0]].to(device, fptype)
                 weight_down = state_dict[pair_keys[1]].to(device, fptype)
-              
-                curr_layer.weight.data += strength * torch.mm(weight_up, weight_down)
+                alpha_key = key[: key.index("lora_down")] + "alpha"   
+                dim = weight_down.size()[0]
+                alpha = state_dict.get(alpha_key, dim)                    
+                k_weight = strength * (alpha / dim)
+                curr_layer.weight.data += k_weight * torch.mm(weight_up, weight_down)
             
          # update visited list
         for item in pair_keys:
