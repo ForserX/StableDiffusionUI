@@ -2,6 +2,7 @@ setuptools
 wheel
 
 # Testing
+protobuf==3.20.*
 Pillow
 parameterized
 
@@ -41,4 +42,3 @@ safetensors
 # ControlNet
 controlnet_aux
 mediapipe
-protobuf==3.20.*

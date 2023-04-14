@@ -29,8 +29,10 @@ namespace SD_FXUI
 
                 Host.Print("Install CUDA runtimes... Please wait");
                 Cmd.Start();
-                Cmd.Send(PyCommand + " -m venv .\\repo\\cuda.venv\\");                
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA)+"\"" + " install -r requirements_cuda.txt ");
+                Cmd.Send(PyCommand + " -m venv .\\repo\\cuda.venv\\");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA) + "\"" + " install -r requirements_cuda.txt ");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA) + "\"" + " install protobuf==3.20.* --force");
+
                 Cmd.SendExitCommand();
                 Cmd.Wait();
 
@@ -84,7 +86,11 @@ namespace SD_FXUI
                 Cmd.Start();
                 Cmd.Send(PyCommand + " -m venv .\\repo\\onnx.venv\\");
                 Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install -r requirements_onnx.txt");
+
+                // Force downgrade
                 Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install ort-nightly-directml==1.15.0.dev20230408001 --force --extra-index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install protobuf==3.20.* --force");
+
                 Cmd.SendExitCommand();
                 Cmd.Wait();
 
