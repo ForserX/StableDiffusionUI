@@ -4,15 +4,13 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 ![image](https://user-images.githubusercontent.com/13867290/222996644-77cfab99-6a1a-45e1-823e-9a1365e515db.png)
 ![image](https://user-images.githubusercontent.com/13867290/216797870-3f05fd70-41b0-41e5-b9ea-e7f41f294b65.png)
 
-
-* Shark (AMD: Vulkan + MRIL/IREE)
 * Diffuser ONNX (AMD: DirectML/DirectX 12)
+* * Support ORT Nightly for speedup
 * Diffuser (CPU/CUDA)
 
 # How to install
 ## Pre-install
-* Install python 3.10 + pip + venv
-* __(SHARK Only)__ Install IREE drivers (Any driver newer than 23.2.1)
+* Install python 3.10 + py launcher + pip + venv
 
 ## Setup
 * Start .exe file and select backend type
@@ -22,7 +20,7 @@ Simple re-implement SD UI for AMD and Nvidia GPU
 
 # Features
 * Custom VAE (ONNX/CUDA)
-* Lora (CUDA) 
+* Lora (CUDA/ONNX) 
 * ControlNet (CUDA/ONNX)
 * DeepDanbooru tokens extractor (ONNX/CUDA)
 * Converter for Diffusers/ONNX 
