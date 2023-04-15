@@ -1,11 +1,10 @@
-from pickle import NONE
 import torch, time, os, numpy
 from PIL import PngImagePlugin, Image
-from Hypernetwork import Hypernetwork
 
-from custom_pipelines.pipeline_onnx_stable_diffusion_instruct_pix2pix import OnnxStableDiffusionInstructPix2PixPipeline
-from custom_pipelines.pipeline_onnx_stable_diffusion_controlnet import OnnxStableDiffusionControlNetPipeline
+from safetensors.torch import load_file
 
+from modules.onnx.custom_pipelines.pipeline_onnx_stable_diffusion_instruct_pix2pix import OnnxStableDiffusionInstructPix2PixPipeline
+from modules.onnx.custom_pipelines.pipeline_onnx_stable_diffusion_controlnet import OnnxStableDiffusionControlNetPipeline
 
 try:
 	from onnxruntime import SessionOptions
@@ -13,9 +12,6 @@ try:
 	ONNX_MODEL = "model.onnx"
 except :
 	pass
-
-
-from safetensors.torch import load_file
 
 from diffusers import ( 
 	OnnxStableDiffusionPipeline, 
@@ -144,15 +140,6 @@ class Device:
 			)
 	
 		return pipe
-	
-	def ApplyHyperNetwork(self, pipe, HyperNetworkPath : str, strength: float):
-	
-		 model_path = HyperNetworkPath
-		 state_dict = torch.load(model_path)
-	
-		 Hyper = Hypernetwork()
-		 Hyper.load_from_state_dict(state_dict)
-		 Hyper.apply_to_diffusers(pipe.unet)
 	
 	def ApplyLoraONNX(self, opt, lora, alpha, pipe):
 		blended_unet = blend_loras(opt.mdlpath + "/unet/" + ONNX_MODEL, lora, "unet", alpha)

@@ -30,9 +30,6 @@
     <Compile Include="convert\convert_vae_pt_to_diffusers.py" />
     <Compile Include="convert\convert_vae_pt_to_onnx.py" />
     <Compile Include="convert\unet_2d_condition_cnet.py" />
-    <Compile Include="custom_pipelines\pipeline_onnx_stable_diffusion_controlnet.py" />
-    <Compile Include="custom_pipelines\pipeline_onnx_stable_diffusion_instruct_pix2pix.py" />
-    <Compile Include="Hypernetwork.py" />
     <Compile Include="merge_diff_lora.py" />
     <Compile Include="modules\controlnet\laion_face_common.py" />
     <Compile Include="modules\controlnet\palette.py" />
@@ -40,6 +37,8 @@
     <Compile Include="modules\danbooru_model.py" />
     <Compile Include="modules\diffusers\lpw_stable_diffusion.py" />
     <Compile Include="modules\inference_gfpgan.py" />
+    <Compile Include="modules\onnx\custom_pipelines\pipeline_onnx_stable_diffusion_controlnet.py" />
+    <Compile Include="modules\onnx\custom_pipelines\pipeline_onnx_stable_diffusion_instruct_pix2pix.py" />
     <Compile Include="modules\onnx\lora.py" />
     <Compile Include="modules\onnx\lpw_stable_diffusion_onnx.py" />
     <Compile Include="sd_cuda_safe.py" />
@@ -48,11 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="convert\" />
-    <Folder Include="custom_pipelines\" />
     <Folder Include="modules\" />
     <Folder Include="modules\controlnet\" />
     <Folder Include="modules\diffusers\" />
     <Folder Include="modules\onnx\" />
+    <Folder Include="modules\onnx\custom_pipelines\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="..\onnx.venv\">
