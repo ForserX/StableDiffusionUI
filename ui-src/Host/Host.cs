@@ -70,6 +70,7 @@ namespace SD_FXUI
             HostFilter.CheckDeepDanBooru(Message);
             HostFilter.CheckImageSize(Message);
             HostFilter.CheckOutOfMemory(Message);
+            HostFilter.CheckHalfPrecision(Message);
 
             if (HostFilter.CheckFalseWarning(Message))
                 return;

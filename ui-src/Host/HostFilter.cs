@@ -35,6 +35,18 @@ namespace SD_FXUI
                 Notification.MsgBox("The image size is not a multiple of 8!");
             }
         }
+        public static void CheckHalfPrecision(string Message)
+        {
+            if (Message.Contains("RuntimeError: \"LayerNormKernelImpl\" not implemented for 'Half'"))
+            {
+                Helper.UIHost.Dispatcher.Invoke(() =>
+                {
+                    Helper.UIHost.Hide();
+                });
+                Notification.MsgBox("Disable fp16. Not supported for current mode!");
+            }
+        }
+
         public static void CheckOutOfMemory(string Message)
         {
             if (Message.Contains("attention_probs = attention_scores.softmax(dim=-1)"))
