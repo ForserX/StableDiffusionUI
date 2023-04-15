@@ -77,13 +77,35 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
     else:
         device = "cpu"
     output_path = Path(output_path)
+    
+    # VAE ENCODER
+    vae_encoder = AutoencoderKL.from_pretrained(model_path + "/vae")
+    vae_in_channels = vae_encoder.config.in_channels
+    vae_sample_size = vae_encoder.config.sample_size
+
+    # need to get the raw tensor output (sample) from the encoder
+    vae_encoder.forward = lambda sample, return_dict: vae_encoder.encode(sample, return_dict)[0].sample()
+    onnx_export(
+        vae_encoder,
+        model_args=(
+            torch.randn(1, vae_in_channels, vae_sample_size, vae_sample_size).to(device=device, dtype=dtype),
+            False,
+        ),
+        output_path=output_path / "vae_encoder" / "model.onnx",
+        ordered_input_names=["sample", "return_dict"],
+        output_names=["latent_sample"],
+        dynamic_axes={
+            "sample": {0: "batch", 1: "channels", 2: "height", 3: "width"},
+        },
+        opset=opset,
+    )
 
     # VAE DECODER
-    vae_decoder =  AutoencoderKL.from_pretrained(model_path + "/vae")
+    vae_decoder = vae_encoder
     vae_latent_channels = vae_decoder.config.latent_channels
-    vae_out_channels = vae_decoder.config.out_channels
+
     # forward only through the decoder part
-    vae_decoder.forward = vae_decoder.decode
+    vae_decoder.forward = vae_encoder.decode
     onnx_export(
         vae_decoder,
         model_args=(
