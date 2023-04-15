@@ -29,7 +29,6 @@ namespace SD_FXUI
         {
             DiffCUDA,
             ONNX,
-            Shark,
             DiffCPU,
             InvokeAI,
 
@@ -46,7 +45,6 @@ namespace SD_FXUI
         {
             DiffCUDA,
             DiffONNX,
-            Shark,
             DiffCPU,
             Any
         }

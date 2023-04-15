@@ -30,7 +30,6 @@
     <Compile Include="convert\convert_vae_pt_to_diffusers.py" />
     <Compile Include="convert\convert_vae_pt_to_onnx.py" />
     <Compile Include="convert\unet_2d_condition_cnet.py" />
-    <Compile Include="merge_diff_lora.py" />
     <Compile Include="modules\controlnet\laion_face_common.py" />
     <Compile Include="modules\controlnet\palette.py" />
     <Compile Include="modules\danbooru.py" />

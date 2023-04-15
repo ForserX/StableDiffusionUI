@@ -26,11 +26,6 @@ namespace SD_FXUI
                 {
                     return "onnx.venv/Scripts/python.exe";
                 }
-                    
-                case Helper.VENV.Shark:
-                {
-                    return "shark.venv/Scripts/python.exe";
-                }
             }
 
             string PathForMode = GetPy((Helper.VENV)Helper.Mode);
@@ -51,14 +46,7 @@ namespace SD_FXUI
                     return Any;
             }
 
-            bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/shark.venv");
-
-            if(bDirCheck)
-            {
-                return GetPy(Helper.VENV.Shark);
-            }
-
-            bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
+            bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
 
             if (bDirCheck)
             {
@@ -88,11 +76,6 @@ namespace SD_FXUI
                     {
                         return "onnx.venv/Scripts/pip.exe";
                     }
-
-                case Helper.VENV.Shark:
-                    {
-                        return "shark.venv/Scripts/pip.exe";
-                    }
             }
 
             string PathForMode = GetPip((Helper.VENV)Helper.Mode);
@@ -113,14 +96,7 @@ namespace SD_FXUI
                     return Any;
             }
 
-            bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/shark.venv");
-
-            if (bDirCheck)
-            {
-                return GetPip(Helper.VENV.Shark);
-            }
-
-            bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
+            bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
 
             if (bDirCheck)
             {
@@ -150,22 +126,10 @@ namespace SD_FXUI
                     {
                         return "onnx.venv";
                     }
-
-                case Helper.VENV.Shark:
-                    {
-                        return "shark.venv";
-                    }
             }
 
             string Any = "";
-            bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/shark.venv");
-
-            if (bDirCheck)
-            {
-                return GetPy(Helper.VENV.Shark);
-            }
-
-            bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
+            bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
 
             if (bDirCheck)
             {

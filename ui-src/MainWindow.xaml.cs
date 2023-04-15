@@ -71,9 +71,6 @@ namespace SD_FXUI
                 Notification.ToastBtnClickManager(toastArgs);
             };
 
-            cbTI.IsEnabled = false;
-            btnApplyTI.IsEnabled = false;
-
             SafeCMD = new ModelCMD();
             cbExtractPoseSelector.SelectedIndex = 4;
 
@@ -101,12 +98,6 @@ namespace SD_FXUI
 
             switch (Helper.Mode)
             {
-                case Helper.ImplementMode.Shark:
-                    {
-                        cmdline += GetCommandLineShark();
-                        Task.Run(() => CMD.ProcessRunnerShark(cmdline, Helper.CurrentUpscaleSize));
-                        break;
-                    }
                 case Helper.ImplementMode.ONNX:
                     {
                         if (tsCN.IsChecked.Value)
@@ -268,12 +259,10 @@ namespace SD_FXUI
 
                 var Safe = btnONNX.Background;
                 btnONNX.Background = new SolidColorBrush(Colors.DarkOrchid);
-                btnShark.Background = Safe;
                 btnDiffCuda.Background = Safe;
                 btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
-                UpdateModelsTIList();
 
                 cbDevice.Items.Clear();
 
@@ -282,20 +271,10 @@ namespace SD_FXUI
                     cbDevice.Items.Add(item);
                 }
 
-                btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Hidden;
-
-                grLoRA.Visibility = Visibility.Visible;
-                brLoRA.Visibility = Visibility.Visible;
-
-                grCN.Visibility = Visibility.Visible;
 
                 grDevice.Visibility = Visibility.Visible;
                 brDevice.Visibility = Visibility.Visible;
-
-                grVAE.Visibility = Visibility.Visible;
-
-                string SafeSampler = cbSampler.Text;
 
                 foreach (string Name in Schedulers.Diffusers)
                 {
@@ -322,23 +301,13 @@ namespace SD_FXUI
                 var Safe = btnDiffCuda.Background;
                 btnDiffCuda.Background = new SolidColorBrush(Colors.DarkCyan);
                 btnONNX.Background = Safe;
-                btnShark.Background = Safe;
                 btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
-                UpdateModelsTIList();
 
                 grDevice.Visibility = Visibility.Collapsed;
                 brDevice.Visibility = Visibility.Collapsed;
 
-                grVAE.Visibility = Visibility.Visible;
-
-                grLoRA.Visibility = Visibility.Visible;
-                brLoRA.Visibility = Visibility.Visible;
-
-                grCN.Visibility = Visibility.Visible;
-
-                btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
                 CPUUse = false;
 
@@ -372,50 +341,6 @@ namespace SD_FXUI
             }
         }
 
-        private void btnShark_Click(object sender, RoutedEventArgs e)
-        {
-            if (Helper.Mode != Helper.ImplementMode.Shark)
-            {
-                Helper.Mode = Helper.ImplementMode.Shark;
-                Install.CheckAndInstallShark();
-
-                var Safe = btnShark.Background;
-                btnShark.Background = new SolidColorBrush(Colors.DarkSlateBlue);
-                btnONNX.Background = Safe;
-                btnDiffCuda.Background = Safe;
-                btnDiffCpu.Background = Safe;
-
-                UpdateModelsList();
-                UpdateModelsTIList();
-
-                cbDevice.Items.Clear();
-                cbDevice.Items.Add("vulkan");
-                cbDevice.Items.Add("CUDA");
-
-                btnImg.Visibility = Visibility.Hidden;
-                cbFf16.Visibility = Visibility.Visible;
-
-                grDevice.Visibility = Visibility.Visible;
-                brDevice.Visibility = Visibility.Visible;
-
-                grVAE.Visibility = Visibility.Collapsed;
-                grCN.Visibility = Visibility.Collapsed;
-
-                grLoRA.Visibility = Visibility.Collapsed;
-                brLoRA.Visibility = Visibility.Collapsed;
-
-                cbSampler.Items.Clear();
-                foreach (string Name in Schedulers.Shark)
-                {
-                    cbSampler.Items.Add(Name);
-                }
-
-                cbSampler.Text = Data.Get("sampler", "DDIM");
-                cbDevice.Text = Data.Get("device");
-
-                Title = "Stable Diffusion XUI : Shark venv";
-            }
-        }
         private void btnDiffCpu_Click(object sender, RoutedEventArgs e)
         {
             if (Helper.Mode != Helper.ImplementMode.DiffCPU)
@@ -426,23 +351,15 @@ namespace SD_FXUI
                 var Safe = btnDiffCpu.Background;
                 btnDiffCpu.Background = new SolidColorBrush(Colors.DarkSalmon);
                 btnONNX.Background = Safe;
-                btnShark.Background = Safe;
                 btnDiffCuda.Background = Safe;
 
                 UpdateModelsList();
-                UpdateModelsTIList();
 
                 grDevice.Visibility = Visibility.Collapsed;
                 brDevice.Visibility = Visibility.Collapsed;
 
-                btnImg.Visibility = Visibility.Visible;
                 cbFf16.Visibility = Visibility.Visible;
-                grVAE.Visibility = Visibility.Visible;
 
-                grLoRA.Visibility = Visibility.Visible;
-                brLoRA.Visibility = Visibility.Visible;
-
-                grCN.Visibility = Visibility.Visible;
                 CPUUse = true;
 
                 cbSampler.Items.Clear();
@@ -805,46 +722,6 @@ namespace SD_FXUI
                 lbRatio.Content = GetRatio(slW.Value, slH.Value);
         }
 
-        private void btnApplyTI_Click(object sender, RoutedEventArgs e)
-        {
-            string Path = FS.GetModelDir(FS.ModelDirs.Diffusers) + cbModel.Text;
-
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
-            {
-                string CPath = FS.GetModelDir(FS.ModelDirs.ONNX) + cbModel.Text;
-
-                if (!Directory.Exists(Path))
-                {
-                    Notification.MsgBox("Error! Need base diffuser model for apply!");
-                    return;
-                }
-
-                TIApply HelpWnd = new TIApply();
-                HelpWnd.ShowDialog();
-
-                Directory.CreateDirectory(CPath + "\\textual_inversion_merges\\");
-
-                if (Helper.CurrentTI != null)
-                    Task.Run(() => CMD.ApplyTextInv(Path, CPath, Helper.CurrentTI));
-            }
-            else
-            {
-                if (!Directory.Exists(Path))
-                {
-                    Notification.MsgBox("Error! Need base diffuser model for apply!");
-                    return;
-                }
-
-                TIApply HelpWnd = new TIApply();
-                HelpWnd.ShowDialog();
-
-                Directory.CreateDirectory(Path + "\\textual_inversion_merges\\");
-
-                if (Helper.CurrentTI != null)
-                    Task.Run(() => CMD.ApplyTextInvDiff(Path, Helper.CurrentTI));
-            }
-        }
-
         private void cbModel_Copy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
@@ -869,30 +746,6 @@ namespace SD_FXUI
             {
                 imgModelPrivew.Source = Helper.NoImageData;
             }
-
-            if (Helper.Mode != Helper.ImplementMode.ONNX || cbTI == null || e.AddedItems.Count == 0)
-                return;
-
-            cbTI.Items.Clear();
-            cbTI.Items.Add("None");
-
-            string Mode = "onnx/";
-
-            string ModelPath = FS.GetModelDir() + Mode + e.AddedItems[0] + "/textual_inversion_merges/";
-
-            if (!Directory.Exists(ModelPath))
-                return;
-
-            foreach (string File in Directory.GetDirectories(ModelPath))
-            {
-                cbTI.Items.Add(Path.GetFileNameWithoutExtension(File));
-            }
-        }
-
-        private void btnMerge_Click(object sender, MouseButtonEventArgs e)
-        {
-            Utils.Merge MergeWnd = new Utils.Merge();
-            MergeWnd.ShowDialog();
         }
 
         private void pbGen_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

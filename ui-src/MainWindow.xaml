@@ -34,7 +34,6 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="btnShark" Content="Shark(Vulkan)" Margin="276,4,0,0" VerticalAlignment="Top" Click="btnShark_Click" Width="80" Grid.Column="3" Height="20" Padding="1,1,1,1" HorizontalAlignment="Left" IsEnabled="False"/>
         <Button x:Name="btnONNX" Content="Diffusers(ONNX)" Margin="186,4,0,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1"/>
         <ListView x:Name="lvImages" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="3,42,3,99" Grid.Column="4" SelectionChanged="lvImages_SelectionChanged" Background="White" BorderBrush="White">
             <ListView.View>
@@ -199,16 +198,7 @@
                         <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="0,-190,13,0" VerticalAlignment="Top" Height="20" HorizontalAlignment="Right" Width="52"/>
                         <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,58,0,0" VerticalAlignment="Top"/>
                         <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,63,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
-                        <Label Content="Textual Inversion " Width="97" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,135,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
-                        <ComboBox x:Name="cbTI" Height="22" Margin="103,135,75,0" VerticalAlignment="Top" SelectionChanged="cbModel_Copy_SelectionChanged" Visibility="Collapsed"/>
-                        <Button x:Name="btnApplyTI" Content="Apply" Style="{StaticResource ButtonPrimary}" Width="66" Height="16" HorizontalAlignment="Right" Margin="0,142,4,0" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Top" Click="btnApplyTI_Click" Visibility="Collapsed">
-                            <Button.Background>
-                                <LinearGradientBrush EndPoint="1,0">
-                                    <GradientStop Color="#FF523876"/>
-                                    <GradientStop Color="#FF4D12AF" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Button.Background>
-                        </Button>
+                        
                         <ToggleButton x:Name="tsTTA" Content="    " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Unchecked="tsTTA_Checked" Margin="88,40,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top" Checked="tsTTA_Checked"/>
                         <Label Content="Enable TTA mode" Height="30" Width="82" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="3,36,0,0" VerticalAlignment="Top" FontSize="10"/>
                         <Label x:Name="lbDenoiseName" Content="Denoise level" Height="30" Width="82" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="140,36,0,0" VerticalAlignment="Top" FontSize="10"/>
@@ -338,7 +328,6 @@
         <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,2,6,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btnZoom_Click"/>
         <Image x:Name="IconRes" Source="res/icon.png" />
         <Image x:Name="btnSettings" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,9,0" VerticalAlignment="Top" Width="41" Source="/res/settings.png" MouseLeftButtonDown="btnSettingsClick"/>
-        <Image x:Name="btnMerge" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,53,0" VerticalAlignment="Top" Width="40" Source="/res/merge.png" MouseLeftButtonDown="btnMerge_Click"/>
 
     </Grid>
 </hc:BlurWindow>

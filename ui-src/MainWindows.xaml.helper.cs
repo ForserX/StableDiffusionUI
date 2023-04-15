@@ -17,7 +17,6 @@ namespace SD_FXUI
         public void InvokeClearImages() => Dispatcher.Invoke(() => { InvokeClearImages(); });
         public void InvokeProgressUpdate(int value) => Dispatcher.Invoke(() => { pbGen.Value = value; });
         public void InvokeUpdateModelsList() => Dispatcher.Invoke(() => { UpdateModelsList(); });
-        public void InvokeUpdateModelsTIList() => Dispatcher.Invoke(() => { UpdateModelsTIList(); });
         public void InvokeProgressApply() => Dispatcher.Invoke(() => { pbGen.Value += (40 / (int)(tbTotalCount.Value)); });
         public void InvokeDropModel() => Dispatcher.Invoke(() => { SafeCMD.Exit(true); });
 
@@ -70,7 +69,6 @@ namespace SD_FXUI
 
                 switch (Helper.Mode)
                 {
-                    case Helper.ImplementMode.Shark: Helper.Mode = Helper.ImplementMode.IDK; btnShark_Click(0, new RoutedEventArgs()); break;
                     case Helper.ImplementMode.ONNX: Helper.Mode = Helper.ImplementMode.IDK; btnONNX_Click(0, new RoutedEventArgs()); break;
                     case Helper.ImplementMode.DiffCUDA: Helper.Mode = Helper.ImplementMode.IDK; btnDiffCuda_Click(0, new RoutedEventArgs()); break;
 
@@ -81,10 +79,9 @@ namespace SD_FXUI
             {
                 switch (Data.Get("back_mode"))
                 {
-                    case "2": btnShark_Click(0, new RoutedEventArgs()); break;
                     case "1": btnONNX_Click(0, new RoutedEventArgs()); break;
-                    case "3": btnDiffCpu_Click(0, new RoutedEventArgs()); break;
-                    case "4": Helper.Mode = Helper.ImplementMode.InvokeAI; break;
+                    case "2": btnDiffCpu_Click(0, new RoutedEventArgs()); break;
+                    case "3": Helper.Mode = Helper.ImplementMode.InvokeAI; break;
                     case "0": btnDiffCuda_Click(0, new RoutedEventArgs()); break;
 
                     default: btnONNX_Click(0, new RoutedEventArgs()); break;
@@ -193,11 +190,6 @@ namespace SD_FXUI
             if (cbNSFW.IsChecked.Value)
             {
                 CmdLine += " --nsfw=True";
-            }
-
-            if (cbTI.Text != "None" && cbTI.Text.Length > 0)
-            {
-                CmdLine += $" --inversion={cbTI.Text}";
             }
 
             if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
@@ -395,11 +387,6 @@ namespace SD_FXUI
                 CmdLine += $" --hypernetwork=\"{HyperModel}\"";
             }
 
-            if (cbTI.Text != "None" && cbTI.Text.Length > 0)
-            {
-                CmdLine += $" --inversion={FS.GetModelDir() + "textual_inversion/" + cbTI.Text + ".pt"}";
-            }
-
             if (cbNSFW.IsChecked.Value)
             {
                 CmdLine += " --nsfw=True";
@@ -443,33 +430,6 @@ namespace SD_FXUI
 
             return CmdLine;
         }
-        private string GetCommandLineShark()
-        {
-            string Prompt = CodeUtils.GetRichText(tbPrompt);
-
-            string FpMode = cbFf16.IsChecked.Value ? "fp16" : "fp32";
-            string Model = cbModel.Text.EndsWith(".hgf") ? cbModel.Text.Replace(".hgf", "") : FS.GetModelDir(FS.ModelDirs.Diffusers) + cbModel.Text;
-            string CmdLine = $" --precision={FpMode}"
-                    + $" --device=\"{cbDevice.Text}\""
-                    + $" --prompt=\"{Prompt}\""
-                    + $" --negative-prompts=\"{CodeUtils.GetRichText(tbNegPrompt)}\""
-                    + $" --height={tbH.Text}"
-                    + $" --width={tbW.Text}"
-                    + $" --guidance_scale={tbCFG.Text.Replace(',', '.')}"
-                    + $" --scheduler={cbSampler.Text}"
-                    + $" --steps={tbSteps.Text}"
-                    + $" --seed={tbSeed.Text}"
-                    + $" --total_count={tbTotalCount.Value.ToString()}"
-                    + $" --hf_model_id=\"{Model}\""
-                    + $" --no-use_tuned "
-                    + $" --local_tank_cache=\".//\""
-                    + " --enable_stack_trace"
-                    //                    + " --iree-vulkan-target-triple=rdna3-unknown-windows"
-                    + " --write_metadata_to_png"
-            ;
-
-            return CmdLine;
-        }
 
         void SetImg(string Img, bool CN = false)
         {
@@ -495,36 +455,6 @@ namespace SD_FXUI
             }
         }
 
-        public void UpdateModelsTIList()
-        {
-            string SafeName = (string)cbTI.Text.Clone();
-            cbTI.Items.Clear();
-            cbTI.Items.Add("None");
-
-            if (Helper.Mode != Helper.ImplementMode.ONNX)
-            {
-                foreach (string File in Directory.GetFiles(FS.GetModelDir() + "textual_inversion"))
-                {
-                    cbTI.Items.Add(Path.GetFileNameWithoutExtension(File));
-                }
-            }
-            else
-            {
-                string Mode = "onnx/";
-                string ModelPath = FS.GetModelDir() + Mode + cbModel.Text + "/textual_inversion_merges/";
-
-                if (!Directory.Exists(ModelPath))
-                    return;
-
-                foreach (string File in Directory.GetDirectories(ModelPath))
-                {
-                    cbTI.Items.Add(Path.GetFileNameWithoutExtension(File));
-                }
-            }
-
-            cbTI.Text = SafeName;
-        }
-
         void UpdateLoRAModels(string LoraPath)
         {
 
@@ -535,7 +465,6 @@ namespace SD_FXUI
                 if (!TryName.EndsWith("txt"))
                     cbLoRA.Items.Add(TryName);
             }
-
         }
 
         public void UpdateModelsList()

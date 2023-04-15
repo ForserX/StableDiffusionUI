@@ -43,37 +43,6 @@ namespace SD_FXUI
             }
 
         }
-        public static void CheckAndInstallShark(string PyCommand = "py -3.10", bool Silent = false)
-        {
-            bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/shark.venv");
-            if (!bDirCheck && (Silent || Notification.MsgBox("Need install packages for use Shark")))
-            {
-                Helper.UIHost.Show();
-                Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
-                Host.Print("Install python venv... Please wait");
-                Cmd.Start();
-                Cmd.Send(PyCommand + " -m venv repo\\shark.venv\\");
-                Cmd.SendExitCommand();
-                Cmd.Wait();
-
-                Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
-                Host.Print("Install shark runtimes... Please wait");
-                Cmd.Start();
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " install -r requirements_shark.txt");
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " install onnxruntime_directml --force");
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " --pre torch-mlir torch torchvision --extra-index-url https://download.pytorch.org/whl/nightly/cpu -f https://llvm.github.io/torch-mlir/package-index/");
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " --upgrade -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html iree-compiler iree-runtime");
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.Shark)  + "\"" + " -e . -f https://llvm.github.io/torch-mlir/package-index/ -f https://nod-ai.github.io/SHARK-Runtime/pip-release-links.html");
-                Cmd.SendExitCommand();
-                Cmd.Wait();
-
-                if (!Silent)
-                {
-                    CheckAndInstallShark("python", true);
-                }
-            }
-
-        }
 
         public static void CheckAndInstallONNX(string PyCommand = "py -3.10", bool Silent = false)
         {

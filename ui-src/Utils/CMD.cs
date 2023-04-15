@@ -6,56 +6,6 @@ namespace SD_FXUI
 {
     internal class CMD
     {
-        public static async Task ApplyTextInv(string BaseModel, string CurrentModel, string TIModel)
-        {
-            string WorkDir = CurrentModel + "\\textual_inversion_merges";
-            Directory.CreateDirectory(WorkDir + "/" + TIModel);
-
-            string ModelPath = FS.GetModelDir() + "textual_inversion\\" + TIModel + ".pt";
-            Host ProcessHost = new Host(FS.GetWorkingDir());
-
-            ProcessHost.Start();
-            ProcessHost.Send("\"repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + 
-                "\" \"repo/diffusion_scripts/convert/convert_textual_inversion_to_onnx.py\"" +
-                $" --textinv=\"{ModelPath}\"" +
-                $" --name=\"{TIModel}\"" +
-                $" --model=\"{BaseModel}\"" +
-                $" --dest=\"{WorkDir}\" "
-            );
-
-            ProcessHost.SendExitCommand();
-
-            Host.Print("\n  Extract task is done..... \n");
-
-            Notification.SendNotification("Convertation: ~few second...");
-            Helper.CurrentTI = null;
-        }
-        
-        public static async Task ApplyTextInvDiff(string BaseModel, string TIModel)
-        {
-            string WorkDir = BaseModel + "\\textual_inversion_merges";
-            Directory.CreateDirectory(WorkDir + "/" +TIModel);
-
-            string ModelPath = FS.GetModelDir() + "textual_inversion\\" + TIModel + ".pt";
-            Host ProcessHost = new Host(FS.GetWorkingDir());
-
-            ProcessHost.Start();
-            ProcessHost.Send("\"repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) +
-                "\" \"repo/diffusion_scripts/convert/convert_textual_inversion_to_diff.py\"" +
-                $" --textinv=\"{ModelPath}\"" +
-                $" --name=\"{TIModel}\"" +
-                $" --model=\"{BaseModel}\"" +
-                $" --dest=\"{WorkDir}\" "
-            );
-
-            ProcessHost.SendExitCommand();
-
-            Host.Print("\n  Extract task is done..... \n");
-
-            Notification.SendNotification("Convertation: ~few second...");
-            Helper.CurrentTI = null;
-        }
-
         public static async Task ProcessConvertCKPT2Diff(string InputFile, bool emaOnly = false)
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
@@ -169,37 +119,6 @@ namespace SD_FXUI
 
             Host.Print("\n  Extract task is done..... \n");
             Notification.SendNotification("Convertation: done!");
-        }
-
-        public static async Task ProcessRunnerShark(string command, int UpSize)
-        {
-            Host ProcessHost = new Host(FS.GetModelDir() + "\\shark\\", "repo/" + PythonEnv.GetPy(Helper.VENV.Shark));
-            Host.Print("\n Startup generation..... \n");
-            Helper.Form.InvokeProgressUpdate(7);
-
-            ProcessHost.Start("../../repo/stable_diffusion/scripts/txt2img.py " + command);
-            ProcessHost.SendExitCommand();
-            Helper.Form.InvokeProgressUpdate(10);
-            ProcessHost.Wait();
-
-            //  process.WaitForInputIdle();
-            var Files = FS.GetFilesFrom(FS.GetModelDir() + "\\shark\\", new string[] { "png", "jpg" }, false);
-            foreach (var file in Files)
-            {
-                string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
-                System.IO.File.Move(file, Helper.ImgPath + System.IO.Path.GetFileName(file));
-
-                await Task.Run(() => UpscalerRunner(UpSize, NewFilePath));
-                if (UpSize == 0 || Helper.CurrentUpscalerType == Helper.UpscalerType.None)
-                {
-                    Helper.Form.UpdateViewImg(NewFilePath);
-                }
-            }
-
-            Host.Print("\n  Task Done..... \n");
-            Notification.SendNotification("Task: done!", true);
-            Helper.Form.InvokeProgressUpdate(100);
-            Helper.Form.UpdateCurrentViewImg();
         }
 
         public static async Task UpscalerRunner(int Size, string File)
@@ -412,23 +331,6 @@ namespace SD_FXUI
 
             Helper.Form.InvokeUpdateModelsList();
         }
-
-        /*
-        public static async Task InstallClip()
-        {
-            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPip(Helper.VENV.DiffCUDA));
-            Host.Print("\n Installing CLIP.... \n");
-
-            ProcessHost.Start(" install git+https://github.com/openai/CLIP.git");
-            Helper.Form.InvokeProgressUpdate(10);
-            ProcessHost.SendExitCommand();
-            ProcessHost.Wait();
-
-            Host.Print("\n  Installing CLIP Done..... \n");
-            Notification.SendNotification("Installing CLIP: done!");
-            Helper.Form.InvokeProgressUpdate(100);
-        }
-        */
 
         public static async Task DeepDanbooruProcess(string currentImage)
         {

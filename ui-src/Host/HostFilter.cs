@@ -76,12 +76,6 @@ namespace SD_FXUI
                 Helper.Form.InvokeUpdateModelsList();
             }
 
-            if (Message.Contains("SD: TI Done"))
-            {
-                Notification.SendNotification("Textual inversion apply: done!");
-                Helper.Form.InvokeUpdateModelsTIList();
-            }
-
             if (Message.Contains("SD: Merge is done!"))
             {
                 Notification.SendNotification("Models merge: done!");
@@ -157,7 +151,7 @@ namespace SD_FXUI
             if (Message.Length > 310)
                 return true;
 
-            if (Helper.Mode != Helper.ImplementMode.Shark || Helper.Mode != Helper.ImplementMode.InvokeAI)
+            if (Helper.Mode != Helper.ImplementMode.InvokeAI)
             {
                 if (Message.Contains("Token indices sequence length is longer than the specified maximum sequence length for this model"))
                 {

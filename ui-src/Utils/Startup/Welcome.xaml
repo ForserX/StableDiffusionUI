@@ -8,25 +8,14 @@
         Title="Welcome" Height="450" Width="801">
     <Grid  Background="#389D9BC9">
         <Label Content="This UI has several implementations of Stable Diffusion, which may be suitable for both AMD and NVIDIA users." HorizontalAlignment="Stretch" Margin="86,10,104,0" VerticalAlignment="Top"/>
-        <Image HorizontalAlignment="Left" Height="65" Margin="22,55,0,0" VerticalAlignment="Top" Width="254" Source="/res/diff.png"/>
-        <TextBlock TextWrapping="WrapWithOverflow" Margin="25,120,0,0" Background="White" HorizontalAlignment="Left" Width="251" Height="168" VerticalAlignment="Top">
+        <Image HorizontalAlignment="Left" Height="65" Margin="268,77,0,0" VerticalAlignment="Top" Width="254" Source="/res/diff.png"/>
+        <TextBlock TextWrapping="WrapWithOverflow" Margin="271,142,0,0" Background="White" HorizontalAlignment="Left" Width="251" Height="168" VerticalAlignment="Top">
             Diffusers is an API that works on: CUDA (NVIDIA), ONNX (DirectX 12), and CPU. For AMD (ONNX) users, it is recommended minimum 12gb VRAM.
             <LineBreak/>
             <LineBreak/>
             This algorithm works with models in diffuser. To transfer your .ckpt/.safetensors file to diffuser - use the import button.
         </TextBlock>
-        <Image HorizontalAlignment="Right" Height="65" Margin="0,54,63,0" VerticalAlignment="Top" Width="193" Source="/res/donai.png"/>
-        <TextBlock TextWrapping="WrapWithOverflow" Margin="0,120,23,0" Background="White" HorizontalAlignment="Right" Width="251" Height="168" VerticalAlignment="Top">
-            <Run Text="NodAI: Shark- is an API that works on AMD MLIR (Vulkan). To work with it, you will need to install special drivers."/>
-            <LineBreak/>
-            <LineBreak/>
-            <Run Text="This algorithm works with models in diffuser. To transfer your .ckpt/.safetensors file to diffuser - use the import button."/>
-            <LineBreak/>
-            <LineBreak/>
-            <Run Text="Warning: This algorithm is under development. There may be problems." FontWeight="Bold" />
-        </TextBlock>
         <Button Content="Okay, Use CUDA" Margin="96,0,0,10" VerticalAlignment="Bottom" Click="Button_Click" HorizontalAlignment="Left"/>
-        <Button Content="Okay, Use ONNX" Margin="336,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="Button_Click_1"/>
-        <Button Content="Okay, Use Shark" Margin="597,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Click="Button_Click_2" IsEnabled="False"/>
+        <Button Content="Okay, Use ONNX" Margin="0,0,93,8" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Button_Click_1"/>
     </Grid>
 </Window>
