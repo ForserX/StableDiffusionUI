@@ -18,17 +18,12 @@ from modules.controlnet.palette import ade_palette
 from PIL import Image
 import argparse
 
-from sd_xbackend import (
-    GetPipeCN,
-    ApplyArg,
-    ApplyLoRA
-)
+from sd_xbackend import Device
 
 parser = argparse.ArgumentParser()
-ApplyArg(parser)
+Device.ApplyArg(parser)
 opt = parser.parse_args()
 
-prov = "DmlExecutionProvider"
 pipe = None
 image = None
 
@@ -170,13 +165,13 @@ def generatePoseFromImage():
     img.save(opt.outfile)
     print(f"CN: Pose - {opt.outfile}")
 
-def generateImageFromPose ():
+def generateImageFromPose (PipeDevice: Device):
     print("processing generateImageFromPose()")
 
-    if opt.mode == "IfPONNX":
+    if PipeDevice.device == "onnx":
         generator = numpy.random.seed(opt.seed)
     else:
-        generator = torch.Generator(device=opt.device).manual_seed(opt.seed)
+        generator = torch.Generator(device=PipeDevice.device).manual_seed(opt.seed)
         
     output = pipe(
         opt.prompt,
@@ -220,42 +215,45 @@ if opt.mode == "PfI":
 
 elif opt.mode == "IfPONNX":
     print("CN: ONNX initial")
+    PipeDevice = Device("onnx", torch.float32)
+
     image = Image.open(opt.pose)
     image.convert("RGB").resize((opt.width, opt.height))
 
-    pipe = GetPipeCN(opt.mdlpath, opt.cn_model, opt.nsfw, opt.precision == "fp16", True)
+    pipe = PipeDevice.GetPipeCN(opt.mdlpath, opt.cn_model, opt.nsfw)
 
     pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
     if not opt.vae == "default":
-        pipe.vae_decoder = OnnxRuntimeModel.from_pretrained(opt.vae + "/vae_decoder", provider=prov)
+        pipe.vae_decoder = OnnxRuntimeModel.from_pretrained(opt.vae + "/vae_decoder", provider=PipeDevice.prov)
         
     print("CN: Model loaded")
     for i in range(opt.totalcount):
-        generateImageFromPose()
+        generateImageFromPose(PipeDevice)
         opt.seed = opt.seed + 1
 
 elif opt.mode == "IfP":
+    PipeDevice = Device(opt.device, fptype)
     print("CN: initial")
     image = Image.open(opt.pose)
     image.convert("RGB").resize((opt.width, opt.height))
 
-    pipe = GetPipeCN(opt.mdlpath, opt.cn_model, opt.nsfw, opt.precision == "fp16")
+    pipe = PipeDevice.GetPipeCN(opt.mdlpath, opt.cn_model, opt.nsfw)
     pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
 
     if not opt.vae == "default":
-        pipe.vae = AutoencoderKL.from_pretrained(opt.vae + "/vae", torch_dtype=fptype)
+        pipe.vae = AutoencoderKL.from_pretrained(opt.vae + "/vae", torch_dtype=PipeDevice.fptype)
         
-    pipe.to(opt.device)
+    pipe.to(PipeDevice.device)
 
     #if opt.device == "cpu":
     #    pipe.enable_model_cpu_offload()
 
     # LoRA magic
     if opt.lora:
-        ApplyLoRA(pipe.unet, pipe.text_encoder, opt.lora_path, opt.device, opt.precision == "fp16", 0.75)
+        PipeDevice.ApplyLoRA(pipe.unet, pipe.text_encoder, opt.lora_path, 0.60)
 
     print("CN: Model loaded")
     for i in range(opt.totalcount):
-        generateImageFromPose()
+        generateImageFromPose(PipeDevice)
         opt.seed = opt.seed + 1

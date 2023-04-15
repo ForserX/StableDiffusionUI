@@ -1,30 +1,15 @@
-import os
-import sys, time
-import argparse
-import json
-import torch
-import copy
+import os, sys, time
+import argparse, json, torch
 
 from diffusers import AutoencoderKL
 from transformers import CLIPTokenizer
 
-from sd_xbackend import (
-    GetPipe,
-    GetSampler,
-    ApplyArg,
-    MakeImage,
-    ApplyLoRA,
-    ApplyHyperNetwork
-)
-
 os.chdir(sys.path[0])
+from sd_xbackend import Device
+
 
 parser = argparse.ArgumentParser()
-ApplyArg(parser)
-
-if len(sys.argv)==1:
-    parser.print_help()
-    parser.exit()
+Device.ApplyArg(parser)
 
 opt = parser.parse_args()
 
@@ -33,12 +18,13 @@ if opt.precision == "fp16":
 else:
     fptype = torch.float32
 
-pipe = GetPipe(opt.mdlpath, opt.mode, False, opt.nsfw, opt.precision == "fp16")
+PipeDevice = Device(opt.device, fptype)
+
+pipe = PipeDevice.GetPipe(opt.mdlpath, opt.mode, opt.nsfw)
 pipe.to(opt.device)
     
 if opt.dlora:
     pipe.unet.load_attn_procs(opt.lora_path)
-
 
 print("SD: Model preload: done")
 old_lora_json = None
@@ -55,36 +41,33 @@ while True:
     
     data = json.loads(message)
     
-    
-
     if data['LoRA'] != old_lora_json:
         # Setup default unet
         pipe.unet = pipe.unet.from_pretrained(opt.mdlpath+"/unet")
         pipe.text_encoder = pipe.text_encoder.from_pretrained(opt.mdlpath+"/text_encoder")
-        pipe.to(opt.device, fptype)
+        pipe.to(PipeDevice.device, PipeDevice.fptype)
 
         for item in data['LoRA']:
             l_name = item['Name']
             l_alpha = item['Value']            
 
             print(f"Apply {l_alpha} lora:{l_name}")
-            ApplyLoRA(pipe.unet, pipe.text_encoder, l_name, opt.device, opt.precision == "fp16", l_alpha)
+            PipeDevice.ApplyLoRA(pipe.unet, pipe.text_encoder, l_name, l_alpha)
 
         old_lora_json = data['LoRA']
 
-
     if not data['VAE'] == "Default":
         print("Load custom vae")
-        pipe.vae = AutoencoderKL.from_pretrained(data['VAE'] + "/vae", torch_dtype=fptype)
+        pipe.vae = AutoencoderKL.from_pretrained(data['VAE'] + "/vae", torch_dtype=PipeDevice.fptype)
         pipe.to(opt.device)
         
-    eta = GetSampler(pipe, data['Sampler'], data['ETA'])
+    eta = PipeDevice.GetSampler(pipe, data['Sampler'], data['ETA'])
     print(f"Prompt: {data['Prompt']}")
     print(f"Neg rompt: {data['NegPrompt']}")
     
     seed = data['StartSeed']
     for i in range(data['TotalCount']):
-        MakeImage(pipe, data['Mode'], eta, data['Prompt'], data['NegPrompt'], data['Steps'], data['Width'], data['Height'], seed, data['CFG'], data['ImgScale'], data['Device'] ,data['Image'] , data['ImgScale'], data['Mask'], data['WorkingDir'])
+        PipeDevice.MakeImage(pipe, data['Mode'], eta, data['Prompt'], data['NegPrompt'], data['Steps'], data['Width'], data['Height'], seed, data['CFG'], data['ImgScale'], data['Image'] , data['ImgScale'], data['Mask'], data['WorkingDir'])
         seed = seed + 1
         
     print("SD Pipeline: Generating done!")
