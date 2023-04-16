@@ -220,20 +220,20 @@ class Device:
 				w2b_key = key.replace("hada_w1_a", "hada_w2_b")
 				alpha_key = key[: key.index("hada_w1_a")] + "alpha"
 	
-				w1a_weight = state_dict[key].to(device,self.fptype)
-				w1b_weight = state_dict[w1b_key].to(device, self.fptype)
-				w2a_weight = state_dict[w2a_key].to(device, self.fptype)
-				w2b_weight = state_dict[w2b_key].to(device, self.fptype)
+				w1a_weight = state_dict[key].to(self.device,self.fptype)
+				w1b_weight = state_dict[w1b_key].to(self.device, self.fptype)
+				w2a_weight = state_dict[w2a_key].to(self.device, self.fptype)
+				w2b_weight = state_dict[w2b_key].to(self.device, self.fptype)
 				
 				t1_weight = state_dict.get(t1_key, None)
 				t2_weight = state_dict.get(t2_key, None)
 	
 				dim = w1b_weight.shape[0]
-				alpha = state_dict.get(alpha_key, dim).to(device, self.fptype)
+				alpha = state_dict.get(alpha_key, dim).to(self.device, self.fptype)
 				
 				if t1_weight is not None and t2_weight is not None:
-					t1_weight = t1_weight.to(device, self.fptype)
-					t2_weight = t2_weight.to(device, self.fptype)
+					t1_weight = t1_weight.to(self.device, self.fptype)
+					t2_weight = t2_weight.to(self.device, self.fptype)
 					
 					weights_1 = torch.einsum(
 						"i j k l, j r, i p -> p r k l",
@@ -275,8 +275,8 @@ class Device:
 				   
 					if weight_down.shape[-2:] == (1, 1):
 						
-						weight_up = state_dict[pair_keys[0]].squeeze(3).squeeze(2).to(device, self.fptype)
-						weight_down = state_dict[pair_keys[1]].squeeze(3).squeeze(2).to(device, self.fptype)
+						weight_up = state_dict[pair_keys[0]].squeeze(3).squeeze(2).to(self.device, self.fptype)
+						weight_down = state_dict[pair_keys[1]].squeeze(3).squeeze(2).to(self.device, self.fptype)
 						alpha_key = key[: key.index("lora_down")] + "alpha"
 						dim = weight_down.size()[0]
 						alpha = state_dict.get(alpha_key, dim)                   
@@ -284,16 +284,16 @@ class Device:
 						curr_layer.weight.data += k_weight * torch.mm(weight_up, weight_down).unsqueeze(2).unsqueeze(3)
 					else:
 						
-						weight_up = state_dict[pair_keys[0]].to(device, self.fptype)                   
-						weight_down = state_dict[pair_keys[1]].permute(1, 0, 2, 3).to(device, self.fptype)
+						weight_up = state_dict[pair_keys[0]].to(self.device, self.fptype)                   
+						weight_down = state_dict[pair_keys[1]].permute(1, 0, 2, 3).to(self.device, self.fptype)
 						alpha_key = key[: key.index("lora_down")] + "alpha"   
 						dim = weight_down.size()[0]
 						alpha = state_dict.get(alpha_key, dim)                    
 						k_weight = strength * (alpha / dim)
 						curr_layer.weight.data += k_weight * torch.nn.functional.conv2d(weight_down, weight_up).permute(1, 0, 2, 3)
 				else:
-					weight_up = state_dict[pair_keys[0]].to(device, self.fptype)
-					weight_down = state_dict[pair_keys[1]].to(device, self.fptype)
+					weight_up = state_dict[pair_keys[0]].to(self.device, self.fptype)
+					weight_down = state_dict[pair_keys[1]].to(self.device, self.fptype)
 					alpha_key = key[: key.index("lora_down")] + "alpha"   
 					dim = weight_down.size()[0]
 					alpha = state_dict.get(alpha_key, dim)                    
