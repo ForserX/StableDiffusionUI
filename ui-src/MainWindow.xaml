@@ -221,7 +221,7 @@
                         <ComboBox x:Name="cbVAE" Height="22" Margin="47,36,77,0" VerticalAlignment="Top"/>
                         <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,4,0,0" VerticalAlignment="Top"/>
                         <ComboBox x:Name="cbModel" Height="22" Margin="47,3,77,0" VerticalAlignment="Top" SelectionChanged="cbModel_SelectionChanged"/>
-                        <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,0,147,2" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom">
+                        <Button Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,0,71,2" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom" Content="Import">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="1,0">
                                     <GradientStop Color="#FF523876"/>
@@ -241,7 +241,14 @@
                         <Label Content="Textual Inversion" Width="63" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="3,71,0,0" VerticalAlignment="Top" FontSize="8"/>
                         <ComboBox x:Name="cbTI" Height="22" Margin="70,73,158,0" VerticalAlignment="Top" FontSize="10" MinHeight="25"/>
                         <TextBox  x:Name="tbTIAlpha" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,72,119,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="4,4,1,4" MinHeight="25"/>
-                        <ToggleButton x:Name="tsTI" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Margin="299,74,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
+                        <Button Content="Add" Style="{StaticResource ButtonPrimary}" Width="38" Height="23" HorizontalAlignment="Right" RenderTransformOrigin="0.512,2.77" Padding="4,1,5,1" FontSize="9" VerticalAlignment="Bottom" Margin="0,0,76,28" Click="Button_Click_2">
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="1,0">
+                                    <GradientStop Color="#FF523876"/>
+                                    <GradientStop Color="#FF4D12AF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
                     </Grid>
                 </Border>
                 <Border x:Name="brLoRA" BorderBrush="#FFD0C0E9" BorderThickness="0.5">

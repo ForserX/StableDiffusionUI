@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using static SD_FXUI.Helper;
 
 namespace SD_FXUI
 {
@@ -230,7 +229,7 @@ namespace SD_FXUI
 
 			string SourcePrompt = CodeUtils.GetRichText(tbPrompt).Replace("\r\n", string.Empty);
 
-			while (SourcePrompt.Contains("<", 0))
+			while (SourcePrompt.Contains("<lora:", 0))
 			{
 				int StartIdx = SourcePrompt.IndexOf("<", 0);
 				int EndIdx = SourcePrompt.IndexOf(">", 0) + 1;
@@ -238,30 +237,43 @@ namespace SD_FXUI
 				string LoraDataStr = SourcePrompt.Substring(StartIdx, EndIdx - StartIdx);
 				SourcePrompt = SourcePrompt.Replace(LoraDataStr, string.Empty);
 
-				LoraDataStr = LoraDataStr.Replace("<", string.Empty).Replace(">", string.Empty);
+				LoraDataStr = LoraDataStr.Replace("<lora:", string.Empty).Replace(">", string.Empty);
 				if (!LoraDataStr.Contains(":", 0))
 					continue;
 
 				int DelimerIdx = LoraDataStr.IndexOf(":", 0);
 
 				Helper.LoRAData LoRAData = new Helper.LoRAData();
-				LoRAData.Name = FS.GetModelDir(FS.ModelDirs.LoRA) + LoraDataStr.Substring(0, DelimerIdx);
-				LoRAData.Value = (float)int.Parse(LoraDataStr.Substring(DelimerIdx + 1)) / 100.0f;
+				LoRAData.Name = string.Concat(FS.GetModelDir(FS.ModelDirs.LoRA), LoraDataStr.AsSpan(0, DelimerIdx));
+				LoRAData.Value = (float)int.Parse(LoraDataStr[(DelimerIdx + 1)..]) / 100.0f;
 
 				Helper.MakeInfo.LoRA.Add(LoRAData);
-			}
+            }
 
-			while(SourcePrompt.StartsWith(",") || SourcePrompt.StartsWith(" "))
+            while (SourcePrompt.Contains("<ti:", 0))
+            {
+                int StartIdx = SourcePrompt.IndexOf("<", 0);
+                int EndIdx = SourcePrompt.IndexOf(">", 0) + 1;
+
+                string DataStr = SourcePrompt.Substring(StartIdx, EndIdx - StartIdx);
+                SourcePrompt = SourcePrompt.Replace(DataStr, string.Empty);
+
+                DataStr = DataStr.Replace("<ti:", string.Empty).Replace(">", string.Empty);
+                if (!DataStr.Contains(":", 0))
+                    continue;
+
+                int DelimerIdx = DataStr.IndexOf(":", 0);
+
+                Helper.LoRAData TIData = new Helper.LoRAData();
+                TIData.Name = string.Concat(FS.GetModelDir(FS.ModelDirs.TextualInversion), DataStr.AsSpan(0, DelimerIdx));
+                TIData.Value = (float)int.Parse(DataStr[(DelimerIdx + 1)..]) / 100.0f;
+
+                Helper.MakeInfo.TI.Add(TIData);
+            }
+
+            while (SourcePrompt.StartsWith(",") || SourcePrompt.StartsWith(" "))
 			{
 				SourcePrompt = SourcePrompt.Substring(1);
-			}
-
-			if (tsTI.IsChecked.Value && cbTI.Text.Length > 0)
-			{
-				Helper.LoRAData TIData = new Helper.LoRAData();
-				TIData.Name = FS.GetModelDir() + "textual_inversion/" + cbTI.Text;
-				TIData.Value = (float)int.Parse(tbTIAlpha.Text) / 100.0f;
-				Helper.MakeInfo.TI.Add(TIData);
 			}
 
 			Helper.MakeInfo.Prompt = SourcePrompt;
@@ -488,7 +500,7 @@ namespace SD_FXUI
 			}
 
 			// Textual Inversion
-			foreach (string Dir in Directory.GetFiles(FS.GetModelDir() + "textual_inversion"))
+			foreach (string Dir in Directory.GetFiles(FS.GetModelDir(FS.ModelDirs.TextualInversion)))
             {
                 cbTI.Items.Add(Path.GetFileName(Dir));
             }

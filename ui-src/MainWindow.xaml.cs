@@ -914,7 +914,7 @@ namespace SD_FXUI
             {
                 LoraSubFolder += "/";
             }
-            string Temporary = $"<{LoraSubFolder}{cbLoRA.Text}:{tbLorastrength.Text}>, ";
+            string Temporary = $"<lora:{LoraSubFolder}{cbLoRA.Text}:{tbLorastrength.Text}>, ";
             Temporary += CodeUtils.GetRichText(tbPrompt);
 
             CodeUtils.SetRichText(tbPrompt, Temporary);
@@ -934,6 +934,18 @@ namespace SD_FXUI
             else
                 UpdateLoRAModels(FS.GetModelDir(FS.ModelDirs.LoRA));
 
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+
+            if (cbTI.Text.Length == 0)
+                return;
+
+            string Temporary = $"<ti:{cbTI.Text}:{tbTIAlpha.Text}>, ";
+            Temporary += CodeUtils.GetRichText(tbPrompt);
+
+            CodeUtils.SetRichText(tbPrompt, Temporary);
         }
     }
 }

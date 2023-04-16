@@ -13,6 +13,7 @@ namespace SD_FXUI
             ONNX,
             LoRA,
             OpenPose,
+            TextualInversion,
 
             General = -1
         }
@@ -54,6 +55,10 @@ namespace SD_FXUI
                     GeneralPath += "lora/";
                     break;
 
+                case ModelDirs.TextualInversion:
+                    GeneralPath += "textual_inversion/";
+                    break;
+
                 case ModelDirs.OpenPose:
                     GeneralPath += "OpenPose/";
                     break;
@@ -63,7 +68,7 @@ namespace SD_FXUI
         }
         public static string GetToolsDir()
         {
-            return System.IO.Directory.GetCurrentDirectory() + "\\tools\\";
+            return System.IO.Directory.GetCurrentDirectory() + "/tools/";
         }
 
         public static string GetModelLogoPath(string Model)
