@@ -848,9 +848,18 @@ namespace SD_FXUI
                 return;
 
             string LoRAName = e.AddedItems[0].ToString();
-            LoRAName = LoRAName.Replace(".safetensors", string.Empty);
+
+            string LoRASubFolder = "";
+
+            if (cbLoRACat.Text != "None")
+            {
+                LoRASubFolder = cbLoRACat.Text;
+            }
+
+            LoRAName = LoRASubFolder + "/" + LoRAName.Replace(".safetensors", string.Empty);
 
             string TokenFilePath = FS.GetModelDir(FS.ModelDirs.LoRA) + LoRAName + ".txt";
+
             if (File.Exists(TokenFilePath))
             {
                 string Contents = File.ReadAllText(TokenFilePath);
@@ -894,10 +903,36 @@ namespace SD_FXUI
             if (cbLoRA.Text.Length == 0)
                 return;
 
-            string Temporary = $"<{cbLoRA.Text}:{tbLorastrength.Text}>, ";
+            string LoraSubFolder = cbLoRACat.Text;
+
+            if (LoraSubFolder == "None")
+            {
+                LoraSubFolder = "";
+            }
+            else
+            {
+                LoraSubFolder += "/";
+            }
+            string Temporary = $"<{LoraSubFolder}{cbLoRA.Text}:{tbLorastrength.Text}>, ";
             Temporary += CodeUtils.GetRichText(tbPrompt);
 
             CodeUtils.SetRichText(tbPrompt, Temporary);
+        }
+
+        private void cbLoRACat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0)
+                return;
+
+            cbLoRA.Items.Clear();
+
+            string NewItm = (string)e.AddedItems[0];
+
+            if (NewItm != "None")
+                UpdateLoRAModels(FS.GetModelDir(FS.ModelDirs.LoRA) + e.AddedItems[0]);
+            else
+                UpdateLoRAModels(FS.GetModelDir(FS.ModelDirs.LoRA));
+
         }
     }
 }

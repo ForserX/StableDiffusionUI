@@ -1,11 +1,8 @@
 ﻿using HandyControl.Data;
-using SD_FXUI.Properties;
 using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace SD_FXUI
 {
@@ -92,7 +89,7 @@ namespace SD_FXUI
             cbModel.Text = Data.Get("model");
             cbVAE.Text = Data.Get("VAE");
             cbLoRA.Text = Data.Get("lora");
-            cbHyper.Text = Data.Get("hypern");
+            cbLoRACat.Text = Data.Get("lora_cat");
 
             if (cbVAE.Text.Length == 0)
             {
@@ -130,7 +127,7 @@ namespace SD_FXUI
             Data.Set("sampler", cbSampler.Text);
             Data.Set("device", cbDevice.Text);
             Data.Set("lora", cbLoRA.Text);
-            Data.Set("hypern", cbHyper.Text);
+            Data.Set("lora_cat", cbLoRACat.Text);
             Data.Set("cfg", tbCFG.Text);
 
             Data.Set("model", cbModel.Text);
@@ -381,12 +378,6 @@ namespace SD_FXUI
                     + $" --outpath=\"{FS.GetWorkingDir()}\""
             ;
 
-            if (false)
-            {
-                string HyperModel = FS.GetModelDir() + "hypernetwork\\" + cbHyper.Text;
-                CmdLine += $" --hypernetwork=\"{HyperModel}\"";
-            }
-
             if (cbNSFW.IsChecked.Value)
             {
                 CmdLine += " --nsfw=True";
@@ -457,10 +448,9 @@ namespace SD_FXUI
 
         void UpdateLoRAModels(string LoraPath)
         {
-
             foreach (var Itm in Directory.GetFiles(LoraPath))
             {
-                string TryName = Itm.Replace(FS.GetModelDir(FS.ModelDirs.LoRA), string.Empty);
+                string TryName = Path.GetFileName(Itm);
 
                 if (!TryName.EndsWith("txt"))
                     cbLoRA.Items.Add(TryName);
@@ -471,13 +461,11 @@ namespace SD_FXUI
         {
             string SafeVAE = (string)cbVAE.Text;
             string SafeModelName = (string)cbModel.Text;
-            string SafeLoRAName = (string)cbLoRA.Text;
-            string SafeHyper = (string)cbHyper.Text;
+            string SafeLoRAName = (string)cbLoRACat.Text;
 
             cbModel.Items.Clear();
             cbVAE.Items.Clear();
-            cbLoRA.Items.Clear();
-            cbHyper.Items.Clear();
+            cbLoRACat.Items.Clear();
 
             cbVAE.Items.Add("Default");
             foreach (var Itm in FS.GetModels(Helper.Mode))
@@ -493,23 +481,11 @@ namespace SD_FXUI
 
             foreach (string Dir in Directory.GetDirectories(LoraPath))
             {
-                UpdateLoRAModels(Dir);
+                cbLoRACat.Items.Add(Path.GetFileName(Dir));
             }
 
-            UpdateLoRAModels(LoraPath);
-            // Yeah... Hypernetwork...
-            string HyperPath = FS.GetModelDir() + "hypernetwork\\";
-            foreach (var Itm in Directory.GetFiles(HyperPath))
-            {
-                string TryName = Itm.Replace(HyperPath, string.Empty);
-                cbHyper.Items.Add(TryName);
-            }
-
-            foreach (var Itm in Directory.GetDirectories(HyperPath))
-            {
-                string TryName = Itm.Replace(HyperPath, string.Empty);
-                cbHyper.Items.Add(TryName);
-            }
+            int NoneID = cbLoRACat.Items.Add("None");
+            cbLoRACat.SelectedIndex = NoneID;
 
             // VAE
             foreach (var Itm in Directory.GetDirectories(FS.GetModelDir() + "vae\\"))
@@ -550,8 +526,10 @@ namespace SD_FXUI
                 cbVAE.SelectedIndex = 0;
             }
 
-            cbLoRA.Text = SafeLoRAName;
-            cbHyper.Text = SafeHyper;
+            if (SafeLoRAName.Length> 0)
+            {
+                cbLoRACat.Text = SafeLoRAName;
+            }
         }
 
         void ClearImages()

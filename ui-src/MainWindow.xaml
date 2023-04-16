@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="822" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="848" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
     <Grid Margin="0,1,0,2" Background="#38928FD4" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -198,7 +198,7 @@
                         <CheckBox x:Name="cbFf16" Content="fp16" IsChecked="True" Margin="0,-190,13,0" VerticalAlignment="Top" Height="20" HorizontalAlignment="Right" Width="52"/>
                         <Label Content="Face Restoration: GFPGAN" Height="30" Width="146" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="1,58,0,0" VerticalAlignment="Top"/>
                         <ToggleButton x:Name="cbGfpgan" Content=" " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="cbGfpgan_SelectionChanged" Unchecked="cbGfpgan_SelectionChanged" Margin="148,63,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
-                        
+
                         <ToggleButton x:Name="tsTTA" Content="    " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Unchecked="tsTTA_Checked" Margin="88,40,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top" Checked="tsTTA_Checked"/>
                         <Label Content="Enable TTA mode" Height="30" Width="82" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="3,36,0,0" VerticalAlignment="Top" FontSize="10"/>
                         <Label x:Name="lbDenoiseName" Content="Denoise level" Height="30" Width="82" RenderTransformOrigin="0.475,-0.021" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="140,36,0,0" VerticalAlignment="Top" FontSize="10"/>
@@ -240,19 +240,14 @@
                         <Image x:Name="imgModelPrivew" Margin="0,3,3,3" Source="/res/nomodelimg.jpg" HorizontalAlignment="Right" Width="65" Stretch="Fill"/>
                     </Grid>
                 </Border>
-                <Border x:Name="brLoRA" BorderBrush="#FFD0C0E9" BorderThickness="0.5" Height="66">
-                    <Grid x:Name="grLoRA" Height="74">
-                        <ComboBox  x:Name="cbLoRA" Height="22" Text="" Margin="46,4,79,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged">
-                            <ComboBox  x:Name="cbLoRA_Copy" Height="22" Text="" VerticalAlignment="Top" Width="272"/>
+                <Border x:Name="brLoRA" BorderBrush="#FFD0C0E9" BorderThickness="0.5">
+                    <Grid x:Name="grLoRA" Margin="0,6,0,0" Height="99">
+                        <ComboBox  x:Name="cbLoRA" Height="28" Text="" Margin="50,36,74,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged" MinHeight="25" Padding="8,4,8,4">
                         </ComboBox>
-                        <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left"/>
-                        <Label Content="Hypernetwork" Height="30" Width="81" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="-1,37,0,0" VerticalAlignment="Top" Visibility="Collapsed"/>
-                        <ComboBox  x:Name="cbHyper" Height="22" Text="" Margin="80,37,79,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged" Visibility="Collapsed">
-                        </ComboBox>
-                        <ToggleButton x:Name="tsHyper" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Margin="0,41,25,0" Height="22" VerticalAlignment="Top" HorizontalAlignment="Right" Width="36" Visibility="Collapsed"/>
-                        <TextBox  x:Name="tbLorastrength" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,4,39,0" VerticalAlignment="Top" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
-                        <TextBox x:Name="tbLoRAUserTokens" Margin="47,37,78,12" TextWrapping="Wrap" IsReadOnly="True" FontSize="8.5" FontFamily="Verdana" MinHeight="20" Padding="8,2,8,1"/>
-                        <Button Content="Apply" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_1" Height="18" HorizontalAlignment="Right" Margin="0,0,7,15" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom">
+                        <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="4,33,0,0" VerticalAlignment="Top"/>
+                        <TextBox  x:Name="tbLorastrength" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,33,35,0" VerticalAlignment="Top" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
+                        <TextBox x:Name="tbLoRAUserTokens" Margin="50,0,75,5" TextWrapping="Wrap" IsReadOnly="True" FontSize="8.5" FontFamily="Verdana" MinHeight="20" Padding="8,2,8,1" Height="25" VerticalAlignment="Bottom"/>
+                        <Button Content="Apply" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_1" Height="18" HorizontalAlignment="Right" Margin="0,0,4,9" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="1,0">
                                     <GradientStop Color="#FF523876"/>
@@ -260,6 +255,9 @@
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
+                        <ComboBox  x:Name="cbLoRACat" Height="28" Text="" Margin="50,4,74,0" VerticalAlignment="Top" SelectionChanged="cbLoRACat_SelectionChanged" MinHeight="25" Padding="8,4,8,4">
+                            <ComboBox  x:Name="cbLoRA_Copy2" Height="22" Text="" VerticalAlignment="Top" Width="272"/>
+                        </ComboBox>
                     </Grid>
                 </Border>
                 <Border x:Name="brDevice" BorderBrush="#FFD0C0E9" BorderThickness="0.5">
