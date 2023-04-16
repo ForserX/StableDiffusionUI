@@ -2,7 +2,6 @@ import os, sys, time
 import argparse, json, torch
 
 from diffusers import AutoencoderKL
-from transformers import CLIPTokenizer
 
 os.chdir(sys.path[0])
 from sd_xbackend import Device

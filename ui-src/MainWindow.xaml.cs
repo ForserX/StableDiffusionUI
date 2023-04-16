@@ -75,6 +75,7 @@ namespace SD_FXUI
             cbExtractPoseSelector.SelectedIndex = 4;
 
             Helper.MakeInfo.LoRA = new System.Collections.Generic.List<Helper.LoRAData>();
+            Helper.MakeInfo.TI = new System.Collections.Generic.List<Helper.LoRAData>();
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)

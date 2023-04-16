@@ -40,6 +40,7 @@
     <Compile Include="modules\onnx\custom_pipelines\pipeline_onnx_stable_diffusion_instruct_pix2pix.py" />
     <Compile Include="modules\onnx\lora.py" />
     <Compile Include="modules\onnx\lpw_stable_diffusion_onnx.py" />
+    <Compile Include="modules\onnx\textual_inversion.py" />
     <Compile Include="sd_cuda_safe.py" />
     <Compile Include="sd_onnx_safe.py" />
     <Compile Include="sd_xbackend.py" />

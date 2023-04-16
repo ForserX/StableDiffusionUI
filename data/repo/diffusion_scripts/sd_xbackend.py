@@ -9,6 +9,8 @@ from modules.onnx.custom_pipelines.pipeline_onnx_stable_diffusion_controlnet imp
 try:
 	from onnxruntime import SessionOptions
 	from modules.onnx.lora import blend_loras, buffer_external_data_tensors
+	from modules.onnx.textual_inversion import blend_textual_inversions
+
 	ONNX_MODEL = "model.onnx"
 except :
 	pass
@@ -141,21 +143,27 @@ class Device:
 	
 		return pipe
 	
-	def ApplyLoraONNX(self, opt, lora, alpha, pipe):
+	def ApplyLoraONNX(self, opt, p_te_model, lora, alpha, pipe):
 		blended_unet = blend_loras(opt.mdlpath + "/unet/" + ONNX_MODEL, lora, "unet", alpha)
-		(unet_model, unet_data) = buffer_external_data_tensors(blended_unet)
+		pipe.unet = self.ONNXProto2Runtime(blended_unet)
+
+		blended_te = blend_loras(p_te_model, lora, "text_encoder", alpha)
+		pipe.text_encoder = self.ONNXProto2Runtime(blended_te)
+
+	def ApplyTE(self, p_model, te_name, alpha, pipe):
+		proto_enc, pipe.tokenizer, prompt_tokens = blend_textual_inversions(p_model, pipe.tokenizer, te_name, alpha)
+		pipe.text_encoder = self.ONNXProto2Runtime(proto_enc)
+
+		return (p_model, prompt_tokens)
+	
+	def ONNXProto2Runtime(self, model):
+		(unet_model, unet_data) = buffer_external_data_tensors(model)
 		unet_names, unet_values = zip(*unet_data)
 		sess = SessionOptions()
 		sess.add_external_initializers(list(unet_names), list(unet_values))
 		
-		blended_te = blend_loras(opt.mdlpath + "/text_encoder/" + ONNX_MODEL, lora, "text_encoder", alpha)
-		(te_model, te_data) = buffer_external_data_tensors(blended_te)
-		te_names, te_values = zip(*te_data)
-		sess_te = SessionOptions()
-		sess_te.add_external_initializers(list(te_names), list(te_values))
-		
-		pipe.unet = OnnxRuntimeModel(OnnxRuntimeModel.load_model(unet_model.SerializeToString(), provider=self.prov, sess_options=sess))
-		pipe.text_encoder = OnnxRuntimeModel(OnnxRuntimeModel.load_model(te_model.SerializeToString(), provider=self.prov, sess_options=sess_te))
+		out_model = OnnxRuntimeModel(OnnxRuntimeModel.load_model(unet_model.SerializeToString(), provider=self.prov, sess_options=sess))
+		return out_model
 	
 	def ApplyLoRA(self, unet, te, LoraPath : str, strength: float):
 		model_path = LoraPath

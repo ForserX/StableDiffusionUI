@@ -135,6 +135,10 @@ namespace SD_FXUI
             if (Message == null || Message.Length == 0)
                 return true;
 
+            // SD Gen info check
+            if (Message.Contains("Prompt:") || Message.Contains("Neg prompt:"))
+                return false;
+
             // DeepDanbooru check
             if (Message.Contains("rating:"))
                 return false;
@@ -148,7 +152,7 @@ namespace SD_FXUI
                 return true;
             }
 
-            if (Message.Length > 310)
+            if (Message.Length > 335)
                 return true;
 
             if (Helper.Mode != Helper.ImplementMode.InvokeAI)

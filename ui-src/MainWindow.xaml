@@ -24,7 +24,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Image x:Name="ViewImg" Margin="5,38,4,101" Grid.Column="3" Source="/res/noimg.jpg" DragDrop.Drop="gridDrop"/>
+        <Image x:Name="ViewImg" Margin="4,38,5,101" Grid.Column="3" Source="/res/noimg.jpg" DragDrop.Drop="gridDrop"/>
         <Button Content="Break!" Margin="6,0,0,0" Click="Button_ClickBreak" HorizontalAlignment="Left" RenderTransformOrigin="0.484,1.102" Height="36
                 " VerticalAlignment="Bottom" Grid.Column="3" Foreground="White" Width="82">
             <Button.Background>
@@ -215,10 +215,10 @@
                         </Label>
                     </Grid>
                 </Border>
-                <Border BorderBrush="#FFD0C0E9" BorderThickness="0.5">
-                    <Grid x:Name="grVAE" Height="86">
-                        <Label x:Name="lbVae" Content="VAE" Height="30" Width="31" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,0,0,20" VerticalAlignment="Bottom"/>
-                        <ComboBox x:Name="cbVAE" Height="22" Margin="47,0,78,20" VerticalAlignment="Bottom"/>
+                <Border BorderBrush="#FFD0C0E9" BorderThickness="0.5" Height="131">
+                    <Grid x:Name="grVAE" Margin="0,6,0,0">
+                        <Label x:Name="lbVae" Content="VAE" Height="30" Width="31" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,35,0,0" VerticalAlignment="Top"/>
+                        <ComboBox x:Name="cbVAE" Height="22" Margin="47,36,77,0" VerticalAlignment="Top"/>
                         <Label Content="Model" Width="40" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,4,0,0" VerticalAlignment="Top"/>
                         <ComboBox x:Name="cbModel" Height="22" Margin="47,3,77,0" VerticalAlignment="Top" SelectionChanged="cbModel_SelectionChanged"/>
                         <Button Content="Import" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,0,147,2" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom">
@@ -229,7 +229,7 @@
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
-                        <Button Content="Selector" Style="{StaticResource ButtonPrimary}" Width="66" Click="btnMore" Height="15" HorizontalAlignment="Right" Margin="0,0,79,2" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom" IsEnabled="False">
+                        <Button Content="Selector" Style="{StaticResource ButtonPrimary}" Width="66" Click="btnMore" Height="15" HorizontalAlignment="Right" Margin="0,0,3,3" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom" IsEnabled="False">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="1,0">
                                     <GradientStop Color="#FF523876"/>
@@ -237,7 +237,11 @@
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
-                        <Image x:Name="imgModelPrivew" Margin="0,3,3,3" Source="/res/nomodelimg.jpg" HorizontalAlignment="Right" Width="65" Stretch="Fill"/>
+                        <Image x:Name="imgModelPrivew" Margin="0,5,4,28" Source="/res/nomodelimg.jpg" HorizontalAlignment="Right" Width="65" Stretch="Fill"/>
+                        <Label Content="Textual Inversion" Width="63" Foreground="#FF1A1818" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="3,71,0,0" VerticalAlignment="Top" FontSize="8"/>
+                        <ComboBox x:Name="cbTI" Height="22" Margin="70,73,158,0" VerticalAlignment="Top" FontSize="10" MinHeight="25"/>
+                        <TextBox  x:Name="tbTIAlpha" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,72,119,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="4,4,1,4" MinHeight="25"/>
+                        <ToggleButton x:Name="tsTI" Content="   " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Margin="299,74,0,0" HorizontalAlignment="Left" Width="36" Height="22" VerticalAlignment="Top"/>
                     </Grid>
                 </Border>
                 <Border x:Name="brLoRA" BorderBrush="#FFD0C0E9" BorderThickness="0.5">
@@ -245,7 +249,7 @@
                         <ComboBox  x:Name="cbLoRA" Height="28" Text="" Margin="50,36,74,0" VerticalAlignment="Top" SelectionChanged="cbLoRA_SelectionChanged" MinHeight="25" Padding="8,4,8,4">
                         </ComboBox>
                         <Label Content="LoRA" Height="30" Width="39" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="4,33,0,0" VerticalAlignment="Top"/>
-                        <TextBox  x:Name="tbLorastrength" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,33,35,0" VerticalAlignment="Top" TextChanged="tbEMA_TextChanged" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
+                        <TextBox  x:Name="tbLorastrength" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,33,35,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="4,6,1,6"/>
                         <TextBox x:Name="tbLoRAUserTokens" Margin="50,0,75,5" TextWrapping="Wrap" IsReadOnly="True" FontSize="8.5" FontFamily="Verdana" MinHeight="20" Padding="8,2,8,1" Height="25" VerticalAlignment="Bottom"/>
                         <Button Content="Apply" Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_1" Height="18" HorizontalAlignment="Right" Margin="0,0,4,9" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom">
                             <Button.Background>

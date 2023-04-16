@@ -75,10 +75,10 @@ namespace SD_FXUI
             public int Height;
             public string WorkingDir;
             public string Device;
-            public string Hypernetwork;
             public bool fp16;
 
             public List<LoRAData> LoRA;
+            public List<LoRAData> TI;
         }
 
         public static List<Host> SecondaryProcessList = new List<Host>();
