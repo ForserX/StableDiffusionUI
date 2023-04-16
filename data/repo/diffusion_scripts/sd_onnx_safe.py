@@ -58,8 +58,9 @@ while True:
             l_name = item['Name']
             l_alpha = item['Value']
             
-            onnx_te_model, prompt_tokens = PipeDevice.ApplyTE(onnx_te_model, l_name, l_alpha, pipe)
+            onnx_te_model, new_pt = PipeDevice.ApplyTE(onnx_te_model, l_name, l_alpha, pipe)
             tokenizer_extract = True
+            prompt_tokens = prompt_tokens + new_pt
         
         old_te_json = data['TI']
         
