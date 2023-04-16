@@ -169,5 +169,5 @@ def blend_textual_inversions(
 			del text_encoder.graph.initializer[i]
 			text_encoder.graph.initializer.insert(i, new_initializer)
 
-	return (text_encoder, tokenizer, prompt_tokens)
+	return (tokenizer, prompt_tokens)
 

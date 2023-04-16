@@ -26,9 +26,10 @@ onnx_te_model = onnx.load(opt.mdlpath + "/text_encoder/" + ONNX_MODEL)
 
 prompt_tokens = ""
 
+tokenizer_extract = False
+
 while True:
     message = input()
-    print(message)
 
     if not message:
         time.sleep(0.01)
@@ -37,11 +38,20 @@ while True:
         break
     
     data = json.loads(message)
+    tokenizer_extract = False
+
+    if (data['LoRA'] != old_lora_json) or (data['TI'] != old_te_json):
+        onnx_te_model = onnx.load(opt.mdlpath + "/text_encoder/" + ONNX_MODEL)
+        
+        # Hard reload
+        old_lora_json = None
+        old_te_json = None
+
 
     if data['TI'] != old_te_json:
         prompt_tokens = ""
-        # Setup default unet
-        onnx_te_model = onnx.load(opt.mdlpath + "/text_encoder/" + ONNX_MODEL)
+
+        # Load base tokenizer
         pipe.tokenizer = CLIPTokenizer.from_pretrained(opt.mdlpath + "/tokenizer")
 
         for item in data['TI']:
@@ -49,6 +59,7 @@ while True:
             l_alpha = item['Value']
             
             onnx_te_model, prompt_tokens = PipeDevice.ApplyTE(onnx_te_model, l_name, l_alpha, pipe)
+            tokenizer_extract = True
         
         old_te_json = data['TI']
         
@@ -61,10 +72,15 @@ while True:
             l_alpha = item['Value']
 
             print(f"Apply {l_alpha} lora:{l_name}")
-            PipeDevice.ApplyLoraONNX(opt, onnx_te_model, l_name, l_alpha, pipe)
+            onnx_te_model = PipeDevice.ApplyLoraONNX(opt, onnx_te_model, l_name, l_alpha, pipe)
+            tokenizer_extract = True
         
         old_lora_json = data['LoRA']
         
+    if tokenizer_extract:
+        # Convert te model to Runtime
+        pipe.text_encoder = PipeDevice.ONNXProto2Runtime(onnx_te_model)
+
     if (data['VAE'] != "Default") or (data['VAE'] != old_vae_json):
         print("Load custom vae")
         pipe.vae_decoder = OnnxRuntimeModel.from_pretrained(data['VAE'] + "/vae_decoder", provider=PipeDevice.prov)

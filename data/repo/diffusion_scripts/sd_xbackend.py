@@ -148,11 +148,11 @@ class Device:
 		pipe.unet = self.ONNXProto2Runtime(blended_unet)
 
 		blended_te = blend_loras(p_te_model, lora, "text_encoder", alpha)
-		pipe.text_encoder = self.ONNXProto2Runtime(blended_te)
+		
+		return blended_te
 
 	def ApplyTE(self, p_model, te_name, alpha, pipe):
-		proto_enc, pipe.tokenizer, prompt_tokens = blend_textual_inversions(p_model, pipe.tokenizer, te_name, alpha)
-		pipe.text_encoder = self.ONNXProto2Runtime(proto_enc)
+		pipe.tokenizer, prompt_tokens = blend_textual_inversions(p_model, pipe.tokenizer, te_name, alpha)
 
 		return (p_model, prompt_tokens)
 	
