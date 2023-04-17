@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
         Title="Stable Diffusion XUI" Height="848" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
-    <Grid Margin="0,1,0,0" Background="#FF1F1F1F" AllowDrop="True">
+    <Grid x:Name="grMain" Margin="0,1,0,-305" Background="#FF1F1F1F" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
