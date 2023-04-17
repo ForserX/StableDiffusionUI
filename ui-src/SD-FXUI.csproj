@@ -34,7 +34,11 @@
     <Resource Include="res\close.png" />
     <Resource Include="res\merge.png" />
     <Resource Include="res\noimg.jpg" />
+    <Resource Include="res\noimg_Dark.jpg" />    
     <Resource Include="res\nomask.jpg" />
+    <Resource Include="res\nomask_Dark.jpg" />     
+    <Resource Include="res\nomodelimg.jpg" />
+    <Resource Include="res\nomodelimg_Dark.jpg"/>
     <Resource Include="res\notfavor.png" />
     <Resource Include="res\img2img.png" />
     <Resource Include="res\diff.png" />
