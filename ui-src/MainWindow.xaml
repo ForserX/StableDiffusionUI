@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
         Title="Stable Diffusion XUI" Height="848" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
-    <Grid Margin="0,1,0,-380" Background="#FF1F1F1F" AllowDrop="True">
+    <Grid Margin="0,1,0,0" Background="#FF1F1F1F" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -24,7 +24,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Image x:Name="ViewImg" Margin="4,38,5,101" Grid.Column="3" Source="/res/noimg_Dark.jpg" DragDrop.Drop="gridDrop"/>
+        <Image x:Name="ViewImg" Margin="4,44,5,153" Grid.Column="3" Source="/res/noimg_Dark.jpg" DragDrop.Drop="gridDrop"/>
         <Button Content="Break!" Margin="6,0,0,0" Click="Button_ClickBreak" HorizontalAlignment="Left" RenderTransformOrigin="0.484,1.102" Height="36
                 " VerticalAlignment="Bottom" Grid.Column="3" Foreground="White" Width="82" BorderBrush="#FF1F1F1F">
             <Button.Background>
@@ -53,7 +53,7 @@
         </ListView>
         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.ColumnSpan="2" Margin="0,0,2,0" BorderThickness="0.75" BorderBrush="#FF383838"  Grid.Column="1">
             <StackPanel>
-                <Border BorderBrush="#FF383838" BorderThickness="0.75"> 
+                <Border BorderBrush="#FF383838" BorderThickness="0.75">
                     <Grid Height="116">
                         <Label Content="Prompt" Height="19" Width="78" Foreground="White" Background="{x:Null}" BorderBrush="#FF1F1F1F" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-14,8,0,0"/>
                         <Button x:Name="btnImg" Content="From image" Margin="0,1,6,0" Click="btnImage_Click" HorizontalAlignment="Right" Width="96" RenderTransformOrigin="0.484,1.102" Height="23" VerticalAlignment="Top" Foreground="White" Padding="10,1,10,1" BorderBrush="#FF1F1F1F">
@@ -314,7 +314,7 @@
         <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,1,67,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btnFavorClick" RenderTransformOrigin="0.615,0.5"/>
         <Image x:Name="imgFavor" Source="/res/favor.png" />
         <Image x:Name="imgNotFavor" Source="/res/notfavor.png" />
-        <ProgressBar x:Name="pbGen" Grid.Column="3" Margin="10,669,9,81" ValueChanged="pbGen_ValueChanged" Background="#FF1A1A1A" Foreground="White"/>
+        <ProgressBar x:Name="pbGen" Grid.Column="3" Margin="8,0,11,132" ValueChanged="pbGen_ValueChanged" Background="#FF1A1A1A" Foreground="White" Height="20" VerticalAlignment="Bottom"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="96,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click" BorderThickness="0.25" Foreground="White" Background="#FF383838"/>
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="6,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click" BorderThickness="0.25" Foreground="White" Background="#FF383838"/>
         <Button x:Name="btnDDB" Grid.Column="3" Content="Get text tokens (DeepDanbooru)" VerticalAlignment="Bottom" Click="Button_Click_DeepDanbooru"  Height="36" Width="194" Foreground="White" BorderBrush="#FF1F1F1F">
