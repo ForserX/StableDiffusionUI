@@ -116,7 +116,7 @@
                         </Button>
                         <ToggleButton x:Name="cbPix2Pix" Content="InstructPix2Pix"  Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Unchecked="cbPix2Pix_Checked" Height="25" Width="110" Margin="115,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="cbPix2Pix_Checked" Foreground="White"/>
                         <TextBox x:Name="tbMeta" Margin="-6,135,-5,0" TextWrapping="Wrap" Text="No meta" IsReadOnly="True" FontSize="9.5" FontFamily="Verdana" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838"/>
-                        <ComboBox x:Name="cbExtractPoseSelector" HorizontalAlignment="Left" Margin="182,100,0,0" VerticalAlignment="Top" Width="154" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838">
+                        <ComboBox x:Name="cbExtractPoseSelector" HorizontalAlignment="Left" Margin="182,100,0,0" VerticalAlignment="Top" Width="154" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}">
                             <ComboBoxItem Content="Canny"/>
                             <ComboBoxItem Content="Depth"/>
                             <!-- ComboBoxItem Content="depth_leres"/ -->
@@ -159,7 +159,7 @@
                         <Label Content="CFG Scale" Height="30" Width="61" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="4,132,0,0" VerticalAlignment="Top"/>
                         <Slider  x:Name="slCFG" Maximum="20" IsSnapToTickEnabled="True" TickFrequency="1" Minimum="5" Value="7.5" ValueChanged="Slider2_ValueChanged" SmallChange="0.5" Margin="75,138,153,0" Height="24" VerticalAlignment="Top"/>
                         <TextBox  x:Name="tbCFG" TextWrapping="Wrap" PreviewTextInput="FloatNumberValidationTextBox" Text="7,5" TextChanged="tbSteps2_TextChanged" Height="25" Margin="0,131,117,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="3,6,1,6" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838"/>
-                        <hc:ComboBox x:Name="cbSampler" Height="22" Style="{StaticResource ComboBoxExtend}" Margin="61,4,56,0" VerticalAlignment="Top" Background="#FF1A1A1A" BorderBrush="#FF383838" Foreground="White">
+                        <hc:ComboBox x:Name="cbSampler" Height="22" Style="{StaticResource ComboBoxExtend}" Margin="61,4,56,0" VerticalAlignment="Top" Background="#FF1A1A1A" BorderBrush="#FF383838" Foreground="White" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}">
                         </hc:ComboBox>
                         <Label Content="Seed" Height="30" Width="31" BorderBrush="{x:Null}" Background="{x:Null}" HorizontalAlignment="Left" Margin="243,99,0,0" Padding="1,6,1,6" VerticalAlignment="Top" Foreground="White"/>
                         <TextBox x:Name="tbSeed" TextWrapping="Wrap" Text="-1" Height="18" IsEnabled="False" Margin="243,133,0,0" VerticalAlignment="Top" Background="#FF1E1E1E" Foreground="White" CaretBrush="#FF3E3E42" BorderBrush="#FF383838"/>
@@ -180,7 +180,7 @@
                 </Border>
                 <Border BorderBrush="#FF383838" BorderThickness="0.75">
                     <Grid Height="86">
-                        <ComboBox x:Name="cbUpscaler" Margin="50,6,132,0" Height="30" VerticalAlignment="Top" SelectionChanged="cbUpscaler_SelectionChanged"  BorderBrush="#FF383838" Foreground="White" Background="#FF1F1F1F">
+                        <ComboBox x:Name="cbUpscaler" Margin="50,6,132,0" Height="30" VerticalAlignment="Top" SelectionChanged="cbUpscaler_SelectionChanged"  BorderBrush="#FF383838" Foreground="White" Background="#FF1F1F1F" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}">
                             <ComboBoxItem Content="Real-ESRGAN: AnimeVideo(v3)"/>
                             <ComboBoxItem Content="Real-ESRGAN:(x4plus)"/>
                             <ComboBoxItem Content="Real-ESRGAN:(x4plus) Anime"/>
