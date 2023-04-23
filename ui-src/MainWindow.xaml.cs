@@ -43,6 +43,7 @@ namespace SD_FXUI
             cbSampler.SelectedIndex = 0;
             cbDevice.SelectedIndex = 0;
 
+
             Helper.Form = this;
 
             Helper.UIHost = new HostForm();
@@ -866,14 +867,21 @@ namespace SD_FXUI
 
             if (File.Exists(TokenFilePath))
             {
-                string Contents = File.ReadAllText(TokenFilePath);
-                tbLoRAUserTokens.Text = Contents;
-                tbLoRAUserTokens.IsEnabled = true;
+
+
+
+                string[] Contents = File.ReadAllLines(TokenFilePath);
+                //cbLoRAUserTokens.Text = Contents
+                foreach(var x in Contents)
+                {
+                    cbLoRAUserTokens.Items.Add(" "+x);
+                }
+                cbLoRAUserTokens.IsEnabled = true;
             }
             else
             {
-                tbLoRAUserTokens.IsEnabled = false;
-                tbLoRAUserTokens.Text = "";
+                cbLoRAUserTokens.IsEnabled = false;
+                cbLoRAUserTokens.Text = "";
             }
         }
 
@@ -949,6 +957,31 @@ namespace SD_FXUI
             Temporary += CodeUtils.GetRichText(tbPrompt);
 
             CodeUtils.SetRichText(tbPrompt, Temporary);
+        }
+
+        private void cbLoRAUserTokens_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {    
+
+           
+
+           if (e.AddedItems.Count == 0)
+           {               
+               return;
+           }
+
+            string Temporary = $"";
+            Temporary += CodeUtils.GetRichText(tbPrompt);
+
+            CodeUtils.SetRichText(tbPrompt, Temporary);
+
+
+            tbPrompt.AppendText(cbLoRAUserTokens.SelectedItem.ToString());
+
+        }
+
+        private void cbLoRAUserTokens_DropDownOpened(object sender, EventArgs e)
+        {
+            cbLoRAUserTokens.SelectedItem = null;
         }
     }
 }
