@@ -865,17 +865,17 @@ namespace SD_FXUI
 
             string TokenFilePath = FS.GetModelDir(FS.ModelDirs.LoRA) + LoRAName + ".txt";
 
+            cbLoRAUserTokens.Items.Clear();
+
             if (File.Exists(TokenFilePath))
             {
-
-
-
                 string[] Contents = File.ReadAllLines(TokenFilePath);
                 //cbLoRAUserTokens.Text = Contents
                 foreach(var x in Contents)
                 {
                     cbLoRAUserTokens.Items.Add(" "+x);
                 }
+
                 cbLoRAUserTokens.IsEnabled = true;
             }
             else
@@ -960,10 +960,7 @@ namespace SD_FXUI
         }
 
         private void cbLoRAUserTokens_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {    
-
-           
-
+        {
            if (e.AddedItems.Count == 0)
            {               
                return;
@@ -972,11 +969,13 @@ namespace SD_FXUI
             string Temporary = $"";
             Temporary += CodeUtils.GetRichText(tbPrompt);
 
-            CodeUtils.SetRichText(tbPrompt, Temporary);
+            string Token2Apply = $"({cbLoRAUserTokens.SelectedItem})";
 
-
-            tbPrompt.AppendText(cbLoRAUserTokens.SelectedItem.ToString());
-
+            if (!Temporary.Contains(Token2Apply))
+            {
+                CodeUtils.SetRichText(tbPrompt, Temporary);
+                tbPrompt.AppendText(Token2Apply);
+            }
         }
 
         private void cbLoRAUserTokens_DropDownOpened(object sender, EventArgs e)
