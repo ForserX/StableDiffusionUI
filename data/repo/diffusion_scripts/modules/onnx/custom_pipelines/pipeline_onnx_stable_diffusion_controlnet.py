@@ -357,7 +357,6 @@ class OnnxStableDiffusionControlNetPipeline(DiffusionPipeline):
 
         # get the initial random noise unless the user supplied it
         latents_dtype = prompt_embeds.dtype
-        latents_shape = (batch_size * num_images_per_prompt, 4, height // 8, width // 8)
         
         num_channels_latents = 4
         latents = self.prepare_latents(
@@ -373,7 +372,6 @@ class OnnxStableDiffusionControlNetPipeline(DiffusionPipeline):
         # set timesteps
         self.scheduler.set_timesteps(num_inference_steps)
         timesteps = self.scheduler.timesteps
-
 
         # prepare extra kwargs for the scheduler step, since not all schedulers have the same signature
         # eta (η) is only used with the DDIMScheduler, it will be ignored for other schedulers.

@@ -89,9 +89,9 @@ namespace SD_FXUI
             Host Download = new Host(WorkingDir);
             Download.Start();
 
-            Download.Send(WGetFile + "https://huggingface.co/ForserX/ControlNetMediaPipeFace-onnx/raw/main/config.json");
-            Download.Send(WGetFile + "https://huggingface.co/ForserX/ControlNetMediaPipeFace-onnx/resolve/main/diffusion_pytorch_model.bin");
             Download.Send(WGetFile + "https://huggingface.co/ForserX/ControlNetMediaPipeFace-onnx/resolve/main/model.onnx");
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/control_v11p_sd15_openpose/raw/main/config.json");
+            Download.Send(WGetFile + "-O diffusion_pytorch_model.bin https://huggingface.co/lllyasviel/control_v11p_sd15_openpose/resolve/main/diffusion_pytorch_model.fp16.bin");
             Download.SendExitCommand();
             Download.Wait();
         }
