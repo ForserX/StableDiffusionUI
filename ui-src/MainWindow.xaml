@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
-        Title="Stable Diffusion XUI" Height="848" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png">
+        Title="Stable Diffusion XUI" Height="848" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png" NonClientAreaBackground="Black" NonClientAreaForeground="White" OtherButtonHoverForeground="Black" Foreground="#FFF9F9F9" OtherButtonHoverBackground="White" OtherButtonForeground="White" CloseButtonForeground="#FFF9F9F9" Background="Black">
+
     <Grid x:Name="grMain" Margin="0,1,0,-305" Background="#FF1F1F1F" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -221,7 +222,7 @@
                         <ComboBox x:Name="cbVAE" Height="22" Margin="47,36,77,0" VerticalAlignment="Top" BorderThickness="0.75" BorderBrush="#FF383838" Background="#FF1E1E1E" Foreground="White" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}" />
                         <Label Content="Model" Width="40" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="2,4,0,0" VerticalAlignment="Top"/>
                         <ComboBox x:Name="cbModel" Height="22" Margin="47,3,77,0" VerticalAlignment="Top" SelectionChanged="cbModel_SelectionChanged" BorderThickness="0.75" BorderBrush="#FF383838" Background="#FF1E1E1E" Foreground="White" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}"/>
-                        
+
                         <Button Style="{StaticResource ButtonPrimary}" Width="66" Click="Button_Click_Import_Model" Height="15" HorizontalAlignment="Right" Margin="0,0,71,2" RenderTransformOrigin="0.512,2.77" Padding="10,1,10,1" FontSize="9" VerticalAlignment="Bottom" Content="Import" BorderBrush="#FF1F1F1F">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="1,0">
