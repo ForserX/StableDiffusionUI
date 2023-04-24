@@ -69,7 +69,7 @@ namespace SD_FXUI
         public ControlNetOpenPose()
         {
             Model = "sd-controlnet-openpose";
-            CNModel = "sd-controlnet/anannotator/ckpts/body_pose_model.pth";
+            CNModel = "sd-controlnet/anannotator/ckpts/";
         }
 
         public override void CheckSD()
@@ -84,7 +84,7 @@ namespace SD_FXUI
 
         public override void CheckCN()
         {
-            if (!System.IO.File.Exists(GetModelPathCN()))
+            if (!System.IO.File.Exists(GetModelPathCN() + "hand_pose_model.pth"))
             {
                 Notification.SendNotification("Starting downloading pose model...");
                 WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Poser);

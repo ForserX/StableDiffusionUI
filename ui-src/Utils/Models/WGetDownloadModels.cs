@@ -60,7 +60,11 @@ namespace SD_FXUI
             Download.Start();
 
             if (Type == HelperControlNet.ControlTypes.Poser)
-                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\body_pose_model.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/body_pose_model.pth");
+            {
+                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\body_pose_model.pth\" https://huggingface.co/lllyasviel/Annotators/resolve/main/body_pose_model.pth");
+                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\hand_pose_model.pth\" https://huggingface.co/lllyasviel/Annotators/resolve/main/hand_pose_model.pth");
+                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\facenet.pth\" https://huggingface.co/lllyasviel/Annotators/resolve/main/facenet.pth");
+            }
 
             if (Type == HelperControlNet.ControlTypes.Hed)
                 Download.Send(WGetFile + "-O \"anannotator\\ckpts\\network-bsds500.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/network-bsds500.pth");

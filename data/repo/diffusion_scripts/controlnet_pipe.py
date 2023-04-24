@@ -161,7 +161,7 @@ def generatePoseFromImage():
     model = OpenposeDetector.from_pretrained(opt.mdlpath)
     in_img = Image.open(opt.img)
     
-    img = model(in_img)
+    img = model(in_img, hand_and_face=True)
     img.save(opt.outfile)
     print(f"CN: Pose - {opt.outfile}")
 
