@@ -24,7 +24,7 @@ tf2onnx
 transformers-onnx
 accelerate
 ftfy
-regex 
+regex
 
 # DirectML Fix
 --extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/

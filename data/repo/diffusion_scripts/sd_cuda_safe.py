@@ -20,7 +20,7 @@ else:
 PipeDevice = Device(opt.device, fptype)
 
 pipe = PipeDevice.GetPipe(opt.mdlpath, opt.mode, opt.nsfw)
-pipe.to(opt.device)
+pipe.to(PipeDevice.device, fptype)
     
 if opt.dlora:
     pipe.unet.load_attn_procs(opt.lora_path)
@@ -58,7 +58,7 @@ while True:
     if not data['VAE'] == "Default":
         print("Load custom vae")
         pipe.vae = AutoencoderKL.from_pretrained(data['VAE'] + "/vae", torch_dtype=PipeDevice.fptype)
-        pipe.to(opt.device)
+        pipe.to(PipeDevice.device)
         
     eta = PipeDevice.GetSampler(pipe, data['Sampler'], data['ETA'])
     print(f"Prompt: {data['Prompt']}")

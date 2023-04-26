@@ -43,6 +43,7 @@ namespace SD_FXUI
             cbSampler.SelectedIndex = 0;
             cbDevice.SelectedIndex = 0;
 
+
             Helper.Form = this;
 
             Helper.UIHost = new HostForm();
@@ -76,6 +77,9 @@ namespace SD_FXUI
 
             Helper.MakeInfo.LoRA = new System.Collections.Generic.List<Helper.LoRAData>();
             Helper.MakeInfo.TI = new System.Collections.Generic.List<Helper.LoRAData>();
+
+            // FX: A hack to see the entire form in the constructor.
+            grMain.Margin = new Thickness(0, 0, 0.0, 0.0);
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -258,9 +262,10 @@ namespace SD_FXUI
                 Helper.Mode = Helper.ImplementMode.ONNX;
                 Install.CheckAndInstallONNX();
 
-                var Safe = btnONNX.Background;
-                btnONNX.Background = new SolidColorBrush(Colors.DarkOrchid);
+                Brush Safe = new SolidColorBrush(Colors.Black);
+
                 btnDiffCuda.Background = Safe;
+                btnONNX.Background = new LinearGradientBrush(Colors.DarkOrchid, Colors.MediumOrchid, 0.5);
                 btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
@@ -289,6 +294,8 @@ namespace SD_FXUI
                     cbDevice.SelectedItem = cbDevice.Items[cbDevice.Items.Count - 1];
 
                 Title = "Stable Diffusion XUI : ONNX venv";
+
+                btnTIApply.IsEnabled = true;
             }
         }
         private void btnDiffCuda_Click(object sender, RoutedEventArgs e)
@@ -299,8 +306,9 @@ namespace SD_FXUI
 
                 Install.CheckAndInstallCUDA();
 
-                var Safe = btnDiffCuda.Background;
-                btnDiffCuda.Background = new SolidColorBrush(Colors.DarkCyan);
+                Brush Safe = new SolidColorBrush(Colors.Black);
+                                
+                btnDiffCuda.Background = new LinearGradientBrush(Colors.DarkGreen, Colors.Black, 0.5);
                 btnONNX.Background = Safe;
                 btnDiffCpu.Background = Safe;
 
@@ -339,6 +347,8 @@ namespace SD_FXUI
                     cbDevice.SelectedItem = 0;
 
                 Title = "Stable Diffusion XUI : CUDA venv";
+
+                btnTIApply.IsEnabled = false;
             }
         }
 
@@ -349,10 +359,11 @@ namespace SD_FXUI
                 Helper.Mode = Helper.ImplementMode.DiffCPU;
                 Install.CheckAndInstallONNX();
 
-                var Safe = btnDiffCpu.Background;
-                btnDiffCpu.Background = new SolidColorBrush(Colors.DarkSalmon);
-                btnONNX.Background = Safe;
+                Brush Safe = new SolidColorBrush(Colors.Black);
+
                 btnDiffCuda.Background = Safe;
+                btnONNX.Background = Safe;
+                btnDiffCpu.Background = new LinearGradientBrush(Colors.Blue, Colors.Red, 0.5);
 
                 UpdateModelsList();
 
@@ -373,6 +384,8 @@ namespace SD_FXUI
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : CPU venv";
+
+                btnTIApply.IsEnabled = false;
             }
         }
         private void lvImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -861,16 +874,23 @@ namespace SD_FXUI
 
             string TokenFilePath = FS.GetModelDir(FS.ModelDirs.LoRA) + LoRAName + ".txt";
 
+            cbLoRAUserTokens.Items.Clear();
+
             if (File.Exists(TokenFilePath))
             {
-                string Contents = File.ReadAllText(TokenFilePath);
-                tbLoRAUserTokens.Text = Contents;
-                tbLoRAUserTokens.IsEnabled = true;
+                string[] Contents = File.ReadAllLines(TokenFilePath);
+                //cbLoRAUserTokens.Text = Contents
+                foreach(var x in Contents)
+                {
+                    cbLoRAUserTokens.Items.Add(x);
+                }
+
+                cbLoRAUserTokens.IsEnabled = true;
             }
             else
             {
-                tbLoRAUserTokens.IsEnabled = false;
-                tbLoRAUserTokens.Text = "";
+                cbLoRAUserTokens.IsEnabled = false;
+                cbLoRAUserTokens.Text = "";
             }
         }
 
@@ -946,6 +966,30 @@ namespace SD_FXUI
             Temporary += CodeUtils.GetRichText(tbPrompt);
 
             CodeUtils.SetRichText(tbPrompt, Temporary);
+        }
+
+        private void cbLoRAUserTokens_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+           if (e.AddedItems.Count == 0)
+           {               
+               return;
+           }
+
+            string Temporary = $"";
+            Temporary += CodeUtils.GetRichText(tbPrompt);
+
+            string Token2Apply = $"({cbLoRAUserTokens.SelectedItem}) ";
+
+            if (!Temporary.Contains(Token2Apply))
+            {
+                CodeUtils.SetRichText(tbPrompt, Temporary);
+                tbPrompt.AppendText(Token2Apply);
+            }
+        }
+
+        private void cbLoRAUserTokens_DropDownOpened(object sender, EventArgs e)
+        {
+            cbLoRAUserTokens.SelectedItem = null;
         }
     }
 }

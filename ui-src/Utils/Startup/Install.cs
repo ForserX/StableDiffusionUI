@@ -123,16 +123,31 @@ namespace SD_FXUI
             {
                 return;
             }
+
             using (var reader = System.IO.File.OpenText(FileName))
             {
+                string[] Lines = File.ReadAllLines(FileName);
+
                 int LineCounter = 0;
                 string? str = reader.ReadLine();
                 while (str != null)
                 {
                     if (str.Contains("hf_hub_download(pretrained_model_or_path, filename, cache_dir=cache_dir)"))
                     {
-                        str = "        body_model_path = pretrained_model_or_path #hf_hub_download(pretrained_model_or_path, filename, cache_dir=cache_dir)";
-                        break;
+                        str = "        body_model_path = pretrained_model_or_path + filename";
+                        Lines[LineCounter] = str;
+                    }
+
+                    if (str.Contains("hf_hub_download(pretrained_model_or_path, hand_filename, cache_dir=cache_dir)"))
+                    {
+                        str = "        hand_model_path = pretrained_model_or_path + hand_filename";
+                        Lines[LineCounter] = str;
+                    }
+
+                    if (str.Contains("hf_hub_download(face_pretrained_model_or_path, face_filename, cache_dir=cache_dir)"))
+                    {
+                        str = "        face_model_path = face_pretrained_model_or_path + face_filename";
+                        Lines[LineCounter] = str;
                     }
                     str = reader.ReadLine();
                     LineCounter++;
@@ -140,11 +155,6 @@ namespace SD_FXUI
 
                 reader.Close();
 
-                if (str == null)
-                    return;
-
-                string[] Lines = File.ReadAllLines(FileName);
-                Lines[LineCounter] = str;
                 System.IO.File.WriteAllLines(FileName, Lines);
             }
         }

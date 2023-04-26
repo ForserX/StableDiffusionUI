@@ -60,7 +60,11 @@ namespace SD_FXUI
             Download.Start();
 
             if (Type == HelperControlNet.ControlTypes.Poser)
-                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\body_pose_model.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/body_pose_model.pth");
+            {
+                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\body_pose_model.pth\" https://huggingface.co/lllyasviel/Annotators/resolve/main/body_pose_model.pth");
+                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\hand_pose_model.pth\" https://huggingface.co/lllyasviel/Annotators/resolve/main/hand_pose_model.pth");
+                Download.Send(WGetFile + "-O \"anannotator\\ckpts\\facenet.pth\" https://huggingface.co/lllyasviel/Annotators/resolve/main/facenet.pth");
+            }
 
             if (Type == HelperControlNet.ControlTypes.Hed)
                 Download.Send(WGetFile + "-O \"anannotator\\ckpts\\network-bsds500.pth\" https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/network-bsds500.pth");
@@ -85,9 +89,9 @@ namespace SD_FXUI
             Host Download = new Host(WorkingDir);
             Download.Start();
 
-            Download.Send(WGetFile + "https://huggingface.co/ForserX/ControlNetMediaPipeFace-onnx/raw/main/config.json");
-            Download.Send(WGetFile + "https://huggingface.co/ForserX/ControlNetMediaPipeFace-onnx/resolve/main/diffusion_pytorch_model.bin");
             Download.Send(WGetFile + "https://huggingface.co/ForserX/ControlNetMediaPipeFace-onnx/resolve/main/model.onnx");
+            Download.Send(WGetFile + "https://huggingface.co/lllyasviel/control_v11p_sd15_openpose/raw/main/config.json");
+            Download.Send(WGetFile + "-O diffusion_pytorch_model.bin https://huggingface.co/lllyasviel/control_v11p_sd15_openpose/resolve/main/diffusion_pytorch_model.fp16.bin");
             Download.SendExitCommand();
             Download.Wait();
         }
