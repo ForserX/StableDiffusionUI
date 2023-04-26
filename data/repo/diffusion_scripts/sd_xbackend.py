@@ -10,6 +10,7 @@ try:
 	from onnxruntime import SessionOptions
 	from modules.onnx.lora import blend_loras, buffer_external_data_tensors
 	from modules.onnx.textual_inversion import blend_textual_inversions
+	import torch_directml
 
 	ONNX_MODEL = "model.onnx"
 except :
@@ -46,14 +47,22 @@ class Device:
 	prov = "DmlExecutionProvider"
 	device = "cpu"
 	fptype = None
+	device_str = "cpu"
 
 	def __init__(self, device: str, fp):
-		self.device = device
+		if device == "onnx":
+			self.device = torch_directml.device(torch_directml.default_device())
+		else:
+			self.device = device
+			
+		self.device_str = device
+		print(f"Current device: {self.device}")
+
 		self.fptype = fp
 
 	def LPW_Path(self):
 		dir_path = os.path.dirname(os.path.realpath(__file__))
-		if self.device == "onnx":
+		if self.device_str == "onnx":
 			dir_path = dir_path + "/modules/onnx/lpw_stable_diffusion_onnx.py"
 		else:
 			dir_path = dir_path + "/modules/diffusers/lpw_stable_diffusion.py"
@@ -64,7 +73,7 @@ class Device:
 		pipe = None
 		nsfw_pipe = None
 		
-		if self.device == "onnx":
+		if self.device_str == "onnx":
 			if Mode == "pix2pix":
 				if NSFW:
 					pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained("ForserX/instruct-pix2pix-onnx", provider=self.prov)
@@ -108,7 +117,7 @@ class Device:
 		pipe = None
 		nsfw_pipe = None
 		
-		if self.device == "onnx":
+		if self.device_str == "onnx":
 			if NSFW:
 				safety_model = Model + "/safety_checker/"
 				nsfw_pipe = OnnxRuntimeModel.from_pretrained(safety_model, provider=self.prov)
@@ -214,8 +223,6 @@ class Device:
 			
 			# org_forward(x) + lora_up(lora_down(x)) * multiplier
 			pair_keys = []
-	
-			
 	
 			if ".hada_w1_a" in key and LORA_PREFIX in key:
 				# LoHA
@@ -344,8 +351,8 @@ class Device:
 		seed = int(seed)
 		print(f"Set seed to {seed}", flush=True)
 		
-		if not self.device == "onnx":
-			rng = torch.Generator(self.device).manual_seed(seed)
+		if not self.device_str == "onnx":
+			rng = torch.Generator(self.device_str).manual_seed(seed)
 		else: 
 			if mode == "pix2pix":
 				rng=numpy.random.seed(seed)
