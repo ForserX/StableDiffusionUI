@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SD_FXUI.Utils.Models"
         mc:Ignorable="d"
         Title="ModelSelector" Height="450" Width="800">
-    <Grid>
+    <Grid Background="#FF1F1F1F" >
         <Grid x:Name="imgView">
 
         </Grid>

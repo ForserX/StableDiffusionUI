@@ -262,9 +262,10 @@ namespace SD_FXUI
                 Helper.Mode = Helper.ImplementMode.ONNX;
                 Install.CheckAndInstallONNX();
 
-                var Safe = btnONNX.Background;
-                btnONNX.Background = new SolidColorBrush(Colors.DarkOrchid);
+                Brush Safe = new SolidColorBrush(Colors.Black);
+
                 btnDiffCuda.Background = Safe;
+                btnONNX.Background = new LinearGradientBrush(Colors.DarkOrchid, Colors.MediumOrchid, 0.5);
                 btnDiffCpu.Background = Safe;
 
                 UpdateModelsList();
@@ -303,8 +304,9 @@ namespace SD_FXUI
 
                 Install.CheckAndInstallCUDA();
 
-                var Safe = btnDiffCuda.Background;
-                btnDiffCuda.Background = new SolidColorBrush(Colors.DarkCyan);
+                Brush Safe = new SolidColorBrush(Colors.Black);
+                                
+                btnDiffCuda.Background = new LinearGradientBrush(Colors.DarkGreen, Colors.Black, 0.5);
                 btnONNX.Background = Safe;
                 btnDiffCpu.Background = Safe;
 
@@ -353,10 +355,11 @@ namespace SD_FXUI
                 Helper.Mode = Helper.ImplementMode.DiffCPU;
                 Install.CheckAndInstallONNX();
 
-                var Safe = btnDiffCpu.Background;
-                btnDiffCpu.Background = new SolidColorBrush(Colors.DarkSalmon);
-                btnONNX.Background = Safe;
+                Brush Safe = new SolidColorBrush(Colors.Black);
+
                 btnDiffCuda.Background = Safe;
+                btnONNX.Background = Safe;
+                btnDiffCpu.Background = new LinearGradientBrush(Colors.Blue, Colors.Red, 0.5);
 
                 UpdateModelsList();
 
@@ -873,7 +876,7 @@ namespace SD_FXUI
                 //cbLoRAUserTokens.Text = Contents
                 foreach(var x in Contents)
                 {
-                    cbLoRAUserTokens.Items.Add(" "+x);
+                    cbLoRAUserTokens.Items.Add(x);
                 }
 
                 cbLoRAUserTokens.IsEnabled = true;
@@ -969,7 +972,7 @@ namespace SD_FXUI
             string Temporary = $"";
             Temporary += CodeUtils.GetRichText(tbPrompt);
 
-            string Token2Apply = $"({cbLoRAUserTokens.SelectedItem})";
+            string Token2Apply = $"({cbLoRAUserTokens.SelectedItem}) ";
 
             if (!Temporary.Contains(Token2Apply))
             {

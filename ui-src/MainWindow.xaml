@@ -316,8 +316,22 @@
         <Image x:Name="imgFavor" Source="/res/favor.png" />
         <Image x:Name="imgNotFavor" Source="/res/notfavor.png" />
         <ProgressBar x:Name="pbGen" Grid.Column="3" Margin="8,0,11,132" ValueChanged="pbGen_ValueChanged" Background="#FF1A1A1A" Foreground="White" Height="20" VerticalAlignment="Bottom"/>
-        <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="96,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click" BorderThickness="0.25" Foreground="White" Background="#FF383838"/>
-        <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="6,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click" BorderThickness="0.25" Foreground="White" Background="#FF383838"/>
+        <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="96,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click" BorderThickness="0.25" Foreground="White">
+            <Button.Background>
+                <LinearGradientBrush StartPoint="1,0" EndPoint="0,5">
+                    <GradientStop Color="#FF76B900" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+    
+        <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="6,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click" BorderThickness="0.25" Foreground="White">
+            <Button.Background>    
+                <LinearGradientBrush StartPoint="1,0" EndPoint="0,5">
+                    <GradientStop Color="#FFFF0000"/>
+                    <GradientStop Color="#FF0000FF" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
         <Button x:Name="btnDDB" Grid.Column="3" Content="Get text tokens (DeepDanbooru)" VerticalAlignment="Bottom" Click="Button_Click_DeepDanbooru"  Height="36" Width="194" Foreground="White" BorderBrush="#FF1F1F1F">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">

@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="res\dropFilesDark.jpg" />
     <None Remove="res\merge.png" />
     <None Remove="res\settings.png" />
   </ItemGroup>
@@ -28,6 +29,9 @@
 
   <ItemGroup>
     <Resource Include="res\cmd.png" />
+    <Resource Include="res\dropFilesDark.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="res\favor.png" />
     <Resource Include="res\folder.png" />
     <Resource Include="res\history.png" />
@@ -38,7 +42,7 @@
     <Resource Include="res\nomask.jpg" />
     <Resource Include="res\nomask_Dark.jpg" />     
     <Resource Include="res\nomodelimg.jpg" />
-    <Resource Include="res\nomodelimg_Dark.jpg"/>
+    <Resource Include="res\nomodelimg_Dark.jpg" />
     <Resource Include="res\notfavor.png" />
     <Resource Include="res\img2img.png" />
     <Resource Include="res\diff.png" />
