@@ -10,7 +10,7 @@ try:
 	from onnxruntime import SessionOptions
 	from modules.onnx.lora import blend_loras, buffer_external_data_tensors
 	from modules.onnx.textual_inversion import blend_textual_inversions
-	import torch_directml
+	#import torch_directml
 
 	ONNX_MODEL = "model.onnx"
 except :
@@ -51,7 +51,7 @@ class Device:
 
 	def __init__(self, device: str, fp):
 		if device == "onnx":
-			self.device = torch_directml.device(torch_directml.default_device())
+			self.device = "onnx" #torch_directml.device(torch_directml.default_device())
 		else:
 			self.device = device
 			
