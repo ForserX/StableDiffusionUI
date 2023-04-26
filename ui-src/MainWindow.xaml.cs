@@ -294,6 +294,8 @@ namespace SD_FXUI
                     cbDevice.SelectedItem = cbDevice.Items[cbDevice.Items.Count - 1];
 
                 Title = "Stable Diffusion XUI : ONNX venv";
+
+                btnTIApply.IsEnabled = true;
             }
         }
         private void btnDiffCuda_Click(object sender, RoutedEventArgs e)
@@ -345,6 +347,8 @@ namespace SD_FXUI
                     cbDevice.SelectedItem = 0;
 
                 Title = "Stable Diffusion XUI : CUDA venv";
+
+                btnTIApply.IsEnabled = false;
             }
         }
 
@@ -380,6 +384,8 @@ namespace SD_FXUI
                 cbDevice.Text = Data.Get("device");
 
                 Title = "Stable Diffusion XUI : CPU venv";
+
+                btnTIApply.IsEnabled = false;
             }
         }
         private void lvImages_SelectionChanged(object sender, SelectionChangedEventArgs e)

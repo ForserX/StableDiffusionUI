@@ -243,7 +243,7 @@
                         <Label Content="Textual Inversion" Width="63" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,6,1,6" HorizontalAlignment="Left" Margin="3,71,0,0" VerticalAlignment="Top" FontSize="8"/>
                         <ComboBox x:Name="cbTI" Height="22" Margin="70,73,158,0" VerticalAlignment="Top" FontSize="10" MinHeight="25" BorderBrush="#FF383838" BorderThickness="0.75" Background="#FF1E1E1E" Foreground="White" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}" />
                         <TextBox  x:Name="tbTIAlpha" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="100" Height="25" Margin="0,72,119,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="34" Padding="4,4,1,4" MinHeight="25" BorderBrush="#FF383838" Background="#FF1E1E1E" Foreground="White"/>
-                        <Button Content="Add" Style="{StaticResource ButtonPrimary}" Width="38" Height="23" HorizontalAlignment="Right" RenderTransformOrigin="0.512,2.77" Padding="4,1,5,1" FontSize="9" VerticalAlignment="Bottom" Margin="0,0,76,28" Click="Button_Click_2">
+                        <Button x:Name="btnTIApply" Content="Add" Style="{StaticResource ButtonPrimary}" Width="38" Height="23" HorizontalAlignment="Right" RenderTransformOrigin="0.512,2.77" Padding="4,1,5,1" FontSize="9" VerticalAlignment="Bottom" Margin="0,0,76,28" Click="Button_Click_2">
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="1,0">
                                     <GradientStop Color="#FF523876"/>
