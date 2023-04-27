@@ -151,7 +151,7 @@
                 </Border>
                 <Border BorderBrush="#FF383838" BorderThickness="0.75">
                     <Grid Height="198" Width="355">
-                        <Label Content="Weight" Height="30" Width="57" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-2,40,0,0" VerticalAlignment="Top"/>
+                        <Label Content="Width" Height="30" Width="57" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-4,40,0,0" VerticalAlignment="Top"/>
                         <Label Content="Sampler" Height="30" Width="52" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="3,6,3,6" HorizontalAlignment="Left" Margin="3,4,0,0" VerticalAlignment="Top"/>
                         <ToggleButton x:Name="chRandom" Content="Random" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="30" Width="68" Margin="285,99,2,0" VerticalAlignment="Top" Foreground="White"/>
                         <Slider  x:Name="slSteps" Maximum="150" Minimum="1" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="76,106,152,68"/>
