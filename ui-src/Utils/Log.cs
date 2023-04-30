@@ -16,12 +16,15 @@ namespace SD_FXUI.Utils
         {
             string filename = "";
             DateTime time= DateTime.Now;
-            filename += @"log/" + time.ToString() + ".log";
+            filename += "/log/" + time.ToString() + ".log";
 
             filename = filename.Replace(":", "-");
             filename = filename.Replace(" ", "_");
 
-            currentLogFile = filename;
+            currentLogFile = FS.GetWorkingDir() + filename;
+
+            Directory.CreateDirectory(FS.GetWorkingDir() + "/log/");
+
             File.Create(currentLogFile).Dispose();
         }
 
