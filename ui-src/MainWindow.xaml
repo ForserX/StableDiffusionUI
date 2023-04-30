@@ -36,7 +36,7 @@
             </Button.Background>
         </Button>
         <Button x:Name="btnONNX" Content="Diffusers(ONNX)" Margin="186,4,0,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" BorderThickness="0.25" Foreground="White" Background="#FF383838"/>
-        <ListView x:Name="lvImages" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="3,42,3,99" Grid.Column="4" SelectionChanged="lvImages_SelectionChanged" Background="#FF1A1A1A" BorderBrush="#FF1F1F1F">
+        <ListView x:Name="lvImages" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="3,42,3,99" Grid.Column="4" SelectionChanged="lvImages_SelectionChanged" Background="#FF1A1A1A" BorderBrush="#FF1A1A1A">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn x:Name="GridViewColumnName" Header=" "  Width="100">
@@ -66,7 +66,7 @@
                             </Button.Background>
                         </Button>
                         <CheckBox x:Name="cbNSFW" Content="NSFW check" IsChecked="True" Margin="0,2,107,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Height="20" Foreground="White"/>
-                        <RichTextBox x:Name="tbPrompt" Margin="3,29,4,7" SpellCheck.IsEnabled="True" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF2E2E2E">
+                        <RichTextBox x:Name="tbPrompt" Margin="3,29,4,7" SpellCheck.IsEnabled="True" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF2E2E2E" CaretBrush="White">
                             <FlowDocument>
                                 <Paragraph>
                                     <Run Text=""/>
@@ -140,7 +140,7 @@
                 <Border BorderBrush="#FF383838" BorderThickness="0.75">
                     <Grid Height="95">
                         <Label Content="Neg prompt" Height="21" Width="95" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
-                        <RichTextBox x:Name="tbNegPrompt" SpellCheck.IsEnabled="True" Margin="3,19,4,2" Foreground="White" Background="#FF1E1E1E" BorderBrush="#FF383838">
+                        <RichTextBox x:Name="tbNegPrompt" SpellCheck.IsEnabled="True" Margin="3,19,4,2" Foreground="White" Background="#FF1E1E1E" BorderBrush="#FF383838" CaretBrush="White">
                             <FlowDocument>
                                 <Paragraph>
                                     <Run Text=""/>
@@ -315,7 +315,7 @@
         <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,1,67,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btnFavorClick" RenderTransformOrigin="0.615,0.5"/>
         <Image x:Name="imgFavor" Source="/res/favor.png" />
         <Image x:Name="imgNotFavor" Source="/res/notfavor.png" />
-        <ProgressBar x:Name="pbGen" Grid.Column="3" Margin="8,0,11,132" ValueChanged="pbGen_ValueChanged" Background="#FF1A1A1A" Foreground="White" Height="20" VerticalAlignment="Bottom"/>
+        <ProgressBar x:Name="pbGen" Grid.Column="3" Margin="8,0,11,132" ValueChanged="pbGen_ValueChanged" Background="#FF1A1A1A" Foreground="#FF963EBD" Height="20" VerticalAlignment="Bottom" BorderBrush="#FF2F1E67" OpacityMask="#FF3A5FA3"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="96,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click" BorderThickness="0.25" Foreground="White">
             <Button.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="0,5">
