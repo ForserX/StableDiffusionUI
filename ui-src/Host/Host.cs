@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SD_FXUI.Utils;
+using System;
 using System.Diagnostics;
 
 namespace SD_FXUI
@@ -76,6 +77,7 @@ namespace SD_FXUI
                 return;
 
             Helper.UIHost.Print(Message);
+
         }
 
         public void Kill()

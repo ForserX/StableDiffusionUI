@@ -37,6 +37,8 @@ namespace SD_FXUI
 
             Install.SetupDirs();
 
+            Log.InitLogFile();
+
             cbUpscaler.SelectedIndex = 0;
             cbModel.SelectedIndex = 0;
 
@@ -107,11 +109,26 @@ namespace SD_FXUI
                     {
                         if (tsCN.IsChecked.Value)
                         {
-                            cmdline += GetCommandLineOnnx();
-                            cmdline += HelperControlNet.Current.CommandLine();
+                            try
+                            {
+                                cmdline += GetCommandLineOnnx();
+                                cmdline += HelperControlNet.Current.CommandLine();
 
-                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, HelperControlNet.Current));
-                            break;
+                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, HelperControlNet.Current));
+                                break;
+                            }
+
+
+                            catch (NullReferenceException ex)
+                            {
+                                string addMsg = "";
+                                if (HelperControlNet.Current == null)
+                                {
+                                    addMsg += "CurrentCN was null, ";
+                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
+                                }
+                                Log.SendMessageToFile(addMsg + ex.Message);
+                            }
                         }
                         else
                         {
@@ -129,12 +146,29 @@ namespace SD_FXUI
                     {
                         if (tsCN.IsChecked.Value)
                         {
+                            
                             ControlNetBase CurrentCN = HelperControlNet.Current;
+                            try
+                            {
+                                cmdline += GetCommandLineDiffCuda();
+                                cmdline += CurrentCN.CommandLine();
 
-                            cmdline += GetCommandLineDiffCuda();
-                            cmdline += CurrentCN.CommandLine();
 
-                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, CurrentCN));
+                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, CurrentCN));
+                            }
+                            
+                            catch (NullReferenceException ex)
+                            {
+                                string addMsg = "";
+                                if (CurrentCN == null)
+                                {
+                                    addMsg += "CurrentCN was null, ";
+                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
+                                }
+
+                                Log.SendMessageToFile(addMsg + ex.Message);
+
+                            }
                             break;
                         }
                         else
@@ -348,7 +382,7 @@ namespace SD_FXUI
 
                 Title = "Stable Diffusion XUI : CUDA venv";
 
-                btnTIApply.IsEnabled = false;
+                btnTIApply.IsEnabled = true;
             }
         }
 

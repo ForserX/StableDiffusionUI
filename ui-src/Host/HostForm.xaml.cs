@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SD_FXUI.Utils;
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -82,6 +83,8 @@ namespace SD_FXUI
             message = message.Replace(FS.GetWorkingDir(), "${Workspace}");
 
             Dispatcher.Invoke(() => ImplPrint(message));
+
+            Log.SendMessageToFileFromHost(message);
         }
 
         private void OnClosing(object sender, EventArgs e)
