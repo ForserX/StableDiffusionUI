@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="HistoryList" Height="263" Width="625">
     <Grid>
-        <ListBox x:Name="lbHistory" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="ListBox_SelectionChanged" Margin="0,0,0,29" FontSize="10" FontFamily="Trebuchet MS" IsSynchronizedWithCurrentItem="False" KeyUp="KeyDown"/>
+        <ListBox x:Name="lbHistory" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="ListBox_SelectionChanged" Margin="0,0,0,29" FontSize="10" FontFamily="Trebuchet MS" IsSynchronizedWithCurrentItem="False" KeyUp="KeyDown" MouseDoubleClick="lbHistory_MouseDoubleClick"/>
         <Button Content="Use" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="White" Height="24" Width="54" Padding="10,1,10,6" Click="Button_Click">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,0">

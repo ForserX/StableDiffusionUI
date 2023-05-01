@@ -86,11 +86,18 @@ namespace SD_FXUI.Utils
             else if (e.Key == Key.Enter)
             {
                 Helper.Form.SetPrompt(lbHistory.SelectedItem.ToString());
+                this.Close();
             }
             else if (e.Key == Key.Escape) 
             {
                 this.Close();
             }
+        }
+
+        private void lbHistory_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Helper.Form.SetPrompt(lbHistory.SelectedItem.ToString());
+            this.Close();
         }
     }
 }
