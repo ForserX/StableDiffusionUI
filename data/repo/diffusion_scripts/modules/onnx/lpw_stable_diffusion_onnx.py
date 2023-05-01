@@ -519,12 +519,6 @@ class OnnxStableDiffusionLongPromptWeightingPipeline(OnnxStableDiffusionPipeline
             negative_prompt = [""] * batch_size
         elif isinstance(negative_prompt, str):
             negative_prompt = [negative_prompt] * batch_size
-        if batch_size != len(negative_prompt):
-            raise ValueError(
-                f"`negative_prompt`: {negative_prompt} has batch size {len(negative_prompt)}, but `prompt`:"
-                f" {prompt} has batch size {batch_size}. Please make sure that passed `negative_prompt` matches"
-                " the batch size of `prompt`."
-            )
 
         text_embeddings, uncond_embeddings = get_weighted_text_embeddings(
             pipe=self,

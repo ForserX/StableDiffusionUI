@@ -150,7 +150,7 @@
                     </Grid>
                 </Border>
                 <Border BorderBrush="#FF383838" BorderThickness="0.75">
-                    <Grid Height="198" Width="355">
+                    <Grid Height="227" Width="355">
                         <Label Content="Width" Height="30" Width="57" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-4,40,0,0" VerticalAlignment="Top"/>
                         <Label Content="Sampler" Height="30" Width="52" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="3,6,3,6" HorizontalAlignment="Left" Margin="3,4,0,0" VerticalAlignment="Top"/>
                         <ToggleButton x:Name="chRandom" Content="Random" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="30" Width="68" Margin="285,99,2,0" VerticalAlignment="Top" Foreground="White"/>
@@ -176,6 +176,8 @@
                         <TextBox  x:Name="tbW" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="512" Height="18" Margin="244,46,0,0" VerticalAlignment="Top" Padding="10,2,10,2" HorizontalAlignment="Left" Width="55" MinHeight="19" TextChanged="tbW_TextChanged" TabIndex="5" Background="#FF1E1E1E" BorderBrush="#FF383838" Foreground="White"/>
                         <Label Content="Size Info" Height="22" Width="52" Foreground="White" Background="#FF252029" BorderBrush="{x:Null}" Padding="2,1,2,6" HorizontalAlignment="Right" Margin="0,46,2,0" VerticalAlignment="Top"/>
                         <Label x:Name="lbRatio" Content="1:1; 1024" Height="27" Width="52" Foreground="White" Background="#FF252029" BorderBrush="{x:Null}" Padding="2,6,2,1" HorizontalAlignment="Right" Margin="0,62,2,0" VerticalAlignment="Top" FontSize="9"/>
+                        <Label Content="Parallel count" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Right" Margin="0,0,47,0" VerticalAlignment="Bottom" Height="30" Width="81"/>
+                        <hc:NumericUpDown x:Name="tbParallel" HorizontalAlignment="Right" Margin="0,0,0,4" VerticalAlignment="Bottom" RenderTransformOrigin="-1.332,-0.546" Width="46" Height="24" Padding="3,2,3,2" MinHeight="20" Value="1" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838"/>
 
                     </Grid>
                 </Border>
@@ -323,9 +325,9 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-    
+
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="6,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click" BorderThickness="0.25" Foreground="White">
-            <Button.Background>    
+            <Button.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="0,5">
                     <GradientStop Color="#FFFF0000"/>
                     <GradientStop Color="#FF0000FF" Offset="0.5"/>

@@ -76,6 +76,7 @@ namespace SD_FXUI
             public string WorkingDir;
             public string Device;
             public bool fp16;
+            public int BatchSize;
 
             public List<LoRAData> LoRA;
             public List<LoRAData> TI;
@@ -103,7 +104,7 @@ namespace SD_FXUI
         public static List<string> ImgList = new List<string>();
         public static string CurrentTI = null;
         public static string CurrentPose = null;
-        
+
         public static int Denoise = 0;
         public static bool TTA = false;
         public static MetaInfo MakeInfo = new Helper.MetaInfo();

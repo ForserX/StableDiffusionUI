@@ -93,8 +93,8 @@ namespace SD_FXUI
 
         private void OnActiveted(object sender, RoutedEventArgs e)
         {
-           // var hwnd = new WindowInteropHelper(this).Handle;
-           // Wrapper.SetWindowLong(hwnd, Wrapper.GWL_STYLE, Wrapper.GetWindowLong(hwnd, Wrapper.GWL_STYLE) & ~Wrapper.WS_SYSMENU);
+           var hwnd = new WindowInteropHelper(this).Handle;
+           Wrapper.SetWindowLong(hwnd, Wrapper.GWL_STYLE, Wrapper.GetWindowLong(hwnd, Wrapper.GWL_STYLE) & ~Wrapper.WS_SYSMENU);
         }
 
         private void OnClosing(object sender, MouseButtonEventArgs e)
