@@ -61,7 +61,7 @@ namespace SD_FXUI
                 Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install protobuf==3.20.* --force");
 
                 // Need 2.0.1 for ONNX
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install --pre torch torchvision --index-url https://download.pytorch.org/whl/nightly/cpu");
+                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install --pre torch torchvision --force --index-url https://download.pytorch.org/whl/nightly/cpu");
 
                 Cmd.SendExitCommand();
                 Cmd.Wait();
