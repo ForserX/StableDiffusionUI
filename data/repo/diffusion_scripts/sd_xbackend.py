@@ -165,7 +165,7 @@ class Device:
 
 		return (p_model, prompt_tokens)
 	
-	def ONNXProto2Runtime(self, model):
+	def ONNXProto2Runtime(self, model, provider="DmlExecutionProvider"):
 		(unet_model, unet_data) = buffer_external_data_tensors(model)
 		unet_names, unet_values = zip(*unet_data)
 		sess = SessionOptions()

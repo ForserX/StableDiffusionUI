@@ -93,7 +93,7 @@ while True:
         
     if tokenizer_extract:
         # Convert te model to Runtime
-        pipe.text_encoder = PipeDevice.ONNXProto2Runtime(onnx_te_model)
+        pipe.text_encoder = PipeDevice.ONNXProto2Runtime(onnx_te_model, "CPUExecutionProvider")
 
     if (data['VAE'] != "Default") or (data['VAE'] != old_vae_json):
         print("Load custom vae")
