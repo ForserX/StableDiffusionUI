@@ -171,7 +171,7 @@ class Device:
 		sess = SessionOptions()
 		sess.add_external_initializers(list(unet_names), list(unet_values))
 		
-		out_model = OnnxRuntimeModel(OnnxRuntimeModel.load_model(unet_model.SerializeToString(), provider=self.prov, sess_options=sess))
+		out_model = OnnxRuntimeModel(OnnxRuntimeModel.load_model(unet_model.SerializeToString(), provider=provider, sess_options=sess))
 		return out_model
 	
 	def ApplyLoRA(self, unet, te, LoraPath : str, strength: float):
