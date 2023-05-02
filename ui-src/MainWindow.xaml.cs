@@ -79,6 +79,7 @@ namespace SD_FXUI
 
             Helper.MakeInfo.LoRA = new System.Collections.Generic.List<Helper.LoRAData>();
             Helper.MakeInfo.TI = new System.Collections.Generic.List<Helper.LoRAData>();
+            Helper.MakeInfo.TINeg = new System.Collections.Generic.List<Helper.LoRAData>();
 
             // FX: A hack to see the entire form in the constructor.
             grMain.Margin = new Thickness(0, 0, 0.0, 0.0);

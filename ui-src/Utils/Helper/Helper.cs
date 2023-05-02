@@ -80,6 +80,7 @@ namespace SD_FXUI
 
             public List<LoRAData> LoRA;
             public List<LoRAData> TI;
+            public List<LoRAData> TINeg;
         }
 
         public static List<Host> SecondaryProcessList = new List<Host>();

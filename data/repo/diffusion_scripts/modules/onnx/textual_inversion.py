@@ -62,6 +62,8 @@ def blend_textual_inversions(
 		keys: List[str] = list(loaded_embeds.keys())
 		if len(keys) == 1 and keys[0].startswith("<") and keys[0].endswith(">"):
 			inversion_format = "concept"
+		elif "emb_params" in keys:
+			inversion_format = "params"
 		elif "string_to_token" in keys and "string_to_param" in keys:
 			inversion_format = "embeddings"
 		else:
@@ -96,12 +98,40 @@ def blend_textual_inversions(
 		trained_embeds = string_to_param[token]
 
 		num_tokens = trained_embeds.shape[0]
-
 		sum_layer = np.zeros(trained_embeds[0, :].shape)
 
 		for i in range(num_tokens):
 			token = f"{base_token}-{i}"
 			layer = trained_embeds[i, :].numpy().astype(dtype)
+			layer *= inversions_alpha
+
+			sum_layer += layer
+			if token in embeds:
+				embeds[token] += layer
+			else:
+				embeds[token] = layer
+
+		# add base and sum tokens to embeds
+		if base_token in embeds:
+			embeds[base_token] += sum_layer
+		else:
+			embeds[base_token] = sum_layer
+
+		sum_token = f"{base_token}-all"
+		if sum_token in embeds:
+			embeds[sum_token] += sum_layer
+		else:
+			embeds[sum_token] = sum_layer
+
+	elif inversion_format == "params":
+		string_to_param = loaded_embeds["emb_params"]
+
+		num_tokens = string_to_param.shape[0]
+		sum_layer = np.zeros(string_to_param[0, :].shape)
+
+		for i in range(num_tokens):
+			token = f"{base_token}-{i}"
+			layer = string_to_param[i, :].numpy().astype(dtype)
 			layer *= inversions_alpha
 
 			sum_layer += layer
