@@ -32,6 +32,7 @@
     <Resource Include="res\dropFilesDark.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="res\faq.png" />
     <Resource Include="res\favor.png" />
     <Resource Include="res\folder.png" />
     <Resource Include="res\history.png" />

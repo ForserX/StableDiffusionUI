@@ -99,7 +99,7 @@
                             </Button.Background>
                         </Button>
                         <Image x:Name="imgMask" HorizontalAlignment="Left" Height="64" Margin="110,40,0,0" VerticalAlignment="Top" Width="65" Source="/res/nomask_Dark.jpg" AllowDrop="True"/>
-                        <Button x:Name="btnImageClearMask" Content="Clear Mask" Margin="0,92,132,0" HorizontalAlignment="Right" Width="50" RenderTransformOrigin="0.484,1.102" Height="18" VerticalAlignment="Top" Foreground="White" Padding="2,1,2,1" Click="btnImageClearMask_Click" FontSize="8" Visibility="Collapsed">
+                        <Button x:Name="btnImageClearMask" Visibility="Collapsed" Content="Clear Mask" Margin="117,18,0,0" Width="50" RenderTransformOrigin="0.484,1.102" Height="18" VerticalAlignment="Top" Foreground="White" Padding="2,1,2,1" Click="btnImageClearMask_Click" FontSize="8" HorizontalAlignment="Left" >
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="1,0">
                                     <GradientStop Color="#FF523876"/>
@@ -115,7 +115,7 @@
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
-                        <ToggleButton x:Name="cbPix2Pix" Content="InstructPix2Pix"  Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Unchecked="cbPix2Pix_Checked" Height="25" Width="110" Margin="115,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="cbPix2Pix_Checked" Foreground="White"/>
+                        <ToggleButton x:Name="cbPix2Pix" Content="InstructPix2Pix"  Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Unchecked="cbPix2Pix_Checked" Height="25" Width="110" Margin="263,1,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="cbPix2Pix_Checked" Foreground="White"/>
                         <TextBox x:Name="tbMeta" Margin="-6,135,-5,0" TextWrapping="Wrap" Text="No meta" IsReadOnly="True" FontSize="9.5" FontFamily="Verdana" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838"/>
                         <ComboBox x:Name="cbExtractPoseSelector" HorizontalAlignment="Left" Margin="182,100,0,0" VerticalAlignment="Top" Width="154" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}">
                             <ComboBoxItem Content="Canny"/>
@@ -354,6 +354,7 @@
         <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,2,6,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btnZoom_Click"/>
         <Image x:Name="IconRes" Source="res/icon.png" />
         <Image x:Name="btnSettings" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,9,0" VerticalAlignment="Top" Width="41" Source="/res/settings.png" MouseLeftButtonDown="btnSettingsClick"/>
+        <Image x:Name="btnFAQ" Grid.Column="4" HorizontalAlignment="Right" Height="44" Margin="0,-2,47,0" VerticalAlignment="Top" Width="48" Source="/res/faq.png" MouseLeftButtonDown="btnFAQClick"/>
 
     </Grid>
 </hc:BlurWindow>

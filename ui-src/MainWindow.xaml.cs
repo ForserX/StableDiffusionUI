@@ -5,7 +5,9 @@ using SD_FXUI.Utils;
 using SD_FXUI.Utils.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -1025,6 +1027,17 @@ namespace SD_FXUI
         private void cbLoRAUserTokens_DropDownOpened(object sender, EventArgs e)
         {
             cbLoRAUserTokens.SelectedItem = null;
+        }
+
+        private void btnFAQClick(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start
+            (
+                new ProcessStartInfo("https://github.com/ForserX/StableDiffusionUI/wiki/How-to---ONNX") 
+                { 
+                    UseShellExecute = true 
+                }
+            );
         }
     }
 }
