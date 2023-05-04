@@ -49,7 +49,9 @@ while True:
     data = json.loads(message)
     
     if (data['LoRA'] != old_lora_json) or (data['TI'] != old_te_json) or (data['TINeg'] != old_ten_json):
-        pipe.text_encoder.from_pretrained(opt.mdlpath + "/text_encoder/")
+        pipe.unet = pipe.unet.from_pretrained(opt.mdlpath+"/unet")
+        pipe.text_encoder = pipe.text_encoder.from_pretrained(opt.mdlpath+"/text_encoder")
+        pipe.to(PipeDevice.device, PipeDevice.fptype)
         
         # Hard reload
         old_lora_json = None
@@ -84,9 +86,6 @@ while True:
         
     if data['LoRA'] != old_lora_json:
         # Setup default unet
-        pipe.unet = pipe.unet.from_pretrained(opt.mdlpath+"/unet")
-        pipe.text_encoder = pipe.text_encoder.from_pretrained(opt.mdlpath+"/text_encoder")
-        pipe.to(PipeDevice.device, PipeDevice.fptype)
 
         for item in data['LoRA']:
             l_name = item['Name']
