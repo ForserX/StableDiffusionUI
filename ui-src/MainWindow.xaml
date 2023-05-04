@@ -354,7 +354,8 @@
         <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,2,6,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btnZoom_Click"/>
         <Image x:Name="IconRes" Source="res/icon.png" />
         <Image x:Name="btnSettings" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,9,0" VerticalAlignment="Top" Width="41" Source="/res/settings.png" MouseLeftButtonDown="btnSettingsClick"/>
-        <Image x:Name="btnFAQ" Grid.Column="4" HorizontalAlignment="Right" Height="44" Margin="0,-2,47,0" VerticalAlignment="Top" Width="48" Source="/res/faq.png" MouseLeftButtonDown="btnFAQClick"/>
+        <Image x:Name="btnFAQ" Grid.Column="4" Height="44" Margin="52,-2,53,0" VerticalAlignment="Top" Source="/res/faq.png" MouseLeftButtonDown="btnFAQClick"/>
+        <Image x:Name="btnDis" Grid.Column="4" Height="38" Margin="6,1,0,0" VerticalAlignment="Top" Source="/res/discord.png" MouseLeftButtonDown="btnDisClick" HorizontalAlignment="Left" Width="40"/>
 
     </Grid>
 </hc:BlurWindow>

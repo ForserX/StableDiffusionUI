@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Resource Include="res\cmd.png" />
+    <Resource Include="res\discord.png" />
     <Resource Include="res\dropFilesDark.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

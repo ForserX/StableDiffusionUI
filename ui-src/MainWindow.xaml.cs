@@ -1039,5 +1039,16 @@ namespace SD_FXUI
                 }
             );
         }
+
+        private void btnDisClick(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start
+            (
+                new ProcessStartInfo("https://discord.gg/HMG82cYNrA")
+                {
+                    UseShellExecute = true
+                }
+            );
+        }
     }
 }
