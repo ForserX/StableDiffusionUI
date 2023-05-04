@@ -14,7 +14,7 @@ try:
 
 	ONNX_MODEL = "model.onnx"
 except :
-	pass
+	from modules.diffusers.textual_inversion import blend_textual_inversions
 
 from diffusers import ( 
 	OnnxStableDiffusionPipeline, 
@@ -160,18 +160,21 @@ class Device:
 		
 		return blended_te
 
-	def ApplyTE(self, p_model, te_name, alpha, pipe):
+	def ApplyTI2CUDA(self, te_name, alpha, pipe):
+		pipe.tokenizer, pipe.text_encoder, prompt_tokens = blend_textual_inversions(pipe.text_encoder, pipe.tokenizer, te_name, alpha)
+		return pipe, prompt_tokens
+	
+	def ApplyTI2ONNX(self, p_model, te_name, alpha, pipe):
 		pipe.tokenizer, prompt_tokens = blend_textual_inversions(p_model, pipe.tokenizer, te_name, alpha)
-
 		return (p_model, prompt_tokens)
 	
-	def ONNXProto2Runtime(self, model):
+	def ONNXProto2Runtime(self, model, provider="DmlExecutionProvider"):
 		(unet_model, unet_data) = buffer_external_data_tensors(model)
 		unet_names, unet_values = zip(*unet_data)
 		sess = SessionOptions()
 		sess.add_external_initializers(list(unet_names), list(unet_values))
 		
-		out_model = OnnxRuntimeModel(OnnxRuntimeModel.load_model(unet_model.SerializeToString(), provider=self.prov, sess_options=sess))
+		out_model = OnnxRuntimeModel(OnnxRuntimeModel.load_model(unet_model.SerializeToString(), provider=provider, sess_options=sess))
 		return out_model
 	
 	def ApplyLoRA(self, unet, te, LoraPath : str, strength: float):
@@ -345,7 +348,7 @@ class Device:
 	
 		return eta
 	
-	def MakeImage(self, pipe, mode : str, eta, prompt, prompt_neg, steps, width, height, seed, scale, image_guidance_scale, init_img_path = None, img_strength = 0.75, mask_img_path = None, outpath = ""):
+	def MakeImage(self, pipe, mode : str, eta, prompt, prompt_neg, steps, width, height, seed, scale, image_guidance_scale, init_img_path = None, img_strength = 0.75, mask_img_path = None, outpath = "", batch_size = 1):
 		start_time = time.time()
 		
 		seed = int(seed)
@@ -362,30 +365,33 @@ class Device:
 		print(mode, flush=True)
 		
 		if mode == "txt2img":
-			image=pipe(prompt=prompt, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
+			image=pipe(prompt=[prompt] * batch_size, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng)
 		
 		if mode == "img2img":
 			# Opt image
 			img=Image.open(init_img_path).convert("RGB").resize((width, height))
-			image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=img_strength, generator=rng).images[0]
+			image=pipe(prompt=[prompt] * batch_size, image=img, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, strength=img_strength, generator=rng)
 	
 		if mode == "pix2pix":
 			# Opt image
 			img=Image.open(init_img_path).convert("RGB").resize((width, height))
-			image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, image_guidance_scale=image_guidance_scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
+			image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, image_guidance_scale=image_guidance_scale, negative_prompt=prompt_neg, eta=eta, generator=rng)
 	
 		if mode == "inpaint":
 			img=Image.open(init_img_path).convert("RGB").resize((width, height))
 			mask=Image.open(mask_img_path).convert("RGB").resize((width, height))
-			image=pipe(prompt=prompt, image=img, mask_image = mask, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng).images[0]
-	
+			image=pipe(prompt=[prompt] * batch_size, image=img, mask_image = mask, height=height, width=width, num_inference_steps=steps, guidance_scale=scale, negative_prompt=prompt_neg, eta=eta, generator=rng)
+		
+		safe_end_time = time.time();
 		# PNG MetaData
 		info = PngImagePlugin.PngInfo()
 		MetaText = "Prompt: {" + f"{prompt}" + "}, NegativePrompt: {" + f"{prompt_neg}" + "} " + f"\nSeed: {seed}, Steps: {steps}, Size: {width}x{height}, Mode: {mode}, CFG Scale: {scale}"
 		info.add_text("XUI Metadata", MetaText)
-		image.save(os.path.join(outpath, f"{time.time_ns()}.png"), 'PNG', pnginfo=info)
 		
-		print(f'Image generated in {(time.time() - start_time):.2f}s')
+		for i in range(len(image.images)):
+			image.images[i].save(os.path.join(outpath, f"{time.time_ns()}_{i}.png"), 'PNG', pnginfo=info)
+		
+		print(f'Image generated in {(safe_end_time - start_time):.2f}s')
 		image = None
 	
 	def ApplyArg(parser):

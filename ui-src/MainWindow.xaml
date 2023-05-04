@@ -36,7 +36,7 @@
             </Button.Background>
         </Button>
         <Button x:Name="btnONNX" Content="Diffusers(ONNX)" Margin="186,4,0,0" VerticalAlignment="Top" Click="btnONNX_Click" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" BorderThickness="0.25" Foreground="White" Background="#FF383838"/>
-        <ListView x:Name="lvImages" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="3,42,3,99" Grid.Column="4" SelectionChanged="lvImages_SelectionChanged" Background="#FF1A1A1A" BorderBrush="#FF1F1F1F">
+        <ListView x:Name="lvImages" VirtualizingPanel.IsVirtualizing="True"  ItemsSource="{Binding ListViewItemsCollections}" Margin="3,42,3,99" Grid.Column="4" SelectionChanged="lvImages_SelectionChanged" Background="#FF1A1A1A" BorderBrush="#FF1A1A1A">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn x:Name="GridViewColumnName" Header=" "  Width="100">
@@ -66,7 +66,7 @@
                             </Button.Background>
                         </Button>
                         <CheckBox x:Name="cbNSFW" Content="NSFW check" IsChecked="True" Margin="0,2,107,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="91" Height="20" Foreground="White"/>
-                        <RichTextBox x:Name="tbPrompt" Margin="3,29,4,7" SpellCheck.IsEnabled="True" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF2E2E2E">
+                        <RichTextBox x:Name="tbPrompt" Margin="3,29,4,7" SpellCheck.IsEnabled="True" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF2E2E2E" CaretBrush="White">
                             <FlowDocument>
                                 <Paragraph>
                                     <Run Text=""/>
@@ -99,7 +99,7 @@
                             </Button.Background>
                         </Button>
                         <Image x:Name="imgMask" HorizontalAlignment="Left" Height="64" Margin="110,40,0,0" VerticalAlignment="Top" Width="65" Source="/res/nomask_Dark.jpg" AllowDrop="True"/>
-                        <Button x:Name="btnImageClearMask" Content="Clear Mask" Margin="0,92,132,0" HorizontalAlignment="Right" Width="50" RenderTransformOrigin="0.484,1.102" Height="18" VerticalAlignment="Top" Foreground="White" Padding="2,1,2,1" Click="btnImageClearMask_Click" FontSize="8" Visibility="Collapsed">
+                        <Button x:Name="btnImageClearMask" Visibility="Collapsed" Content="Clear Mask" Margin="117,18,0,0" Width="50" RenderTransformOrigin="0.484,1.102" Height="18" VerticalAlignment="Top" Foreground="White" Padding="2,1,2,1" Click="btnImageClearMask_Click" FontSize="8" HorizontalAlignment="Left" >
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="1,0">
                                     <GradientStop Color="#FF523876"/>
@@ -115,7 +115,7 @@
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
-                        <ToggleButton x:Name="cbPix2Pix" Content="InstructPix2Pix"  Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Unchecked="cbPix2Pix_Checked" Height="25" Width="110" Margin="115,3,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="cbPix2Pix_Checked" Foreground="White"/>
+                        <ToggleButton x:Name="cbPix2Pix" Content="InstructPix2Pix"  Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="False" Unchecked="cbPix2Pix_Checked" Height="25" Width="110" Margin="263,1,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Checked="cbPix2Pix_Checked" Foreground="White"/>
                         <TextBox x:Name="tbMeta" Margin="-6,135,-5,0" TextWrapping="Wrap" Text="No meta" IsReadOnly="True" FontSize="9.5" FontFamily="Verdana" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838"/>
                         <ComboBox x:Name="cbExtractPoseSelector" HorizontalAlignment="Left" Margin="182,100,0,0" VerticalAlignment="Top" Width="154" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}">
                             <ComboBoxItem Content="Canny"/>
@@ -140,7 +140,7 @@
                 <Border BorderBrush="#FF383838" BorderThickness="0.75">
                     <Grid Height="95">
                         <Label Content="Neg prompt" Height="21" Width="95" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="10,1,10,1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-10,0,0,0"/>
-                        <RichTextBox x:Name="tbNegPrompt" SpellCheck.IsEnabled="True" Margin="3,19,4,2" Foreground="White" Background="#FF1E1E1E" BorderBrush="#FF383838">
+                        <RichTextBox x:Name="tbNegPrompt" SpellCheck.IsEnabled="True" Margin="3,19,4,2" Foreground="White" Background="#FF1E1E1E" BorderBrush="#FF383838" CaretBrush="White">
                             <FlowDocument>
                                 <Paragraph>
                                     <Run Text=""/>
@@ -150,8 +150,8 @@
                     </Grid>
                 </Border>
                 <Border BorderBrush="#FF383838" BorderThickness="0.75">
-                    <Grid Height="198" Width="355">
-                        <Label Content="Weight" Height="30" Width="57" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-2,40,0,0" VerticalAlignment="Top"/>
+                    <Grid Height="227" Width="355">
+                        <Label Content="Width" Height="30" Width="57" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Left" Margin="-4,40,0,0" VerticalAlignment="Top"/>
                         <Label Content="Sampler" Height="30" Width="52" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="3,6,3,6" HorizontalAlignment="Left" Margin="3,4,0,0" VerticalAlignment="Top"/>
                         <ToggleButton x:Name="chRandom" Content="Random" Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Checked="chRandom_Checked" Unchecked="chRandom_Unchecked" Height="30" Width="68" Margin="285,99,2,0" VerticalAlignment="Top" Foreground="White"/>
                         <Slider  x:Name="slSteps" Maximum="150" Minimum="1" Value="25" ValueChanged="Slider_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" LargeChange="0" Margin="76,106,152,68"/>
@@ -176,6 +176,8 @@
                         <TextBox  x:Name="tbW" PreviewTextInput="NumberValidationTextBox" TextWrapping="Wrap" Text="512" Height="18" Margin="244,46,0,0" VerticalAlignment="Top" Padding="10,2,10,2" HorizontalAlignment="Left" Width="55" MinHeight="19" TextChanged="tbW_TextChanged" TabIndex="5" Background="#FF1E1E1E" BorderBrush="#FF383838" Foreground="White"/>
                         <Label Content="Size Info" Height="22" Width="52" Foreground="White" Background="#FF252029" BorderBrush="{x:Null}" Padding="2,1,2,6" HorizontalAlignment="Right" Margin="0,46,2,0" VerticalAlignment="Top"/>
                         <Label x:Name="lbRatio" Content="1:1; 1024" Height="27" Width="52" Foreground="White" Background="#FF252029" BorderBrush="{x:Null}" Padding="2,6,2,1" HorizontalAlignment="Right" Margin="0,62,2,0" VerticalAlignment="Top" FontSize="9"/>
+                        <Label Content="Parallel count" Foreground="White" Background="{x:Null}" BorderBrush="{x:Null}" Padding="2,6,2,6" HorizontalAlignment="Right" Margin="0,0,47,0" VerticalAlignment="Bottom" Height="30" Width="81"/>
+                        <hc:NumericUpDown x:Name="tbParallel" HorizontalAlignment="Right" Margin="0,0,0,4" VerticalAlignment="Bottom" RenderTransformOrigin="-1.332,-0.546" Width="46" Height="24" Padding="3,2,3,2" MinHeight="20" Value="1" Background="#FF1E1E1E" Foreground="White" BorderBrush="#FF383838"/>
 
                     </Grid>
                 </Border>
@@ -313,9 +315,9 @@
         <Image x:Name="btCmd" Source="/res/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Margin="3,0,0,34" HorizontalAlignment="Left" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="48" VerticalAlignment="Bottom"/>
         <Image x:Name="btHistory" Source="/res/history.png" MouseLeftButtonDown="btnHistory_Click" Margin="0,0,0,53" HorizontalAlignment="Right" Width="44" Grid.Column="4" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
         <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,1,67,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btnFavorClick" RenderTransformOrigin="0.615,0.5"/>
-        <Image x:Name="imgFavor" Source="/res/favor.png" />
-        <Image x:Name="imgNotFavor" Source="/res/notfavor.png" />
-        <ProgressBar x:Name="pbGen" Grid.Column="3" Margin="8,0,11,132" ValueChanged="pbGen_ValueChanged" Background="#FF1A1A1A" Foreground="White" Height="20" VerticalAlignment="Bottom"/>
+        <Image x:Name="imgFavor" Source="/res/favor.png" Visibility="Collapsed" />
+        <Image x:Name="imgNotFavor" Source="/res/notfavor.png" Visibility="Collapsed" />
+        <ProgressBar x:Name="pbGen" Grid.Column="3" Margin="8,0,11,132" ValueChanged="pbGen_ValueChanged" Background="#FF1A1A1A" Foreground="#FF963EBD" Height="20" VerticalAlignment="Bottom" BorderBrush="#FF2F1E67" OpacityMask="#FF3A5FA3"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="96,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click" BorderThickness="0.25" Foreground="White">
             <Button.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="0,5">
@@ -323,9 +325,9 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-    
+
         <Button x:Name="btnDiffCpu" Content="Diffusers(CPU)" Margin="6,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCpu_Click" BorderThickness="0.25" Foreground="White">
-            <Button.Background>    
+            <Button.Background>
                 <LinearGradientBrush StartPoint="1,0" EndPoint="0,5">
                     <GradientStop Color="#FFFF0000"/>
                     <GradientStop Color="#FF0000FF" Offset="0.5"/>
@@ -350,8 +352,10 @@
             </Button.Background>
         </Button>
         <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,2,6,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btnZoom_Click"/>
-        <Image x:Name="IconRes" Source="res/icon.png" />
+        <Image x:Name="IconRes" Source="res/icon.png" Visibility="Collapsed" />
         <Image x:Name="btnSettings" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,9,0" VerticalAlignment="Top" Width="41" Source="/res/settings.png" MouseLeftButtonDown="btnSettingsClick"/>
+        <Image x:Name="btnFAQ" Grid.Column="4" Height="44" Margin="52,-2,53,0" VerticalAlignment="Top" Source="/res/faq.png" MouseLeftButtonDown="btnFAQClick"/>
+        <Image x:Name="btnDis" Grid.Column="4" Height="38" Margin="6,1,0,0" VerticalAlignment="Top" Source="/res/discord.png" MouseLeftButtonDown="btnDisClick" HorizontalAlignment="Left" Width="40"/>
 
     </Grid>
 </hc:BlurWindow>

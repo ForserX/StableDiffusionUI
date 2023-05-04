@@ -1,11 +1,10 @@
 from os import makedirs, path
-from typing import List, Optional, Tuple, Dict
+from typing import List, Optional, Dict
 
 from pathlib import Path
 
 import numpy as np
-import torch, safetensors, onnx
-from onnx import ModelProto, numpy_helper
+import torch, safetensors
 from transformers import CLIPTokenizer
 
 ONNX_MODEL = "model.onnx"
@@ -47,7 +46,7 @@ def blend_textual_inversions(
 	tokenizer: CLIPTokenizer,
 	inversions: str,
 	inversions_alpha: float
-) -> Tuple[ModelProto, CLIPTokenizer]:
+):
 	# always load to CPU for blending
 	device = torch.device("cpu")
 	dtype = np.float32
@@ -55,7 +54,7 @@ def blend_textual_inversions(
 
 	inversion_format = None
 	base_token = Path(inversions).stem
-	
+	tokenList = []
 	loaded_embeds = load_tensor(inversions, map_location=device)
 
 	if inversion_format is None:
@@ -100,8 +99,10 @@ def blend_textual_inversions(
 		num_tokens = trained_embeds.shape[0]
 		sum_layer = np.zeros(trained_embeds[0, :].shape)
 
+		
 		for i in range(num_tokens):
 			token = f"{base_token}-{i}"
+			tokenList.append(token)
 			layer = trained_embeds[i, :].numpy().astype(dtype)
 			layer *= inversions_alpha
 
@@ -131,6 +132,7 @@ def blend_textual_inversions(
 
 		for i in range(num_tokens):
 			token = f"{base_token}-{i}"
+			tokenList.append(token)
 			layer = string_to_param[i, :].numpy().astype(dtype)
 			layer *= inversions_alpha
 
@@ -171,33 +173,23 @@ def blend_textual_inversions(
 	print(f"added {num_added_tokens} tokens from {base_token} textual inversion")
 
 	# resize the token embeddings
-	# text_encoder.resize_token_embeddings(len(tokenizer))
-	embedding_node = [
-		n
-		for n in text_encoder.graph.initializer
-		if n.name == "text_model.embeddings.token_embedding.weight"
-	][0]
-	base_weights = numpy_helper.to_array(embedding_node)
+	text_encoder.resize_token_embeddings(len(tokenizer))
+	
 
-	weights_dim = base_weights.shape[1]
-	zero_weights = np.zeros((num_added_tokens, weights_dim))
-	embedding_weights = np.concatenate((base_weights, zero_weights), axis=0)
-
-	for token, weights in embeds.items():
+	if len(trained_embeds.shape) == 2:
+		# multiple vectors in embeds
+		for i in range(trained_embeds.shape[0]):
+			layer_embeds = trained_embeds[i]
+			layer_token = tokenList[i]
+			#print(
+			#	f"embedding {layer_embeds.shape} vector for layer {layer_token}"
+			#)
+			token_id = tokenizer.convert_tokens_to_ids(layer_token)
+			text_encoder.get_input_embeddings().weight.data[token_id] = layer_embeds
+	else:
+		# get the id for the token and assign the embeds
 		token_id = tokenizer.convert_tokens_to_ids(token)
-		embedding_weights[token_id] = weights
+		text_encoder.get_input_embeddings().weight.data[token_id] = embeds
 
-	# replace embedding_node
-	for i in range(len(text_encoder.graph.initializer)):
-		if (
-			text_encoder.graph.initializer[i].name
-			== "text_model.embeddings.token_embedding.weight"
-		):
-			new_initializer = numpy_helper.from_array(
-				embedding_weights.astype(base_weights.dtype), embedding_node.name
-			)
-			del text_encoder.graph.initializer[i]
-			text_encoder.graph.initializer.insert(i, new_initializer)
-
-	return (tokenizer, prompt_tokens)
+	return (tokenizer, text_encoder, prompt_tokens)
 

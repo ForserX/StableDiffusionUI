@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SD_FXUI.Utils;
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -39,16 +40,28 @@ namespace SD_FXUI
 
             return message.StartsWith("Downloading") || char.IsNumber(Firt);
         }
+
+        public void Clear()
+        {
+            tbHost.Text = "";
+        }
+
         void ImplPrint(string message)
         {
+            // Buffer offload
+            if (tbHost.Text.Length > 8000)
+            {
+                tbHost.Text = tbHost.Text[500..];
+            }
+                
             if (StepTest(message))
             {
-                string OldText = tbHost.Text.Substring(0, tbHost.Text.Length - 2);
+                string OldText = tbHost.Text[..^2];
                 int Idx = OldText.LastIndexOf("\n");
 
-                if (Idx != -1 && StepTest(OldText.Substring(Idx + 1)))
+                if (Idx != -1 && StepTest(OldText[(Idx + 1)..]))
                 {
-                    tbHost.Text = OldText.Substring(0, Idx + 1) + message + "\n";
+                    tbHost.Text = OldText[..(Idx + 1)] + message + "\n";
                 }
                 else
                 {
@@ -70,6 +83,8 @@ namespace SD_FXUI
             message = message.Replace(FS.GetWorkingDir(), "${Workspace}");
 
             Dispatcher.Invoke(() => ImplPrint(message));
+
+            Log.SendMessageToFileFromHost(message);
         }
 
         private void OnClosing(object sender, EventArgs e)
@@ -78,8 +93,8 @@ namespace SD_FXUI
 
         private void OnActiveted(object sender, RoutedEventArgs e)
         {
-            var hwnd = new WindowInteropHelper(this).Handle;
-            Wrapper.SetWindowLong(hwnd, Wrapper.GWL_STYLE, Wrapper.GetWindowLong(hwnd, Wrapper.GWL_STYLE) & ~Wrapper.WS_SYSMENU);
+           var hwnd = new WindowInteropHelper(this).Handle;
+           Wrapper.SetWindowLong(hwnd, Wrapper.GWL_STYLE, Wrapper.GetWindowLong(hwnd, Wrapper.GWL_STYLE) & ~Wrapper.WS_SYSMENU);
         }
 
         private void OnClosing(object sender, MouseButtonEventArgs e)

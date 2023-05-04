@@ -69,6 +69,13 @@ namespace SD_FXUI
                 PipUninstall(Package);
                 Contain = true;
             }
+            
+
+            if (Message.Length < 8 && Message.ToLower().Contains("clear"))
+            {
+                Helper.UIHost.Clear();
+                Contain = true;
+            }
 
             if (!Contain)
             {

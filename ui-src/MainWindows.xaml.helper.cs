@@ -226,6 +226,7 @@ namespace SD_FXUI
 		{
 			Helper.MakeInfo.LoRA.Clear();
 			Helper.MakeInfo.TI.Clear();
+			Helper.MakeInfo.TINeg.Clear();
 
 			string SourcePrompt = CodeUtils.GetRichText(tbPrompt).Replace("\r\n", string.Empty);
 
@@ -276,9 +277,38 @@ namespace SD_FXUI
 				SourcePrompt = SourcePrompt.Substring(1);
 			}
 
+
+            string NegPrompt = CodeUtils.GetRichText(tbNegPrompt).Replace("\r\n", string.Empty);
+            while (NegPrompt.Contains("<ti:", 0))
+            {
+                int StartIdx = NegPrompt.IndexOf("<", 0);
+                int EndIdx = NegPrompt.IndexOf(">", 0) + 1;
+
+                string DataStr = NegPrompt.Substring(StartIdx, EndIdx - StartIdx);
+                NegPrompt = NegPrompt.Replace(DataStr, string.Empty);
+
+                DataStr = DataStr.Replace("<ti:", string.Empty).Replace(">", string.Empty);
+                if (!DataStr.Contains(":", 0))
+                    continue;
+
+                int DelimerIdx = DataStr.IndexOf(":", 0);
+
+                Helper.LoRAData TIData = new Helper.LoRAData();
+                TIData.Name = string.Concat(FS.GetModelDir(FS.ModelDirs.TextualInversion), DataStr.AsSpan(0, DelimerIdx));
+                TIData.Value = (float)int.Parse(DataStr[(DelimerIdx + 1)..]) / 100.0f;
+
+                Helper.MakeInfo.TINeg.Add(TIData);
+            }
+
+            while (NegPrompt.StartsWith(",") || NegPrompt.StartsWith(" "))
+			{
+                NegPrompt = NegPrompt.Substring(1);
+			}
+
 			Helper.MakeInfo.Prompt = SourcePrompt;
-			Helper.MakeInfo.NegPrompt = CodeUtils.GetRichText(tbNegPrompt);
+			Helper.MakeInfo.NegPrompt = NegPrompt;
 			Helper.MakeInfo.StartSeed = int.Parse(tbSeed.Text);
+			Helper.MakeInfo.BatchSize = (int)tbParallel.Value;
 			Helper.MakeInfo.CFG = float.Parse(tbCFG.Text);
 			Helper.MakeInfo.Steps = (int)slSteps.Value;
 			Helper.MakeInfo.Model = cbModel.Text;

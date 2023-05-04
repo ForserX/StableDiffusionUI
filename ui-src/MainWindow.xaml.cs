@@ -5,7 +5,9 @@ using SD_FXUI.Utils;
 using SD_FXUI.Utils.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -36,6 +38,8 @@ namespace SD_FXUI
             InitializeComponent();
 
             Install.SetupDirs();
+
+            Log.InitLogFile();
 
             cbUpscaler.SelectedIndex = 0;
             cbModel.SelectedIndex = 0;
@@ -77,6 +81,7 @@ namespace SD_FXUI
 
             Helper.MakeInfo.LoRA = new System.Collections.Generic.List<Helper.LoRAData>();
             Helper.MakeInfo.TI = new System.Collections.Generic.List<Helper.LoRAData>();
+            Helper.MakeInfo.TINeg = new System.Collections.Generic.List<Helper.LoRAData>();
 
             // FX: A hack to see the entire form in the constructor.
             grMain.Margin = new Thickness(0, 0, 0.0, 0.0);
@@ -107,11 +112,26 @@ namespace SD_FXUI
                     {
                         if (tsCN.IsChecked.Value)
                         {
-                            cmdline += GetCommandLineOnnx();
-                            cmdline += HelperControlNet.Current.CommandLine();
+                            try
+                            {
+                                cmdline += GetCommandLineOnnx();
+                                cmdline += HelperControlNet.Current.CommandLine();
 
-                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, HelperControlNet.Current));
-                            break;
+                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, HelperControlNet.Current));
+                                break;
+                            }
+
+
+                            catch (NullReferenceException ex)
+                            {
+                                string addMsg = "";
+                                if (HelperControlNet.Current == null)
+                                {
+                                    addMsg += "CurrentCN was null, ";
+                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
+                                }
+                                Log.SendMessageToFile(addMsg + ex.Message);
+                            }
                         }
                         else
                         {
@@ -129,12 +149,29 @@ namespace SD_FXUI
                     {
                         if (tsCN.IsChecked.Value)
                         {
+                            
                             ControlNetBase CurrentCN = HelperControlNet.Current;
+                            try
+                            {
+                                cmdline += GetCommandLineDiffCuda();
+                                cmdline += CurrentCN.CommandLine();
 
-                            cmdline += GetCommandLineDiffCuda();
-                            cmdline += CurrentCN.CommandLine();
 
-                            Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, CurrentCN));
+                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, CurrentCN));
+                            }
+                            
+                            catch (NullReferenceException ex)
+                            {
+                                string addMsg = "";
+                                if (CurrentCN == null)
+                                {
+                                    addMsg += "CurrentCN was null, ";
+                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
+                                }
+
+                                Log.SendMessageToFile(addMsg + ex.Message);
+
+                            }
                             break;
                         }
                         else
@@ -348,7 +385,7 @@ namespace SD_FXUI
 
                 Title = "Stable Diffusion XUI : CUDA venv";
 
-                btnTIApply.IsEnabled = false;
+                btnTIApply.IsEnabled = true;
             }
         }
 
@@ -990,6 +1027,28 @@ namespace SD_FXUI
         private void cbLoRAUserTokens_DropDownOpened(object sender, EventArgs e)
         {
             cbLoRAUserTokens.SelectedItem = null;
+        }
+
+        private void btnFAQClick(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start
+            (
+                new ProcessStartInfo("https://github.com/ForserX/StableDiffusionUI/wiki/How-to---ONNX") 
+                { 
+                    UseShellExecute = true 
+                }
+            );
+        }
+
+        private void btnDisClick(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start
+            (
+                new ProcessStartInfo("https://discord.gg/HMG82cYNrA")
+                {
+                    UseShellExecute = true
+                }
+            );
         }
     }
 }

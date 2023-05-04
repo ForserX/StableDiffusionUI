@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SD_FXUI.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace SD_FXUI
                 // Drop loaded model
                 Helper.Form.InvokeDropModel();
 
-                Notification.SendErrorNotification("Error! See host for details!");
+                Notification.SendErrorNotification("Error! See host for details!");               
             }
         }
         public static void CheckImageSize(string Message)
@@ -32,7 +33,7 @@ namespace SD_FXUI
                 {
                     Helper.UIHost.Hide();
                 });
-                Notification.MsgBox("The image size is not a multiple of 8!");
+                Notification.MsgBox("The image size is not a multiple of 8!");              
             }
         }
         public static void CheckHalfPrecision(string Message)
@@ -185,6 +186,8 @@ namespace SD_FXUI
             {
                 Helper.Form.InvokeProgressApply();
             }
+
+            
         }
         public static void CheckDeepDanBooru(string Message)
         {

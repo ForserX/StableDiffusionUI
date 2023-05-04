@@ -29,3 +29,6 @@ csharp_style_implicit_object_creation_when_type_is_apparent = false
 
 # CS8604: Возможно, аргумент-ссылка, допускающий значение NULL.
 dotnet_diagnostic.CS8604.severity = none
+
+# CA1806: Do not ignore method results
+dotnet_diagnostic.CA1806.severity = none

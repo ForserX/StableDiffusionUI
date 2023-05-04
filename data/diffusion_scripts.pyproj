@@ -35,6 +35,7 @@
     <Compile Include="modules\danbooru.py" />
     <Compile Include="modules\danbooru_model.py" />
     <Compile Include="modules\diffusers\lpw_stable_diffusion.py" />
+    <Compile Include="modules\diffusers\textual_inversion.py" />
     <Compile Include="modules\inference_gfpgan.py" />
     <Compile Include="modules\onnx\custom_pipelines\pipeline_onnx_stable_diffusion_controlnet.py" />
     <Compile Include="modules\onnx\custom_pipelines\pipeline_onnx_stable_diffusion_instruct_pix2pix.py" />
