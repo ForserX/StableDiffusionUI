@@ -62,7 +62,7 @@ while True:
             l_name = item['Name']
             l_alpha = item['Value']
             
-            onnx_te_model, new_pt = PipeDevice.ApplyTE(onnx_te_model, l_name, l_alpha, pipe)
+            onnx_te_model, new_pt = PipeDevice.ApplyTI2ONNX(onnx_te_model, l_name, l_alpha, pipe)
             tokenizer_extract = True
             prompt_tokens = prompt_tokens + new_pt
         
@@ -70,7 +70,7 @@ while True:
             l_name = item['Name']
             l_alpha = item['Value']
             
-            onnx_te_model, new_pt = PipeDevice.ApplyTE(onnx_te_model, l_name, l_alpha, pipe)
+            onnx_te_model, new_pt = PipeDevice.ApplyTI2ONNX(onnx_te_model, l_name, l_alpha, pipe)
             tokenizer_extract = True
             prompt_neg_tokens = prompt_neg_tokens + new_pt
         

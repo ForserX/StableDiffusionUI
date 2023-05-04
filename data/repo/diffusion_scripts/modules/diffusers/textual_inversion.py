@@ -1,126 +1,190 @@
 from os import makedirs, path
+from typing import List, Optional, Dict
 
-import argparse
-import torch
+from pathlib import Path
 
-from transformers import CLIPTextModel, CLIPTokenizer
+import numpy as np
+import torch, safetensors
+from transformers import CLIPTokenizer
+
+ONNX_MODEL = "model.onnx"
+
+def load_tensor(name: str, map_location=None) -> Optional[Dict]:
+	_, extension = path.splitext(name)
+	extension = extension[1:].lower()
+
+	checkpoint = None
+	if extension == "":
+		# if no extension was intentional, do not search for others
+		if path.exists(name):
+			checkpoint = torch.load(name, map_location=map_location)
+		else:
+			for next_extension in ["safetensors", "ckpt", "pt", "bin"]:
+				next_name = f"{name}.{next_extension}"
+				if path.exists(next_name):
+					checkpoint = load_tensor(next_name, map_location=map_location)
+					if checkpoint is not None:
+						break
+
+	elif extension == "safetensors":
+			checkpoint = safetensors.torch.load_file(name, device="cpu")
+	elif extension in ["bin", "ckpt", "pt"]:
+			checkpoint = torch.load(name, map_location=map_location)
+	elif extension in ["onnx", "pt"]:
+			checkpoint = torch.load(name, map_location=map_location)
+	else:
+			checkpoint = torch.load(name, map_location=map_location)
+
+	if checkpoint is not None and "state_dict" in checkpoint:
+		checkpoint = checkpoint["state_dict"]
+
+	return checkpoint
 
 @torch.no_grad()
-def convert_diffusion_textual_inversion(
-    out_name: str, name: str, base_model: str, inversion: str,
+def blend_textual_inversions(
+	text_encoder,
+	tokenizer: CLIPTokenizer,
+	inversions: str,
+	inversions_alpha: float
 ):
-    dest_path = path.join(out_name, f"{name}")
-    print(
-        "converting Textual Inversion: %s + %s -> %s", base_model, inversion, dest_path
-    )
+	# always load to CPU for blending
+	device = torch.device("cpu")
+	dtype = np.float32
+	embeds = {}
 
-    makedirs(path.join(dest_path, "text_encoder"), exist_ok=True)
+	inversion_format = None
+	base_token = Path(inversions).stem
+	
+	loaded_embeds = load_tensor(inversions, map_location=device)
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    loaded_embeds = torch.load(inversion, map_location=device)
+	if inversion_format is None:
+		keys: List[str] = list(loaded_embeds.keys())
+		if len(keys) == 1 and keys[0].startswith("<") and keys[0].endswith(">"):
+			inversion_format = "concept"
+		elif "emb_params" in keys:
+			inversion_format = "params"
+		elif "string_to_token" in keys and "string_to_param" in keys:
+			inversion_format = "embeddings"
+		else:
+			print(
+				f"unknown Textual Inversion format, no recognized keys: %s", keys
+			)
+			return
 
-    string_to_token = loaded_embeds["string_to_token"]
-    string_to_param = loaded_embeds["string_to_param"]
+	if inversion_format == "concept":
+		# separate token and the embeds
+		token = list(loaded_embeds.keys())[0]
 
-    # separate token and embeds
-    trained_token = list(string_to_token.keys())[0]
-    embeds = string_to_param[trained_token]
+		layer = loaded_embeds[token].numpy().astype(dtype)
+		layer *= inversions_alpha
 
-    num_tokens = embeds.shape[0]
-    print("generating %s layer tokens", num_tokens)
-    token = [f"{name}-{i}" for i in range(num_tokens)]
+		if base_token in embeds:
+			embeds[base_token] += layer
+		else:
+			embeds[base_token] = layer
 
-    print("found embedding for token %s: %s", trained_token, embeds.shape)
+		if token in embeds:
+			embeds[token] += layer
+		else:
+			embeds[token] = layer
 
-    tokenizer = CLIPTokenizer.from_pretrained(
-        base_model,
-        subfolder="tokenizer",
-    )
-    text_encoder = CLIPTextModel.from_pretrained(
-        base_model,
-        subfolder="text_encoder",
-    )
+	elif inversion_format == "embeddings":
+		string_to_token = loaded_embeds["string_to_token"]
+		string_to_param = loaded_embeds["string_to_param"]
 
-    # cast to dtype of text_encoder
-    dtype = text_encoder.get_input_embeddings().weight.dtype
-    embeds.to(dtype)
+		# separate token and embeds
+		token = list(string_to_token.keys())[0]
+		trained_embeds = string_to_param[token]
 
-    # add the token in tokenizer
-    num_added_tokens = tokenizer.add_tokens(token)
-    if num_added_tokens == 0:
-        raise ValueError(
-            f"The tokenizer already contains the token {token}. Please pass a different `token` that is not already in the tokenizer."
-        )
+		num_tokens = trained_embeds.shape[0]
+		sum_layer = np.zeros(trained_embeds[0, :].shape)
 
-    print("added %s tokens", num_added_tokens)
+		for i in range(num_tokens):
+			token = f"{base_token}-{i}"
+			layer = trained_embeds[i, :].numpy().astype(dtype)
+			layer *= inversions_alpha
 
-    # resize the token embeddings
-    text_encoder.resize_token_embeddings(len(tokenizer))
+			sum_layer += layer
+			if token in embeds:
+				embeds[token] += layer
+			else:
+				embeds[token] = layer
 
-    if len(embeds.shape) == 2:
-        # multiple vectors in embeds
-        for i in range(embeds.shape[0]):
-            layer_embeds = embeds[i]
-            layer_token = token[i]
-            print(
-                "embedding %s vector for layer %s", layer_embeds.shape, layer_token
-            )
-            token_id = tokenizer.convert_tokens_to_ids(layer_token)
-            text_encoder.get_input_embeddings().weight.data[token_id] = layer_embeds
-    else:
-        # get the id for the token and assign the embeds
-        token_id = tokenizer.convert_tokens_to_ids(token)
-        text_encoder.get_input_embeddings().weight.data[token_id] = embeds
+		# add base and sum tokens to embeds
+		if base_token in embeds:
+			embeds[base_token] += sum_layer
+		else:
+			embeds[base_token] = sum_layer
 
-    # conversion stuff
-    text_input = tokenizer(
-        "A sample prompt",
-        padding="max_length",
-        max_length=tokenizer.model_max_length,
-        truncation=True,
-        return_tensors="pt",
-    )
+		sum_token = f"{base_token}-all"
+		if sum_token in embeds:
+			embeds[sum_token] += sum_layer
+		else:
+			embeds[sum_token] = sum_layer
 
-    print("saving tokenizer for textual inversion")
-    tokenizer.save_pretrained(path.join(dest_path, "tokenizer"))
+	elif inversion_format == "params":
+		string_to_param = loaded_embeds["emb_params"]
 
-    print("saving text encoder for textual inversion")
-    text_encoder.save_pretrained(path.join(dest_path, "text_encoder"))
+		num_tokens = string_to_param.shape[0]
+		sum_layer = np.zeros(string_to_param[0, :].shape)
 
-    print("textual inversion saved to %s", dest_path)
+		for i in range(num_tokens):
+			token = f"{base_token}-{i}"
+			layer = string_to_param[i, :].numpy().astype(dtype)
+			layer *= inversions_alpha
 
+			sum_layer += layer
+			if token in embeds:
+				embeds[token] += layer
+			else:
+				embeds[token] = layer
 
-parser = argparse.ArgumentParser()
+		# add base and sum tokens to embeds
+		if base_token in embeds:
+			embeds[base_token] += sum_layer
+		else:
+			embeds[base_token] = sum_layer
 
-parser.add_argument(
-    "--model",
-    type=str,
-    help="Path to model checkpoint file",
-    dest='model',
-)
+		sum_token = f"{base_token}-all"
+		if sum_token in embeds:
+			embeds[sum_token] += sum_layer
+		else:
+			embeds[sum_token] = sum_layer
+	else:
+		raise ValueError(f"unknown Textual Inversion format: {inversion_format}")
 
-parser.add_argument(
-    "--textinv",
-    type=str,
-    help="Path to model checkpoint file",
-    dest='textinv',
-)
+	# add the tokens to the tokenizer
 
-parser.add_argument(
-    "--name",
-    type=str,
-    help="Path to model checkpoint file",
-    dest='name',
-)
+	num_added_tokens = tokenizer.add_tokens(list(embeds.keys()))
+	if num_added_tokens == 0:
+		raise ValueError(
+			f"The tokenizer already contains the token {token}. Please pass a different `token` that is not already in the tokenizer."
+		)
+	
+	prompt_tokens = "("
+	for i in range(num_added_tokens):
+		prompt_tokens = prompt_tokens + f"{base_token}-{i}, "
 
-parser.add_argument(
-    "--dest",
-    type=str,
-    help="Path to model checkpoint file",
-    dest='dest',
-)
+	prompt_tokens = prompt_tokens + "), "
 
-arg = parser.parse_args()
+	print(f"added {num_added_tokens} tokens from {base_token} textual inversion")
 
-convert_diffusion_textual_inversion(arg.dest, arg.name, arg.model, arg.textinv)
-print("SD: TI Done!")
+	# resize the token embeddings
+	text_encoder.resize_token_embeddings(len(tokenizer))
+	if len(embeds.shape) == 2:
+		# multiple vectors in embeds
+		for i in range(embeds.shape[0]):
+			layer_embeds = embeds[i]
+			layer_token = token[i]
+			print(
+				"embedding %s vector for layer %s", layer_embeds.shape, layer_token
+			)
+			token_id = tokenizer.convert_tokens_to_ids(layer_token)
+			text_encoder.get_input_embeddings().weight.data[token_id] = layer_embeds
+	else:
+		# get the id for the token and assign the embeds
+		token_id = tokenizer.convert_tokens_to_ids(token)
+		text_encoder.get_input_embeddings().weight.data[token_id] = embeds
+
+	return (tokenizer, text_encoder, prompt_tokens)
+

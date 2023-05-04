@@ -14,7 +14,7 @@ try:
 
 	ONNX_MODEL = "model.onnx"
 except :
-	pass
+	from modules.diffusers.textual_inversion import blend_textual_inversions
 
 from diffusers import ( 
 	OnnxStableDiffusionPipeline, 
@@ -160,9 +160,12 @@ class Device:
 		
 		return blended_te
 
-	def ApplyTE(self, p_model, te_name, alpha, pipe):
+	def ApplyTI2CUDA(self, te_name, alpha, pipe):
+		pipe.tokenizer, pipe.text_encoder, prompt_tokens = blend_textual_inversions(pipe.text_encoder, pipe.tokenizer, te_name, alpha)
+		return pipe, prompt_tokens
+	
+	def ApplyTI2ONNX(self, p_model, te_name, alpha, pipe):
 		pipe.tokenizer, prompt_tokens = blend_textual_inversions(p_model, pipe.tokenizer, te_name, alpha)
-
 		return (p_model, prompt_tokens)
 	
 	def ONNXProto2Runtime(self, model, provider="DmlExecutionProvider"):
