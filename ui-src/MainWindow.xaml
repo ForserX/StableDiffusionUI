@@ -315,8 +315,8 @@
         <Image x:Name="btCmd" Source="/res/cmd.png" MouseLeftButtonDown="btCmd_ValueChanged" Margin="3,0,0,34" HorizontalAlignment="Left" Width="44" Grid.Column="3" RenderTransformOrigin="0.558,-0.231" Height="48" VerticalAlignment="Bottom"/>
         <Image x:Name="btHistory" Source="/res/history.png" MouseLeftButtonDown="btnHistory_Click" Margin="0,0,0,53" HorizontalAlignment="Right" Width="44" Grid.Column="4" RenderTransformOrigin="0.558,-0.231" Height="38" VerticalAlignment="Bottom"/>
         <Image x:Name="btnFavor" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,1,67,0" VerticalAlignment="Top" Width="26" Source="/res/notfavor.png" MouseLeftButtonDown="btnFavorClick" RenderTransformOrigin="0.615,0.5"/>
-        <Image x:Name="imgFavor" Source="/res/favor.png" />
-        <Image x:Name="imgNotFavor" Source="/res/notfavor.png" />
+        <Image x:Name="imgFavor" Source="/res/favor.png" Visibility="Collapsed" />
+        <Image x:Name="imgNotFavor" Source="/res/notfavor.png" Visibility="Collapsed" />
         <ProgressBar x:Name="pbGen" Grid.Column="3" Margin="8,0,11,132" ValueChanged="pbGen_ValueChanged" Background="#FF1A1A1A" Foreground="#FF963EBD" Height="20" VerticalAlignment="Bottom" BorderBrush="#FF2F1E67" OpacityMask="#FF3A5FA3"/>
         <Button x:Name="btnDiffCuda" Content="Diffusers(CUDA)" Margin="96,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91" Grid.Column="3" Height="20" Padding="1,1,1,1" Click="btnDiffCuda_Click" BorderThickness="0.25" Foreground="White">
             <Button.Background>
@@ -352,7 +352,7 @@
             </Button.Background>
         </Button>
         <Image x:Name="btnZoom" Grid.Column="3" HorizontalAlignment="Right" Height="23" Margin="0,2,6,0" VerticalAlignment="Top" Width="26" Source="/res/zoom.png" MouseLeftButtonDown="btnZoom_Click"/>
-        <Image x:Name="IconRes" Source="res/icon.png" />
+        <Image x:Name="IconRes" Source="res/icon.png" Visibility="Collapsed" />
         <Image x:Name="btnSettings" Grid.Column="4" HorizontalAlignment="Right" Height="38" Margin="0,1,9,0" VerticalAlignment="Top" Width="41" Source="/res/settings.png" MouseLeftButtonDown="btnSettingsClick"/>
         <Image x:Name="btnFAQ" Grid.Column="4" Height="44" Margin="52,-2,53,0" VerticalAlignment="Top" Source="/res/faq.png" MouseLeftButtonDown="btnFAQClick"/>
         <Image x:Name="btnDis" Grid.Column="4" Height="38" Margin="6,1,0,0" VerticalAlignment="Top" Source="/res/discord.png" MouseLeftButtonDown="btnDisClick" HorizontalAlignment="Left" Width="40"/>
