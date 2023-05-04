@@ -54,7 +54,7 @@ def blend_textual_inversions(
 
 	inversion_format = None
 	base_token = Path(inversions).stem
-	
+	tokenList = []
 	loaded_embeds = load_tensor(inversions, map_location=device)
 
 	if inversion_format is None:
@@ -99,8 +99,10 @@ def blend_textual_inversions(
 		num_tokens = trained_embeds.shape[0]
 		sum_layer = np.zeros(trained_embeds[0, :].shape)
 
+		
 		for i in range(num_tokens):
 			token = f"{base_token}-{i}"
+			tokenList.append(token)
 			layer = trained_embeds[i, :].numpy().astype(dtype)
 			layer *= inversions_alpha
 
@@ -130,6 +132,7 @@ def blend_textual_inversions(
 
 		for i in range(num_tokens):
 			token = f"{base_token}-{i}"
+			tokenList.append(token)
 			layer = string_to_param[i, :].numpy().astype(dtype)
 			layer *= inversions_alpha
 
@@ -171,14 +174,16 @@ def blend_textual_inversions(
 
 	# resize the token embeddings
 	text_encoder.resize_token_embeddings(len(tokenizer))
-	if len(embeds.shape) == 2:
+	
+
+	if len(trained_embeds.shape) == 2:
 		# multiple vectors in embeds
-		for i in range(embeds.shape[0]):
-			layer_embeds = embeds[i]
-			layer_token = token[i]
-			print(
-				"embedding %s vector for layer %s", layer_embeds.shape, layer_token
-			)
+		for i in range(trained_embeds.shape[0]):
+			layer_embeds = trained_embeds[i]
+			layer_token = tokenList[i]
+			#print(
+			#	f"embedding {layer_embeds.shape} vector for layer {layer_token}"
+			#)
 			token_id = tokenizer.convert_tokens_to_ids(layer_token)
 			text_encoder.get_input_embeddings().weight.data[token_id] = layer_embeds
 	else:
