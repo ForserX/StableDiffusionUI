@@ -1050,5 +1050,12 @@ namespace SD_FXUI
                 }
             );
         }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            FileDownloader.InitDownloaderConfig();
+
+            FileDownloader.DownloadFileAsync("https://huggingface.co/lllyasviel/control_v11p_sd15_seg/resolve/main/diffusion_pytorch_model.fp16.safetensors",  Helper.ImgPath.ToString() + "diffusion_pytorch_model.fp16.safetensors");
+        }
     }
 }

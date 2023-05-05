@@ -66,7 +66,7 @@ namespace SD_FXUI
             OutData += time.Minute + "-";
             if (time.Second < 10)
                 OutData += "0";
-            OutData += +time.Second;
+            OutData += time.Second;
 
             return OutData;
         }
