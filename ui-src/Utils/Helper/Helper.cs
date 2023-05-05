@@ -59,7 +59,7 @@ namespace SD_FXUI
         {
             public string Prompt;
             public string NegPrompt;
-            public int StartSeed;
+            public long StartSeed;
             public int Steps;
             public float CFG;
             public float ImgScale;

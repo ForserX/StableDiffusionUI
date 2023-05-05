@@ -307,7 +307,7 @@ namespace SD_FXUI
 
 			Helper.MakeInfo.Prompt = SourcePrompt;
 			Helper.MakeInfo.NegPrompt = NegPrompt;
-			Helper.MakeInfo.StartSeed = int.Parse(tbSeed.Text);
+			Helper.MakeInfo.StartSeed = long.Parse(tbSeed.Text);
 			Helper.MakeInfo.BatchSize = (int)tbParallel.Value;
 			Helper.MakeInfo.CFG = float.Parse(tbCFG.Text);
 			Helper.MakeInfo.Steps = (int)slSteps.Value;
