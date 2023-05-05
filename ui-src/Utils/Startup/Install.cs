@@ -242,8 +242,8 @@ namespace SD_FXUI
 
         internal static void SetupDirs()
         {
-            Helper.CachePath = FS.GetModelDir() + @"\shark\";
-            Helper.ImgPath = FS.GetImagesDir() + System.DateTime.Now.ToString().Replace(':', '-').Replace(' ', '_') + "\\";
+            Helper.CachePath = FS.GetModelDir() + @"\diffusers\";
+            Helper.ImgPath = FS.GetImagesDir() + CodeUtils.Data() + "\\";
             Helper.ImgPath.Replace('\\', '/');
 
             string OldDiffDirectoryName = FS.GetModelDir() + "diff";

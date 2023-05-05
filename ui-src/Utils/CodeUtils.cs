@@ -45,5 +45,30 @@ namespace SD_FXUI
 
             return MetaText;
         }
+
+        public static string Data()
+        {
+            string OutData = "";
+
+            DateTime time = DateTime.Now;
+
+            if (time.Day < 10)
+                OutData += "0";
+            OutData += time.Day + ".";
+            if (time.Month < 10)
+                OutData += "0";
+            OutData += time.Month + "." + time.Year + "_";
+            if (time.Hour < 10)
+                OutData += "0";
+            OutData += time.Hour + "-";
+            if (time.Minute < 10)
+                OutData += "0";
+            OutData += time.Minute + "-";
+            if (time.Minute < 10)
+                OutData += "0";
+            OutData += +time.Second;
+
+            return OutData;
+        }
     }
 }
