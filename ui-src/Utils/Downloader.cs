@@ -10,7 +10,6 @@ namespace SD_FXUI.Utils
     {
         private static WebClient Client = new WebClient();
         private static bool TaskCompleted = false;
-        private static float progressStatusNextCheck = 0;
 
         public static void Initial()
         {
@@ -43,9 +42,8 @@ namespace SD_FXUI.Utils
         {
             //Console.SetCursorPosition(0, Console.CursorTop - 1);
             //Host.ClearCurrentConsoleLine();
-            if(e.ProgressPercentage >= progressStatusNextCheck + 5.0f)
+            if(e.ProgressPercentage % 5 == 0)
             {
-                progressStatusNextCheck += 5.0f;
                 Host.Print("DownloadProgress: " + e.ProgressPercentage.ToString() + $"% ({e.BytesReceived / 1024 / 1024}/{e.TotalBytesToReceive / 1024 / 1024} mb)" );
             }
             
@@ -53,7 +51,6 @@ namespace SD_FXUI.Utils
 
         private static void OnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            progressStatusNextCheck = 0;
             TaskCompleted = true;
             Host.Print("OnDownloadFileCompleted");
         }
