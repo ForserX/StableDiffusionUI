@@ -85,6 +85,8 @@ namespace SD_FXUI
 
             // FX: A hack to see the entire form in the constructor.
             grMain.Margin = new Thickness(0, 0, 0.0, 0.0);
+
+            FileDownloader.Initial();
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)

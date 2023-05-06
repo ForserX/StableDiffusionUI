@@ -18,13 +18,18 @@ namespace SD_FXUI.Utils
             Client.DownloadProgressChanged += OnDownloadProgressChanged;
         }
 
-        public static async Task DownloadFileAsync(string url, string FullFilePath)
+        public static async Task DownloadFileAsync(string url, string FullFilePath, bool Wait = true)
         {
             if (!System.IO.File.Exists(url))
             {
                 TaskCompleted = false;
                 Host.Print("Download started: " + FullFilePath);
                 Client.DownloadFileAsync(new Uri(url), FullFilePath);
+
+                if (Wait)
+                {
+                    FileDownloader.Wait();
+                }
             }
         }
 
