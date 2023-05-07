@@ -50,19 +50,21 @@ namespace SD_FXUI
             if (!bDirCheck && (Silent || Notification.MsgBox("Need install packages for use ONNX")))
             {
                 Helper.UIHost.Show();
-                Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Host.Print("Install ONNX runtimes... Please wait");
+                Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Cmd.Start();
                 Cmd.Send(PyCommand + " -m venv .\\repo\\onnx.venv\\");
                 Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install -r requirements_onnx.txt");
 
                 // Force downgrade
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install ort-nightly-directml==1.15.0.dev20230408001 --force --extra-index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/");
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install protobuf==3.20.* --force");
+                //Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install ort-nightly-directml==1.15.0.dev20230408001 --force --extra-index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/");
+                //Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install protobuf==3.20.* --force");
 
                 // Need 2.0.1 for ONNX
-                Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install --pre torch torchvision --force --index-url https://download.pytorch.org/whl/nightly/cpu");
-
+                //Cmd.Send("\"repo/" + PythonEnv.GetPip(Helper.VENV.DiffONNX) + "\"" + " install --pre torch torchvision --force --index-url https://download.pytorch.org/whl/nightly/cpu");
+#if DEBUG
+                Cmd.Send("pause");
+#endif
                 Cmd.SendExitCommand();
                 Cmd.Wait();
 

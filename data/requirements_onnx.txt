@@ -1,35 +1,33 @@
 setuptools
 wheel
 
-# Testing
+# 3rd
+regex
 protobuf==3.20.*
 Pillow
+mediapipe
 parameterized
-
-# Add transformers, diffusers and scipy since it most commonly used
-diffusers
-scipy
 gradio
 altair
 omegaconf
 
-# ONNX Trash
-onnxruntime
-onnxruntime-gpu
-onnxruntime_directml
-torch
+# Torch trash
+torch==2.0.0
 torchvision
 pytorch_lightning
-tf2onnx
+
+# Add transformers, diffusers and scipy since it most commonly used
+diffusers==0.16.1
+controlnet_aux==0.0.3
 transformers-onnx
+scipy
+tf2onnx
 accelerate
-ftfy
-regex
 
-# DirectML Fix
+# ONNX Trash
 --extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/
-ort-nightly-directml==1.15.0.dev20230408001
-
+onnxruntime
+ort-nightly-directml==1.16.0.dev20230505007
 
 # GFPGAN
 gfpgan
@@ -38,7 +36,3 @@ opencv-python
 
 # CPU: LoRA
 safetensors
-
-# ControlNet
-controlnet_aux
-mediapipe
