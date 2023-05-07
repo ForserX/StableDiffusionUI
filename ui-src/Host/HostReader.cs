@@ -20,6 +20,19 @@ namespace SD_FXUI
             Host ProcessHost = new Host(WorkDirectory, GetPyExe);
             ProcessHost.Start(CommandLine);
         }
+        
+        static void DiffusersVersion()
+        {
+            string WorkDirectory = FS.GetWorkingDir() + "\\repo\\";
+            string GetPyExe = WorkDirectory + PythonEnv.GetPy(Helper.VENV.Any);
+
+            string CommandLine = "-c \"import diffusers; print(diffusers.__version__)\"";
+
+
+            Host.Print("Current PyTorch version: ");
+            Host ProcessHost = new Host(WorkDirectory, GetPyExe);
+            ProcessHost.Start(CommandLine);
+        }
 
         static void PipInstall(string Package)
         {
@@ -48,10 +61,22 @@ namespace SD_FXUI
             bool Contain = false;
             Host.Print("$> " + Message);
 
-            if (Message.ToLower().Contains("torch -v"))
+            if (Message.ToLower().Contains("-v"))
             {
-                TorchVersion();
                 Contain = true;
+
+                if (Message.Contains("torch"))
+                {
+                    TorchVersion();
+                }
+                else if (Message.Contains("diffusers"))
+                {
+                    DiffusersVersion();
+                }
+                else 
+                {
+                    Contain = false; 
+                }
             }
 
             if (Message.ToLower().Contains("py -install"))
