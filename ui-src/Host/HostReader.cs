@@ -8,31 +8,21 @@ namespace SD_FXUI
 {
     internal class HostReader
     {
-        static void TorchVersion()
+        static void PackageVersion(string PackageName)
         {
+            PackageName = PackageName.ToLower();
+
             string WorkDirectory = FS.GetWorkingDir() + "\\repo\\";
             string GetPyExe = WorkDirectory + PythonEnv.GetPy(Helper.VENV.Any);
 
-            string CommandLine = "-c \"import torch; print(torch.__version__)\"";
+            string CommandLine = $"-c \"import {PackageName}; print({PackageName}.__version__)\"";
 
 
-            Host.Print("Current PyTorch version: ");
+            Host.Print($"Current {CodeUtils.ToUpperFirstLetter(PackageName)} version: ");
             Host ProcessHost = new Host(WorkDirectory, GetPyExe);
             ProcessHost.Start(CommandLine);
         }
-        
-        static void DiffusersVersion()
-        {
-            string WorkDirectory = FS.GetWorkingDir() + "\\repo\\";
-            string GetPyExe = WorkDirectory + PythonEnv.GetPy(Helper.VENV.Any);
 
-            string CommandLine = "-c \"import diffusers; print(diffusers.__version__)\"";
-
-
-            Host.Print("Current PyTorch version: ");
-            Host ProcessHost = new Host(WorkDirectory, GetPyExe);
-            ProcessHost.Start(CommandLine);
-        }
 
         static void PipInstall(string Package)
         {
@@ -63,19 +53,12 @@ namespace SD_FXUI
 
             if (Message.ToLower().Contains("-v"))
             {
-                Contain = true;
+                var Words = Message.Split(' ');
+                Contain = Words.Length > 2;
 
-                if (Message.Contains("torch"))
+                if (Contain)
                 {
-                    TorchVersion();
-                }
-                else if (Message.Contains("diffusers"))
-                {
-                    DiffusersVersion();
-                }
-                else 
-                {
-                    Contain = false; 
+                    PackageVersion(Words[2]);
                 }
             }
 
