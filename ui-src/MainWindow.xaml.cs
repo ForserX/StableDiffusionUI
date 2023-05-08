@@ -91,6 +91,12 @@ namespace SD_FXUI
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (cbModel.Text.Length == 0)
+            {
+                Notification.MsgBox("Select model!");
+                return;
+            }
+
             Directory.CreateDirectory(Helper.ImgPath);
             btnDDB.Visibility = Visibility.Collapsed;
 
