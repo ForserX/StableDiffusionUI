@@ -5,6 +5,8 @@ data/repo/shark.venv
 data/repo/cuda.venv
 data/nodai_SHARK.egg-info/
 
+build/
+
 .vs/
 
 ui-src/bin/

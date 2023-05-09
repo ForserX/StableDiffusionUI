@@ -110,7 +110,7 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 
 	# UNET
 	pipeline.unet.set_attn_processor(AttnProcessor())
-
+	
 	unet_in_channels = pipeline.unet.config.in_channels
 	unet_sample_size = pipeline.unet.config.sample_size
 	unet_path = output_path / "unet" / "model.onnx"
@@ -150,12 +150,12 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 	del pipeline.unet
 	
 	convert_to_fp16(unet_model_path)
-
+	
 	# UNET CONTROLNET
 	pipe_cnet = UNet2DConditionModel_Cnet.from_pretrained(model_path, subfolder = "unet")
 	
 	pipe_cnet.set_attn_processor(AttnProcessor())
-
+	
 	cnet_path = output_path / "cnet" / "model.onnx"
 	onnx_export(
 		pipe_cnet,
@@ -197,7 +197,7 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 							 "mid_block_additional_residual",
 							 "return_dict"
 							 ],
-
+	
 		output_names=["out_sample"],  # has to be different from "sample" for correct tracing
 		dynamic_axes={
 			"sample": {0: "batch", 1: "channels", 2: "height", 3: "width"},
@@ -222,11 +222,11 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 	cnet_model_path = str(cnet_path.absolute().as_posix())
 	cnet_dir = os.path.dirname(cnet_model_path)
 	cnet = onnx.load(cnet_model_path)
-
+	
 	# clean up existing tensor files
 	shutil.rmtree(cnet_dir)
 	os.mkdir(cnet_dir)
-
+	
 	# collate external tensor files into one
 	onnx.save_model(
 		cnet,
@@ -239,6 +239,10 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 	del pipe_cnet
 	
 	convert_to_fp16(cnet_model_path)
+
+	# Diffusers 0.16.1 - Hack for PyTorch 2.0.0
+	pipeline.vae.encoder.mid_block.attentions[0]._use_2_0_attn = False
+	pipeline.vae.decoder.mid_block.attentions[0]._use_2_0_attn = False
 
 	# VAE ENCODER
 	vae_encoder = pipeline.vae
@@ -284,11 +288,6 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 	)
 	del pipeline.vae
 	
-	#vae_decoder_path = output_path / "vae_decoder/model.onnx"
-	#vae_decoder_path = str(vae_decoder_path.absolute().as_posix())
-	#
-	#convert_to_fp16(vae_decoder_path)
-
 	# SAFETY CHECKER
 	if pipeline.safety_checker is not None:
 		safety_checker = pipeline.safety_checker

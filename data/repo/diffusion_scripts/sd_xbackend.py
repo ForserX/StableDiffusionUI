@@ -76,9 +76,9 @@ class Device:
 		if self.device_str == "onnx":
 			if Mode == "pix2pix":
 				if NSFW:
-					pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained("ForserX/instruct-pix2pix-onnx", provider=self.prov)
+					pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained(pretrained_model_name_or_path=Model, provider=self.prov)
 				else:
-					pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained("ForserX/instruct-pix2pix-onnx", provider=self.prov, safety_checker=None)
+					pipe = OnnxStableDiffusionInstructPix2PixPipeline.from_pretrained(pretrained_model_name_or_path=Model, provider=self.prov, safety_checker=None)
 					
 				pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
 			else:
