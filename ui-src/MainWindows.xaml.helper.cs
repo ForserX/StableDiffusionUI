@@ -1,6 +1,7 @@
 ﻿using HandyControl.Data;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -222,7 +223,7 @@ namespace SD_FXUI
 
 			return CmdLine;
 		}
-		private void MakeCommandObject()
+		private bool MakeCommandObject()
 		{
 			Helper.MakeInfo.LoRA.Clear();
 			Helper.MakeInfo.TI.Clear();
@@ -307,7 +308,7 @@ namespace SD_FXUI
 
 			Helper.MakeInfo.Prompt = SourcePrompt;
 			Helper.MakeInfo.NegPrompt = NegPrompt;
-			Helper.MakeInfo.StartSeed = int.Parse(tbSeed.Text);
+			Helper.MakeInfo.StartSeed = long.Parse(tbSeed.Text);
 			Helper.MakeInfo.BatchSize = (int)tbParallel.Value;
 			Helper.MakeInfo.CFG = float.Parse(tbCFG.Text);
 			Helper.MakeInfo.Steps = (int)slSteps.Value;
@@ -341,8 +342,17 @@ namespace SD_FXUI
 			Helper.MakeInfo.WorkingDir = FS.GetWorkingDir();
 
 			if (cbPix2Pix.IsChecked.Value && Helper.DrawMode == Helper.DrawingMode.Img2Img)
-			{
-				Helper.MakeInfo.Mode = "pix2pix";
+            {
+                string WorkingDir = FS.GetModelDir() + "pix2pix/";
+
+                if (!Directory.Exists(WorkingDir))
+                {
+                    Task.Run(() => WGetDownloadModels.DownloadPix2Pix());
+                    return false;
+                }
+
+                Helper.MakeInfo.Model = WorkingDir;
+                Helper.MakeInfo.Mode = "pix2pix";
 				Helper.MakeInfo.Image = Helper.InputImagePath;
 			}
 			else if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
@@ -364,6 +374,7 @@ namespace SD_FXUI
 			int Size = (int)slUpscale.Value;
 			Helper.CurrentUpscaleSize = Size;
 
+			return true;
 		}
 
 		void ValidateSize()

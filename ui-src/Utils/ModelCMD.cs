@@ -61,7 +61,14 @@ namespace SD_FXUI
                 }
                 else
                 {
-                    CmdLine = $"--model=\"{FS.GetModelDir(FS.ModelDirs.ONNX) + Model}\" --mode=\"{Mode}\"";
+                    string ModelFullPath = FS.GetModelDir(FS.ModelDirs.ONNX) + Model;
+
+                    if (Mode == "pix2pix")
+                    {
+                        ModelFullPath = Model;
+                    }
+
+                    CmdLine = $"--model=\"{ModelFullPath}\" --mode=\"{Mode}\"";
                     if (NSFW)
                     {
                         CmdLine += " --nsfw=True ";

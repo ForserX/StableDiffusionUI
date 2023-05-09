@@ -85,10 +85,18 @@ namespace SD_FXUI
 
             // FX: A hack to see the entire form in the constructor.
             grMain.Margin = new Thickness(0, 0, 0.0, 0.0);
+
+            FileDownloader.Initial();
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (cbModel.Text.Length == 0)
+            {
+                Notification.MsgBox("Select model!");
+                return;
+            }
+
             Directory.CreateDirectory(Helper.ImgPath);
             btnDDB.Visibility = Visibility.Collapsed;
 
@@ -99,7 +107,10 @@ namespace SD_FXUI
             }
 
             ValidateSize();
-            MakeCommandObject();
+            if (!MakeCommandObject())
+            {
+                return;
+            }
 
             string cmdline = "";
             bool SafeCPUFlag = CPUUse;
@@ -136,7 +147,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = false;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
+                            SafeCMD.PreStart(Helper.MakeInfo.Model, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
                             SafeCMD.Start();
 
                             //cmdline += GetCommandLineOnnx();
@@ -177,7 +188,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = cbFf16.IsChecked.Value;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
+                            SafeCMD.PreStart(Helper.MakeInfo.Model, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
                             SafeCMD.Start();
                             //cmdline += GetCommandLineDiffCuda();
                             //Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
@@ -1049,6 +1060,12 @@ namespace SD_FXUI
                     UseShellExecute = true
                 }
             );
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+
+            FileDownloader.DownloadFileAsync("https://huggingface.co/lllyasviel/control_v11p_sd15_seg/resolve/main/diffusion_pytorch_model.fp16.safetensors",  Helper.ImgPath.ToString() + "diffusion_pytorch_model.fp16.safetensors");
         }
     }
 }

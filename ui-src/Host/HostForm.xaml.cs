@@ -38,7 +38,7 @@ namespace SD_FXUI
                 ChrId++;
             }
 
-            return message.StartsWith("Downloading") || char.IsNumber(Firt);
+            return message.StartsWith("DownloadProgress") || message.StartsWith("Downloading") || char.IsNumber(Firt);
         }
 
         public void Clear()

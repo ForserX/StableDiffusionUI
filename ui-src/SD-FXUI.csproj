@@ -2,11 +2,23 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-	  <TargetFramework>net6.0-windows10.0.20348.0</TargetFramework>
+	  <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
     <RootNamespace>SD_FXUI</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <StartupObject>SD_FXUI.App</StartupObject>
+    <SupportedOSPlatformVersion>10.0.22000.0</SupportedOSPlatformVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <BaseOutputPath>..\build\bins</BaseOutputPath>
+    <BaseIntermediateOutputPath>..\build\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>9999</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>9999</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>

@@ -8,15 +8,16 @@ namespace SD_FXUI
 {
     internal class HostReader
     {
-        static void TorchVersion()
+        static void PackageVersion(string PackageName)
         {
+            PackageName = PackageName.ToLower();
+
             string WorkDirectory = FS.GetWorkingDir() + "\\repo\\";
             string GetPyExe = WorkDirectory + PythonEnv.GetPy(Helper.VENV.Any);
 
-            string CommandLine = "-c \"import torch; print(torch.__version__)\"";
+            string CommandLine = $"-c \"import {PackageName}; print({PackageName}.__version__)\"";
 
-
-            Host.Print("Current PyTorch version: ");
+            Host.Print($"Current {CodeUtils.ToUpperFirstLetter(PackageName)} version: ");
             Host ProcessHost = new Host(WorkDirectory, GetPyExe);
             ProcessHost.Start(CommandLine);
         }
@@ -48,10 +49,15 @@ namespace SD_FXUI
             bool Contain = false;
             Host.Print("$> " + Message);
 
-            if (Message.ToLower().Contains("torch -v"))
+            if (Message.ToLower().Contains("-v"))
             {
-                TorchVersion();
-                Contain = true;
+                var Words = Message.Split(' ');
+                Contain = Words.Length > 2;
+
+                if (Contain)
+                {
+                    PackageVersion(Words[2]);
+                }
             }
 
             if (Message.ToLower().Contains("py -install"))

@@ -15,29 +15,9 @@ namespace SD_FXUI.Utils
         public static void InitLogFile()
         {
             string filename = "";
-            DateTime time= DateTime.Now;
-            //filename += "/log/" + time.ToString() + ".log";
-            //filename = filename.Replace(":", "-");
-            //filename = filename.Replace(" ", "_");
 
             filename += "/log/";
-
-            if (time.Day < 10)
-                filename += "0";
-            filename += time.Day + ".";
-            if (time.Month < 10)
-                filename += "0";
-            filename += time.Month + "." + time.Year + "_";
-            if (time.Hour < 10)
-                filename += "0";
-            filename += time.Hour + "-";
-            if (time.Minute < 10)
-                filename += "0";
-            filename += time.Minute + "-";
-            if (time.Minute < 10)
-                filename += "0";
-            filename += + time.Second;
-
+            filename += CodeUtils.Data();
             filename += ".log";
 
             currentLogFile = FS.GetWorkingDir() + filename;

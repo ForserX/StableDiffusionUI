@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SD_FXUI.Utils;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -340,10 +341,7 @@ namespace SD_FXUI
                 Notification.SendNotification("Starting downloading deepdanbooru model...");
                 Directory.CreateDirectory(FS.GetModelDir() + "deepdanbooru\\");
 
-                Host ProcessWGet = new Host(FS.GetModelDir() + "deepdanbooru\\", FS.GetToolsDir() + "wget.exe");
-                ProcessWGet.Start("https://github.com/AUTOMATIC1111/TorchDeepDanbooru/releases/download/v1/model-resnet_custom_v3.pt");
-                ProcessWGet.SendExitCommand();
-                ProcessWGet.Wait();
+                FileDownloader.DownloadFileAsync("https://github.com/AUTOMATIC1111/TorchDeepDanbooru/releases/download/v1/model-resnet_custom_v3.pt", FS.GetModelDir() + "deepdanbooru\\model-resnet_custom_v3.pt");
                 Notification.SendNotification("Downloading deepdanbooru model: done!");
             }
 
