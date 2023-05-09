@@ -107,7 +107,10 @@ namespace SD_FXUI
             }
 
             ValidateSize();
-            MakeCommandObject();
+            if (!MakeCommandObject())
+            {
+                return;
+            }
 
             string cmdline = "";
             bool SafeCPUFlag = CPUUse;
@@ -144,7 +147,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = false;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
+                            SafeCMD.PreStart(Helper.MakeInfo.Model, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
                             SafeCMD.Start();
 
                             //cmdline += GetCommandLineOnnx();
@@ -185,7 +188,7 @@ namespace SD_FXUI
                         else
                         {
                             Helper.MakeInfo.fp16 = cbFf16.IsChecked.Value;
-                            SafeCMD.PreStart(cbModel.Text, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
+                            SafeCMD.PreStart(Helper.MakeInfo.Model, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
                             SafeCMD.Start();
                             //cmdline += GetCommandLineDiffCuda();
                             //Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));

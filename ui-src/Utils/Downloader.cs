@@ -38,12 +38,14 @@ namespace SD_FXUI.Utils
                 Thread.Sleep(10);
         }
 
+        static int PreviousProgress = 0;
         private static void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             //Console.SetCursorPosition(0, Console.CursorTop - 1);
             //Host.ClearCurrentConsoleLine();
-            if(e.ProgressPercentage % 5 == 0)
+            if(e.ProgressPercentage > PreviousProgress && e.ProgressPercentage % 5 == 0)
             {
+                PreviousProgress = e.ProgressPercentage;
                 Host.Print("DownloadProgress: " + e.ProgressPercentage.ToString() + $"% ({e.BytesReceived / 1024 / 1024}/{e.TotalBytesToReceive / 1024 / 1024} mb)" );
             }
             
@@ -51,6 +53,7 @@ namespace SD_FXUI.Utils
 
         private static void OnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+            PreviousProgress = 0;
             TaskCompleted = true;
             Host.Print("OnDownloadFileCompleted");
         }

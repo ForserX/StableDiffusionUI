@@ -17,12 +17,10 @@ namespace SD_FXUI
 
             string CommandLine = $"-c \"import {PackageName}; print({PackageName}.__version__)\"";
 
-
             Host.Print($"Current {CodeUtils.ToUpperFirstLetter(PackageName)} version: ");
             Host ProcessHost = new Host(WorkDirectory, GetPyExe);
             ProcessHost.Start(CommandLine);
         }
-
 
         static void PipInstall(string Package)
         {

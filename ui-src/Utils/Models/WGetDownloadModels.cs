@@ -168,5 +168,34 @@ namespace SD_FXUI
             FileDownloader.DownloadFileAsync("https://huggingface.co/lllyasviel/sd-controlnet-mlsd/resolve/main/diffusion_pytorch_model.bin", WorkingDir + @"diffusion_pytorch_model.bin");
             FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/sd-controlnet-mlsd-onnx/resolve/main/model.onnx", WorkingDir + @"model.onnx");
         }
+
+        public static async Task DownloadPix2Pix()
+        {
+            string WorkingDir = FS.GetModelDir() + "pix2pix/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+
+            Directory.CreateDirectory(WorkingDir);
+            Directory.CreateDirectory(WorkingDir + "scheduler/");
+            Directory.CreateDirectory(WorkingDir + "text_encoder/");
+            Directory.CreateDirectory(WorkingDir + "tokenizer/");
+            Directory.CreateDirectory(WorkingDir + "unet/");
+            Directory.CreateDirectory(WorkingDir + "vae_decoder/");
+            Directory.CreateDirectory(WorkingDir + "vae_encoder/");
+
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/raw/main/scheduler/scheduler_config.json", WorkingDir + @"scheduler/scheduler_config.json");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/resolve/main/text_encoder/model.onnx", WorkingDir + @"text_encoder/model.onnx");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/raw/main/tokenizer/merges.txt", WorkingDir + @"tokenizer/merges.txt");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/raw/main/tokenizer/special_tokens_map.json", WorkingDir + @"tokenizer/special_tokens_map.json");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/raw/main/tokenizer/tokenizer_config.json", WorkingDir + @"tokenizer/tokenizer_config.json");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/raw/main/tokenizer/vocab.json", WorkingDir + @"tokenizer/vocab.json");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/resolve/main/unet/model.onnx", WorkingDir + @"unet/model.onnx");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/resolve/main/vae_decoder/model.onnx", WorkingDir + @"vae_decoder/model.onnx");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/resolve/main/vae_encoder/model.onnx", WorkingDir + @"vae_encoder/model.onnx");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/instruct-pix2pix-onnx/raw/main/model_index.json", WorkingDir + @"model_index.json");
+        }
     }
 }
