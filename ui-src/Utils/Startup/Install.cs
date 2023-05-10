@@ -4,21 +4,6 @@ namespace SD_FXUI
 {
     internal class Install
     {
-        public static void Check()
-        {
-            bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/shark.venv");
-
-            if (!bDirCheck)
-            {
-              //  InstallApp();
-            }
-        }
-
-        public static void InstallApp()
-        {
-            //Task.Run(() => InstallGFPGAN());
-        }
-
         public static void CheckAndInstallCUDA(string PyCommand = "py -3.10", bool Silent = false)
         {
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/cuda.venv");

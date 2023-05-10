@@ -562,7 +562,6 @@ namespace SD_FXUI
 
         private void BlurWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Install.Check();
         }
 
         private void btnFavorClick(object sender, MouseButtonEventArgs e)
