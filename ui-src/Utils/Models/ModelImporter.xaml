@@ -9,18 +9,28 @@
         x:Class="SD_FXUI.Utils.SharkModelImporter"
     
         Title="Model Importer" Height="193" Width="390" ResizeMode="NoResize" Foreground="#FFF9F9F9" Background="#FF0F0E0E" WindowStyle="ToolWindow">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid Margin="0,0,0,1" AllowDrop="True" Drop="Grid_Drop" DragEnter="Grid_DragEnter" Background="#FF1F1F1F" >
         <Button Content="Convert!" Margin="0,0,6,3" HorizontalAlignment="Right" Width="112" Click="Button_Click" VerticalAlignment="Bottom" Padding="2,1,2,1" Height="22" Foreground="White" Background="#FF1F1F1F"/>
-        <ComboBox x:Name="cbFrom" Margin="0,2,6,0" HorizontalAlignment="Right" Width="112" Height="21" VerticalAlignment="Top" Padding="1,2,1,2" Foreground="White" Background="#FF1F1F1F" BorderBrush="White" >
+        <hc:ComboBox x:Name="cbFrom" Margin="0,3,6,0" HorizontalAlignment="Right" Width="112" Height="21" VerticalAlignment="Top" Padding="1,2,1,2" Foreground="White" Background="#FF1F1F1F" BorderBrush="White" SelectionBrush="#FF6A3ADA" >
             <ComboBoxItem Content=".ckpt" Foreground="White" Background="#FF1F1F1F"/>
             <ComboBoxItem Content=".safetensors" Foreground="White" Background="#FF1F1F1F"/>
             <ComboBoxItem Content=".pt (vae)" Foreground="White" Background="#FF1F1F1F"/>
             <ComboBoxItem Content="diffusion" Foreground="White" Background="#FF1F1F1F"/>
-        </ComboBox>
-        <ComboBox x:Name="cbTo" Margin="0,40,6,0" SelectionChanged="cbTo_SelectionChanged" Height="7" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Padding="1,2,1,2" Foreground="White" Background="#FF1F1F1F">
+        </hc:ComboBox>
+        <hc:ComboBox x:Name="cbTo" Margin="0,41,6,0" SelectionChanged="cbTo_SelectionChanged" Height="14" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Padding="1,2,1,2" Foreground="White" Background="#FF1F1F1F" SelectionBrush="#FF6A3ADA">
             <ComboBoxItem Content="ONNX" Foreground="White" Background="#FF1F1F1F"/>
             <ComboBoxItem Content="Diffuser" Foreground="White" Background="#FF1F1F1F"/>
-        </ComboBox>
+        </hc:ComboBox>
         <Label Content="From" HorizontalAlignment="Right" Margin="0,5,123,0" VerticalAlignment="Top" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,1,1,1"/>
         <Label Content="To" HorizontalAlignment="Right" Margin="0,40,123,0" Background="{x:Null}" BorderBrush="{x:Null}" Padding="1,1,1,1" VerticalAlignment="Top"/>
         <CheckBox x:Name="chBoxEmaOnly" Content="extract ema only" HorizontalAlignment="Left" Margin="125,0,0,4" VerticalAlignment="Bottom" Foreground="White" Background="#FF1F1F1F"/>

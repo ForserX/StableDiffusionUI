@@ -12,5 +12,11 @@ namespace SD_FXUI
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
         [DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+
+        [DllImport("dbghelp.dll")]
+        public static extern bool MiniDumpWriteDump(IntPtr hProcess, int processId, IntPtr hFile, int dumpType,
+            IntPtr exceptionParam, IntPtr userStreamParam, IntPtr callStackParam);
+
     }
 }
