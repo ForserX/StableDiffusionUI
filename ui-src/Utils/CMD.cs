@@ -7,7 +7,7 @@ namespace SD_FXUI
 {
     internal class CMD
     {
-        public static async Task ProcessConvertCKPT2Diff(string InputFile, bool emaOnly = false)
+        public static async Task ProcessConvertCKPT2Diff(string InputFile, bool emaOnly = false, bool b768 = false)
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
             Host ProcessHost = new Host(WorkDir);
@@ -33,10 +33,19 @@ namespace SD_FXUI
                 AddCmd += " --extract_ema";
             }
 
+            string YamlCfg = "../../repo/diffusion_scripts/v1-inference.yaml";
+
+            if (b768)
+            {
+                AddCmd += " --image_size=768";
+                AddCmd += " --prediction_type=v-prediction";
+                YamlCfg = "../../repo/diffusion_scripts/v2-inference-v.yaml";
+            }
+
             ProcessHost.Start();
             ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
-                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
+                                                                            $"--original_config_file=\"{YamlCfg}\" " + AddCmd);
 
             ProcessHost.SendExitCommand();
 
@@ -44,7 +53,7 @@ namespace SD_FXUI
 
             Notification.SendNotification("Convertation: ~3min!");
         }
-        public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false)
+        public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false, bool b768 = false)
         {
             string WorkDir = FS.GetModelDir() + "shark\\";
             Host ProcessHost = new Host(WorkDir);
@@ -70,10 +79,19 @@ namespace SD_FXUI
                 AddCmd += " --extract_ema";
             }
 
+            string YamlCfg = "../../repo/diffusion_scripts/v1-inference.yaml";
+
+            if (b768)
+            {
+                AddCmd += " --image_size=768";
+                AddCmd += " --prediction_type=v-prediction";
+                YamlCfg = "../../repo/diffusion_scripts/v2-inference-v.yaml";
+            }
+
             ProcessHost.Start();
             ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
-                                                                            $"--original_config_file=\"../../repo/diffusion_scripts/v1-inference.yaml\" " + AddCmd);
+                                                                            $"--original_config_file=\"{YamlCfg}\" " + AddCmd);
 
             string Name = System.IO.Path.GetFileNameWithoutExtension(InputFile);
             if (Name.Length == 0)
