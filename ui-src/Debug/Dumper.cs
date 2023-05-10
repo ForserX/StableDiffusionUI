@@ -42,10 +42,6 @@ namespace SD_FXUI
         /// </summary>
         public const string DumpDirectory = "Minidump";
 
-        [DllImport("dbghelp.dll")]
-        private static extern bool MiniDumpWriteDump(IntPtr hProcess, int processId, IntPtr hFile, int dumpType,
-            IntPtr exceptionParam, IntPtr userStreamParam, IntPtr callStackParam);
-
         /// <summary>
         /// Write minidump to file.
         /// </summary>
@@ -74,7 +70,7 @@ namespace SD_FXUI
 
                 using (var fileStream = new FileStream(filePath, FileMode.CreateNew))
                 {
-                    return MiniDumpWriteDump(
+                    return Wrapper.MiniDumpWriteDump(
                         handler,
                         processId,
                         fileStream.SafeFileHandle.DangerousGetHandle(),

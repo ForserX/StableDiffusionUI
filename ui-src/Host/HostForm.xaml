@@ -7,6 +7,17 @@
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="SD_FXUI.HostForm"
         mc:Ignorable="d"
         Title="Host" Height="450" Width="800" Icon="/res/cmd.png" Closing="OnClosing" Loaded="OnActiveted" WindowStyle="ToolWindow" Background="#FF08090E" Foreground="White">
+
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid>
         <TextBox x:Name="tbHost" TextWrapping="Wrap" Text="Host started..." Background="#FF08090E" FontFamily="Verdana" Foreground="#FF9FA3B8" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" IsReadOnly="True" VerticalContentAlignment="Top" Margin="0,0,0,28"/>
         <Image Margin="0,6,14,0" Source="/res/close.png" MouseLeftButtonDown="OnClosing" HorizontalAlignment="Right" Width="44" Height="46" VerticalAlignment="Top"/>
