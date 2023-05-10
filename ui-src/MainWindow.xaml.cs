@@ -1,6 +1,7 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
+using SD_FXUI.Debug;
 using SD_FXUI.Utils;
 using SD_FXUI.Utils.Models;
 using System;
@@ -36,7 +37,7 @@ namespace SD_FXUI
         public MainWindow()
         {
             InitializeComponent();
-
+            
             Install.SetupDirs();
 
             Log.InitLogFile();

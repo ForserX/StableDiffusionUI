@@ -22,6 +22,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ApplicationDefinition Remove="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Image1.png" />
     <None Remove="res\dropFilesDark.jpg" />
     <None Remove="res\merge.png" />
     <None Remove="res\settings.png" />

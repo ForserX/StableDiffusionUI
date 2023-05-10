@@ -6,7 +6,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 
-namespace SD_FXUI.Utils
+namespace SD_FXUI.Debug
 {
     internal class Log
     {
@@ -28,14 +28,14 @@ namespace SD_FXUI.Utils
         }
 
 
-     public static string GetMessage()
+        public static string GetMessage()
         {
             return string.Empty;
         }
 
         public static void SendMessageToFile(string msg, bool newLine = true, [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string filepath = null, [CallerMemberName] string memberName = null)
         {
-            if (newLine) File.AppendAllText(currentLogFile, filepath + ":" + lineNumber + ":" + memberName + " \"" + msg + "\"" + "\n" );
+            if (newLine) File.AppendAllText(currentLogFile, filepath + ":" + lineNumber + ":" + memberName + " \"" + msg + "\"" + "\n");
             else File.AppendAllText(currentLogFile, filepath + ":" + lineNumber + ":" + memberName + " \"" + msg + "\"");
         }
 
