@@ -8,7 +8,14 @@
         WindowStartupLocation="CenterScreen"
         xmlns:local="clr-namespace:SD_FXUI"               
         Title="Stable Diffusion XUI" Height="848" Width="1197" Closed="OnClose" Loaded="BlurWindow_Loaded" Icon="res/icon.png" NonClientAreaBackground="Black" NonClientAreaForeground="White" OtherButtonHoverForeground="Black" Foreground="#FFF9F9F9" OtherButtonHoverBackground="White" OtherButtonForeground="White" CloseButtonForeground="#FFF9F9F9" Background="Black">
-
+    <hc:BlurWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </hc:BlurWindow.Resources>
     <Grid x:Name="grMain" Margin="0,1,0,-305" Background="#FF1F1F1F" AllowDrop="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

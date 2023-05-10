@@ -1,4 +1,4 @@
-﻿using SD_FXUI.Utils;
+﻿using SD_FXUI.Debug;
 using System;
 using System.Windows;
 using System.Windows.Input;
