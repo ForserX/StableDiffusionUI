@@ -25,11 +25,14 @@ namespace SD_FXUI.Utils
 
             if(bWait)
             {
-                CMD.ProcessConvertCKPT2Diff(SafeName);
+                CMD.ProcessConvertCKPT2Diff(SafeName, chBoxEmaOnly.IsChecked.Value, cb768.IsChecked.Value);
             }
             else
             {
-                Task.Run(() => CMD.ProcessConvertCKPT2Diff(SafeName));
+                bool EMA = chBoxEmaOnly.IsChecked.Value, 
+                     b768 = cb768.IsChecked.Value;
+
+                Task.Run(() => CMD.ProcessConvertCKPT2Diff(SafeName, EMA, b768));
             }
         }
 
@@ -55,7 +58,7 @@ namespace SD_FXUI.Utils
             {
                 if(ToID == 0)
                 {
-                    CMD.ProcessConvertCKPT2ONNX(cbPath.Text, chBoxEmaOnly.IsChecked.Value);
+                    CMD.ProcessConvertCKPT2ONNX(cbPath.Text, chBoxEmaOnly.IsChecked.Value, cb768.IsChecked.Value);
                 }
                 else
                 {

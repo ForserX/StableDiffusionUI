@@ -36,6 +36,7 @@
         <CheckBox x:Name="chBoxEmaOnly" Content="extract ema only" HorizontalAlignment="Left" Margin="125,0,0,4" VerticalAlignment="Bottom" Foreground="White" Background="#FF1F1F1F"/>
         <TextBox x:Name="cbPath" Margin="5,5,155,0" TextWrapping="Wrap" Text="Set your dir/url" VerticalAlignment="Top" Height="57" DragEnter="cbPath_DragEnter" DragLeave="cbPath_DragLeave" AllowDrop="True" Opacity="1.0" LostFocus="cbPathLost" GotFocus="cbPathSet" Foreground="White" Background="#FF1F1F1F" BorderBrush="White" CaretBrush="White"/>
         <Image x:Name="imgPreview" Margin="8,0,202,24" AllowDrop="True" DragEnter="cbPath_DragEnter" DragLeave="cbPath_DragLeave" Source="/res/dropFilesDark.jpg" Height="67" VerticalAlignment="Bottom"/>
+        <CheckBox x:Name="cb768" Content="SD v2.1 768" HorizontalAlignment="Left" Margin="5,0,0,4" VerticalAlignment="Bottom" Foreground="White" Background="#FF1F1F1F"/>
 
     </Grid>
 </Window>
