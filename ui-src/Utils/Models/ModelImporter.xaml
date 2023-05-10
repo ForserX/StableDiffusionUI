@@ -27,7 +27,7 @@
             <ComboBoxItem Content=".pt (vae)" Foreground="White" Background="#FF1F1F1F"/>
             <ComboBoxItem Content="diffusion" Foreground="White" Background="#FF1F1F1F"/>
         </hc:ComboBox>
-        <hc:ComboBox x:Name="cbTo" Margin="0,41,6,0" SelectionChanged="cbTo_SelectionChanged" Height="14" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Padding="1,2,1,2" Foreground="White" Background="#FF1F1F1F" SelectionBrush="#FF6A3ADA">
+        <hc:ComboBox x:Name="cbTo" Margin="0,69,6,0" SelectionChanged="cbTo_SelectionChanged" Height="14" VerticalAlignment="Top" HorizontalAlignment="Right" Width="112" Padding="1,2,1,2" Foreground="White" Background="#FF1F1F1F" SelectionBrush="#FF6A3ADA">
             <ComboBoxItem Content="ONNX" Foreground="White" Background="#FF1F1F1F"/>
             <ComboBoxItem Content="Diffuser" Foreground="White" Background="#FF1F1F1F"/>
         </hc:ComboBox>
@@ -36,7 +36,14 @@
         <CheckBox x:Name="chBoxEmaOnly" Content="extract ema only" HorizontalAlignment="Left" Margin="125,0,0,4" VerticalAlignment="Bottom" Foreground="White" Background="#FF1F1F1F"/>
         <TextBox x:Name="cbPath" Margin="5,5,155,0" TextWrapping="Wrap" Text="Set your dir/url" VerticalAlignment="Top" Height="57" DragEnter="cbPath_DragEnter" DragLeave="cbPath_DragLeave" AllowDrop="True" Opacity="1.0" LostFocus="cbPathLost" GotFocus="cbPathSet" Foreground="White" Background="#FF1F1F1F" BorderBrush="White" CaretBrush="White"/>
         <Image x:Name="imgPreview" Margin="8,0,202,24" AllowDrop="True" DragEnter="cbPath_DragEnter" DragLeave="cbPath_DragLeave" Source="/res/dropFilesDark.jpg" Height="67" VerticalAlignment="Bottom"/>
-        <CheckBox x:Name="cb768" Content="SD v2.1 768" HorizontalAlignment="Left" Margin="5,0,0,4" VerticalAlignment="Bottom" Foreground="White" Background="#FF1F1F1F"/>
+        <hc:ComboBox x:Name="cbBaseModel" Margin="0,36,6,0" HorizontalAlignment="Right" Width="112" Height="21" VerticalAlignment="Top" Padding="1,2,1,2" Foreground="White" Background="#FF1F1F1F" BorderBrush="White" SelectionBrush="#FF6A3ADA" >
+            <ComboBoxItem Content="SD 1.5" Foreground="White" Background="#FF1F1F1F"/>
+            <ComboBoxItem Content="SD 2.0" Foreground="White" Background="#FF1F1F1F"/>
+            <ComboBoxItem Content="SD 2.0 768" Foreground="White" Background="#FF1F1F1F"/>
+            <ComboBoxItem Content="SD 2.1" Foreground="White" Background="#FF1F1F1F"/>
+            <ComboBoxItem Content="SD 2.1 768" Foreground="White" Background="#FF1F1F1F"/>
+            <ComboBoxItem Content="SD 2.1 Unclip" Foreground="White" Background="#FF1F1F1F"/>
+        </hc:ComboBox>
 
     </Grid>
 </Window>

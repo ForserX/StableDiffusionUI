@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace SD_FXUI.Utils
@@ -14,8 +15,33 @@ namespace SD_FXUI.Utils
 
             cbFrom.SelectedIndex = 0;
             cbTo.SelectedIndex = 0;
+            cbBaseModel.SelectedIndex = 0;
         }
-               
+        bool PresetIs768()
+        {
+            return cbBaseModel.Text.Contains("768");
+        }
+
+        string PresetName()
+        {
+            if (cbBaseModel.Text.Contains("768"))
+            {
+                return "v2-inference-v.yaml";
+            }
+            else if (cbBaseModel.Text.Contains("clip"))
+            {
+                return "v2-1-stable-unclip-l-inference.yaml";
+            }
+            else if (cbBaseModel.Text.Contains("2."))
+            {
+                return "v2-inference.yaml";
+            }
+            else
+            {
+                return "v1-inference.yaml";
+            }
+        }
+
         private void OrigToDiff(bool bWait = false)
         {
             if (!System.IO.File.Exists(cbPath.Text))
@@ -25,12 +51,12 @@ namespace SD_FXUI.Utils
 
             if(bWait)
             {
-                CMD.ProcessConvertCKPT2Diff(SafeName, chBoxEmaOnly.IsChecked.Value, cb768.IsChecked.Value);
+                CMD.ProcessConvertCKPT2Diff(SafeName, chBoxEmaOnly.IsChecked.Value, PresetIs768(), PresetName());
             }
             else
             {
                 bool EMA = chBoxEmaOnly.IsChecked.Value, 
-                     b768 = cb768.IsChecked.Value;
+                     b768 = PresetIs768();
 
                 Task.Run(() => CMD.ProcessConvertCKPT2Diff(SafeName, EMA, b768));
             }
@@ -58,7 +84,7 @@ namespace SD_FXUI.Utils
             {
                 if(ToID == 0)
                 {
-                    CMD.ProcessConvertCKPT2ONNX(cbPath.Text, chBoxEmaOnly.IsChecked.Value, cb768.IsChecked.Value);
+                    CMD.ProcessConvertCKPT2ONNX(cbPath.Text, chBoxEmaOnly.IsChecked.Value, PresetIs768(), PresetName());
                 }
                 else
                 {
