@@ -7,6 +7,16 @@
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="SD_FXUI.Utils.Settings"
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800" Icon="../res/settings.png">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid>
         <GroupBox Header="Notification" Margin="0,1,0,305">
             <ToggleButton x:Name="chNotification" Content="           " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="20" Width="68" Margin="206,3,516,0" VerticalAlignment="Top" Checked="chNotification_Checked" Unchecked="chNotification_Checked"/>

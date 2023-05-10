@@ -6,6 +6,16 @@
         xmlns:local="clr-namespace:SD_FXUI"
         mc:Ignorable="d"
         Title="Welcome" Height="450" Width="801">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid  Background="#389D9BC9">
         <Label Content="This UI has several implementations of Stable Diffusion, which may be suitable for both AMD and NVIDIA users." HorizontalAlignment="Stretch" Margin="86,10,104,0" VerticalAlignment="Top"/>
         <Image HorizontalAlignment="Left" Height="65" Margin="268,77,0,0" VerticalAlignment="Top" Width="254" Source="/res/diff.png"/>
