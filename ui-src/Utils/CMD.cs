@@ -7,7 +7,7 @@ namespace SD_FXUI
 {
     internal class CMD
     {
-        public static async Task ProcessConvertCKPT2Diff(string InputFile, bool emaOnly = false, bool b768 = false)
+        public static async Task ProcessConvertCKPT2Diff(string InputFile, bool emaOnly = false, bool b768 = false, string YamlCfgName = "")
         {
             string WorkDir = FS.GetModelDir() + "onnx\\";
             Host ProcessHost = new Host(WorkDir);
@@ -33,13 +33,12 @@ namespace SD_FXUI
                 AddCmd += " --extract_ema";
             }
 
-            string YamlCfg = "../../repo/diffusion_scripts/v1-inference.yaml";
+            string YamlCfg = "../../repo/model_data/" + YamlCfgName;
 
             if (b768)
             {
                 AddCmd += " --image_size=768";
                 AddCmd += " --prediction_type=v-prediction";
-                YamlCfg = "../../repo/diffusion_scripts/v2-inference-v.yaml";
             }
 
             ProcessHost.Start();
@@ -53,7 +52,7 @@ namespace SD_FXUI
 
             Notification.SendNotification("Convertation: ~3min!");
         }
-        public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false, bool b768 = false)
+        public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false, bool b768 = false, string YamlCfgName = "")
         {
             string WorkDir = FS.GetModelDir() + "onnx\\";
             Host ProcessHost = new Host(WorkDir);
@@ -79,13 +78,12 @@ namespace SD_FXUI
                 AddCmd += " --extract_ema";
             }
 
-            string YamlCfg = "../../repo/diffusion_scripts/v1-inference.yaml";
+            string YamlCfg = "../../repo/model_data/" + YamlCfgName;
 
             if (b768)
             {
                 AddCmd += " --image_size=768";
                 AddCmd += " --prediction_type=v-prediction";
-                YamlCfg = "../../repo/diffusion_scripts/v2-inference-v.yaml";
             }
 
             ProcessHost.Start();
