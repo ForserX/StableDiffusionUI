@@ -9,7 +9,7 @@ namespace SD_FXUI
     {
         public static async Task ProcessConvertCKPT2Diff(string InputFile, bool emaOnly = false, bool b768 = false)
         {
-            string WorkDir = FS.GetModelDir() + "shark\\";
+            string WorkDir = FS.GetModelDir() + "onnx\\";
             Host ProcessHost = new Host(WorkDir);
             Host.Print($"\n Startup extract ckpt ({InputFile})..... \n");
 
@@ -55,7 +55,7 @@ namespace SD_FXUI
         }
         public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false, bool b768 = false)
         {
-            string WorkDir = FS.GetModelDir() + "shark\\";
+            string WorkDir = FS.GetModelDir() + "onnx\\";
             Host ProcessHost = new Host(WorkDir);
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
