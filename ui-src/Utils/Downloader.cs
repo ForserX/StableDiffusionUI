@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace SD_FXUI.Utils
 {
@@ -43,10 +44,22 @@ namespace SD_FXUI.Utils
         {
             //Console.SetCursorPosition(0, Console.CursorTop - 1);
             //Host.ClearCurrentConsoleLine();
-            if(e.ProgressPercentage > PreviousProgress && e.ProgressPercentage % 5 == 0)
+            if(e.ProgressPercentage > PreviousProgress && e.ProgressPercentage % 4 == 0)
             {
+                string ProgressBar = "|";
+
+                for (int i = 10; i < 101; i+=10)
+                {
+                    if (i <= e.ProgressPercentage)
+                        ProgressBar += "#";
+                    else
+                        ProgressBar += "-";
+                }
+
+                ProgressBar += "| ";
+
                 PreviousProgress = e.ProgressPercentage;
-                Host.Print("DownloadProgress: " + e.ProgressPercentage.ToString() + $"% ({e.BytesReceived / 1024 / 1024}/{e.TotalBytesToReceive / 1024 / 1024} mb)" );
+                Host.Print("DownloadProgress: " + ProgressBar + e.ProgressPercentage.ToString() + $"% ({e.BytesReceived / 1024 / 1024}/{e.TotalBytesToReceive / 1024 / 1024} mb)" );
             }
             
         }
