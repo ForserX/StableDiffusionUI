@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SD_FXUI.Debug;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -87,8 +88,18 @@ namespace SD_FXUI
         }
         public static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            //System.Windows.Forms.MessageBox.Show("Unhandled exception!");
-            Notification.MsgBox(e.ExceptionObject.ToString());
+            string CallStack = e.ExceptionObject.ToString();
+
+            try
+            {
+                Log.SendMessageToFile(CallStack);
+            }
+            catch
+            {
+                // So sad...
+            }
+
+            Notification.MsgBox(CallStack);
             WriteDump();
         }
 

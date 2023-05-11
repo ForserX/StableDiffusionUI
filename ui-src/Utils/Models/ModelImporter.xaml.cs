@@ -9,6 +9,8 @@ namespace SD_FXUI.Utils
     /// </summary>
     public partial class SharkModelImporter : Window
     {
+        string SwapText = "Enter the path to the file (.ckpt/.safetensors/.pt) or folder (diffusers)";
+
         public SharkModelImporter()
         {
             InitializeComponent();
@@ -16,6 +18,8 @@ namespace SD_FXUI.Utils
             cbFrom.SelectedIndex = 0;
             cbTo.SelectedIndex = 0;
             cbBaseModel.SelectedIndex = 0;
+
+            cbPath.Text = SwapText;
         }
         bool PresetIs768()
         {
@@ -217,12 +221,12 @@ namespace SD_FXUI.Utils
         private void cbPathLost(object sender, RoutedEventArgs e)
         {
             if (cbPath.Text == "")
-                cbPath.Text = "Set your dir/url";
+                cbPath.Text = SwapText;
         }
 
         private void cbPathSet(object sender, RoutedEventArgs e)
         {
-            if (cbPath.Text == "Set your dir/url")
+            if (cbPath.Text == SwapText)
                 cbPath.Text = "";
         }
     }
