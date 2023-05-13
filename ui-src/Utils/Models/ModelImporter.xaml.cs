@@ -18,9 +18,9 @@ namespace SD_FXUI.Utils
             cbFrom.SelectedIndex = 0;
             cbTo.SelectedIndex = 0;
             cbBaseModel.SelectedIndex = 0;
-
             cbPath.Text = SwapText;
         }
+        
         bool PresetIs768()
         {
             return cbBaseModel.Text.Contains("768");

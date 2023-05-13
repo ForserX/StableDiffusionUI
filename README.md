@@ -1,6 +1,7 @@
 # Stable Diffusion XUI
+</br> <a href="https://discord.gg/HMG82cYNrA"><img src="https://cdn.rawgit.com/NNTin/discord-logo/f4333344/src/assets/animateddiscord.svg" align="left" height="48" width="48" ></a></br></br>
 ### What is it
-Simple re-implement SD UI for AMD and Nvidia GPU 
+Simple re-implement SD UI for AMD and Nvidia GPU
 ![image](https://user-images.githubusercontent.com/13867290/222996644-77cfab99-6a1a-45e1-823e-9a1365e515db.png)
 ![image](https://user-images.githubusercontent.com/13867290/216797870-3f05fd70-41b0-41e5-b9ea-e7f41f294b65.png)
 

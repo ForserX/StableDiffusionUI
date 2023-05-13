@@ -1,4 +1,4 @@
-﻿using SD_FXUI.Debug;
+using SD_FXUI.Debug;
 using System;
 using System.Diagnostics;
 using System.IO;
