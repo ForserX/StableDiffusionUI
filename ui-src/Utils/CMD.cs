@@ -250,14 +250,14 @@ namespace SD_FXUI
             Host.Print("\n Startup upscale..... \n");
 
             string OutFile = File.Substring(0, File.Length - 4) + "_upscale.png";
-            ProcessHost.Start("-i " + File + " -o " + OutFile + DopCmd);
+            ProcessHost.Start("-i \"" + File + "\" -o \"" + OutFile + "\"" + DopCmd);
             ProcessHost.Wait();
 
             if (Helper.EnableGFPGAN)
             {
                 Host ProcesHostTwo = new Host(FS.GetModelDir(), FileName);
                 OutFile = NewFile.Substring(0, NewFile.Length - 4) + "_upscale.png";
-                ProcesHostTwo.Start("-i " + NewFile + " -o " + OutFile + DopCmd);
+                ProcesHostTwo.Start("-i \"" + NewFile + "\" -o \"" + OutFile + "\"" + DopCmd);
                 ProcesHostTwo.Wait();
                 Helper.Form.UpdateViewImg(OutFile);
             }

@@ -396,40 +396,40 @@ class Device:
 	
 	def ApplyArg(parser):
 		parser.add_argument(
-			"--model", type=str, help="Path to model checkpoint file", dest='mdlpath',
+			"--model", type=str, help="Path to model checkpoint (.ckpt or .safetensors)", dest='mdlpath',
 		)
 		parser.add_argument(
-			"--workdir", default=None, type=str, help="Path to model checkpoint file", dest='workdir',
+			"--workdir", default=None, type=str, help="Path to working directory", dest='workdir',
 		)
 		parser.add_argument(
-			"--width", type=int, help="Path to model checkpoint file", dest='width',
+			"--width", type=int, help="Image width", dest='width',
 		)
 		parser.add_argument(
-			"--guidance_scale", type=float, help="Path to model checkpoint file", dest='guidance_scale',
+			"--guidance_scale", type=float, help="guidance scale or CFG scale", dest='guidance_scale',
 		)
 		parser.add_argument(
-			"--height", type=int, help="Path to model checkpoint file", dest='height',
+			"--height", type=int, help="Image Height", dest='height',
 		)
 		parser.add_argument(
 			"--totalcount",
-			type=int, help="Path to model checkpoint file", dest='totalcount',
+			type=int, help="total images", dest='totalcount',
 		)
 		parser.add_argument(
 			"--steps",
-			type=int, help="Path to model checkpoint file", dest='steps',
+			type=int, help="scheduller steps per image", dest='steps',
 		)
 		parser.add_argument(
-			"--seed", type=int, help="Path to model checkpoint file", dest='seed',
+			"--seed", type=int, help="random seed", dest='seed',
 		)
 		parser.add_argument(
 			"--imgscale",
-			type=float, default=0.44, help="Path to model checkpoint file", dest='imgscale',
+			type=float, default=0.44, help="no description", dest='imgscale',
 		)
 		parser.add_argument(
-			"--prompt_neg", type=str, help="Path to model checkpoint file", dest='prompt_neg',
+			"--prompt_neg", type=str, help="negative prompt", dest='prompt_neg',
 		)
 		parser.add_argument(
-			"--prompt", type=str, help="Path to model checkpoint file", dest='prompt',
+			"--prompt", type=str, help="prompt", dest='prompt',
 		)
 		parser.add_argument(
 			"--outpath",
@@ -481,10 +481,10 @@ class Device:
 			"--hypernetwork", type=str, help="hypernetwork path", dest='hypernetwork', default=None,
 		)
 		parser.add_argument(
-			"--cn_model", type=str, help="Path to model checkpoint file", dest='cn_model',
+			"--cn_model", type=str, help="controlnet model path", dest='cn_model',
 		)
 		parser.add_argument(
-			"--outfile", type=str, default="", help="Specify generation mode", dest='outfile',
+			"--outfile", type=str, default="", help="specify generation mode", dest='outfile',
 		)
 		parser.add_argument(
 			"--pose", type=str, default="", help="input pose image", dest='pose',
