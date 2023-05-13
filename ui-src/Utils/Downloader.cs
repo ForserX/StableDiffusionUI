@@ -64,7 +64,7 @@ namespace SD_FXUI.Utils
             
         }
 
-        private static void OnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        private static void OnDownloadFileCompleted(object? sender, AsyncCompletedEventArgs e)
         {
             PreviousProgress = 0;
             TaskCompleted = true;

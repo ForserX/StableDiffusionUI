@@ -10,8 +10,8 @@ namespace SD_FXUI
 {
     class ControlNetBase
     {
-        protected string Model;
-        protected string CNModel;
+        protected string Model = "";
+        protected string CNModel = "";
         protected string BaseOutPath = FS.GetModelDir() + "controlnet/gen/";
 
         public string GetModelPathSD()
