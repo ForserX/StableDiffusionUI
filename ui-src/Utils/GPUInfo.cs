@@ -13,6 +13,23 @@ namespace SD_FXUI
 
         public GPUInfo()
         {
+            try
+            {
+                string WineVer = Wrapper.wine_get_version();
+                GreenGPU = true;
+
+                Host.Print($"Wine be like: {WineVer}");
+                return;
+            }
+            catch
+            {
+                Wrapper.RTL_OSVERSIONINFOW RltData = new Wrapper.RTL_OSVERSIONINFOW();
+                Wrapper.RtlGetVersion(ref RltData);
+
+                Host.Print($"RTL be like: {RltData.dwBuildNumber}.{RltData.dwMajorVersion}.{RltData.dwMinorVersion}");
+                // Windows 
+            }
+
             using (var searcher = new ManagementObjectSearcher("select * from Win32_VideoController"))
             {
                 foreach (ManagementObject obj in searcher.Get())
