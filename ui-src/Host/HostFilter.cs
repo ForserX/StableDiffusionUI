@@ -11,6 +11,17 @@ namespace SD_FXUI
     {
         public static void CheckTraceBack(string Message)
         {
+            if (Message.Contains("Specified provider 'DmlExecutionProvider'"))
+            {
+                if (Notification.MsgBox("Warning! Incorrect DML Provider! To speed up the generation, you need to update the package. Update?"))
+                {
+                    // Drop loaded model
+                    Helper.Form.InvokeDropModel();
+
+                    HostReader.Filter("py -install ort-nightly-directml==1.15.0.dev20230408001 --extra-index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/ --force");
+                }
+            }
+
             if (Message.Contains("Traceback (most recent call last)"))
             {
                 Helper.UIHost.Dispatcher.Invoke(() => 
