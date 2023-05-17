@@ -895,12 +895,18 @@ namespace SD_FXUI
                 cbSampler.Text = "EulerAncestralDiscrete";
                 cbSampler.IsEnabled = false;
                 cbModel.IsEnabled = false;
+
+                slDenoising.Minimum = 0;
+                slDenoising.Maximum = 200;
             }
             else
             {
                 imgMask.Visibility = Visibility.Visible;
                 cbSampler.IsEnabled = true;
                 cbModel.IsEnabled = true;
+
+                slDenoising.Minimum = 5;
+                slDenoising.Maximum = 100;
             }
         }
 
