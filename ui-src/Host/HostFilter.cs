@@ -112,10 +112,14 @@ namespace SD_FXUI
                     string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
                     System.IO.File.Move(file, NewFilePath);
 
-                    Task.Run(() => CMD.UpscalerRunner(UpSize, NewFilePath));
                     if (UpSize == 0 || Helper.CurrentUpscalerType == Helper.UpscalerType.None)
                     {
                         Helper.Form.UpdateViewImg(NewFilePath);
+                    }
+                    else
+                    {
+                        Task.Run(() => CMD.UpscalerRunner(UpSize, NewFilePath));
+                        Helper.ImgList.Add(NewFilePath);
                     }
                 }
 

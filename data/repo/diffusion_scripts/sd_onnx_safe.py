@@ -106,7 +106,7 @@ while True:
 
     seed = data['StartSeed']
     for i in range(data['TotalCount']):
-        PipeDevice.MakeImage(pipe, data['Mode'], eta, prompt_tokens + data['Prompt'], prompt_neg_tokens + data['NegPrompt'], data['Steps'], data['Width'], data['Height'], seed, data['CFG'], data['ImgScale'], data['Image'] , data['ImgScale'], data['Mask'], data['WorkingDir'], data['BatchSize'])
+        PipeDevice.MakeImage(pipe, data['Mode'], eta, prompt_tokens + data['Prompt'], prompt_neg_tokens + data['NegPrompt'], data['Steps'], data['Width'], data['Height'], seed, data['CFG'], data['ImgCFGScale'], data['Image'] , data['ImgScale'], data['Mask'], data['WorkingDir'], data['BatchSize'])
         seed = seed + 1
         
     print("SD Pipeline: Generating done!")

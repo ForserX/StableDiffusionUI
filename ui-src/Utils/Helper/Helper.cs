@@ -63,6 +63,7 @@ namespace SD_FXUI
             public int Steps;
             public float CFG;
             public float ImgScale;
+            public float ImgCFGScale;
             public string Model;
             public string VAE;
             public string Sampler;

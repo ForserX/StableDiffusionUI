@@ -279,7 +279,6 @@
                         <ComboBox  x:Name="cbLoRACat" Height="28" Text="" Margin="50,4,74,0" VerticalAlignment="Top" SelectionChanged="cbLoRACat_SelectionChanged" MinHeight="25" Padding="8,4,8,4" BorderBrush="#FF383838" BorderThickness="0.75" Background="#FF1F1F1F" Foreground="White" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}">
                             <ComboBox  x:Name="cbLoRA_Copy2" Height="22" Text="" VerticalAlignment="Top" Width="272" ItemContainerStyle="{StaticResource ComboBoxItemCapsuleDefault}"/>
                         </ComboBox>
-                        <Button Content="Button" HorizontalAlignment="Left" Margin="355,4,0,0" VerticalAlignment="Top" Height="23" Width="37" Click="Button_Click_3"/>
                     </Grid>
                 </Border>
                 <Border x:Name="brDevice" BorderBrush="#FF383838" BorderThickness="0.75">

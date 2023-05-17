@@ -354,7 +354,8 @@ namespace SD_FXUI
                 Helper.MakeInfo.Model = WorkingDir;
                 Helper.MakeInfo.Mode = "pix2pix";
 				Helper.MakeInfo.Image = Helper.InputImagePath;
-			}
+                Helper.MakeInfo.ImgCFGScale = (float)slDenoising.Value / 100;
+            }
 			else if (Helper.DrawMode == Helper.DrawingMode.Img2Img)
 			{
 				Helper.MakeInfo.Mode = "img2img";

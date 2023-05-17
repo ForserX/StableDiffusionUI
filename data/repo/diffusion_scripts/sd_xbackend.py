@@ -375,6 +375,7 @@ class Device:
 		if mode == "pix2pix":
 			# Opt image
 			img=Image.open(init_img_path).convert("RGB").resize((width, height))
+			print(image_guidance_scale)
 			image=pipe(prompt=prompt, image=img, num_inference_steps=steps, guidance_scale=scale, image_guidance_scale=image_guidance_scale, negative_prompt=prompt_neg, eta=eta, generator=rng)
 	
 		if mode == "inpaint":
