@@ -586,32 +586,6 @@ namespace SD_FXUI
 
 		}
 
-		ControlNetBase GetCNType(string ComboBox)
-		{
-			string LoverName = ComboBox.ToLower();
-
-			if (LoverName == "canny")          return HelperControlNet.Canny;
-			if (LoverName == "depth")          return HelperControlNet.Depth;
-			if (LoverName == "hed")            return HelperControlNet.Hed;
-			if (LoverName == "normalmap")      return HelperControlNet.Normal;
-			if (LoverName == "openposedetector")       return HelperControlNet.OpenPose;
-			if (LoverName == "scribble") return HelperControlNet.Scribble;
-			if (LoverName == "segmentation") return HelperControlNet.Seg;
-			if (LoverName == "mlsd") return HelperControlNet.MLSD;
-			if (LoverName == "facegen") return HelperControlNet.Face;
-
-			/*
-			if (LoverName == "depth_leres") ; // not implemented return canny
-			if (LoverName == "openpose_hand") ; // not implemented return canny
-			if (LoverName == "clip_vision") ; // not implemented return canny
-			if (LoverName == "fake_scribble") ; // not implemented return canny
-			if (LoverName == "pidinet") ; // not implemented return canny
-			if (LoverName == "binary")         ; // not implemented return canny
-			*/
-
-			return HelperControlNet.Canny;                      // temp Bypass error;
-
-		}
 		public void UpdateModelsListControlNet()
 		{
 			cbPose.Items.Clear();

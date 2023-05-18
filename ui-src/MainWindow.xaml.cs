@@ -822,7 +822,7 @@ namespace SD_FXUI
         {
             string CurrentImg = Helper.InputImagePath;
 
-            ControlNetBase CN = GetCNType(cbExtractPoseSelector.Text);
+            ControlNetBase CN = HelperControlNet.GetType(cbExtractPoseSelector.Text);
             Task.Run(() => CMD.PoserProcess(CurrentImg, CN));
 
             cbControlNetMode.SelectedIndex = cbExtractPoseSelector.SelectedIndex;
@@ -960,7 +960,7 @@ namespace SD_FXUI
 
             string NewMode = ((ComboBoxItem)e.AddedItems[0]).Content.ToString();
 
-            HelperControlNet.Current = GetCNType(NewMode);
+            HelperControlNet.Current = HelperControlNet.GetType(NewMode);
 
             UpdateModelsListControlNet();
             cbPose.IsEnabled = true;
