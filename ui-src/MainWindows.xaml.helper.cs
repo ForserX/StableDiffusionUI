@@ -619,8 +619,5 @@ namespace SD_FXUI
 			cbPreprocess.Items.Add(HelperControlNet.Current.GetModelName());
 			cbPreprocess.SelectedIndex = 0;
 		}
-
-		
-
 	}
 }

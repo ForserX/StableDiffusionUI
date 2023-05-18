@@ -1,5 +1,4 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
-using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using SD_FXUI.Debug;
 using SD_FXUI.Utils;
@@ -8,7 +7,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,7 +14,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using Windows.Devices.Usb;
 
 namespace SD_FXUI
 {
@@ -132,8 +129,6 @@ namespace SD_FXUI
                                 Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, HelperControlNet.Current));
                                 break;
                             }
-
-
                             catch (NullReferenceException ex)
                             {
                                 string addMsg = "";
@@ -150,9 +145,6 @@ namespace SD_FXUI
                             Helper.MakeInfo.fp16 = false;
                             SafeCMD.PreStart(Helper.MakeInfo.Model, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
                             SafeCMD.Start();
-
-                            //cmdline += GetCommandLineOnnx();
-                            //Task.Run(() => CMD.ProcessRunnerOnnx(cmdline, Size));
                         }
                         break;
                     }
@@ -191,8 +183,6 @@ namespace SD_FXUI
                             Helper.MakeInfo.fp16 = cbFf16.IsChecked.Value;
                             SafeCMD.PreStart(Helper.MakeInfo.Model, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
                             SafeCMD.Start();
-                            //cmdline += GetCommandLineDiffCuda();
-                            //Task.Run(() => CMD.ProcessRunnerDiffCuda(cmdline, Size, SafeCPUFlag));
                             break;
                         }
                     }
@@ -295,11 +285,6 @@ namespace SD_FXUI
         private void chRandom_Unchecked(object sender, RoutedEventArgs e)
         {
             tbSeed.IsEnabled = true;
-        }
-
-        private void cbDevice_TextChanged(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void btnONNX_Click(object sender, RoutedEventArgs e)
@@ -707,12 +692,6 @@ namespace SD_FXUI
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private void btnDownload_Click(object sender, RoutedEventArgs e)
-        {
-            Utils.HuggDownload DownloadWnd = new Utils.HuggDownload();
-            DownloadWnd.Show();
-        }
-
         private void btnImageClearMask_Click(object sender, RoutedEventArgs e)
         {
             btnImageClearMask.Visibility = Visibility.Collapsed;
@@ -1066,12 +1045,6 @@ namespace SD_FXUI
                     UseShellExecute = true
                 }
             );
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-
-            FileDownloader.DownloadFileAsync("https://huggingface.co/lllyasviel/control_v11p_sd15_seg/resolve/main/diffusion_pytorch_model.fp16.safetensors",  Helper.ImgPath.ToString() + "diffusion_pytorch_model.fp16.safetensors");
         }
     }
 }
