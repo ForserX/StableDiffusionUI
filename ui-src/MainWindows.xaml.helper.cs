@@ -229,62 +229,12 @@ namespace SD_FXUI
 			Helper.MakeInfo.TI.Clear();
 			Helper.MakeInfo.TINeg.Clear();
 
-			string SourcePrompt = CodeUtils.GetRichText(tbPrompt).Replace("\r\n", string.Empty);
+			string SourcePrompt = CodeUtils.GetRichText(tbPrompt);
 			SourcePrompt = LoRA.Extract(SourcePrompt);
+            SourcePrompt = TextualInversion.Extract(SourcePrompt);
 
-            while (SourcePrompt.Contains("<ti:", 0))
-            {
-                int StartIdx = SourcePrompt.IndexOf("<", 0);
-                int EndIdx = SourcePrompt.IndexOf(">", 0) + 1;
-
-                string DataStr = SourcePrompt.Substring(StartIdx, EndIdx - StartIdx);
-                SourcePrompt = SourcePrompt.Replace(DataStr, string.Empty);
-
-                DataStr = DataStr.Replace("<ti:", string.Empty).Replace(">", string.Empty);
-                if (!DataStr.Contains(":", 0))
-                    continue;
-
-                int DelimerIdx = DataStr.IndexOf(":", 0);
-
-                Helper.LoRAData TIData = new Helper.LoRAData();
-                TIData.Name = string.Concat(FS.GetModelDir(FS.ModelDirs.TextualInversion), DataStr.AsSpan(0, DelimerIdx));
-                TIData.Value = (float)int.Parse(DataStr[(DelimerIdx + 1)..]) / 100.0f;
-
-                Helper.MakeInfo.TI.Add(TIData);
-            }
-
-            while (SourcePrompt.StartsWith(",") || SourcePrompt.StartsWith(" "))
-			{
-				SourcePrompt = SourcePrompt.Substring(1);
-			}
-
-
-            string NegPrompt = CodeUtils.GetRichText(tbNegPrompt).Replace("\r\n", string.Empty);
-            while (NegPrompt.Contains("<ti:", 0))
-            {
-                int StartIdx = NegPrompt.IndexOf("<", 0);
-                int EndIdx = NegPrompt.IndexOf(">", 0) + 1;
-
-                string DataStr = NegPrompt.Substring(StartIdx, EndIdx - StartIdx);
-                NegPrompt = NegPrompt.Replace(DataStr, string.Empty);
-
-                DataStr = DataStr.Replace("<ti:", string.Empty).Replace(">", string.Empty);
-                if (!DataStr.Contains(":", 0))
-                    continue;
-
-                int DelimerIdx = DataStr.IndexOf(":", 0);
-
-                Helper.LoRAData TIData = new Helper.LoRAData();
-                TIData.Name = string.Concat(FS.GetModelDir(FS.ModelDirs.TextualInversion), DataStr.AsSpan(0, DelimerIdx));
-                TIData.Value = (float)int.Parse(DataStr[(DelimerIdx + 1)..]) / 100.0f;
-
-                Helper.MakeInfo.TINeg.Add(TIData);
-            }
-
-            while (NegPrompt.StartsWith(",") || NegPrompt.StartsWith(" "))
-			{
-                NegPrompt = NegPrompt.Substring(1);
-			}
+            string NegPrompt = CodeUtils.GetRichText(tbNegPrompt);
+            NegPrompt = TextualInversion.Extract(NegPrompt, false);
 
 			Helper.MakeInfo.Prompt = SourcePrompt;
 			Helper.MakeInfo.NegPrompt = NegPrompt;
@@ -524,9 +474,10 @@ namespace SD_FXUI
 			}
 
 			// Textual Inversion
+			TextualInversion.Reload();
 			foreach (string Dir in Directory.GetFiles(FS.GetModelDir(FS.ModelDirs.TextualInversion)))
             {
-                cbTI.Items.Add(Path.GetFileName(Dir));
+                cbTI.Items.Add(Path.GetFileNameWithoutExtension(Dir));
             }
 
 			// Yeah... LoRA...
