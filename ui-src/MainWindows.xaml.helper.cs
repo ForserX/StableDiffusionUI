@@ -230,27 +230,7 @@ namespace SD_FXUI
 			Helper.MakeInfo.TINeg.Clear();
 
 			string SourcePrompt = CodeUtils.GetRichText(tbPrompt).Replace("\r\n", string.Empty);
-
-			while (SourcePrompt.Contains("<lora:", 0))
-			{
-				int StartIdx = SourcePrompt.IndexOf("<", 0);
-				int EndIdx = SourcePrompt.IndexOf(">", 0) + 1;
-
-				string LoraDataStr = SourcePrompt.Substring(StartIdx, EndIdx - StartIdx);
-				SourcePrompt = SourcePrompt.Replace(LoraDataStr, string.Empty);
-
-				LoraDataStr = LoraDataStr.Replace("<lora:", string.Empty).Replace(">", string.Empty);
-				if (!LoraDataStr.Contains(":", 0))
-					continue;
-
-				int DelimerIdx = LoraDataStr.IndexOf(":", 0);
-
-				Helper.LoRAData LoRAData = new Helper.LoRAData();
-				LoRAData.Name = string.Concat(FS.GetModelDir(FS.ModelDirs.LoRA), LoraDataStr.AsSpan(0, DelimerIdx));
-				LoRAData.Value = (float)int.Parse(LoraDataStr[(DelimerIdx + 1)..]) / 100.0f;
-
-				Helper.MakeInfo.LoRA.Add(LoRAData);
-            }
+			SourcePrompt = LoRA.Extract(SourcePrompt);
 
             while (SourcePrompt.Contains("<ti:", 0))
             {
@@ -512,11 +492,13 @@ namespace SD_FXUI
 
 		void UpdateLoRAModels(string LoraPath)
 		{
-			foreach (var Itm in Directory.GetFiles(LoraPath))
-			{
-				string TryName = Path.GetFileName(Itm);
+			LoRA.Reload();
 
-				if (!TryName.EndsWith("txt"))
+            foreach (var Itm in Directory.GetFiles(LoraPath))
+			{
+				string TryName = Path.GetFileNameWithoutExtension(Itm);
+
+				if (!Itm.EndsWith("txt"))
 					cbLoRA.Items.Add(TryName);
 			}
 		}
