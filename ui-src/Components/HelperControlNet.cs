@@ -5,11 +5,13 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Automation;
 
 namespace SD_FXUI
 {
     class ControlNetBase
     {
+        protected HelperControlNet.ControlTypes ControlType;
         protected string Model = "";
         protected string CNModel = "";
         protected string BaseOutPath = FS.GetModelDir() + "controlnet/gen/";
@@ -70,6 +72,7 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-openpose";
             CNModel = "sd-controlnet/anannotator/ckpts/";
+            ControlType = HelperControlNet.ControlTypes.OpenPose;
         }
 
         public override void CheckSD()
@@ -87,7 +90,7 @@ namespace SD_FXUI
             if (!System.IO.File.Exists(GetModelPathCN() + "hand_pose_model.pth"))
             {
                 Notification.SendNotification("Starting downloading pose model...");
-                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Poser);
+                WGetDownloadModels.DownloadCNPoser(ControlType);
                 Notification.SendNotification("Download pose model: done!");
             }
         }
@@ -110,6 +113,7 @@ namespace SD_FXUI
             Model = "sd-controlnet-facegen";
             CNModel = "";
 
+            ControlType = HelperControlNet.ControlTypes.MediapipeFace;
             System.IO.Directory.CreateDirectory(Outdir());
         }
 
@@ -140,6 +144,7 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-hed";
             CNModel = "sd-controlnet/anannotator/ckpts/network-bsds500.pth";
+            ControlType = HelperControlNet.ControlTypes.Hed;
 
             System.IO.Directory.CreateDirectory(Outdir());
         }
@@ -159,7 +164,7 @@ namespace SD_FXUI
             if (!System.IO.File.Exists(GetModelPathCN()))
             {
                 Notification.SendNotification("Starting downloading hed model...");
-                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Hed);
+                WGetDownloadModels.DownloadCNPoser(ControlType);
                 Notification.SendNotification("Download hed model: done!");
             }
         }
@@ -180,6 +185,7 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-canny";
             CNModel = "";
+            ControlType = HelperControlNet.ControlTypes.Canny;
 
             System.IO.Directory.CreateDirectory(Outdir());
         }
@@ -210,6 +216,7 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-depth";
             CNModel = "";
+            ControlType = HelperControlNet.ControlTypes.Depth;
 
             System.IO.Directory.CreateDirectory(Outdir());
         }
@@ -241,6 +248,7 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-normal";
             CNModel = "";
+            ControlType = HelperControlNet.ControlTypes.NormalMap;
 
             System.IO.Directory.CreateDirectory(Outdir());
         }
@@ -271,6 +279,7 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-scribble";
             CNModel = "sd-controlnet/anannotator/ckpts/network-bsds500.pth";
+            ControlType = HelperControlNet.ControlTypes.Scribble;
 
             System.IO.Directory.CreateDirectory(Outdir());
         }
@@ -301,6 +310,7 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-seg";
             CNModel = "";
+            ControlType = HelperControlNet.ControlTypes.Segmentation;
 
             System.IO.Directory.CreateDirectory(Outdir());
         }
@@ -331,6 +341,7 @@ namespace SD_FXUI
         {
             Model = "sd-controlnet-mlsd";
             CNModel = "sd-controlnet\\anannotator\\ckpts\\mlsd_large_512_fp32.pth";
+            ControlType = HelperControlNet.ControlTypes.Mlsd;
 
             System.IO.Directory.CreateDirectory(Outdir());
         }
@@ -350,7 +361,7 @@ namespace SD_FXUI
             if (!System.IO.File.Exists(GetModelPathCN()))
             {
                 Notification.SendNotification("Starting downloading mlsd model...");
-                WGetDownloadModels.DownloadCNPoser(HelperControlNet.ControlTypes.Mlsd);
+                WGetDownloadModels.DownloadCNPoser(ControlType);
                 Notification.SendNotification("Download mlsd model: done!");
             }
         }
@@ -388,7 +399,7 @@ namespace SD_FXUI
             Hed,
             NormalMap,
             OpenPose,
-            OpenPose_hand,
+            MediapipeFace,
             Clip_vision,
             Color,
             Pidinet,
@@ -397,6 +408,33 @@ namespace SD_FXUI
             Scribble,
             Fake_Scribble,
             Binary
+        }
+
+        public static ControlNetBase GetType(string StrData)
+        {
+            string LoverName = StrData.ToLower();
+
+            if (LoverName == "canny")               return Canny;
+            if (LoverName == "depth")               return Depth;
+            if (LoverName == "hed")                 return Hed;
+            if (LoverName == "normalmap")           return Normal;
+            if (LoverName == "openposedetector")    return OpenPose;
+            if (LoverName == "scribble")            return Scribble;
+            if (LoverName == "segmentation")        return Seg;
+            if (LoverName == "mlsd")                return MLSD;
+            if (LoverName == "facegen")             return Face;
+
+            /*
+			if (LoverName == "depth_leres") ; // not implemented return canny
+			if (LoverName == "openpose_hand") ; // not implemented return canny
+			if (LoverName == "clip_vision") ; // not implemented return canny
+			if (LoverName == "fake_scribble") ; // not implemented return canny
+			if (LoverName == "pidinet") ; // not implemented return canny
+			if (LoverName == "binary")         ; // not implemented return canny
+			*/
+
+            return HelperControlNet.Canny;                      // temp Bypass error;
+
         }
     }
 }
