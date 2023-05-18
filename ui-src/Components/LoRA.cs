@@ -33,7 +33,7 @@ namespace SD_FXUI
             }
         }
 
-        static string GetFormat(string FullPath)
+        static string AppendFormat(string FullPath)
         {
             FullPath = FullPath.Replace("\\", "/");
 
@@ -70,7 +70,7 @@ namespace SD_FXUI
                 LoRAData.Name = string.Concat(FS.GetModelDir(FS.ModelDirs.LoRA), LoraDataStr.AsSpan(0, DelimerIdx));
 
                 // Validate 
-                LoRAData.Name = GetFormat(LoRAData.Name);
+                LoRAData.Name = AppendFormat(LoRAData.Name);
 
                 LoRAData.Value = (float)int.Parse(LoraDataStr[(DelimerIdx + 1)..]) / 100.0f;
 
