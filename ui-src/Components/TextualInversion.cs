@@ -10,6 +10,7 @@ namespace SD_FXUI
     class TextualInversion
     {
         static Dictionary<string, string> TIs = null;
+        static string[] Formats = new string[] { "safetensors", "ckpt", "pt" };
 
         public static void Reload()
         {
@@ -38,6 +39,18 @@ namespace SD_FXUI
             FullPath = FullPath.Replace("\\", "/");
 
             string ValidName = FullPath;
+
+            string Ext = System.IO.Path.GetExtension(ValidName);
+
+            if (Ext.Length > 1)
+            {
+                Ext = Ext[1..];
+
+                if (Formats.Contains(Ext))
+                {
+                    return ValidName;
+                }
+            }
 
             if (!TIs.ContainsKey(FullPath))
             {

@@ -12,7 +12,7 @@
     <OutputPath>.</OutputPath>
     <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <InterpreterId>MSBuild|cuda.venv|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|onnx.venv|$(MSBuildProjectFullPath)</InterpreterId>
     <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
@@ -24,9 +24,7 @@
     <Compile Include="controlnet_pipe.py" />
     <Compile Include="convert\convert_controlnet_to_onnx.py" />
     <Compile Include="convert\convert_original_stable_diffusion_to_diffusers.py" />
-    <Compile Include="convert\convert_pix2pix_to_onnx.py" />
     <Compile Include="convert\convert_diffusers_to_onnx.py" />
-    <Compile Include="convert\convert_textual_inversion_to_onnx.py" />
     <Compile Include="convert\convert_vae_pt_to_diffusers.py" />
     <Compile Include="convert\convert_vae_pt_to_onnx.py" />
     <Compile Include="convert\unet_2d_condition_cnet.py" />
