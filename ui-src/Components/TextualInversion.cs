@@ -23,7 +23,7 @@ namespace SD_FXUI
                 TIs.Clear();
             }
 
-            foreach (string File in FS.GetFilesFrom(FS.GetModelDir(FS.ModelDirs.TextualInversion), Formats, true))
+            foreach (string File in FS.GetFilesFrom(FS.GetModelDir(FS.ModelDirs.TextualInversion), new string[] { "safetensors", "ckpt", "pt" }, true))
             {
                 string Ext = System.IO.Path.GetExtension(File);
                 string FileName = File.Replace(Ext, string.Empty);

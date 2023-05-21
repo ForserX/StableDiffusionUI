@@ -11,7 +11,7 @@ namespace SD_FXUI
     {
         static Dictionary<string, string> LoRAs = null;
         static string[] Formats = new string[] { "safetensors", "ckpt", "pt" };
-
+      
         public static void Reload()
         {
             if (LoRAs == null)
@@ -39,7 +39,6 @@ namespace SD_FXUI
             FullPath = FullPath.Replace("\\", "/");
 
             string ValidName = FullPath;
-
             string Ext = System.IO.Path.GetExtension(ValidName);
 
             if (Ext.Length > 1)
