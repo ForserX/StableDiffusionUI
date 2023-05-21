@@ -10,6 +10,7 @@ namespace SD_FXUI
     class LoRA
     {
         static Dictionary<string, string> LoRAs = null;
+        static string[] Formats = new string[] { "safetensors", "ckpt", "pt" };
 
         public static void Reload()
         {
@@ -22,7 +23,7 @@ namespace SD_FXUI
                 LoRAs.Clear();
             }
 
-            foreach(string File in FS.GetFilesFrom(FS.GetModelDir(FS.ModelDirs.LoRA), new string[]{ "safetensors", "ckpt", "pt"}, true))
+            foreach(string File in FS.GetFilesFrom(FS.GetModelDir(FS.ModelDirs.LoRA), Formats, true))
             {
                 string Ext = System.IO.Path.GetExtension(File);
                 string FileName = File.Replace(Ext, string.Empty);
@@ -38,6 +39,18 @@ namespace SD_FXUI
             FullPath = FullPath.Replace("\\", "/");
 
             string ValidName = FullPath;
+
+            string Ext = System.IO.Path.GetExtension(ValidName);
+
+            if (Ext.Length > 1)
+            {
+                Ext = Ext[1..];
+
+                if (Formats.Contains(Ext))
+                {
+                    return ValidName;
+                }
+            }
 
             if (!LoRAs.ContainsKey(FullPath)) 
             {
