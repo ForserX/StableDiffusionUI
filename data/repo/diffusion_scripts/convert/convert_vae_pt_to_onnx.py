@@ -64,7 +64,7 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 	vae_sample_size = vae_encoder.config.sample_size
 	
 	# Diffusers 0.16.1 - Hack for PyTorch 2.0.0
-	vae_encoder.mid_block.attentions[0]._use_2_0_attn = False
+	vae_encoder.encoder.mid_block.attentions[0]._use_2_0_attn = False
 
 	# need to get the raw tensor output (sample) from the encoder
 	vae_encoder.forward = lambda sample, return_dict: vae_encoder.encode(sample, return_dict)[0].sample()
@@ -88,7 +88,7 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 	vae_latent_channels = vae_decoder.config.latent_channels
 	
 	# Diffusers 0.16.1 - Hack for PyTorch 2.0.0
-	vae_decoder.mid_block.attentions[0]._use_2_0_attn = False
+	vae_decoder.decoder.mid_block.attentions[0]._use_2_0_attn = False
 
 	# forward only through the decoder part
 	vae_decoder.forward = vae_encoder.decode
