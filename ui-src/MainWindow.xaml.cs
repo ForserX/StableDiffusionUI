@@ -261,6 +261,26 @@ namespace SD_FXUI
         {
             SafeCMD.Exit(true);
 
+            string WorkingPath = FS.GetWorkingDir() + "/repo/";
+            if (Helper.Mode == Helper.ImplementMode.DiffCUDA)
+            {
+                WorkingPath += "cuda.venv";
+            }
+            else
+            {
+                WorkingPath += "onnx.venv";
+            }
+
+            if (!Directory.Exists(WorkingPath))
+            {
+                if (Helper.Mode == Helper.ImplementMode.DiffCUDA)
+                    Install.CheckAndInstallCUDA();
+                else
+                    Install.CheckAndInstallONNX();
+
+                return;
+            }
+
             foreach (var Proc in Helper.SecondaryProcessList)
             {
                 Proc.Kill();
