@@ -12,27 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import argparse
-import os
-import shutil
+import argparse, os, shutil, json
 from pathlib import Path
 
 import torch
 from torch.onnx import export
 
 import onnx
+import onnxruntime as ort
+
+from olive.model import ONNXModel
+from olive.workflows import run as olive_run
 
 from diffusers.models.attention_processor import AttnProcessor
-from diffusers import OnnxRuntimeModel, OnnxStableDiffusionPipeline, StableDiffusionPipeline
+from diffusers import StableDiffusionPipeline, OnnxStableDiffusionPipeline, OnnxRuntimeModel
 from unet_2d_condition_cnet import UNet2DConditionModel_Cnet
-from packaging import version
-from onnxruntime.transformers.float16 import convert_float_to_float16
 
 @torch.no_grad()
 def convert_to_fp16(
 	model_path
 ):
 	'''Converts an ONNX model on disk to FP16'''
+	from onnxruntime.transformers.float16 import convert_float_to_float16
+
 	model_dir=os.path.dirname(model_path)
 	# Breaking down in steps due to Windows bug in convert_float_to_float16_model_path
 	onnx.shape_inference.infer_shapes_path(model_path)
@@ -67,6 +69,48 @@ def onnx_export(
 		opset_version=opset,
 	)
 
+def olive_export(model_path : str, output_path: str, submodel : str):
+	fin= open(f"./model_data/olive/config_{submodel}.json", "r")
+	olive_config = json.load(fin)
+	
+	olive_config["input_model"]["config"]["model_path"] = model_path
+	olive_run(olive_config)
+
+	footprints_file_path = (f"./footprints/{submodel}_gpu-dml_footprints.json")
+
+	footprint_file = open(footprints_file_path, "r")
+	footprints = json.load(footprint_file)
+	
+	optimizer_footprint = None
+	conversion_footprint = None
+	
+	for _, footprint in footprints.items():
+		if footprint["from_pass"] == "OrtTransformersOptimization":
+			optimizer_footprint = footprint
+	
+	optimized_olive_model = ONNXModel(**optimizer_footprint["model_config"]["config"])
+	print(f"Optimized Model   : {optimized_olive_model.model_path}")
+
+	outfile_path = str(output_path) + f"/{submodel}/"
+
+	if not os.path.exists(outfile_path):
+		os.makedirs(outfile_path)
+		
+	if os.path.exists(outfile_path + "model.onnx"):
+		os.remove(outfile_path + "model.onnx")
+
+	shutil.move(optimized_olive_model.model_path, outfile_path + "model.onnx")
+	
+	footprints = None
+	footprint_file = None
+	olive_config = None
+
+	if os.path.exists("./cache"):
+		shutil.rmtree("./cache")
+
+	if os.path.exists("./footprints"):
+		shutil.rmtree("./footprints")
+
 
 @torch.no_grad()
 def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = False):
@@ -83,31 +127,8 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 	# TEXT ENCODER
 	num_tokens = pipeline.text_encoder.config.max_position_embeddings
 	text_hidden_size = pipeline.text_encoder.config.hidden_size
-	text_input = pipeline.tokenizer(
-		"A sample prompt",
-		padding="max_length",
-		max_length=pipeline.tokenizer.model_max_length,
-		truncation=True,
-		return_tensors="pt",
-	)
-	onnx_export(
-		pipeline.text_encoder,
-		# casting to torch.int32 until the CLIP fix is released: https://github.com/huggingface/transformers/pull/18515/files
-		model_args=(text_input.input_ids.to(device=device, dtype=torch.int32)),
-		output_path=output_path / "text_encoder" / "model.onnx",
-		ordered_input_names=["input_ids"],
-		output_names=["last_hidden_state", "pooler_output"],
-		dynamic_axes={
-			"input_ids": {0: "batch", 1: "sequence"},
-		},
-		opset=opset,
-	)
-	del pipeline.text_encoder
-
-	textenc_path = output_path / "text_encoder" / "model.onnx"
-	textenc_model_path = str(textenc_path.absolute().as_posix())
-	convert_to_fp16(textenc_model_path)
-
+	olive_export(model_path, output_path, "text_encoder")
+	
 	# UNET
 	pipeline.unet.set_attn_processor(AttnProcessor())
 	
@@ -148,7 +169,6 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 		convert_attribute=False,
 	)
 	del pipeline.unet
-	
 	convert_to_fp16(unet_model_path)
 	
 	# UNET CONTROLNET
@@ -240,86 +260,18 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 	
 	convert_to_fp16(cnet_model_path)
 
-	# Diffusers 0.16.1 - Hack for PyTorch 2.0.0
-	pipeline.vae.encoder.mid_block.attentions[0]._use_2_0_attn = False
-	pipeline.vae.decoder.mid_block.attentions[0]._use_2_0_attn = False
-
 	# VAE ENCODER
-	vae_encoder = pipeline.vae
-
-	vae_in_channels = vae_encoder.config.in_channels
-	vae_sample_size = vae_encoder.config.sample_size
-	# need to get the raw tensor output (sample) from the encoder
-	vae_encoder.forward = lambda sample, return_dict: vae_encoder.encode(sample, return_dict)[0].sample()
-	onnx_export(
-		vae_encoder,
-		model_args=(
-			torch.randn(1, vae_in_channels, vae_sample_size, vae_sample_size).to(device=device, dtype=dtype),
-			False,
-		),
-		output_path=output_path / "vae_encoder" / "model.onnx",
-		ordered_input_names=["sample", "return_dict"],
-		output_names=["latent_sample"],
-		dynamic_axes={
-			"sample": {0: "batch", 1: "channels", 2: "height", 3: "width"},
-		},
-		opset=opset,
-	)
+	olive_export(model_path, output_path, "vae_encoder")
 
 	# VAE DECODER
-	vae_decoder = pipeline.vae
-	vae_latent_channels = vae_decoder.config.latent_channels
-	vae_out_channels = vae_decoder.config.out_channels
-	# forward only through the decoder part
-	vae_decoder.forward = vae_encoder.decode
-	onnx_export(
-		vae_decoder,
-		model_args=(
-			torch.randn(1, vae_latent_channels, unet_sample_size, unet_sample_size).to(device=device, dtype=dtype),
-			False,
-		),
-		output_path=output_path / "vae_decoder" / "model.onnx",
-		ordered_input_names=["latent_sample", "return_dict"],
-		output_names=["sample"],
-		dynamic_axes={
-			"latent_sample": {0: "batch", 1: "channels", 2: "height", 3: "width"},
-		},
-		opset=opset,
-	)
-	del pipeline.vae
-	
+	olive_export(model_path, output_path, "vae_decoder")
+
 	# SAFETY CHECKER
+	safety_checker = None
 	if pipeline.safety_checker is not None:
-		safety_checker = pipeline.safety_checker
-		clip_num_channels = safety_checker.config.vision_config.num_channels
-		clip_image_size = safety_checker.config.vision_config.image_size
-		safety_checker.forward = safety_checker.forward_onnx
-		onnx_export(
-			pipeline.safety_checker,
-			model_args=(
-				torch.randn(
-					1,
-					clip_num_channels,
-					clip_image_size,
-					clip_image_size,
-				).to(device=device, dtype=dtype),
-				torch.randn(1, vae_sample_size, vae_sample_size, vae_out_channels).to(device=device, dtype=dtype),
-			),
-			output_path=output_path / "safety_checker" / "model.onnx",
-			ordered_input_names=["clip_input", "images"],
-			output_names=["out_images", "has_nsfw_concepts"],
-			dynamic_axes={
-				"clip_input": {0: "batch", 1: "channels", 2: "height", 3: "width"},
-				"images": {0: "batch", 1: "height", 2: "width", 3: "channels"},
-			},
-			opset=opset,
-		)
-		del pipeline.safety_checker
+		olive_export(model_path, output_path, "safety_checker")
+		pipeline.feature_extractor.save_pretrained(output_path / "feature_extractor")
 		safety_checker = OnnxRuntimeModel.from_pretrained(output_path / "safety_checker")
-		feature_extractor = pipeline.feature_extractor
-	else:
-		safety_checker = None
-		feature_extractor = None
 
 	onnx_pipeline = OnnxStableDiffusionPipeline(
 		vae_encoder=OnnxRuntimeModel.from_pretrained(output_path / "vae_encoder"),
@@ -329,21 +281,21 @@ def convert_models(model_path: str, output_path: str, opset: int, fp16: bool = F
 		unet=OnnxRuntimeModel.from_pretrained(output_path / "unet"),
 		scheduler=pipeline.scheduler,
 		safety_checker=safety_checker,
-		feature_extractor=feature_extractor,
+		feature_extractor=pipeline.feature_extractor,
 		requires_safety_checker=safety_checker is not None,
 	)
 
 	onnx_pipeline.save_pretrained(output_path)
-	
-
-	print("ONNX pipeline saved to", output_path)
-
-	del pipeline
-	del onnx_pipeline
 
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
+
+	if os.path.exists("./cache"):
+		shutil.rmtree("./cache")
+
+	if os.path.exists("./footprints"):
+		shutil.rmtree("./footprints")
 
 	parser.add_argument(
 		"--model_path",
