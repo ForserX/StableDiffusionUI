@@ -11,6 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using Windows.Storage.Pickers;
+using WinRT;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace SD_FXUI.Utils
 {
@@ -58,6 +62,24 @@ namespace SD_FXUI.Utils
             }
 
             Helper.Form.InvokeUpdateModelsList();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            CommonFileDialogResult result = dialog.ShowDialog();
+
+            if (result == CommonFileDialogResult.Ok && !string.IsNullOrWhiteSpace(dialog.FileName))
+            {
+                tbCustomModelPath.Text = dialog.FileName;
+            }
+
         }
     }
 }
