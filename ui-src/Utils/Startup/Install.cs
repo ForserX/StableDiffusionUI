@@ -4,7 +4,7 @@ namespace SD_FXUI
 {
     internal class Install
     {
-        public static void CheckAndInstallCUDA(string PyCommand = "py -3.10", bool Silent = false)
+        public static void CheckAndInstallCUDA(string PyCommand = "py -3.11", bool Silent = false)
         {
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/cuda.venv");
             if (!bDirCheck && (Silent || Notification.MsgBox("Need install packages for use CUDA")))
@@ -29,7 +29,7 @@ namespace SD_FXUI
 
         }
 
-        public static void CheckAndInstallONNX(string PyCommand = "py -3.10", bool Silent = false)
+        public static void CheckAndInstallONNX(string PyCommand = "py -3.11", bool Silent = false)
         {
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
             if (!bDirCheck && (Silent || Notification.MsgBox("Need install packages for use ONNX")))
