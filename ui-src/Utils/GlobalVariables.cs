@@ -36,5 +36,6 @@ namespace SD_FXUI
         public static ImageSource NoImageData = null;
 
         public static string PythonVersion = null;
+        public static string ModelsDir = null;
     }
 }

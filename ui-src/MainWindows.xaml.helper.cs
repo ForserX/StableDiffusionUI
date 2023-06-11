@@ -52,6 +52,8 @@ namespace SD_FXUI
 			cbUpscaler.Text = Data.Get("upscaler", "None");
 			slUpscale.Value = int.Parse(Data.Get("up_value", "4"));
 			cbSampler.Text = Data.Get("sampler", "DDIM");
+			GlobalVariables.ModelsDir = Data.Get("formmodelpath", null);
+            cbSampler.Text = Data.Get("sampler", "DDIM");
 
 			GlobalVariables.PythonVersion = Data.Get("pyver", "");
             Utils.Settings.UseNotif = Data.Get("notif", "true") == "true";
@@ -131,6 +133,7 @@ namespace SD_FXUI
 			Data.Set("lora", cbLoRA.Text);
 			Data.Set("lora_cat", cbLoRACat.Text);
 			Data.Set("cfg", tbCFG.Text);
+			Data.Set("formmodelpath", GlobalVariables.ModelsDir);
 
 			Data.Set("model", cbModel.Text);
 			Data.Set("VAE", cbVAE.Text);

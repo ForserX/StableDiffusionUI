@@ -83,5 +83,15 @@ namespace SD_FXUI.Utils
             }
 
         }
+
+        private void tbCustomModelPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            GlobalVariables.ModelsDir = tbCustomModelPath.Text.Replace('\\', '/');
+
+            if (!GlobalVariables.ModelsDir.EndsWith('/'))
+            {
+                GlobalVariables.ModelsDir += "/";
+            }
+        }
     }
 }

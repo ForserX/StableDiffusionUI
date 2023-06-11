@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using static SD_FXUI.FS;
 
 namespace SD_FXUI
 {
@@ -29,9 +30,19 @@ namespace SD_FXUI
             return filesFound.ToArray();
         }
 
+        public static string GetModelRootDir()
+        {
+            if (GlobalVariables.ModelsDir == null || GlobalVariables.ModelsDir.Length < 3)
+            {
+                GlobalVariables.ModelsDir = Directory.GetCurrentDirectory() + "\\models\\";
+            }
+
+            return GlobalVariables.ModelsDir;
+        }
+
         public static string GetWorkingDir()
         {
-            return System.IO.Directory.GetCurrentDirectory();
+            return Directory.GetCurrentDirectory();
         }
         public static string GetImagesDir()
         {
@@ -39,9 +50,9 @@ namespace SD_FXUI
         }
         public static string GetModelDir(ModelDirs SubDir = ModelDirs.General)
         {
-            string GeneralPath = Directory.GetCurrentDirectory() + "\\models\\";
+            string GeneralPath = GetModelRootDir();
 
-            switch(SubDir)
+            switch (SubDir)
             {
                 case ModelDirs.ONNX:
                     GeneralPath += "onnx/";

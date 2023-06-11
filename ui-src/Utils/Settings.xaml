@@ -30,7 +30,7 @@
 
                 <Label Content="Show VAE from models" HorizontalAlignment="Left" Margin="3,0,0,0" VerticalAlignment="Top" Width="191" BorderBrush="#FF505050"/>
                 <Label Content="Custom models path" HorizontalAlignment="Left" Margin="3,42,0,0" VerticalAlignment="Top" Width="191" BorderBrush="#FF505050"/>
-                <hc:TextBox x:Name="tbCustomModelPath" Margin="206,42,129,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="" Height="28" UndoLimit="110" BorderBrush="#FF505050"/>
+                <hc:TextBox x:Name="tbCustomModelPath" Margin="206,42,129,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="" Height="28" UndoLimit="110" BorderBrush="#FF505050" TextChanged="tbCustomModelPath_TextChanged"/>
                 <Button Content="..." HorizontalAlignment="Right" Margin="0,42,85,0" VerticalAlignment="Top" Click="Button_Click_1" BorderBrush="#FF505050"/>
                 <Button Content="Default" HorizontalAlignment="Right" Margin="0,43,3,0" VerticalAlignment="Top" Click="Button_Click" Width="72" BorderBrush="#FF505050"/>
             </Grid>
