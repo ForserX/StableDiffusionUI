@@ -54,7 +54,7 @@ namespace SD_FXUI
         }
         public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false, bool b768 = false, string YamlCfgName = "")
         {
-            string WorkDir = FS.GetModelDir() + "onnx\\";
+            string WorkDir = FS.GetWorkingDir() + "repo\\";
             Host ProcessHost = new Host(WorkDir);
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
@@ -78,7 +78,7 @@ namespace SD_FXUI
                 AddCmd += " --extract_ema";
             }
 
-            string YamlCfg = "../../repo/model_data/" + YamlCfgName;
+            string YamlCfg = "/model_data/" + YamlCfgName;
 
             if (b768)
             {
@@ -87,7 +87,7 @@ namespace SD_FXUI
             }
 
             ProcessHost.Start();
-            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"../../repo/diffusion_scripts/convert/convert_original_stable_diffusion_to_diffusers.py\" " +
+            ProcessHost.Send("\"" + PythonEnv.GetPy(Helper.VENV.Any) + "\" \"./diffusion_scripts/convert/convert_original_stable_diffusion_to_diffusers.py\" " +
                                                                             $"--checkpoint_path=\"{InputFile}\" --dump_path=\"{OutPath}\" " +
                                                                             $"--original_config_file=\"{YamlCfg}\" " + AddCmd);
 
@@ -100,7 +100,7 @@ namespace SD_FXUI
             string OutPathONNX = FS.GetModelDir(FS.ModelDirs.ONNX) + Name;
             OutPath = OutPath.Replace("\\", "/");
 
-            ProcessHost.Send("\"../../repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"../../repo/diffusion_scripts/convert/convert_diffusers_to_onnx.py\" " +
+            ProcessHost.Send("\"" + PythonEnv.GetPy(Helper.VENV.DiffONNX) + "\" \"./diffusion_scripts/convert/convert_diffusers_to_onnx.py\" " +
                                                                             $"--model_path=\"{OutPath}\" --output_path=\"{OutPathONNX}\"");
 
             ProcessHost.SendExitCommand();
@@ -110,7 +110,7 @@ namespace SD_FXUI
         public static async Task ProcessConvertDiff2Onnx(string InputFile)
         {
             Notification.SendNotification("Convertation: ~3min!");
-            string WorkDir = FS.GetModelDir(FS.ModelDirs.ONNX);
+            string WorkDir = FS.GetWorkingDir() + "/repo/";
 
             Host ProcessHost = new Host(WorkDir, "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
@@ -122,13 +122,13 @@ namespace SD_FXUI
                 Name = System.IO.Path.GetDirectoryName(InputFile);
             }
 
-            string OutPath = WorkDir + Name;
+            string OutPath = FS.GetModelDir(FS.ModelDirs.ONNX) + Name;
             OutPath = OutPath.Replace("\\", "/");
             InputFile = InputFile.Replace("\\", "/");
 
             Directory.CreateDirectory(OutPath);
 
-            ProcessHost.Start("\"../../repo/diffusion_scripts/convert/convert_diffusers_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
+            ProcessHost.Start("\"diffusion_scripts/convert/convert_diffusers_to_onnx.py\" " + $"--output_path=\"{OutPath}\"" +
                                                                             $" --model_path=\"{InputFile}\"");
 
             ProcessHost.SendExitCommand();
@@ -379,7 +379,7 @@ namespace SD_FXUI
             string OutFile = CN.Outdir() + Path.GetFileNameWithoutExtension(currentImage) + ".png";
             Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print("\n Processing poser.... \n");
-            ProcessHost.Start($"repo/diffusion_scripts/controlnet_pipe.py --mode=\"{CN.PreprocessCommandLine()}\" --workdir={ FS.GetModelDir() + "controlnet\\huggface\\" } --img=\"{currentImage}\" --model=\"{CN.GetModelPathCN()}\"  --outfile=\"{OutFile}\" ");
+            ProcessHost.Start($"repo/diffusion_scripts/controlnet_pipe.py --mode=\"{CN.PreprocessCommandLine()}\" --workdir={FS.GetModelDir() + "controlnet\\huggface\\"} --img=\"{currentImage}\" --model=\"{CN.GetModelPathCN()}\"  --outfile=\"{OutFile}\" ");
             Helper.Form.InvokeProgressUpdate(10);
             ProcessHost.SendExitCommand();
             ProcessHost.Wait();
