@@ -35,6 +35,8 @@ namespace SD_FXUI.Utils
             chNotification_1.IsChecked = UseNotifImgs;
             tsVAE.IsChecked = UseInternalVAE;
 
+            tbCustomModelPath.Text = FS.GetModelDir();
+
             IsLoadedWnd = true;
         }
 
@@ -66,7 +68,7 @@ namespace SD_FXUI.Utils
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            tbCustomModelPath.Text = FS.GetWorkingDir() + "/models/";
         }
 
         private async void Button_Click_1(object sender, RoutedEventArgs e)
