@@ -32,8 +32,15 @@ namespace SD_FXUI
 
         public static string GetModelRootDir()
         {
-            if (GlobalVariables.ModelsDir == null || GlobalVariables.ModelsDir.Length < 3)
+            bool IsNull = GlobalVariables.ModelsDir == null || GlobalVariables.ModelsDir.Length < 3;
+            bool IsNotFound = !Directory.Exists(GlobalVariables.ModelsDir);
+            if (IsNull || IsNotFound)
             {
+                if (!IsNull && IsNotFound)
+                {
+                    Notification.MsgBox($"Models directory {GlobalVariables.ModelsDir} not found! Used default path.");
+                }
+
                 GlobalVariables.ModelsDir = Directory.GetCurrentDirectory() + "\\models\\";
             }
 
