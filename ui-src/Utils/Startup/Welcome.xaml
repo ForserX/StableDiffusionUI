@@ -28,7 +28,7 @@
         <Button Content="Okay, Use CUDA" Margin="96,0,0,10" VerticalAlignment="Bottom" Click="Button_Click" HorizontalAlignment="Left"/>
         <Button Content="Okay, Use ONNX" Margin="0,0,93,8" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="Button_Click_1"/>
         <Label Content="Select python version: " HorizontalAlignment="Left" Margin="6,0,0,76" VerticalAlignment="Bottom"/>
-        <ComboBox x:Name="cbPyVer" HorizontalAlignment="Left" Margin="158,327,0,0" VerticalAlignment="Top" Width="120">
+        <ComboBox x:Name="cbPyVer" HorizontalAlignment="Left" Margin="158,0,0,77" VerticalAlignment="Bottom" Width="120">
             <ComboBoxItem Content="3.10"/>
             <ComboBoxItem Content="3.11"/>
         </ComboBox>

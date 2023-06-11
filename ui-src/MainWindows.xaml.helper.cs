@@ -53,7 +53,8 @@ namespace SD_FXUI
 			slUpscale.Value = int.Parse(Data.Get("up_value", "4"));
 			cbSampler.Text = Data.Get("sampler", "DDIM");
 
-			Utils.Settings.UseNotif = Data.Get("notif", "true") == "true";
+			GlobalVariables.PythonVersion = Data.Get("pyver", "");
+            Utils.Settings.UseNotif = Data.Get("notif", "true") == "true";
 			Utils.Settings.UseNotifImgs = Data.Get("notifi", "true") == "true";
 			Utils.Settings.UseInternalVAE = Data.Get("in_vae", "false") == "true";
 
@@ -135,7 +136,9 @@ namespace SD_FXUI
 			Data.Set("VAE", cbVAE.Text);
 			Data.Set("back_mode", ((int)(GlobalVariables.Mode)).ToString());
 
-			string HistoryStack = "";
+            Data.Set("pyver", GlobalVariables.PythonVersion);
+
+            string HistoryStack = "";
 			foreach (var item in GlobalVariables.PromHistory)
 			{
 				HistoryStack += item + "|";
