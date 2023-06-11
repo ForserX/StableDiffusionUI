@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using static SD_FXUI.FS;
 
 namespace SD_FXUI
 {
@@ -29,9 +30,26 @@ namespace SD_FXUI
             return filesFound.ToArray();
         }
 
+        public static string GetModelRootDir()
+        {
+            bool IsNull = GlobalVariables.ModelsDir == null || GlobalVariables.ModelsDir.Length < 3;
+            bool IsNotFound = !Directory.Exists(GlobalVariables.ModelsDir);
+            if (IsNull || IsNotFound)
+            {
+                if (!IsNull && IsNotFound)
+                {
+                    Notification.MsgBox($"Models directory {GlobalVariables.ModelsDir} not found! Used default path.");
+                }
+
+                GlobalVariables.ModelsDir = Directory.GetCurrentDirectory() + "\\models\\";
+            }
+
+            return GlobalVariables.ModelsDir;
+        }
+
         public static string GetWorkingDir()
         {
-            return System.IO.Directory.GetCurrentDirectory();
+            return Directory.GetCurrentDirectory();
         }
         public static string GetImagesDir()
         {
@@ -39,9 +57,9 @@ namespace SD_FXUI
         }
         public static string GetModelDir(ModelDirs SubDir = ModelDirs.General)
         {
-            string GeneralPath = Directory.GetCurrentDirectory() + "\\models\\";
+            string GeneralPath = GetModelRootDir();
 
-            switch(SubDir)
+            switch (SubDir)
             {
                 case ModelDirs.ONNX:
                     GeneralPath += "onnx/";
@@ -75,7 +93,7 @@ namespace SD_FXUI
         {
             string FirstPath = FS.GetModelDir(ModelDirs.ONNX);
 
-            if (Helper.Mode != Helper.ImplementMode.ONNX)
+            if (GlobalVariables.Mode != Helper.ImplementMode.ONNX)
                 FirstPath = FS.GetModelDir(ModelDirs.Diffusers);
 
             string TryModelPath = FirstPath + Model;

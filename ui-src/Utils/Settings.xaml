@@ -20,14 +20,24 @@
     <Grid>
         <GroupBox Header="Notification" Margin="0,1,0,305">
             <ToggleButton x:Name="chNotification" Content="           " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="20" Width="68" Margin="206,3,516,0" VerticalAlignment="Top" Checked="chNotification_Checked" Unchecked="chNotification_Checked"/>
-         </GroupBox>
-        <Label Content="Use Windows notifications" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="191"/>
-        <Label Content="Show images into notifications" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="191"/>
-        <ToggleButton x:Name="chNotification_1" Content="           " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="20" Width="68" Margin="211,86,521,0" VerticalAlignment="Top" Checked="chNotification_1_Checked" Unchecked="chNotification_1_Checked"/>
-        <GroupBox Header="Other" Margin="0,133,0,173">
-            <ToggleButton x:Name="tsVAE" Content="           " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="20" Width="68" Margin="206,3,516,0" VerticalAlignment="Top" Checked="chVAE_Checked" Unchecked="chVAE_Checked"/>
         </GroupBox>
-        <Label Content="Show VAE from models" HorizontalAlignment="Left" Margin="3,174,0,0" VerticalAlignment="Top" Width="191"/>
+        <Label Content="Use Windows notifications" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="191" BorderBrush="#FF505050"/>
+        <Label Content="Show images into notifications" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top" Width="191" BorderBrush="#FF505050"/>
+        <ToggleButton x:Name="chNotification_1" Content="           " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="20" Width="68" Margin="211,86,521,0" VerticalAlignment="Top" Checked="chNotification_1_Checked" Unchecked="chNotification_1_Checked"/>
+        <GroupBox Header="Other" Margin="0,133,0,10">
+            <Grid>
+                <ToggleButton x:Name="tsVAE" Content="           " Style="{StaticResource ToggleButtonSwitch}" TextElement.FontSize="18" IsChecked="True" Height="20" Width="68" Margin="206,3,516,0" VerticalAlignment="Top" Checked="chVAE_Checked" Unchecked="chVAE_Checked"/>
+
+                <Label Content="Show VAE from models" HorizontalAlignment="Left" Margin="3,0,0,0" VerticalAlignment="Top" Width="191" BorderBrush="#FF505050"/>
+                <Label Content="Custom models path" HorizontalAlignment="Left" Margin="3,42,0,0" VerticalAlignment="Top" Width="191" BorderBrush="#FF505050"/>
+                <hc:TextBox x:Name="tbCustomModelPath" Margin="206,42,129,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="" Height="28" UndoLimit="110" BorderBrush="#FF505050" TextChanged="tbCustomModelPath_TextChanged"/>
+                <Button Content="..." HorizontalAlignment="Right" Margin="0,42,85,0" VerticalAlignment="Top" Click="Button_Click_1" BorderBrush="#FF505050"/>
+                <Button Content="Default" HorizontalAlignment="Right" Margin="0,43,3,0" VerticalAlignment="Top" Click="Button_Click" Width="72" BorderBrush="#FF505050"/>
+            </Grid>
+
+
+        </GroupBox>
+
 
     </Grid>
 </Window>

@@ -46,13 +46,13 @@ namespace SD_FXUI
             cbDevice.SelectedIndex = 0;
 
 
-            Helper.Form = this;
+            GlobalVariables.Form = this;
 
-            Helper.UIHost = new HostForm();
-            Helper.UIHost.Hide();
+            GlobalVariables.UIHost = new HostForm();
+            GlobalVariables.UIHost.Hide();
             Host.Print("\n");
 
-            Helper.GPUID = new GPUInfo();
+            GlobalVariables.GPUID = new GPUInfo();
 
             // Load App data
             Data = new Config();
@@ -66,8 +66,8 @@ namespace SD_FXUI
             gridImg.Visibility = Visibility.Collapsed;
             brImgPane.Visibility = Visibility.Collapsed;
             btnDDB.Visibility = Visibility.Collapsed;
-            Helper.NoImageData = ViewImg.Source;
-            Helper.SafeMaskFreeImg = imgMask.Source;
+            GlobalVariables.NoImageData = ViewImg.Source;
+            GlobalVariables.SafeMaskFreeImg = imgMask.Source;
 
             ToastNotificationManagerCompat.OnActivated += toastArgs =>
             {
@@ -77,9 +77,9 @@ namespace SD_FXUI
             SafeCMD = new ModelCMD();
             cbExtractPoseSelector.SelectedIndex = 4;
 
-            Helper.MakeInfo.LoRA = new System.Collections.Generic.List<Helper.LoRAData>();
-            Helper.MakeInfo.TI = new System.Collections.Generic.List<Helper.LoRAData>();
-            Helper.MakeInfo.TINeg = new System.Collections.Generic.List<Helper.LoRAData>();
+            GlobalVariables.MakeInfo.LoRA = new System.Collections.Generic.List<Helper.LoRAData>();
+            GlobalVariables.MakeInfo.TI = new System.Collections.Generic.List<Helper.LoRAData>();
+            GlobalVariables.MakeInfo.TINeg = new System.Collections.Generic.List<Helper.LoRAData>();
 
             // FX: A hack to see the entire form in the constructor.
             grMain.Margin = new Thickness(0, 0, 0.0, 0.0);
@@ -95,7 +95,7 @@ namespace SD_FXUI
                 return;
             }
 
-            Directory.CreateDirectory(Helper.ImgPath);
+            Directory.CreateDirectory(GlobalVariables.ImgPath);
             btnDDB.Visibility = Visibility.Collapsed;
 
             if (chRandom.IsChecked.Value)
@@ -115,7 +115,7 @@ namespace SD_FXUI
 
             InvokeProgressUpdate(3);
 
-            switch (Helper.Mode)
+            switch (GlobalVariables.Mode)
             {
                 case Helper.ImplementMode.ONNX:
                     {
@@ -126,7 +126,7 @@ namespace SD_FXUI
                                 cmdline += GetCommandLineOnnx();
                                 cmdline += HelperControlNet.Current.CommandLine();
 
-                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, HelperControlNet.Current));
+                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, GlobalVariables.CurrentUpscaleSize, HelperControlNet.Current));
                                 break;
                             }
                             catch (NullReferenceException ex)
@@ -142,8 +142,8 @@ namespace SD_FXUI
                         }
                         else
                         {
-                            Helper.MakeInfo.fp16 = false;
-                            SafeCMD.PreStart(Helper.MakeInfo.Model, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value);
+                            GlobalVariables.MakeInfo.fp16 = false;
+                            SafeCMD.PreStart(GlobalVariables.MakeInfo.Model, GlobalVariables.MakeInfo.Mode, cbNSFW.IsChecked.Value);
                             SafeCMD.Start();
                         }
                         break;
@@ -161,7 +161,7 @@ namespace SD_FXUI
                                 cmdline += CurrentCN.CommandLine();
 
 
-                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, Helper.CurrentUpscaleSize, CurrentCN));
+                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, GlobalVariables.CurrentUpscaleSize, CurrentCN));
                             }
                             
                             catch (NullReferenceException ex)
@@ -180,8 +180,8 @@ namespace SD_FXUI
                         }
                         else
                         {
-                            Helper.MakeInfo.fp16 = cbFf16.IsChecked.Value;
-                            SafeCMD.PreStart(Helper.MakeInfo.Model, Helper.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
+                            GlobalVariables.MakeInfo.fp16 = cbFf16.IsChecked.Value;
+                            SafeCMD.PreStart(GlobalVariables.MakeInfo.Model, GlobalVariables.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
                             SafeCMD.Start();
                             break;
                         }
@@ -229,7 +229,7 @@ namespace SD_FXUI
             if (lbDenoise != null)
                 lbDenoise.Content = "x" + (slDenoise.Value).ToString();
 
-            Helper.Denoise = (int)slDenoise.Value;
+            GlobalVariables.Denoise = (int)slDenoise.Value;
         }
 
         private void tbSteps_TextChanged(object sender, TextChangedEventArgs e)
@@ -241,19 +241,19 @@ namespace SD_FXUI
 
         private void btFolder_ValueChanged(object sender, MouseButtonEventArgs e)
         {
-            string argument = "/select, \"" + Helper.ImgPath + "\"";
+            string argument = "/select, \"" + GlobalVariables.ImgPath + "\"";
             Host Explorer = new Host("", "explorer.exe");
             Explorer.Start(argument);
         }
         private void btCmd_ValueChanged(object sender, MouseButtonEventArgs e)
         {
-            Helper.UIHost.Hide();
-            Helper.UIHost.Show();
+            GlobalVariables.UIHost.Hide();
+            GlobalVariables.UIHost.Show();
         }
 
         private void OnClose(object sender, EventArgs e)
         {
-            Helper.UIHost.Close();
+            GlobalVariables.UIHost.Close();
             Save();
         }
 
@@ -261,13 +261,33 @@ namespace SD_FXUI
         {
             SafeCMD.Exit(true);
 
-            foreach (var Proc in Helper.SecondaryProcessList)
+            string WorkingPath = FS.GetWorkingDir() + "/repo/";
+            if (GlobalVariables.Mode == Helper.ImplementMode.DiffCUDA)
+            {
+                WorkingPath += "cuda.venv";
+            }
+            else
+            {
+                WorkingPath += "onnx.venv";
+            }
+
+            if (!Directory.Exists(WorkingPath))
+            {
+                if (GlobalVariables.Mode == Helper.ImplementMode.DiffCUDA)
+                    Install.CheckAndInstallCUDA();
+                else
+                    Install.CheckAndInstallONNX();
+
+                return;
+            }
+
+            foreach (Host Proc in GlobalVariables.SecondaryProcessList)
             {
                 Proc.Kill();
             }
 
             Host.Print("\n All task aborted (」°ロ°)」");
-            Helper.SecondaryProcessList.Clear();
+            GlobalVariables.SecondaryProcessList.Clear();
             InvokeProgressUpdate(0);
         }
 
@@ -289,11 +309,11 @@ namespace SD_FXUI
 
         private void btnONNX_Click(object sender, RoutedEventArgs e)
         {
-            if (Helper.Mode != Helper.ImplementMode.ONNX)
+            if (GlobalVariables.Mode != Helper.ImplementMode.ONNX)
             {
                 tsCN.IsChecked = false;
 
-                Helper.Mode = Helper.ImplementMode.ONNX;
+                GlobalVariables.Mode = Helper.ImplementMode.ONNX;
                 Install.CheckAndInstallONNX();
 
                 Brush Safe = new SolidColorBrush(Colors.Black);
@@ -306,7 +326,7 @@ namespace SD_FXUI
 
                 cbDevice.Items.Clear();
 
-                foreach (var item in Helper.GPUID.GPUs)
+                foreach (var item in GlobalVariables.GPUID.GPUs)
                 {
                     cbDevice.Items.Add(item);
                 }
@@ -334,9 +354,9 @@ namespace SD_FXUI
         }
         private void btnDiffCuda_Click(object sender, RoutedEventArgs e)
         {
-            if (Helper.Mode != Helper.ImplementMode.DiffCUDA)
+            if (GlobalVariables.Mode != Helper.ImplementMode.DiffCUDA)
             {
-                Helper.Mode = Helper.ImplementMode.DiffCUDA;
+                GlobalVariables.Mode = Helper.ImplementMode.DiffCUDA;
 
                 Install.CheckAndInstallCUDA();
 
@@ -362,7 +382,7 @@ namespace SD_FXUI
 
                 cbSampler.Text = Data.Get("sampler", "UniPCMultistep");
 
-                foreach (var item in Helper.GPUID.GPUs)
+                foreach (var item in GlobalVariables.GPUID.GPUs)
                 {
                     if (item.Contains("nvidia"))
                     {
@@ -388,9 +408,9 @@ namespace SD_FXUI
 
         private void btnDiffCpu_Click(object sender, RoutedEventArgs e)
         {
-            if (Helper.Mode != Helper.ImplementMode.DiffCPU)
+            if (GlobalVariables.Mode != Helper.ImplementMode.DiffCPU)
             {
-                Helper.Mode = Helper.ImplementMode.DiffCPU;
+                GlobalVariables.Mode = Helper.ImplementMode.DiffCPU;
                 Install.CheckAndInstallONNX();
 
                 Brush Safe = new SolidColorBrush(Colors.Black);
@@ -424,9 +444,9 @@ namespace SD_FXUI
         }
         private void lvImages_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Helper.ImgList.Count > 0)
+            if (GlobalVariables.ImgList.Count > 0)
             {
-                currentImage = (Helper.ImgList[lvImages.SelectedIndex]);
+                currentImage = (GlobalVariables.ImgList[lvImages.SelectedIndex]);
 
                 ViewImg.Source = CodeUtils.BitmapFromUri(new Uri(currentImage));
                 string NewCurrentImage = currentImage.Replace("_upscale.", ".");
@@ -436,16 +456,16 @@ namespace SD_FXUI
                     currentImage = NewCurrentImage;
                 }
 
-                string Name = FS.GetImagesDir() + "best\\" + Path.GetFileName(Helper.ImgList[lvImages.SelectedIndex]);
+                string Name = FS.GetImagesDir() + "best\\" + Path.GetFileName(GlobalVariables.ImgList[lvImages.SelectedIndex]);
 
                 if (File.Exists(Name))
                 {
-                    Helper.ActiveImageState = Helper.ImageState.Favor;
+                    GlobalVariables.ActiveImageState = Helper.ImageState.Favor;
                     btnFavor.Source = imgFavor.Source;
                 }
                 else
                 {
-                    Helper.ActiveImageState = Helper.ImageState.Free;
+                    GlobalVariables.ActiveImageState = Helper.ImageState.Free;
                     btnFavor.Source = imgNotFavor.Source;
                 }
             }
@@ -455,7 +475,7 @@ namespace SD_FXUI
             if (cbDevice.SelectedItem == null)
                 return;
 
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            if (GlobalVariables.Mode == Helper.ImplementMode.ONNX)
             {
                 Install.WrapONNXGPU(cbDevice.SelectedIndex > 0);
             }
@@ -470,13 +490,13 @@ namespace SD_FXUI
             bool? IsOpened = OpenDlg.ShowDialog();
             if (IsOpened.Value)
             {
-                Helper.InputImagePath = OpenDlg.FileName;
+                GlobalVariables.InputImagePath = OpenDlg.FileName;
                 gridImg.Visibility = Visibility.Visible;
                 brImgPane.Visibility = Visibility.Visible;
-                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(Helper.InputImagePath));
-                Helper.DrawMode = Helper.DrawingMode.Img2Img;
+                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(GlobalVariables.InputImagePath));
+                GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
 
-                tbMeta.Text = CodeUtils.MetaData(Helper.InputImagePath);
+                tbMeta.Text = CodeUtils.MetaData(GlobalVariables.InputImagePath);
             }
         }
 
@@ -492,13 +512,13 @@ namespace SD_FXUI
 
         private void btnToImg_Click(object sender, MouseButtonEventArgs e)
         {
-            if (currentImage == null && Helper.ImgList.Count <= 0)
+            if (currentImage == null && GlobalVariables.ImgList.Count <= 0)
             {
                 return;
             }
             else if (currentImage != null)
             {
-                Helper.InputImagePath = currentImage;
+                GlobalVariables.InputImagePath = currentImage;
                 imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(currentImage));
             }
             else
@@ -509,15 +529,15 @@ namespace SD_FXUI
                     Idx = lvImages.Items.Count - 1;
                 }
 
-                Helper.InputImagePath = Helper.ImgList[Idx];
-                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(Helper.InputImagePath));
+                GlobalVariables.InputImagePath = GlobalVariables.ImgList[Idx];
+                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(GlobalVariables.InputImagePath));
             }
 
-            tbMeta.Text = CodeUtils.MetaData(Helper.InputImagePath);
+            tbMeta.Text = CodeUtils.MetaData(GlobalVariables.InputImagePath);
 
             gridImg.Visibility = Visibility.Visible;
             brImgPane.Visibility = Visibility.Visible;
-            Helper.DrawMode = Helper.DrawingMode.Img2Img;
+            GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
         }
 
         private void tbDenoising_TextChanged(object sender, TextChangedEventArgs e)
@@ -530,12 +550,12 @@ namespace SD_FXUI
             gridImg.Visibility = Visibility.Collapsed;
             brImgPane.Visibility = Visibility.Collapsed;
 
-            Helper.DrawMode = Helper.DrawingMode.Text2Img;
-            imgLoaded.Source = Helper.NoImageData;
+            GlobalVariables.DrawMode = Helper.DrawingMode.Text2Img;
+            imgLoaded.Source = GlobalVariables.NoImageData;
 
             // Mask clear
-            imgMask.Source = Helper.SafeMaskFreeImg;
-            Helper.ImgMaskPath = string.Empty;
+            imgMask.Source = GlobalVariables.SafeMaskFreeImg;
+            GlobalVariables.ImgMaskPath = string.Empty;
             imgMask.Visibility = Visibility.Collapsed;
         }
 
@@ -558,19 +578,19 @@ namespace SD_FXUI
 
             int CurrentSel = lvImages.SelectedItem != null ? lvImages.SelectedIndex : 0;
 
-            if (Helper.ImageState.Favor == Helper.ActiveImageState)
+            if (Helper.ImageState.Favor == GlobalVariables.ActiveImageState)
             {
-                string Name = Path.GetFileName(Helper.ImgList[CurrentSel]);
+                string Name = Path.GetFileName(GlobalVariables.ImgList[CurrentSel]);
                 File.Delete(FS.GetImagesDir() + "best\\" + Name);
-                Helper.ActiveImageState = Helper.ImageState.Free;
+                GlobalVariables.ActiveImageState = Helper.ImageState.Free;
 
                 btnFavor.Source = imgNotFavor.Source;
             }
             else
             {
-                string Name = Path.GetFileName(Helper.ImgList[CurrentSel]);
-                File.Copy(Helper.ImgList[CurrentSel], FS.GetImagesDir() + "best\\" + Name);
-                Helper.ActiveImageState = Helper.ImageState.Favor;
+                string Name = Path.GetFileName(GlobalVariables.ImgList[CurrentSel]);
+                File.Copy(GlobalVariables.ImgList[CurrentSel], FS.GetImagesDir() + "best\\" + Name);
+                GlobalVariables.ActiveImageState = Helper.ImageState.Favor;
 
                 btnFavor.Source = imgFavor.Source;
             }
@@ -578,7 +598,7 @@ namespace SD_FXUI
 
         private void cbUpscaler_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Helper.CurrentUpscalerType = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
+            GlobalVariables.CurrentUpscalerType = (Helper.UpscalerType)cbUpscaler.SelectedIndex;
 
             // Waifu and SRMD
             if (cbUpscaler.SelectedIndex > 3 && cbUpscaler.SelectedIndex < 7)
@@ -605,12 +625,12 @@ namespace SD_FXUI
 
         private void cbGfpgan_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            Helper.EnableGFPGAN = cbGfpgan.IsChecked.Value;
+            GlobalVariables.EnableGFPGAN = cbGfpgan.IsChecked.Value;
         }
 
         private void btnDeepDanbooru_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(() => CMD.DeepDanbooruProcess(Helper.InputImagePath));
+            Task.Run(() => CMD.DeepDanbooruProcess(GlobalVariables.InputImagePath));
         }
 
         private void Button_Click_DeepDanbooru(object sender, RoutedEventArgs e)
@@ -696,8 +716,8 @@ namespace SD_FXUI
         {
             btnImageClearMask.Visibility = Visibility.Collapsed;
 
-            imgMask.Source = Helper.SafeMaskFreeImg;
-            Helper.ImgMaskPath = string.Empty;
+            imgMask.Source = GlobalVariables.SafeMaskFreeImg;
+            GlobalVariables.ImgMaskPath = string.Empty;
         }
 
         private void btnSettingsClick(object sender, RoutedEventArgs e)
@@ -712,7 +732,7 @@ namespace SD_FXUI
 
             if (dropedFile.ToLower().EndsWith(".png") || dropedFile.ToLower().EndsWith(".jpg") || dropedFile.ToLower().EndsWith(".jpeg"))
             {
-                Helper.ImgMaskPath = dropedFile;
+                GlobalVariables.ImgMaskPath = dropedFile;
                 imgMask.Source = CodeUtils.BitmapFromUri(new Uri(dropedFile));
                 btnImageClearMask.Visibility = Visibility.Visible;
             }
@@ -773,7 +793,7 @@ namespace SD_FXUI
             if (e.AddedItems.Count == 0)
                 return;
 
-            string PickPathName = FS.GetModelDir() + (Helper.Mode != Helper.ImplementMode.ONNX ? "Diffusers\\" : "onnx\\") + e.AddedItems[0] + "\\logo.";
+            string PickPathName = FS.GetModelDir() + (GlobalVariables.Mode != Helper.ImplementMode.ONNX ? "Diffusers\\" : "onnx\\") + e.AddedItems[0] + "\\logo.";
 
             if (System.IO.File.Exists(PickPathName + "png"))
             {
@@ -785,7 +805,7 @@ namespace SD_FXUI
             }
             else
             {
-                imgModelPrivew.Source = Helper.NoImageData;
+                imgModelPrivew.Source = GlobalVariables.NoImageData;
             }
         }
 
@@ -799,7 +819,7 @@ namespace SD_FXUI
 
         private void btnInImgPose_Click(object sender, RoutedEventArgs e)
         {
-            string CurrentImg = Helper.InputImagePath;
+            string CurrentImg = GlobalVariables.InputImagePath;
 
             ControlNetBase CN = HelperControlNet.GetType(cbExtractPoseSelector.Text);
             Task.Run(() => CMD.PoserProcess(CurrentImg, CN));
@@ -816,7 +836,7 @@ namespace SD_FXUI
 
             if (e.AddedItems.Count == 0)
             {
-                Helper.CurrentPose = null;
+                GlobalVariables.CurrentPose = null;
                 return;
             }
 
@@ -829,7 +849,7 @@ namespace SD_FXUI
             if (File.Exists(ImgPath))
                 imgPose.Source = CodeUtils.BitmapFromUri(new Uri(ImgPath));
 
-            Helper.CurrentPose = ImgPath;
+            GlobalVariables.CurrentPose = ImgPath;
         }
 
         private void tsCN_Checked(object sender, RoutedEventArgs e)
@@ -843,7 +863,7 @@ namespace SD_FXUI
                 cbSampler.Text = "UniPCMultistep";
             }
 
-            if (Helper.Mode != Helper.ImplementMode.ONNX)
+            if (GlobalVariables.Mode != Helper.ImplementMode.ONNX)
                 return;
 
             if (tsCN.IsChecked == true)
@@ -860,7 +880,7 @@ namespace SD_FXUI
 
         private void tsTTA_Checked(object sender, RoutedEventArgs e)
         {
-            Helper.TTA = tsTTA.IsChecked.Value;
+            GlobalVariables.TTA = tsTTA.IsChecked.Value;
         }
 
         private void cbPix2Pix_Checked(object sender, RoutedEventArgs e)

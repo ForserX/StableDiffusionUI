@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static SD_FXUI.Helper;
 
 namespace SD_FXUI
 {
@@ -88,11 +85,11 @@ namespace SD_FXUI
 
                 if (IsPositive)
                 {
-                    Helper.MakeInfo.TI.Add(TIData);
+                    GlobalVariables.MakeInfo.TI.Add(TIData);
                 }
                 else
                 {
-                    Helper.MakeInfo.TINeg.Add(TIData);
+                    GlobalVariables.MakeInfo.TINeg.Add(TIData);
                 }
             }
 

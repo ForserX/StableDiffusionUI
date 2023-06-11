@@ -28,14 +28,14 @@ namespace SD_FXUI
                 }
             }
 
-            string PathForMode = GetPy((Helper.VENV)Helper.Mode);
+            string PathForMode = GetPy((Helper.VENV)GlobalVariables.Mode);
             if (System.IO.File.Exists(PathForMode))
             {
                 return PathForMode;
             }
 
             string Any = "";
-            int CurModeIdx = (int)Helper.Mode;
+            int CurModeIdx = (int)GlobalVariables.Mode;
             if (CurModeIdx < 4)
             {
                 Any = GetPy((Helper.VENV)CurModeIdx);
@@ -78,14 +78,14 @@ namespace SD_FXUI
                     }
             }
 
-            string PathForMode = GetPip((Helper.VENV)Helper.Mode);
+            string PathForMode = GetPip((Helper.VENV)GlobalVariables.Mode);
             if (System.IO.File.Exists(PathForMode))
             {
                 return PathForMode;
             }
 
             string Any = "";
-            int CurModeIdx = (int)Helper.Mode;
+            int CurModeIdx = (int)GlobalVariables.Mode;
             if (CurModeIdx < 4)
             {
                 Any = GetPip((Helper.VENV)CurModeIdx);

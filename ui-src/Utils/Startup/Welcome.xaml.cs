@@ -10,17 +10,20 @@ namespace SD_FXUI
         public Welcome()
         {
             InitializeComponent();
+            cbPyVer.SelectedIndex = 0;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Helper.Mode = Helper.ImplementMode.DiffCUDA;
+            GlobalVariables.Mode = Helper.ImplementMode.DiffCUDA;
+            GlobalVariables.PythonVersion = cbPyVer.Text;
             this.Close();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Helper.Mode = Helper.ImplementMode.ONNX;
+            GlobalVariables.Mode = Helper.ImplementMode.ONNX;
+            GlobalVariables.PythonVersion = cbPyVer.Text;
             this.Close();
         }
     }

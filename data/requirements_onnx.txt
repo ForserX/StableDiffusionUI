@@ -27,7 +27,7 @@ accelerate
 # ONNX Trash
 --extra-index-url https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/
 onnxruntime
-ort-nightly-directml==1.16.0.dev20230505007
+ort-nightly-directml==1.16.0.dev20230516003
 
 # GFPGAN
 gfpgan

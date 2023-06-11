@@ -4,12 +4,31 @@ namespace SD_FXUI
 {
     internal class Install
     {
-        public static void CheckAndInstallCUDA(string PyCommand = "py -3.10", bool Silent = false)
+        private static string GetValidPyVer(string Input)
         {
+            if (GlobalVariables.PythonVersion.Length == 0)
+            {
+                GlobalVariables.PythonVersion = "3.10";
+            }
+
+            if (Input == "default")
+            {
+                return "py -" + GlobalVariables.PythonVersion;
+            }
+            else
+            {
+                return Input;
+            }
+        }
+
+        public static void CheckAndInstallCUDA(string PyCommand = "default", bool Silent = false)
+        {
+            PyCommand = GetValidPyVer(PyCommand);
+
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/cuda.venv");
             if (!bDirCheck && (Silent || Notification.MsgBox("Need install packages for use CUDA")))
             {
-                Helper.UIHost.Show();
+                GlobalVariables.UIHost.Show();
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
 
                 Host.Print("Install CUDA runtimes... Please wait");
@@ -25,16 +44,19 @@ namespace SD_FXUI
                 {
                     CheckAndInstallCUDA("python", true);
                 }
+                Host.Print("Install done!");
             }
 
         }
 
-        public static void CheckAndInstallONNX(string PyCommand = "py -3.10", bool Silent = false)
+        public static void CheckAndInstallONNX(string PyCommand = "default", bool Silent = false)
         {
+            PyCommand = GetValidPyVer(PyCommand);
+
             bool bDirCheck = System.IO.Directory.Exists(FS.GetWorkingDir() + "/repo/onnx.venv");
             if (!bDirCheck && (Silent || Notification.MsgBox("Need install packages for use ONNX")))
             {
-                Helper.UIHost.Show();
+                GlobalVariables.UIHost.Show();
                 Host.Print("Install ONNX runtimes... Please wait");
                 Host Cmd = new Host(FS.GetWorkingDir(), "cmd.exe", true);
                 Cmd.Start();
@@ -57,6 +79,7 @@ namespace SD_FXUI
                 {
                     CheckAndInstallONNX("python", true);
                 }
+                Host.Print("Install done!");
             }
 
         }
@@ -104,7 +127,7 @@ namespace SD_FXUI
         {
             string FileName = FS.GetWorkingDir() + @"\repo\onnx.venv\Lib\site-packages\controlnet_aux\open_pose\__init__.py";
 
-            if (Helper.Mode == Helper.ImplementMode.DiffCUDA)
+            if (GlobalVariables.Mode == Helper.ImplementMode.DiffCUDA)
             {
                 FileName = FS.GetWorkingDir() + @"\repo\cuda.venv\Lib\site-packages\controlnet_aux\open_pose\__init__.py";
             }
@@ -152,7 +175,7 @@ namespace SD_FXUI
         {
             string FileName = FS.GetWorkingDir() + @"\repo\onnx.venv\Lib\site-packages\controlnet_aux\hed\__init__.py";
 
-            if (Helper.Mode == Helper.ImplementMode.DiffCUDA)
+            if (GlobalVariables.Mode == Helper.ImplementMode.DiffCUDA)
             {
                 FileName = FS.GetWorkingDir() + @"\repo\cuda.venv\Lib\site-packages\controlnet_aux\hed\__init__.py";
             }
@@ -191,7 +214,7 @@ namespace SD_FXUI
         {
             string FileName = FS.GetWorkingDir() + @"\repo\onnx.venv\Lib\site-packages\controlnet_aux\mlsd\__init__.py";
 
-            if (Helper.Mode == Helper.ImplementMode.DiffCUDA)
+            if (GlobalVariables.Mode == Helper.ImplementMode.DiffCUDA)
             {
                 FileName = FS.GetWorkingDir() + @"\repo\cuda.venv\Lib\site-packages\controlnet_aux\mlsd\__init__.py";
             }
@@ -229,9 +252,9 @@ namespace SD_FXUI
 
         internal static void SetupDirs()
         {
-            Helper.CachePath = FS.GetModelDir() + @"\diffusers\";
-            Helper.ImgPath = FS.GetImagesDir() + CodeUtils.Data() + "\\";
-            Helper.ImgPath.Replace('\\', '/');
+            GlobalVariables.CachePath = FS.GetModelDir() + @"\diffusers\";
+            GlobalVariables.ImgPath = FS.GetImagesDir() + CodeUtils.Data() + "\\";
+            GlobalVariables.ImgPath.Replace('\\', '/');
 
             string OldDiffDirectoryName = FS.GetModelDir() + "diff";
             string NewDiffDirectoryName = FS.GetModelDir(FS.ModelDirs.Diffusers);
@@ -240,7 +263,7 @@ namespace SD_FXUI
                 Directory.Move(OldDiffDirectoryName, NewDiffDirectoryName);
             }
 
-            Directory.CreateDirectory(Helper.CachePath);
+            Directory.CreateDirectory(GlobalVariables.CachePath);
             Directory.CreateDirectory(FS.GetImagesDir() + "Best");
             Directory.CreateDirectory(FS.GetModelDir() + @"\huggingface");
             Directory.CreateDirectory(FS.GetModelDir() + @"\onnx");

@@ -11,6 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using Windows.Storage.Pickers;
+using WinRT;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace SD_FXUI.Utils
 {
@@ -30,6 +34,8 @@ namespace SD_FXUI.Utils
             chNotification.IsChecked = UseNotif;
             chNotification_1.IsChecked = UseNotifImgs;
             tsVAE.IsChecked = UseInternalVAE;
+
+            tbCustomModelPath.Text = FS.GetModelDir();
 
             IsLoadedWnd = true;
         }
@@ -57,7 +63,35 @@ namespace SD_FXUI.Utils
                 UseInternalVAE = tsVAE.IsChecked.Value;
             }
 
-            Helper.Form.InvokeUpdateModelsList();
+            GlobalVariables.Form.InvokeUpdateModelsList();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            tbCustomModelPath.Text = FS.GetWorkingDir() + "/models/";
+        }
+
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            CommonFileDialogResult result = dialog.ShowDialog();
+
+            if (result == CommonFileDialogResult.Ok && !string.IsNullOrWhiteSpace(dialog.FileName))
+            {
+                tbCustomModelPath.Text = dialog.FileName;
+            }
+
+        }
+
+        private void tbCustomModelPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            GlobalVariables.ModelsDir = tbCustomModelPath.Text.Replace('\\', '/');
+
+            if (!GlobalVariables.ModelsDir.EndsWith('/'))
+            {
+                GlobalVariables.ModelsDir += "/";
+            }
         }
     }
 }

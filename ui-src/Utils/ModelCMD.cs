@@ -47,7 +47,7 @@ namespace SD_FXUI
                         CmdLine += " --nsfw=True ";
                     }
 
-                    if (Helper.Form.CPUUse)
+                    if (GlobalVariables.Form.CPUUse)
                     {
                         CmdLine += " --device=\"cpu\"";
                     }
@@ -56,7 +56,7 @@ namespace SD_FXUI
                         CmdLine += " --device=\"cuda\"";
                     }
 
-                    Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.Form.CPUUse ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
+                    Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(GlobalVariables.Form.CPUUse ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
                     Process.Start("./repo/diffusion_scripts/sd_cuda_safe.py " + CmdLine);
                 }
                 else
@@ -80,13 +80,13 @@ namespace SD_FXUI
             }
             else
             {
-                Helper.Form.InvokeProgressUpdate(20);
+                GlobalVariables.Form.InvokeProgressUpdate(20);
             }
         }
 
         public void Start()
         {
-            string JSONStr = JsonConvert.SerializeObject(Helper.MakeInfo);
+            string JSONStr = JsonConvert.SerializeObject(GlobalVariables.MakeInfo);
 
             Process.Send(JSONStr);
         }

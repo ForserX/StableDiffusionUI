@@ -86,7 +86,7 @@ namespace SD_FXUI
 
                 LoRAData.Value = (float)int.Parse(LoraDataStr[(DelimerIdx + 1)..]) / 100.0f;
 
-                Helper.MakeInfo.LoRA.Add(LoRAData);
+                GlobalVariables.MakeInfo.LoRA.Add(LoRAData);
             }
 
             return SourcePrompt;

@@ -128,21 +128,11 @@ namespace SD_FXUI.Utils
                 */
             }
 
-            Helper.Form.UpdateModelsList();
+            GlobalVariables.Form.UpdateModelsList();
         }
 
         private void cbTo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            int ToID = cbTo.SelectedIndex;
-
-            //if (ToID == 1)
-            //{
-            //    cbFrom.Items.Remove(cbFrom.Items[2]);
-            //}
-            //else
-            //{
-            //    cbFrom.Items.Insert(2, "huggingface");
-            //}
         }
 
         private void cbPath_Drop(object sender, DragEventArgs e)
@@ -154,7 +144,7 @@ namespace SD_FXUI.Utils
             // Assuming you have one file that you care about, pass it off to whatever
             // handling code you have defined.
 
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            if (GlobalVariables.Mode == Helper.ImplementMode.ONNX)
             {
                 cbTo.SelectedIndex = 0;
             }
