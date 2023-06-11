@@ -75,7 +75,7 @@ namespace SD_FXUI
         {
             string FirstPath = FS.GetModelDir(ModelDirs.ONNX);
 
-            if (Helper.Mode != Helper.ImplementMode.ONNX)
+            if (GlobalVariables.Mode != Helper.ImplementMode.ONNX)
                 FirstPath = FS.GetModelDir(ModelDirs.Diffusers);
 
             string TryModelPath = FirstPath + Model;

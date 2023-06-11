@@ -59,7 +59,7 @@ namespace SD_FXUI
                 Process.BeginErrorReadLine();
             }
 
-            Helper.SecondaryProcessList.Add(this);
+            GlobalVariables.SecondaryProcessList.Add(this);
         }
 
         static public void Print(string Message)
@@ -76,7 +76,7 @@ namespace SD_FXUI
             if (HostFilter.CheckFalseWarning(Message))
                 return;
 
-            Helper.UIHost.Print(Message);
+            GlobalVariables.UIHost.Print(Message);
 
         }
 
@@ -86,13 +86,6 @@ namespace SD_FXUI
             Console.SetCursorPosition(0, Console.CursorTop);
             Console.Write(new string(' ', Console.WindowWidth)); 
             Console.SetCursorPosition(0, currentLineCursor);
-
-            /*
-             *   Sample
-             *   Console.WriteLine("Test");
-             *   Console.SetCursorPosition(0, Console.CursorTop - 1);
-             *   ClearCurrentConsoleLine();
-             */
         }
 
 
@@ -114,9 +107,9 @@ namespace SD_FXUI
         public void Wait()
         {
             Process.WaitForExit();
-            if (Helper.SecondaryProcessList.Contains(this))
+            if (GlobalVariables.SecondaryProcessList.Contains(this))
             {
-                Helper.SecondaryProcessList.Remove(this);
+                GlobalVariables.SecondaryProcessList.Remove(this);
             }
         }
     }

@@ -16,7 +16,7 @@ namespace SD_FXUI
                 if (Notification.MsgBox("Warning! Incorrect DML Provider! To speed up the generation, you need to update the package. Update?"))
                 {
                     // Drop loaded model
-                    Helper.Form.InvokeDropModel();
+                    GlobalVariables.Form.InvokeDropModel();
 
                     HostReader.Filter("py -install ort-nightly-directml==1.15.0.dev20230408001 --extra-index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/ --force");
                 }
@@ -24,14 +24,14 @@ namespace SD_FXUI
 
             if (Message.Contains("Traceback (most recent call last)"))
             {
-                Helper.UIHost.Dispatcher.Invoke(() => 
-                { 
-                    Helper.UIHost.Hide(); 
-                    Helper.UIHost.Show(); 
+                GlobalVariables.UIHost.Dispatcher.Invoke(() => 
+                {
+                    GlobalVariables.UIHost.Hide();
+                    GlobalVariables.UIHost.Show(); 
                 });
 
                 // Drop loaded model
-                Helper.Form.InvokeDropModel();
+                GlobalVariables.Form.InvokeDropModel();
 
                 Notification.SendErrorNotification("Error! See host for details!");               
             }
@@ -40,9 +40,9 @@ namespace SD_FXUI
         {
             if (Message.Contains("ValueError: `height` and `width` have to be divisible by 8"))
             {
-                Helper.UIHost.Dispatcher.Invoke(() =>
+                GlobalVariables.UIHost.Dispatcher.Invoke(() =>
                 {
-                    Helper.UIHost.Hide();
+                    GlobalVariables.UIHost.Hide();
                 });
                 Notification.MsgBox("The image size is not a multiple of 8!");              
             }
@@ -51,9 +51,9 @@ namespace SD_FXUI
         {
             if (Message.Contains("RuntimeError: \"LayerNormKernelImpl\" not implemented for 'Half'"))
             {
-                Helper.UIHost.Dispatcher.Invoke(() =>
+                GlobalVariables.UIHost.Dispatcher.Invoke(() =>
                 {
-                    Helper.UIHost.Hide();
+                    GlobalVariables.UIHost.Hide();
                 });
                 Notification.MsgBox("Disable fp16. Not supported for current mode!");
             }
@@ -63,18 +63,18 @@ namespace SD_FXUI
         {
             if (Message.Contains("attention_probs = attention_scores.softmax(dim=-1)"))
             {
-                Helper.UIHost.Dispatcher.Invoke(() =>
+                GlobalVariables.UIHost.Dispatcher.Invoke(() =>
                 {
-                    Helper.UIHost.Hide();
+                    GlobalVariables.UIHost.Hide();
                 });
                 Notification.MsgBox("CUDA GPU Error: Out of memory. Use fp16 or reduce the image size!");
             }
 
             if (Message.Contains("onnxruntime.capi.onnxruntime_pybind11_state.RuntimeException"))
             {
-                Helper.UIHost.Dispatcher.Invoke(() =>
+                GlobalVariables.UIHost.Dispatcher.Invoke(() =>
                 {
-                    Helper.UIHost.Hide();
+                    GlobalVariables.UIHost.Hide();
                 });
                 Notification.MsgBox("ONNX GPU Error: Out of memory. Use reduce the image size!");
             }
@@ -85,13 +85,13 @@ namespace SD_FXUI
             if (Message.Contains("SD: Done"))
             {
                 Notification.SendNotification(Message);
-                Helper.Form.InvokeUpdateModelsList();
+                GlobalVariables.Form.InvokeUpdateModelsList();
             }
 
             if (Message.Contains("SD: Merge is done!"))
             {
                 Notification.SendNotification("Models merge: done!");
-                Helper.Form.InvokeUpdateModelsList();
+                GlobalVariables.Form.InvokeUpdateModelsList();
             }
         }
 
@@ -99,50 +99,50 @@ namespace SD_FXUI
         {
             if (Message.Contains("SD: Model loaded"))
             {
-                Helper.Form.InvokeProgressUpdate(20);
+                GlobalVariables.Form.InvokeProgressUpdate(20);
             }
 
             if (Message.Contains("Model preload: done"))
             {
-                Helper.Form.InvokeProgressUpdate(20);
+                GlobalVariables.Form.InvokeProgressUpdate(20);
             }
 
             if (Message.Contains("SD: Generating done"))
             {
-                Helper.Form.InvokeProgressUpdate(60);
+                GlobalVariables.Form.InvokeProgressUpdate(60);
             }
 
             if (Message.Contains("SD Pipeline: Generating done!"))
             {
-                Helper.Form.InvokeProgressUpdate(60);
+                GlobalVariables.Form.InvokeProgressUpdate(60);
 
-                int UpSize = Helper.CurrentUpscaleSize;
+                int UpSize = GlobalVariables.CurrentUpscaleSize;
                 var Files = FS.GetFilesFrom(FS.GetWorkingDir(), new string[] { "png", "jpg" }, false);
                 foreach (var file in Files)
                 {
-                    string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
+                    string NewFilePath = GlobalVariables.ImgPath + System.IO.Path.GetFileName(file);
                     System.IO.File.Move(file, NewFilePath);
 
-                    if (UpSize == 0 || Helper.CurrentUpscalerType == Helper.UpscalerType.None)
+                    if (UpSize == 0 || GlobalVariables.CurrentUpscalerType == Helper.UpscalerType.None)
                     {
-                        Helper.Form.UpdateViewImg(NewFilePath);
+                        GlobalVariables.Form.UpdateViewImg(NewFilePath);
                     }
                     else
                     {
                         Task.Run(() => CMD.UpscalerRunner(UpSize, NewFilePath));
-                        Helper.ImgList.Add(NewFilePath);
+                        GlobalVariables.ImgList.Add(NewFilePath);
                     }
                 }
 
                 Host.Print("\n  Task Done..... \n");
                 Notification.SendNotification("Task: done!", true);
-                Helper.Form.InvokeProgressUpdate(100);
-                Helper.Form.UpdateCurrentViewImg();
+                GlobalVariables.Form.InvokeProgressUpdate(100);
+                GlobalVariables.Form.UpdateCurrentViewImg();
             }
 
             if (Message.Contains("Image generate"))
             {
-                Helper.Form.InvokeProgressApply();
+                GlobalVariables.Form.InvokeProgressApply();
             }
         }
 
@@ -171,7 +171,7 @@ namespace SD_FXUI
             if (Message.Length > 335)
                 return true;
 
-            if (Helper.Mode != Helper.ImplementMode.InvokeAI)
+            if (GlobalVariables.Mode != Helper.ImplementMode.InvokeAI)
             {
                 if (Message.Contains("Token indices sequence length is longer than the specified maximum sequence length for this model"))
                 {
@@ -188,18 +188,18 @@ namespace SD_FXUI
             if (Message.Contains("CN: Pose - "))
             {
                 string PoseImg = Message.Replace("CN: Pose - ", string.Empty);
-                Helper.Form.UpdateViewImg(PoseImg, true);
-                Helper.Form.InvokeUpdateModelsList();
+                GlobalVariables.Form.UpdateViewImg(PoseImg, true);
+                GlobalVariables.Form.InvokeUpdateModelsList();
             }
 
             if (Message.Contains("CN: Model loaded"))
             {
-                Helper.Form.InvokeProgressUpdate(20);
+                GlobalVariables.Form.InvokeProgressUpdate(20);
             }
 
             if (Message.Contains("CN: Image from Pose: done!"))
             {
-                Helper.Form.InvokeProgressApply();
+                GlobalVariables.Form.InvokeProgressApply();
             }
 
             
@@ -218,7 +218,7 @@ namespace SD_FXUI
                 NewPrompt = NewPrompt.Replace("rating:explicit", string.Empty);
 
                 //NewPrompt = NewPrompt.Substring(1, NewPrompt.Length - 2);
-                Helper.Form.InvokeSetPrompt(NewPrompt);
+                GlobalVariables.Form.InvokeSetPrompt(NewPrompt);
             }
         }
     }

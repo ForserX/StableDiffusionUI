@@ -36,9 +36,9 @@ namespace SD_FXUI
 
         virtual public string CommandLine()
         {
-            string cmdline = $" --pose=\"{Helper.CurrentPose}\"";
+            string cmdline = $" --pose=\"{GlobalVariables.CurrentPose}\"";
 
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            if (GlobalVariables.Mode == Helper.ImplementMode.ONNX)
             {
                 cmdline += $" --mode=\"IfPONNX\"";
             }

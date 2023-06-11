@@ -35,7 +35,7 @@ namespace SD_FXUI.Utils.Models
             int kW = (int)(imgView.ActualWidth / imageWidth);
             int kH = (int)((imgView.ActualHeight - offset) / imageHeight);
 
-            var Models = FS.GetModels(Helper.Mode);
+            var Models = FS.GetModels(GlobalVariables.Mode);
 
             int ModelCounter = 0;
 

@@ -63,7 +63,7 @@ namespace SD_FXUI.Utils
                 UseInternalVAE = tsVAE.IsChecked.Value;
             }
 
-            Helper.Form.InvokeUpdateModelsList();
+            GlobalVariables.Form.InvokeUpdateModelsList();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

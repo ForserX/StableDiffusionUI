@@ -51,7 +51,7 @@ namespace SD_FXUI.Utils
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             HuggCast();
-            Helper.Form.InvokeUpdateModelsList();
+            GlobalVariables.Form.InvokeUpdateModelsList();
             Close();
         }
     }

@@ -141,7 +141,7 @@ namespace SD_FXUI
         public static async Task UpscalerRunner(int Size, string File)
         {
             string NewFile = null;
-            if (Helper.EnableGFPGAN)
+            if (GlobalVariables.EnableGFPGAN)
             {
                 string ModelDir = FS.GetModelDir();
 
@@ -160,7 +160,7 @@ namespace SD_FXUI
                 var Files = FS.GetFilesFrom(RestorePath, new string[] { "png", "jpg" }, false);
                 foreach (var file in Files)
                 {
-                    NewFile = Helper.ImgPath + Path.GetFileNameWithoutExtension(file) + "_fx.png";
+                    NewFile = GlobalVariables.ImgPath + Path.GetFileNameWithoutExtension(file) + "_fx.png";
                     System.IO.File.Move(file, NewFile);
                 }
                 FS.Dir.Delete(RestorePath, true);
@@ -172,12 +172,12 @@ namespace SD_FXUI
             string DopCmd = (Size + 1).ToString();
             DopCmd = " -s " + DopCmd;
 
-            if (Helper.TTA)
+            if (GlobalVariables.TTA)
                 DopCmd += " -x";
 
             string FileName = FS.GetToolsDir();
 
-            switch (Helper.CurrentUpscalerType)
+            switch (GlobalVariables.CurrentUpscalerType)
             {
                 case Helper.UpscalerType.ESRGAN:
                     {
@@ -209,19 +209,19 @@ namespace SD_FXUI
                 case Helper.UpscalerType.WAIFU_CU:
                     {
                         FileName += @"\waifu2x\waifu2x-ncnn-vulkan.exe";
-                        DopCmd += $" -n {Helper.Denoise} -m \"{FS.GetToolsDir() + "waifu2x\\models-cunet"}\" -v ";
+                        DopCmd += $" -n {GlobalVariables.Denoise} -m \"{FS.GetToolsDir() + "waifu2x\\models-cunet"}\" -v ";
                         break;
                     }
                 case Helper.UpscalerType.WAIFU_UP_PHOTO:
                     {
                         FileName += @"\waifu2x\waifu2x-ncnn-vulkan.exe";
-                        DopCmd += $" -n {Helper.Denoise} -m \"{FS.GetToolsDir() + "waifu2x\\models-upconv_7_photo"}\" -v ";
+                        DopCmd += $" -n {GlobalVariables.Denoise} -m \"{FS.GetToolsDir() + "waifu2x\\models-upconv_7_photo"}\" -v ";
                         break;
                     }
                 case Helper.UpscalerType.WAIFU_UP_ART:
                     {
                         FileName += @"\waifu2x\waifu2x-ncnn-vulkan.exe";
-                        DopCmd += $" -n {Helper.Denoise} -m \"{FS.GetToolsDir() + "waifu2x\\models-upconv_7_anime_style_art_rgb"}\" -v ";
+                        DopCmd += $" -n {GlobalVariables.Denoise} -m \"{FS.GetToolsDir() + "waifu2x\\models-upconv_7_anime_style_art_rgb"}\" -v ";
                         break;
                     }
                 case Helper.UpscalerType.SR:
@@ -232,13 +232,13 @@ namespace SD_FXUI
                 case Helper.UpscalerType.SRMD:
                     {
                         FileName += @"\srmd\srmd-ncnn-vulkan.exe";
-                        DopCmd += $" -n {Helper.Denoise}";
+                        DopCmd += $" -n {GlobalVariables.Denoise}";
                         break;
                     }
                 default:
                     {
                         if (NewFile != null)
-                            Helper.Form.UpdateViewImg(NewFile);
+                            GlobalVariables.Form.UpdateViewImg(NewFile);
                     }
                     return;
             }
@@ -253,20 +253,20 @@ namespace SD_FXUI
             ProcessHost.Start("-i \"" + File + "\" -o \"" + OutFile + "\"" + DopCmd);
             ProcessHost.Wait();
 
-            if (Helper.EnableGFPGAN)
+            if (GlobalVariables.EnableGFPGAN)
             {
                 Host ProcesHostTwo = new Host(FS.GetModelDir(), FileName);
                 OutFile = NewFile.Substring(0, NewFile.Length - 4) + "_upscale.png";
                 ProcesHostTwo.Start("-i \"" + NewFile + "\" -o \"" + OutFile + "\"" + DopCmd);
                 ProcesHostTwo.Wait();
-                Helper.Form.UpdateViewImg(OutFile);
+                GlobalVariables.Form.UpdateViewImg(OutFile);
             }
             else
             {
-                Helper.Form.UpdateViewImg(OutFile);
+                GlobalVariables.Form.UpdateViewImg(OutFile);
             }
 
-            Helper.Form.InvokeProgressApply();
+            GlobalVariables.Form.InvokeProgressApply();
         }
 
 
@@ -294,7 +294,7 @@ namespace SD_FXUI
 
             Host.Print("\n  Convert task is done..... \n");
             Notification.SendNotification("Convertation: done!");
-            Helper.Form.InvokeUpdateModelsList();
+            GlobalVariables.Form.InvokeUpdateModelsList();
         }
 
         internal static void ProcessConvertVaePt2ONNX(string InputFile)
@@ -346,7 +346,7 @@ namespace SD_FXUI
             Host.Print("\n  Convert task is done..... \n");
             Notification.SendNotification("Convertation: done!");
 
-            Helper.Form.InvokeUpdateModelsList();
+            GlobalVariables.Form.InvokeUpdateModelsList();
         }
 
         public static async Task DeepDanbooruProcess(string currentImage)
@@ -364,13 +364,13 @@ namespace SD_FXUI
             Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print("\n Processing DeepDanbooru.... \n");
             ProcessHost.Start($"repo/diffusion_scripts/modules/danbooru.py --img=\"{currentImage}\" --model=\"{DDBModel}\"  ");
-            Helper.Form.InvokeProgressUpdate(10);
+            GlobalVariables.Form.InvokeProgressUpdate(10);
             ProcessHost.SendExitCommand();
             ProcessHost.Wait();
 
             Host.Print("\n Processing DeepDanbooru: Done..... \n");
             Notification.SendNotification("Processing DeepDanbooru: Done!");
-            Helper.Form.InvokeProgressUpdate(100);
+            GlobalVariables.Form.InvokeProgressUpdate(100);
         }
         public static async Task PoserProcess(string currentImage, ControlNetBase CN)
         {
@@ -380,13 +380,13 @@ namespace SD_FXUI
             Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.Any));
             Host.Print("\n Processing poser.... \n");
             ProcessHost.Start($"repo/diffusion_scripts/controlnet_pipe.py --mode=\"{CN.PreprocessCommandLine()}\" --workdir={FS.GetModelDir() + "controlnet\\huggface\\"} --img=\"{currentImage}\" --model=\"{CN.GetModelPathCN()}\"  --outfile=\"{OutFile}\" ");
-            Helper.Form.InvokeProgressUpdate(10);
+            GlobalVariables.Form.InvokeProgressUpdate(10);
             ProcessHost.SendExitCommand();
             ProcessHost.Wait();
 
             Host.Print("\n Processing poser: Done..... \n");
             Notification.SendNotification("Processing poser: Done!");
-            Helper.Form.InvokeProgressUpdate(100);
+            GlobalVariables.Form.InvokeProgressUpdate(100);
         }
 
         internal static async Task ProcessRunnerDiffCN(string cmdline, int size, ControlNetBase CN)
@@ -396,41 +396,41 @@ namespace SD_FXUI
             cmdline += $" --cn_model=\"{CN.GetModelPathSD()}\" ";
             cmdline += $" --outfile=\"{FS.GetWorkingDir()}\" ";
 
-            if (Helper.Mode == Helper.ImplementMode.ONNX)
+            if (GlobalVariables.Mode == Helper.ImplementMode.ONNX)
             {
-                if (!Directory.Exists(FS.GetModelDir(FS.ModelDirs.ONNX) + Helper.MakeInfo.Model + "\\cnet"))
+                if (!Directory.Exists(FS.GetModelDir(FS.ModelDirs.ONNX) + GlobalVariables.MakeInfo.Model + "\\cnet"))
                 {
                     Notification.SendNotification("Your model is old. Reconvert again for use ControlNet API!", true);
                 }
             }
 
-            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.Mode != Helper.ImplementMode.DiffCUDA ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
+            Host ProcessHost = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(GlobalVariables.Mode != Helper.ImplementMode.DiffCUDA ? Helper.VENV.DiffONNX : Helper.VENV.DiffCUDA));
             Host.Print("\n Startup generation..... \n");
 
-            Helper.Form.InvokeProgressUpdate(7);
+            GlobalVariables.Form.InvokeProgressUpdate(7);
             ProcessHost.Start("./repo/diffusion_scripts/controlnet_pipe.py " + cmdline);
             ProcessHost.SendExitCommand();
-            Helper.Form.InvokeProgressUpdate(10);
+            GlobalVariables.Form.InvokeProgressUpdate(10);
             ProcessHost.Wait();
 
             //  process.WaitForInputIdle();
             var Files = FS.GetFilesFrom(FS.GetWorkingDir(), new string[] { "png", "jpg" }, false);
             foreach (var file in Files)
             {
-                string NewFilePath = Helper.ImgPath + System.IO.Path.GetFileName(file);
+                string NewFilePath = GlobalVariables.ImgPath + System.IO.Path.GetFileName(file);
                 System.IO.File.Move(file, NewFilePath);
 
                 await Task.Run(() => UpscalerRunner(size, NewFilePath));
-                if (size == 0 || Helper.CurrentUpscalerType == Helper.UpscalerType.None)
+                if (size == 0 || GlobalVariables.CurrentUpscalerType == Helper.UpscalerType.None)
                 {
-                    Helper.Form.UpdateViewImg(NewFilePath);
+                    GlobalVariables.Form.UpdateViewImg(NewFilePath);
                 }
             }
 
             Host.Print("\n  Task Done..... \n");
             Notification.SendNotification("Task: done!", true);
-            Helper.Form.InvokeProgressUpdate(100);
-            Helper.Form.UpdateCurrentViewImg();
+            GlobalVariables.Form.InvokeProgressUpdate(100);
+            GlobalVariables.Form.UpdateCurrentViewImg();
         }
     }
 }

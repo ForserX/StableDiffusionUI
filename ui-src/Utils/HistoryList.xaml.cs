@@ -23,7 +23,7 @@ namespace SD_FXUI.Utils
         {
             InitializeComponent();
 
-            foreach (var Itm in Helper.PromHistory)
+            foreach (var Itm in GlobalVariables.PromHistory)
                 lbHistory.Items.Add(Itm);
         }
 
@@ -36,7 +36,7 @@ namespace SD_FXUI.Utils
             if (lbHistory == null)
                 return;
 
-            Helper.Form.SetPrompt(lbHistory.SelectedItem.ToString());
+            GlobalVariables.Form.SetPrompt(lbHistory.SelectedItem.ToString());
             this.Close();
         }
 
@@ -47,21 +47,21 @@ namespace SD_FXUI.Utils
 
             if (lbHistory.SelectedItem != null)
             {
-                Helper.PromHistory.Remove(lbHistory.SelectedItem.ToString());
+                GlobalVariables.PromHistory.Remove(lbHistory.SelectedItem.ToString());
                 lbHistory.Items.Remove(lbHistory.SelectedItem);
             }
         }
 
         public static void ApplyPrompt(string Message)
         {
-            if (Helper.PromHistory.Count == 0 || Helper.PromHistory[0] != Message)
+            if (GlobalVariables.PromHistory.Count == 0 || GlobalVariables.PromHistory[0] != Message)
             {
-                if (Helper.PromHistory.Contains(Message))
+                if (GlobalVariables.PromHistory.Contains(Message))
                 {
-                    Helper.PromHistory.Remove(Message);
+                    GlobalVariables.PromHistory.Remove(Message);
                 }
 
-                Helper.PromHistory.Insert(0, Message);
+                GlobalVariables.PromHistory.Insert(0, Message);
             }
 
         }
@@ -78,14 +78,14 @@ namespace SD_FXUI.Utils
             {
                 int Idx = lbHistory.SelectedIndex;
 
-                Helper.PromHistory.Remove(lbHistory.SelectedItem.ToString());
+                GlobalVariables.PromHistory.Remove(lbHistory.SelectedItem.ToString());
                 lbHistory.Items.Remove(lbHistory.SelectedItem);
 
                 lbHistory.SelectedIndex = Idx;
             }
             else if (e.Key == Key.Enter)
             {
-                Helper.Form.SetPrompt(lbHistory.SelectedItem.ToString());
+                GlobalVariables.Form.SetPrompt(lbHistory.SelectedItem.ToString());
                 this.Close();
             }
             else if (e.Key == Key.Escape) 
@@ -96,7 +96,7 @@ namespace SD_FXUI.Utils
 
         private void lbHistory_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Helper.Form.SetPrompt(lbHistory.SelectedItem.ToString());
+            GlobalVariables.Form.SetPrompt(lbHistory.SelectedItem.ToString());
             this.Close();
         }
     }

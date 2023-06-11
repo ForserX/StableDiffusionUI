@@ -27,9 +27,9 @@ namespace SD_FXUI
 
             if (ApplyImages && Utils.Settings.UseNotifImgs)
             {
-                foreach (string File in Helper.ImgList)
+                foreach (string File in GlobalVariables.ImgList)
                 {
-                    if (Helper.ImgList.Count == 1)
+                    if (GlobalVariables.ImgList.Count == 1)
                     {
                         NotificationToShow.AddHeroImage(new Uri(File));
                         break;
@@ -73,10 +73,10 @@ namespace SD_FXUI
         {
             if (Arg.Argument.Contains("OpenHost"))
             {
-                Helper.UIHost.Dispatcher.Invoke(() =>
+                GlobalVariables.UIHost.Dispatcher.Invoke(() =>
                 {
-                    Helper.UIHost.Hide();
-                    Helper.UIHost.Show();
+                    GlobalVariables.UIHost.Hide();
+                    GlobalVariables.UIHost.Show();
                 });
             }
         }

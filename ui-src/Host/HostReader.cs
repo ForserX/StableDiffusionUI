@@ -79,7 +79,7 @@ namespace SD_FXUI
 
             if (Message.Length < 8 && Message.ToLower().Contains("clear"))
             {
-                Helper.UIHost.Clear();
+                GlobalVariables.UIHost.Clear();
                 Contain = true;
             }
 
