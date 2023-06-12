@@ -484,7 +484,7 @@ namespace SD_FXUI
         private void btnImage_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog OpenDlg = new OpenFileDialog();
-            OpenDlg.Filter = "Image Files|*.jpg;*.jpeg;*.png| PNG (*.png)|*.png|JPG (*.jpg)|*.jpg|All files (*.*)|*.*";
+            OpenDlg.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.mp4| PNG (*.png)|*.png|MP4 (*.mp4)|*.mp4|JPG (*.jpg)|*.jpg|All files (*.*)|*.*";
             OpenDlg.Multiselect = false;
 
             bool? IsOpened = OpenDlg.ShowDialog();
@@ -493,8 +493,16 @@ namespace SD_FXUI
                 GlobalVariables.InputImagePath = OpenDlg.FileName;
                 gridImg.Visibility = Visibility.Visible;
                 brImgPane.Visibility = Visibility.Visible;
-                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(GlobalVariables.InputImagePath));
-                GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
+
+                if (GlobalVariables.InputImagePath.EndsWith(".mp4"))
+                {
+                    VideoFrame.ReadVideo(GlobalVariables.InputImagePath);
+                }
+                else
+                {
+                    imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(GlobalVariables.InputImagePath));
+                    GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
+                }
 
                 tbMeta.Text = CodeUtils.MetaData(GlobalVariables.InputImagePath);
             }
