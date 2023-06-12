@@ -114,6 +114,7 @@ namespace SD_FXUI
                 GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
                 GlobalVariables.LastVideoData.ActiveRender = true;
 
+                VideoFrame.ReadVideo(GlobalVariables.InputImagePath, (int)slFPS.Value);
                 Task.Run(() =>
                 {
                     RunVideoRender();
@@ -136,6 +137,11 @@ namespace SD_FXUI
             if (tbDenoising != null)
                 tbDenoising.Text = slDenoising.Value.ToString();
         }
+        private void Slider_FPS(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (tbFPS != null)
+                tbFPS.Text = slFPS.Value.ToString();
+        }
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (tbSteps != null)
@@ -147,6 +153,13 @@ namespace SD_FXUI
             double Val = 0;
             double.TryParse(tbCFG.Text, out Val);
             slCFG.Value = Val;
+        }
+        
+        private void tbFPS_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int Val = 0;
+            int.TryParse(tbFPS.Text, out Val);
+            slFPS.Value = Val;
         }
 
         private void Slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -432,7 +445,6 @@ namespace SD_FXUI
 
                 if (GlobalVariables.InputImagePath.EndsWith(".mp4"))
                 {
-                    VideoFrame.ReadVideo(GlobalVariables.InputImagePath);
                     GlobalVariables.DrawMode = Helper.DrawingMode.Vid2Vid;
                 }
                 else

@@ -709,7 +709,7 @@ namespace SD_FXUI
 		void RunVideoRender()
         {
             string SafeImgPath = GlobalVariables.ImgPath;
-            GlobalVariables.ImgPath = FS.GetImagesDir() + "vidcap_out\\";
+            GlobalVariables.ImgPath = FS.GetImagesDir() + $"vidcap_out_{CodeUtils.Data()}\\";
 
 			string CapPath = GlobalVariables.ImgPath;
 			FS.Dir.Delete(CapPath, true);
@@ -736,7 +736,8 @@ namespace SD_FXUI
             GlobalVariables.ImgPath = SafeImgPath;
 			GlobalVariables.LastVideoData.ActiveFrame = 0;
 
-            VideoFrame.ReadVideo(CapPath);
+			VideoFrame.RenderVideo(CapPath);
+            GlobalVariables.LastVideoData.ActiveRender = false;
         }
 	}
 }
