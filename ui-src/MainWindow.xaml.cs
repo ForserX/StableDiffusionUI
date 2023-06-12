@@ -446,9 +446,26 @@ namespace SD_FXUI
                 if (GlobalVariables.InputImagePath.EndsWith(".mp4"))
                 {
                     GlobalVariables.DrawMode = Helper.DrawingMode.Vid2Vid;
+                    imgLoaded.Source = VideoFrame.GetPreviewPic();
+
+                    imgMask.Visibility = Visibility.Collapsed;
+
+                    slFPS.Visibility = Visibility.Visible;
+                    tbFPS.Visibility = Visibility.Visible;
+                    lbFPS.Visibility = Visibility.Visible;
+
+                    cbControlNetMode.IsEnabled = false;
                 }
                 else
                 {
+                    imgMask.Visibility = Visibility.Visible;
+
+                    lbFPS.Visibility = Visibility.Collapsed;
+                    slFPS.Visibility = Visibility.Collapsed;
+                    tbFPS.Visibility = Visibility.Collapsed;
+
+                    cbControlNetMode.IsEnabled = true;
+
                     imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(GlobalVariables.InputImagePath));
                     GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
                 }

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using OpenCvSharp;
 using Windows.Devices.Geolocation;
+using System.Windows.Media;
+using System;
+using OpenCvSharp.WpfExtensions;
+using System.Drawing;
 
 namespace SD_FXUI
 {
@@ -111,6 +115,28 @@ namespace SD_FXUI
 
                 OutCapture.Write(FrameImage);
             }
+        }
+
+        internal static ImageSource GetPreviewPic()
+        {
+            VideoCapture Capture = new VideoCapture(GlobalVariables.InputImagePath);
+            Mat FirstFrameCapture = new Mat();
+
+            Capture.Read(FirstFrameCapture);
+            Capture.Release();
+
+            Bitmap OutputPriview = CodeUtils.BitmapFromSource(FirstFrameCapture.ToBitmapSource());
+            Bitmap PlayIcon = CodeUtils.BitmapFromSource(GlobalVariables.Form.IconPlay.Source);
+
+            PlayIcon = CodeUtils.ResizeBitmap(PlayIcon, new System.Drawing.Size(OutputPriview.Height, OutputPriview.Height));
+
+            int SizeDeltaX = OutputPriview.Width - PlayIcon.Width;
+            SizeDeltaX /= 4;
+
+            Graphics g = Graphics.FromImage(OutputPriview);
+            g.DrawImage(PlayIcon, new System.Drawing.Point(SizeDeltaX, 0));
+
+            return CodeUtils.CreateBitmapSourceFromGdiBitmap(OutputPriview);
         }
     }
 }
