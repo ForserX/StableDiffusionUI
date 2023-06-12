@@ -37,5 +37,6 @@ namespace SD_FXUI
 
         public static string PythonVersion = null;
         public static string ModelsDir = null;
+        public static VideoData LastVideoData = new VideoData();
     }
 }

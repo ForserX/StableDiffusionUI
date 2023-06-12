@@ -105,94 +105,30 @@ namespace SD_FXUI
             }
 
             ValidateSize();
-            if (!MakeCommandObject())
-            {
-                return;
-            }
-
-            string cmdline = "";
-            bool SafeCPUFlag = CPUUse;
-
-            InvokeProgressUpdate(3);
-
-            switch (GlobalVariables.Mode)
-            {
-                case Helper.ImplementMode.ONNX:
-                    {
-                        if (tsCN.IsChecked.Value)
-                        {
-                            try
-                            {
-                                cmdline += GetCommandLineOnnx();
-                                cmdline += HelperControlNet.Current.CommandLine();
-
-                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, GlobalVariables.CurrentUpscaleSize, HelperControlNet.Current));
-                                break;
-                            }
-                            catch (NullReferenceException ex)
-                            {
-                                string addMsg = "";
-                                if (HelperControlNet.Current == null)
-                                {
-                                    addMsg += "CurrentCN was null, ";
-                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
-                                }
-                                Log.SendMessageToFile(addMsg + ex.Message);
-                            }
-                        }
-                        else
-                        {
-                            GlobalVariables.MakeInfo.fp16 = false;
-                            SafeCMD.PreStart(GlobalVariables.MakeInfo.Model, GlobalVariables.MakeInfo.Mode, cbNSFW.IsChecked.Value);
-                            SafeCMD.Start();
-                        }
-                        break;
-                    }
-                case Helper.ImplementMode.DiffCPU:
-                case Helper.ImplementMode.DiffCUDA:
-                    {
-                        if (tsCN.IsChecked.Value)
-                        {
-                            
-                            ControlNetBase CurrentCN = HelperControlNet.Current;
-                            try
-                            {
-                                cmdline += GetCommandLineDiffCuda();
-                                cmdline += CurrentCN.CommandLine();
-
-
-                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, GlobalVariables.CurrentUpscaleSize, CurrentCN));
-                            }
-                            
-                            catch (NullReferenceException ex)
-                            {
-                                string addMsg = "";
-                                if (CurrentCN == null)
-                                {
-                                    addMsg += "CurrentCN was null, ";
-                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
-                                }
-
-                                Log.SendMessageToFile(addMsg + ex.Message);
-
-                            }
-                            break;
-                        }
-                        else
-                        {
-                            GlobalVariables.MakeInfo.fp16 = cbFf16.IsChecked.Value;
-                            SafeCMD.PreStart(GlobalVariables.MakeInfo.Model, GlobalVariables.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
-                            SafeCMD.Start();
-                            break;
-                        }
-                    }
-            }
-
-            string richText = new TextRange(tbPrompt.Document.ContentStart, tbPrompt.Document.ContentEnd).Text;
-            Utils.HistoryList.ApplyPrompt(richText);
 
             currentImage = null;
             ClearImages();
+
+            if (GlobalVariables.DrawMode == Helper.DrawingMode.Vid2Vid)
+            {
+                GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
+                GlobalVariables.LastVideoData.ActiveRender = true;
+
+                Task.Run(() =>
+                {
+                    RunVideoRender();
+                });
+
+            }
+            else
+            {
+                if (!MakeCommandObject())
+                {
+                    return;
+                }
+
+                MakeImage();
+            }
         }
 
         private void Slider_Denoising(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -497,6 +433,7 @@ namespace SD_FXUI
                 if (GlobalVariables.InputImagePath.EndsWith(".mp4"))
                 {
                     VideoFrame.ReadVideo(GlobalVariables.InputImagePath);
+                    GlobalVariables.DrawMode = Helper.DrawingMode.Vid2Vid;
                 }
                 else
                 {

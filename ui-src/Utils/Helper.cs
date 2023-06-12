@@ -22,7 +22,8 @@ namespace SD_FXUI
         {
             Text2Img,
             Img2Img,
-            Inpaint
+            Inpaint,
+            Vid2Vid
         }
 
         public enum ImplementMode
