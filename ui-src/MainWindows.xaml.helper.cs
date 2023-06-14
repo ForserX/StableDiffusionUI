@@ -1,9 +1,11 @@
 ﻿using HandyControl.Data;
+using SD_FXUI.Debug;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace SD_FXUI
 {
@@ -20,6 +22,9 @@ namespace SD_FXUI
 
 		public void UpdateCurrentViewImg() => Dispatcher.Invoke(() =>
 		{
+			if (GlobalVariables.LastVideoData.ActiveRender)
+				return;
+
 			if (lvImages.Items.Count > 0)
 			{
 				int NewIndex = lvImages.Items.Count - 1;
@@ -618,5 +623,121 @@ namespace SD_FXUI
 			cbPreprocess.Items.Add(HelperControlNet.Current.GetModelName());
 			cbPreprocess.SelectedIndex = 0;
 		}
+
+		void MakeImage()
+		{
+            InvokeProgressUpdate(3);
+            string cmdline = "";
+
+            switch (GlobalVariables.Mode)
+            {
+                case Helper.ImplementMode.ONNX:
+                    {
+                        if (tsCN.IsChecked.Value)
+                        {
+                            try
+                            {
+                                cmdline += GetCommandLineOnnx();
+                                cmdline += HelperControlNet.Current.CommandLine();
+
+                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, GlobalVariables.CurrentUpscaleSize, HelperControlNet.Current));
+                                break;
+                            }
+                            catch (NullReferenceException ex)
+                            {
+                                string addMsg = "";
+                                if (HelperControlNet.Current == null)
+                                {
+                                    addMsg += "CurrentCN was null, ";
+                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
+                                }
+                                Log.SendMessageToFile(addMsg + ex.Message);
+                            }
+                        }
+                        else
+                        {
+                            GlobalVariables.MakeInfo.fp16 = false;
+                            SafeCMD.PreStart(GlobalVariables.MakeInfo.Model, GlobalVariables.MakeInfo.Mode, cbNSFW.IsChecked.Value);
+                            SafeCMD.Start();
+                        }
+                        break;
+                    }
+                case Helper.ImplementMode.DiffCPU:
+                case Helper.ImplementMode.DiffCUDA:
+                    {
+                        if (tsCN.IsChecked.Value)
+                        {
+
+                            ControlNetBase CurrentCN = HelperControlNet.Current;
+                            try
+                            {
+                                cmdline += GetCommandLineDiffCuda();
+                                cmdline += CurrentCN.CommandLine();
+
+
+                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, GlobalVariables.CurrentUpscaleSize, CurrentCN));
+                            }
+
+                            catch (NullReferenceException ex)
+                            {
+                                string addMsg = "";
+                                if (CurrentCN == null)
+                                {
+                                    addMsg += "CurrentCN was null, ";
+                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
+                                }
+
+                                Log.SendMessageToFile(addMsg + ex.Message);
+
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            GlobalVariables.MakeInfo.fp16 = cbFf16.IsChecked.Value;
+                            SafeCMD.PreStart(GlobalVariables.MakeInfo.Model, GlobalVariables.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
+                            SafeCMD.Start();
+                            break;
+                        }
+                    }
+            }
+
+            string richText = new TextRange(tbPrompt.Document.ContentStart, tbPrompt.Document.ContentEnd).Text;
+            Utils.HistoryList.ApplyPrompt(richText);
+        }
+
+		void RunVideoRender()
+        {
+            string SafeImgPath = GlobalVariables.ImgPath;
+            GlobalVariables.ImgPath = FS.GetImagesDir() + $"vidcap_out_{CodeUtils.Data()}\\";
+
+			string CapPath = GlobalVariables.ImgPath;
+			FS.Dir.Delete(CapPath, true);
+
+			Directory.CreateDirectory(CapPath);
+
+            foreach (string File in GlobalVariables.LastVideoData.Files)
+            {
+                GlobalVariables.InputImagePath = File;
+
+                Dispatcher.Invoke(() => MakeCommandObject());
+                Dispatcher.Invoke(() => MakeImage());
+
+                while (!GlobalVariables.LastVideoData.FrameDone)
+                {
+                    System.Threading.Thread.Sleep(50);
+                }
+
+                GlobalVariables.LastVideoData.ActiveFrame++;
+                GlobalVariables.LastVideoData.FrameDone = false;
+            }
+
+            GlobalVariables.DrawMode = Helper.DrawingMode.Vid2Vid;
+            GlobalVariables.ImgPath = SafeImgPath;
+			GlobalVariables.LastVideoData.ActiveFrame = 0;
+
+			VideoFrame.RenderVideo(CapPath);
+            GlobalVariables.LastVideoData.ActiveRender = false;
+        }
 	}
 }

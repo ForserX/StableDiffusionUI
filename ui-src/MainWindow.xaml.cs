@@ -105,100 +105,42 @@ namespace SD_FXUI
             }
 
             ValidateSize();
-            if (!MakeCommandObject())
-            {
-                return;
-            }
-
-            string cmdline = "";
-            bool SafeCPUFlag = CPUUse;
-
-            InvokeProgressUpdate(3);
-
-            switch (GlobalVariables.Mode)
-            {
-                case Helper.ImplementMode.ONNX:
-                    {
-                        if (tsCN.IsChecked.Value)
-                        {
-                            try
-                            {
-                                cmdline += GetCommandLineOnnx();
-                                cmdline += HelperControlNet.Current.CommandLine();
-
-                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, GlobalVariables.CurrentUpscaleSize, HelperControlNet.Current));
-                                break;
-                            }
-                            catch (NullReferenceException ex)
-                            {
-                                string addMsg = "";
-                                if (HelperControlNet.Current == null)
-                                {
-                                    addMsg += "CurrentCN was null, ";
-                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
-                                }
-                                Log.SendMessageToFile(addMsg + ex.Message);
-                            }
-                        }
-                        else
-                        {
-                            GlobalVariables.MakeInfo.fp16 = false;
-                            SafeCMD.PreStart(GlobalVariables.MakeInfo.Model, GlobalVariables.MakeInfo.Mode, cbNSFW.IsChecked.Value);
-                            SafeCMD.Start();
-                        }
-                        break;
-                    }
-                case Helper.ImplementMode.DiffCPU:
-                case Helper.ImplementMode.DiffCUDA:
-                    {
-                        if (tsCN.IsChecked.Value)
-                        {
-                            
-                            ControlNetBase CurrentCN = HelperControlNet.Current;
-                            try
-                            {
-                                cmdline += GetCommandLineDiffCuda();
-                                cmdline += CurrentCN.CommandLine();
-
-
-                                Task.Run(() => CMD.ProcessRunnerDiffCN(cmdline, GlobalVariables.CurrentUpscaleSize, CurrentCN));
-                            }
-                            
-                            catch (NullReferenceException ex)
-                            {
-                                string addMsg = "";
-                                if (CurrentCN == null)
-                                {
-                                    addMsg += "CurrentCN was null, ";
-                                    MessageBox.Show("ControlNet enabled, but CN model wasn't selected");
-                                }
-
-                                Log.SendMessageToFile(addMsg + ex.Message);
-
-                            }
-                            break;
-                        }
-                        else
-                        {
-                            GlobalVariables.MakeInfo.fp16 = cbFf16.IsChecked.Value;
-                            SafeCMD.PreStart(GlobalVariables.MakeInfo.Model, GlobalVariables.MakeInfo.Mode, cbNSFW.IsChecked.Value, true);
-                            SafeCMD.Start();
-                            break;
-                        }
-                    }
-            }
-
-            string richText = new TextRange(tbPrompt.Document.ContentStart, tbPrompt.Document.ContentEnd).Text;
-            Utils.HistoryList.ApplyPrompt(richText);
 
             currentImage = null;
             ClearImages();
+
+            if (GlobalVariables.DrawMode == Helper.DrawingMode.Vid2Vid)
+            {
+                GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
+                GlobalVariables.LastVideoData.ActiveRender = true;
+
+                VideoFrame.ReadVideo(GlobalVariables.InputImagePath, (int)slFPS.Value);
+                Task.Run(() =>
+                {
+                    RunVideoRender();
+                });
+
+            }
+            else
+            {
+                if (!MakeCommandObject())
+                {
+                    return;
+                }
+
+                MakeImage();
+            }
         }
 
         private void Slider_Denoising(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (tbDenoising != null)
                 tbDenoising.Text = slDenoising.Value.ToString();
+        }
+        private void Slider_FPS(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (tbFPS != null)
+                tbFPS.Text = slFPS.Value.ToString();
         }
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -211,6 +153,13 @@ namespace SD_FXUI
             double Val = 0;
             double.TryParse(tbCFG.Text, out Val);
             slCFG.Value = Val;
+        }
+        
+        private void tbFPS_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int Val = 0;
+            int.TryParse(tbFPS.Text, out Val);
+            slFPS.Value = Val;
         }
 
         private void Slider2_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -484,7 +433,7 @@ namespace SD_FXUI
         private void btnImage_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog OpenDlg = new OpenFileDialog();
-            OpenDlg.Filter = "Image Files|*.jpg;*.jpeg;*.png| PNG (*.png)|*.png|JPG (*.jpg)|*.jpg|All files (*.*)|*.*";
+            OpenDlg.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.mp4| PNG (*.png)|*.png|MP4 (*.mp4)|*.mp4|JPG (*.jpg)|*.jpg|All files (*.*)|*.*";
             OpenDlg.Multiselect = false;
 
             bool? IsOpened = OpenDlg.ShowDialog();
@@ -493,8 +442,33 @@ namespace SD_FXUI
                 GlobalVariables.InputImagePath = OpenDlg.FileName;
                 gridImg.Visibility = Visibility.Visible;
                 brImgPane.Visibility = Visibility.Visible;
-                imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(GlobalVariables.InputImagePath));
-                GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
+
+                if (GlobalVariables.InputImagePath.EndsWith(".mp4"))
+                {
+                    GlobalVariables.DrawMode = Helper.DrawingMode.Vid2Vid;
+                    imgLoaded.Source = VideoFrame.GetPreviewPic();
+
+                    imgMask.Visibility = Visibility.Collapsed;
+
+                    slFPS.Visibility = Visibility.Visible;
+                    tbFPS.Visibility = Visibility.Visible;
+                    lbFPS.Visibility = Visibility.Visible;
+
+                    cbControlNetMode.IsEnabled = false;
+                }
+                else
+                {
+                    imgMask.Visibility = Visibility.Visible;
+
+                    lbFPS.Visibility = Visibility.Collapsed;
+                    slFPS.Visibility = Visibility.Collapsed;
+                    tbFPS.Visibility = Visibility.Collapsed;
+
+                    cbControlNetMode.IsEnabled = true;
+
+                    imgLoaded.Source = CodeUtils.BitmapFromUri(new Uri(GlobalVariables.InputImagePath));
+                    GlobalVariables.DrawMode = Helper.DrawingMode.Img2Img;
+                }
 
                 tbMeta.Text = CodeUtils.MetaData(GlobalVariables.InputImagePath);
             }

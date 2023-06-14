@@ -54,7 +54,7 @@ namespace SD_FXUI
         }
         public static async Task ProcessConvertCKPT2ONNX(string InputFile, bool emaOnly = false, bool b768 = false, string YamlCfgName = "")
         {
-            string WorkDir = FS.GetWorkingDir() + "repo\\";
+            string WorkDir = FS.GetWorkingDir() + "\\repo\\";
             Host ProcessHost = new Host(WorkDir);
             Host.Print($"\n Startup extract ckpt({InputFile})..... \n");
 
@@ -78,7 +78,7 @@ namespace SD_FXUI
                 AddCmd += " --extract_ema";
             }
 
-            string YamlCfg = "/model_data/" + YamlCfgName;
+            string YamlCfg = WorkDir + "/model_data/" + YamlCfgName;
 
             if (b768)
             {

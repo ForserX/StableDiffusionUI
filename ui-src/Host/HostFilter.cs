@@ -33,7 +33,8 @@ namespace SD_FXUI
                 // Drop loaded model
                 GlobalVariables.Form.InvokeDropModel();
 
-                Notification.SendErrorNotification("Error! See host for details!");               
+                Notification.SendErrorNotification("Error! See host for details!");
+                GlobalVariables.LastVideoData.FrameDone = true;
             }
         }
         public static void CheckImageSize(string Message)
@@ -44,7 +45,8 @@ namespace SD_FXUI
                 {
                     GlobalVariables.UIHost.Hide();
                 });
-                Notification.MsgBox("The image size is not a multiple of 8!");              
+                Notification.MsgBox("The image size is not a multiple of 8!");
+                GlobalVariables.LastVideoData.FrameDone = true;
             }
         }
         public static void CheckHalfPrecision(string Message)
@@ -56,6 +58,7 @@ namespace SD_FXUI
                     GlobalVariables.UIHost.Hide();
                 });
                 Notification.MsgBox("Disable fp16. Not supported for current mode!");
+                GlobalVariables.LastVideoData.FrameDone = true;
             }
         }
 
@@ -68,6 +71,7 @@ namespace SD_FXUI
                     GlobalVariables.UIHost.Hide();
                 });
                 Notification.MsgBox("CUDA GPU Error: Out of memory. Use fp16 or reduce the image size!");
+                GlobalVariables.LastVideoData.FrameDone = true;
             }
 
             if (Message.Contains("onnxruntime.capi.onnxruntime_pybind11_state.RuntimeException"))
@@ -77,6 +81,7 @@ namespace SD_FXUI
                     GlobalVariables.UIHost.Hide();
                 });
                 Notification.MsgBox("ONNX GPU Error: Out of memory. Use reduce the image size!");
+                GlobalVariables.LastVideoData.FrameDone = true;
             }
         }
 
@@ -114,13 +119,25 @@ namespace SD_FXUI
 
             if (Message.Contains("SD Pipeline: Generating done!"))
             {
+                string CurrentVideoFrame = $"{GlobalVariables.LastVideoData.ActiveFrame}.png";
+
+                GlobalVariables.LastVideoData.FrameDone = true;
                 GlobalVariables.Form.InvokeProgressUpdate(60);
 
                 int UpSize = GlobalVariables.CurrentUpscaleSize;
                 var Files = FS.GetFilesFrom(FS.GetWorkingDir(), new string[] { "png", "jpg" }, false);
                 foreach (var file in Files)
                 {
-                    string NewFilePath = GlobalVariables.ImgPath + System.IO.Path.GetFileName(file);
+                    string NewFilePath = GlobalVariables.ImgPath;
+                    if (GlobalVariables.LastVideoData.ActiveRender)
+                    {
+                        NewFilePath += CurrentVideoFrame;
+                    }
+                    else
+                    {
+                        NewFilePath += System.IO.Path.GetFileName(file);
+                    }
+
                     System.IO.File.Move(file, NewFilePath);
 
                     if (UpSize == 0 || GlobalVariables.CurrentUpscalerType == Helper.UpscalerType.None)
@@ -134,8 +151,12 @@ namespace SD_FXUI
                     }
                 }
 
-                Host.Print("\n  Task Done..... \n");
-                Notification.SendNotification("Task: done!", true);
+                if (!GlobalVariables.LastVideoData.ActiveRender)
+                {
+                    Host.Print("\n  Task Done..... \n");
+                    Notification.SendNotification("Task: done!", true);
+                }
+
                 GlobalVariables.Form.InvokeProgressUpdate(100);
                 GlobalVariables.Form.UpdateCurrentViewImg();
             }
