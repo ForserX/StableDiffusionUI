@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using OpenCvSharp;
-using Windows.Devices.Geolocation;
 using System.Windows.Media;
-using System;
 using OpenCvSharp.WpfExtensions;
 using System.Drawing;
 
@@ -102,9 +100,12 @@ namespace SD_FXUI
         {
             Host.Print("Render video...");
             VideoCapture InCapture = new VideoCapture($"{Input}%d.png");
-            //VideoCapture OutCapture = new VideoCapture("N:\\TestMP4\\test.mp4", VideoCaptureAPIs.FFMPEG);
 
-            OpenCvSharp.VideoWriter OutCapture = new VideoWriter($"{GlobalVariables.ImgPath}test.mp4", FourCC.AVC, 25, new OpenCvSharp.Size(GlobalVariables.MakeInfo.Width, GlobalVariables.MakeInfo.Height));
+            //#TODO: Upscaler coef 
+            //OpenCvSharp.Size OutVideoSize = new OpenCvSharp.Size();
+            //OutVideoSize.Width = GlobalVariables.MakeInfo.Width * GlobalVariables.MakeInfo.sc
+
+            VideoWriter OutCapture = new VideoWriter($"{GlobalVariables.ImgPath}test.mp4", FourCC.AVC, 25, new OpenCvSharp.Size(GlobalVariables.MakeInfo.Width, GlobalVariables.MakeInfo.Height));
 
             Mat FrameImage = new Mat();
             while (true)
@@ -115,6 +116,9 @@ namespace SD_FXUI
 
                 OutCapture.Write(FrameImage);
             }
+
+            Host.Print("Render video... Done!");
+            Notification.SendNotification("Video render: Done!");
         }
 
         internal static ImageSource GetPreviewPic()
