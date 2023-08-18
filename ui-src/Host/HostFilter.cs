@@ -18,7 +18,7 @@ namespace SD_FXUI
                     // Drop loaded model
                     GlobalVariables.Form.InvokeDropModel();
 
-                    HostReader.Filter("py -install ort-nightly-directml==1.15.0.dev20230408001 --extra-index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ORT-Nightly/pypi/simple/ --force");
+                    HostReader.Filter("py -install onnxruntime-directml --force");
                 }
             }
 
