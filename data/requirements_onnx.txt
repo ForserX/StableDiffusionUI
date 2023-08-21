@@ -19,7 +19,7 @@ pytorch_lightning
 # Add transformers, diffusers and scipy since it most commonly used
 diffusers==0.16.1
 controlnet_aux==0.0.3
-transformers-onnx
+transformers==4.25.0
 scipy
 tf2onnx
 accelerate
