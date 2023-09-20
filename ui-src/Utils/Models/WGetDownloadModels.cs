@@ -154,6 +154,20 @@ namespace SD_FXUI
             FileDownloader.DownloadFileAsync("https://huggingface.co/lllyasviel/sd-controlnet-seg/resolve/main/diffusion_pytorch_model.bin", WorkingDir + @"diffusion_pytorch_model.bin");
             FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/sd-controlnet-seg-onnx/resolve/main/model.onnx", WorkingDir + @"model.onnx");
         }
+        public static void DownloadSDCNBrg()
+        {
+            string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet-brightness/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+            Directory.CreateDirectory(WorkingDir);
+
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ioclab/control_v1p_sd15_brightness/raw/main/config.json", WorkingDir + @"config.json");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ioclab/control_v1p_sd15_brightness/resolve/main/diffusion_pytorch_model.safetensors", WorkingDir + @"diffusion_pytorch_model.safetensors");
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/sd-controlnet-brightness/resolve/main/model.onnx", WorkingDir + @"model.onnx");
+        }
         public static void DownloadSDCNMLSD()
         {
             string WorkingDir = FS.GetModelDir() + "controlnet/sd-controlnet-mlsd/";

@@ -720,12 +720,21 @@ class OnnxStableDiffusionControlNetPipeline(DiffusionPipeline):
 				
 				timestep = np.array([t], dtype=timestep_dtype)
 				
-				blocksamples = self.controlnet(
-					sample=latent_model_input,
-					timestep=timestep,
-					encoder_hidden_states=prompt_embeds,
-					controlnet_cond=image,
-				)
+				try:
+					blocksamples = self.controlnet(
+						sample=latent_model_input,
+						timestep=timestep,
+						encoder_hidden_states=prompt_embeds,
+						controlnet_cond=image,
+					    conditioning_scale=1.0
+					)	
+				except :
+					blocksamples = self.controlnet(
+						sample=latent_model_input,
+						timestep=timestep,
+						encoder_hidden_states=prompt_embeds,
+						controlnet_cond=image
+					)	
 				
 				mid_block_res_sample=blocksamples[12]
 				down_block_res_samples=(

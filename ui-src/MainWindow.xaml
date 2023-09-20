@@ -313,6 +313,7 @@
                             <ComboBoxItem Content="Facegen"/>
                             <!-- ComboBoxItem Content="color"/ -->
                             <ComboBoxItem Content="Scribble"/>
+                            <ComboBoxItem Content="Brightness"/>
                             <!-- ComboBoxItem Content="pidinet"/ -->
                             <ComboBoxItem Content="MLSD"/>
                             <ComboBoxItem Content="Segmentation"/>

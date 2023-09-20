@@ -93,7 +93,7 @@ def convert_models(model_path: str, output_path: str, opset: int, attention_slic
             torch.randn(2, 3, 512,512).to(device=device, dtype=dtype),
         ),
         output_path=cnet_path,
-        ordered_input_names=["sample", "timestep", "encoder_hidden_states", "controlnet_cond","return_dict"],
+        ordered_input_names=["sample", "timestep", "encoder_hidden_states", "controlnet_cond"],
         output_names=["down_block_res_samples", "mid_block_res_sample"],  # has to be different from "sample" for correct tracing
         dynamic_axes={
             "sample": {0: "batch", 1: "channels", 2: "height", 3: "width"},
