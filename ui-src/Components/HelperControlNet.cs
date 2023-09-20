@@ -334,6 +334,36 @@ namespace SD_FXUI
             return BaseOutPath + "Seg/";
         }
     }
+    class ControlNetBrightness : ControlNetBase
+    {
+        public ControlNetBrightness()
+        {
+            Model = "sd-controlnet-brightness";
+            CNModel = "";
+            ControlType = HelperControlNet.ControlTypes.Brightness;
+
+            System.IO.Directory.CreateDirectory(Outdir());
+        }
+
+        public override void CheckSD()
+        {
+            if (!System.IO.Directory.Exists(GetModelPathSD()))
+            {
+                Notification.SendNotification("Starting downloading brightness model...");
+                WGetDownloadModels.DownloadSDCNBrg();
+                Notification.SendNotification("Downloading brightness model: done!");
+            }
+        }
+
+        override public string PreprocessCommandLine()
+        {
+            return "BrgfI";
+        }
+        override public string Outdir()
+        {
+            return BaseOutPath + "brightness/";
+        }
+    }
 
     class ControlNetMLSD : ControlNetBase
     {
@@ -388,6 +418,7 @@ namespace SD_FXUI
         public static ControlNetSeg Seg = new ControlNetSeg();
         public static ControlNetMLSD MLSD = new ControlNetMLSD();
         public static ControlNetFace Face = new ControlNetFace();
+        public static ControlNetBrightness Brightness = new ControlNetBrightness();
 
         public static ControlNetBase Current = null;
         public enum ControlTypes
@@ -407,7 +438,8 @@ namespace SD_FXUI
             Mlsd,
             Scribble,
             Fake_Scribble,
-            Binary
+            Binary,
+            Brightness
         }
 
         public static ControlNetBase GetType(string StrData)
@@ -423,6 +455,7 @@ namespace SD_FXUI
             if (LoverName == "segmentation")        return Seg;
             if (LoverName == "mlsd")                return MLSD;
             if (LoverName == "facegen")             return Face;
+            if (LoverName == "brightness")          return Brightness;
 
             /*
 			if (LoverName == "depth_leres") ; // not implemented return canny
