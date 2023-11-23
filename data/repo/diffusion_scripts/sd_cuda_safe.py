@@ -20,7 +20,7 @@ else:
 
 PipeDevice = Device(opt.device, fptype)
 
-pipe = PipeDevice.GetPipe(opt.mdlpath, opt.mode, opt.nsfw)
+pipe = PipeDevice.GetPipe(opt.mdlpath, opt.mode, opt.nsfw, "")
 pipe.to(PipeDevice.device, fptype)
     
 if opt.dlora:

@@ -13,7 +13,7 @@ opt = parser.parse_args()
 pipe = None
 PipeDevice = Device("onnx", torch.float32)
 
-pipe = PipeDevice.GetPipe(opt.mdlpath, opt.mode, opt.nsfw)
+pipe = PipeDevice.GetPipe(opt.mdlpath, opt.mode, opt.nsfw, opt.textencoder)
 safe_unet = pipe.unet
 
 print("SD: Model preload: done")
@@ -43,7 +43,7 @@ while True:
     tokenizer_extract = False
 
     if (data['LoRA'] != old_lora_json) or (data['TI'] != old_te_json) or (data['TINeg'] != old_ten_json):
-        onnx_te_model = onnx.load(opt.mdlpath + "/text_encoder/" + ONNX_MODEL)
+        onnx_te_model = onnx.load(opt.textencoder + ONNX_MODEL)
         
         # Hard reload
         old_lora_json = None

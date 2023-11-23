@@ -223,9 +223,13 @@ namespace SD_FXUI
             if (!Directory.Exists(WorkingPath))
             {
                 if (GlobalVariables.Mode == Helper.ImplementMode.DiffCUDA)
+                {
                     Install.CheckAndInstallCUDA();
+                }
                 else
+                {
                     Install.CheckAndInstallONNX();
+                }
 
                 return;
             }
@@ -264,6 +268,7 @@ namespace SD_FXUI
 
                 GlobalVariables.Mode = Helper.ImplementMode.ONNX;
                 Install.CheckAndInstallONNX();
+                Task.Run(() => TextEncoderONNX.CheckEncoder());
 
                 Brush Safe = new SolidColorBrush(Colors.Black);
 
