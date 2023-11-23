@@ -50,6 +50,18 @@ namespace SD_FXUI
             FileDownloader.DownloadFileAsync("https://huggingface.co/lllyasviel/control_v11p_sd15_openpose/raw/main/config.json", WorkingDir + @"config.json");
             FileDownloader.DownloadFileAsync("https://huggingface.co/lllyasviel/control_v11p_sd15_openpose/resolve/main/diffusion_pytorch_model.fp16.bin", WorkingDir + @"diffusion_pytorch_model.bin");
         }
+        public static void DownloadTextEncoder()
+        {
+            string WorkingDir = FS.GetModelDir() + "text_encoder/";
+
+            if (Directory.Exists(WorkingDir))
+            {
+                return;
+            }
+            Directory.CreateDirectory(WorkingDir);
+
+            FileDownloader.DownloadFileAsync("https://huggingface.co/ForserX/TextEncoderBackupONNX/resolve/main/model.onnx", WorkingDir + @"model.onnx");
+        }
         
         public static void DownloadSDFacegen()
         {

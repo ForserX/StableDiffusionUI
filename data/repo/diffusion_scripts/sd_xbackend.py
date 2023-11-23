@@ -69,7 +69,7 @@ class Device:
 	
 		return dir_path
 	
-	def GetPipe(self, Model: str, Mode: str, NSFW: bool):
+	def GetPipe(self, Model: str, Mode: str, NSFW: bool, TextEnc: str):
 		pipe = None
 		nsfw_pipe = None
 		
@@ -87,11 +87,13 @@ class Device:
 					nsfw_pipe = OnnxRuntimeModel.from_pretrained(safety_model, provider=self.prov)
 				print (Mode)    
 				if Mode == "txt2img":
-					pipe = OnnxStableDiffusionPipeline.from_pretrained(Model, custom_pipeline=self.LPW_Path(), provider=self.prov, safety_checker=nsfw_pipe)
+					pipe = OnnxStableDiffusionPipeline.from_pretrained(Model, custom_pipeline=self.LPW_Path(), provider=self.prov, safety_checker=nsfw_pipe, text_encoder=None)
 				if Mode == "img2img":
-					pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline=self.LPW_Path(), provider=self.prov, safety_checker=nsfw_pipe)
+					pipe = OnnxStableDiffusionImg2ImgPipeline.from_pretrained(Model, custom_pipeline=self.LPW_Path(), provider=self.prov, safety_checker=nsfw_pipe, text_encoder=None)
 				if Mode == "inpaint":
-					pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline=self.LPW_Path(), provider=self.prov, safety_checker=nsfw_pipe)
+					pipe = OnnxStableDiffusionInpaintPipeline.from_pretrained(Model, custom_pipeline=self.LPW_Path(), provider=self.prov, safety_checker=nsfw_pipe, text_encoder=None)
+				
+				pipe.text_encoder = OnnxRuntimeModel.from_pretrained(TextEnc, provider=self.prov)
 		else:
 			if Mode == "pix2pix":
 				if NSFW:
@@ -398,6 +400,9 @@ class Device:
 	def ApplyArg(parser):
 		parser.add_argument(
 			"--model", type=str, help="Path to model checkpoint (.ckpt or .safetensors)", dest='mdlpath',
+		)
+		parser.add_argument(
+			"--textencoder", type=str, help="Path to model checkpoint (.onnx)", dest='textencoder',
 		)
 		parser.add_argument(
 			"--workdir", default=None, type=str, help="Path to working directory", dest='workdir',

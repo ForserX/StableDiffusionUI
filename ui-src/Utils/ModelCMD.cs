@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using SD_FXUI.Utils.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using System.Windows.Xps.Serialization;
 
@@ -73,6 +75,7 @@ namespace SD_FXUI
                     {
                         CmdLine += " --nsfw=True ";
                     }
+                    CmdLine += $" --textencoder={TextEncoderONNX.GetModelDir()} ";
 
                     Process = new Host(FS.GetWorkingDir(), "repo/" + PythonEnv.GetPy(Helper.VENV.DiffONNX));
                     Process.Start("./repo/diffusion_scripts/sd_onnx_safe.py " + CmdLine);
